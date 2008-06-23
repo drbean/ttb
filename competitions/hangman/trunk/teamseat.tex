@@ -1,0 +1,32 @@
+\documentclass[a4paper]{article}
+\newcommand{\printlandscape}{\special{landscape}}
+\printlandscape
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\usepackage{array}
+\usepackage{color}
+\newcommand{\myseat}[3]{%
+	\vspace{0.1cm}
+	% \vspace{0.1cm}
+	\large
+	\begin{minipage}{3.0cm}
+	\begin{description}
+		\item [Table:] #1
+		\item [Role:] #2
+		\item \huge #3
+	\end{description}
+	\vspace{0.1cm}
+	\end{minipage}
+}
+\begin{document}
+\begin{picture}(30,20)(+2.3,-24.5)
+\begin{tabular}[t]{|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|p{2.5cm}|}
+	\hline
+	\color{black}\myseat{Yellow}{}{} & \color{black}\myseat{Yellow}{}{} & \color{black}\myseat{Twenty}{B}{Brian} & \color{black}\myseat{Twenty}{A}{Shi} & \color{black}\myseat{Fifteen}{B}{LuHua} & \color{black}\myseat{Fifteen}{A}{KeiJing} & \color{black}\myseat{Ten}{B}{Men} & \color{black}\myseat{Ten}{A}{ShiwThrn} & \color{black}\myseat{Five}{B}{Shiw} & \color{black}\myseat{Five}{A}{YingHao} \\ \hline
+	\color{black}\myseat{Twenty-four}{B}{} & \color{black}\myseat{Twenty-four}{A}{} & \color{black}\myseat{Nineteen}{B}{Lin} & \color{black}\myseat{Nineteen}{A}{Ging} & \color{black}\myseat{Fourteen}{B}{Jin} & \color{black}\myseat{Fourteen}{A}{JuJye} & \color{black}\myseat{Nine}{B}{ILin} & \color{black}\myseat{Nine}{A}{NaiHwa} & \color{black}\myseat{Four}{B}{Ming} & \color{black}\myseat{Four}{A}{MonShow} \\ \hline
+	\color{black}\myseat{Twenty-three}{B}{Zhi} & \color{black}\myseat{Twenty-three}{A}{ZhiQiang} & \color{black}\myseat{Eighteen}{B}{Lacos} & \color{black}\myseat{Eighteen}{A}{MuJun} & \color{black}\myseat{Thirteen}{B}{BoHong} & \color{black}\myseat{Thirteen}{A}{Vilendeno} & \color{black}\myseat{Eight}{B}{Guo} & \color{black}\myseat{Eight}{A}{Xing} & \color{black}\myseat{Three}{B}{Qi1} & \color{black}\myseat{Three}{A}{Jackie} \\ \hline
+	\color{black}\myseat{Twenty-two}{B}{JiaZhen} & \color{black}\myseat{Twenty-two}{A}{WenBang} & \color{black}\myseat{Seventeen}{B}{ChiFu} & \color{black}\myseat{Seventeen}{A}{YangShen} & \color{black}\myseat{Twelve}{B}{WeWn} & \color{black}\myseat{Twelve}{A}{ShaoRu} & \color{black}\myseat{Seven}{B}{We} & \color{black}\myseat{Seven}{A}{Jason} & \color{black}\myseat{Two}{B}{TaoZhen} & \color{black}\myseat{Two}{A}{ChenYu} \\ \hline
+	\color{black}\myseat{Twenty-one}{B}{Yong} & \color{black}\myseat{Twenty-one}{A}{JianYuan} & \color{black}\myseat{Sixteen}{B}{ZhenXiang} & \color{black}\myseat{Sixteen}{A}{JianLun} & \color{black}\myseat{Eleven}{B}{GGBear} & \color{black}\myseat{Eleven}{A}{DeChien} & \color{black}\myseat{Six}{B}{Qi2} & \color{black}\myseat{Six}{A}{BigHate} & \color{black}\myseat{One}{B}{TunMao} & \color{black}\myseat{One}{A}{JiaChin} \\ \hline
+\end{tabular}
+\end{picture}
+\end{document}
