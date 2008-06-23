@@ -1,0 +1,43 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{2.15cm}
+% \textblockorigin{0.30cm}{0.35cm} %HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % LaserJet
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\myquestion}[3]{%
+\begin{minipage}{7.5cm}
+\vspace{-0.1cm}
+\textbf{#1}
+\vspace{-0.1cm}
+\begin{description}
+\vspace{-0.1cm}
+\item [a] #2
+\vspace{-0.2cm}
+\item [b] #3
+\vspace{-0.1cm}
+\end{description}
+\end{minipage}
+}
+
+\newcommand{\myblock}[<TMPL>$questionN</TMPL>]{%
+\begin{minipage}{7.5cm}
+\begin{description}
+<TMPL>$questions</TMPL>
+\end{description}
+\end{minipage}
+\par
+\vspace{0.5cm}
+}
+
+\begin{document}
+

@@ -1,0 +1,44 @@
+%Last Edit: 2007 Apr 08, 09:27:04 AM
+<tmpl>$autogen</tmpl>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+% \textblockorigin{+0.35cm}{2.15cm}
+% \textblockorigin{+0.35cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{+0.35cm}{3.35cm} % LaserJet
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[4]{%
+	\addvspace{0.1cm}
+	\small #1
+	\normalsize
+	\parbox[t][12.4cm][t]{7.8cm}{
+		\begin{Large} <tmpl>$league</tmpl> Pairwork \end{Large}
+		\begin{description}
+			\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{1.5cm}Bye: <tmpl>$bye</tmpl> <tmpl>$byeId</tmpl>\end{large} 
+			\vspace{-0.2cm}
+			\item [Assistants:] \begin{large}<tmpl>$assistant[0]</tmpl> <tmpl>$assistantId[0]</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$assistantId[1]</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$assistantId[2]</tmpl>, <tmpl>$assistant[3]</tmpl> <tmpl>$assistantId[3]</tmpl> \end{large}
+			\vspace{-0.2cm}
+			\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl>
+			\vspace{-0.2cm}
+			\item [Group:] #2
+			\vspace{-0.2cm}
+			\item [A:] #3
+			\item [B:] #4
+			\vspace{-0.2cm}
+			\item [Answers Correct:] \begin{Large}\rule{2.0cm}{0.3pt}\end{Large}
+			\vspace{-0.2cm}
+			\item [Total Questions:] \begin{Large}\rule{2.0cm}{0.3pt}\end{Large}
+			\vspace{-0.2cm}
+			\item [Winner:] \begin{Large}A\hspace{1.5cm}B\end{Large}
+			\vspace{-0.2cm}
+			\item [Points:] \hspace{1.0cm}\begin{Large}0\hspace{1.0cm}0.5\hspace{1.0cm}1\end{Large}
+			\vspace{-0.2cm}
+			\item [Rules:] 1. Your partner has 3 questions for you, and you have 3 for him/her. Write down his/her questions. Read your questions to your partner. Answer his/her questions. \par \vspace{-0.2cm} 2. Think of another question for your partner. Help your partner write down the question. \par \vspace{-0.2cm} 3. Check your partner answered your question correctly. \par \vspace{-0.2cm} 4. The person with most correct answers wins 1 point. \par \vspace{-0.2cm} 5. The other person wins 0.5 points. \par \vspace{-0.2cm} 6. If both persons have the same number of correct answers, the winner will be randomly chosen.
+		\end{description}
+	}
+}
+\begin{document}
+
