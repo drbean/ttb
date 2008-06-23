@@ -1,0 +1,51 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper,landscape]{article}
+% \renewcommand{\printlandscape}{\special{landscape}}
+% \printlandscape
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+% \textblockorigin{3.35cm}{3.05cm} % w5
+% \textblockorigin{0.35cm}{3.05cm} % HPDeskJet810C
+\textblockorigin{2.55cm}{3.05cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\mycard}[3]{%
+\tiny <TMPL>$cardIdentifier</TMPL>\\%
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+\begin{minipage}{12.0cm}
+\normalsize \ding{220}I/We, #2, confirmed #1 wrote this. Sgd: \rule{2.0cm}{0.3pt}#2\\
+% \hrulefill\\
+% \end{minipage}
+% \begin{minipage}{12.0cm}
+% \normalsize \ding{220}1\\
+% \begin{tabular}{|r|l|l|}% \hline
+%\multicolumn{1}{|l|}{Prefix} & Word & \multicolumn{1}{l|}{Suffix} \\ \hline \hline
+#3 % \\
+% #4 \\
+% \end{tabular}
+\end{minipage}
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+}
+
+\newcommand{\1}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\makebox(0.5,0.5)[br]{\tiny #1}}
+\put (0,0){\line(0,1){0.3}}
+\put (0,0){\line(1,0){0.5}}
+\put (0.5,0){\line(0,1){0.3}}
+\end{picture}%
+}
+
+\newcommand{\2}{%
+\includegraphics{cards.p2}%
+}
+
+\begin{document}
+
