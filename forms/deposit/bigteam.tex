@@ -1,0 +1,87 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.00cm}{1.75cm}
+% \textblockorigin{0.00cm}{0.00cm}
+% \textblockorigin{0.08cm}{1.04cm}
+\textblockorigin{0.08cm}{0.04cm} %HPLaserJet5000LE
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}{%
+	\small Version 0.01
+	\par
+	\vspace{-0.6cm}
+	\parbox[t][7.4cm][c]{9.8cm}{%\vfill
+	\Large Classwork \hfill \raggedleft Week: \rule{2.0cm}{0.01cm}\\
+	\vspace{0.1cm}
+	\large \begin{description}
+	\item Team \rule{3.0cm}{0.01cm}
+	\vspace{0.1cm}
+	\item Points \rule{1.5cm}{0.01cm}
+	\item Members\normalsize 
+	\vspace{0.2cm}
+	\\ Name:\rule{2.8cm}{0.01cm} ID:\rule{2.8cm}{0.01cm}
+	\vspace{0.2cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent
+	\vspace{0.2cm}
+	\\ Name:\rule{2.8cm}{0.01cm} ID:\rule{2.8cm}{0.01cm}
+	\vspace{0.2cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent
+	\vspace{0.2cm}
+	\\ Name:\rule{2.8cm}{0.01cm} ID:\rule{2.8cm}{0.01cm}
+	\vspace{0.2cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent
+	\par
+	\large \item Signed: \rule{2cm}{0.01cm} Id: \rule{1.5cm}{0.01cm}
+	\end{description}
+	}
+}
+
+\begin{document}
+\fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
+\begin{textblock}{8}(0,0)
+\textblocklabel{picture1}
+\mycard{}
+\end{textblock}
+
+\begin{textblock}{8}(8,0)
+\textblocklabel{picture2}
+\mycard{}
+\end{textblock}
+
+\begin{textblock}{8}(0,4)
+\textblocklabel{picture3}
+\mycard{}
+\end{textblock}
+
+\begin{textblock}{8}(8,4)
+\textblocklabel{picture4}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(0,8)
+\textblocklabel{picture5}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,8)
+\textblocklabel{picture6}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(0,12)
+\textblocklabel{picture7}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,12)
+\textblocklabel{picture8}
+\mycard
+\end{textblock}
+
+\end{document}
+
+

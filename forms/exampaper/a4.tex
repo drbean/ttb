@@ -1,0 +1,29 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.00cm}{1.75cm}
+% \textblockorigin{0.00cm}{0.00cm}
+\textblockorigin{1.05cm}{2.05cm}
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}{%
+	\small Version 0.04\\
+	\vspace{-0.6cm}
+	\parbox[t][27.3cm][t]{17.8cm}{%\vfill
+	\normalsize Name: \rule{2.5cm}{0.01cm} Id: \rule{2.0cm}{0.01cm} Title: \rule{9.0cm}{0.01cm}
+	}
+}
+
+\begin{document}
+\fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
+\begin{textblock}{14.5}(0,0)
+\textblocklabel{wholepage}
+\mycard
+\end{textblock}
+
+\end{document}
+
+

@@ -1,0 +1,70 @@
+<TMPL>$autogen</TMPL>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.00cm}{1.75cm}
+% \textblockorigin{0.00cm}{0.00cm}
+% \textblockorigin{0.08cm}{1.04cm}
+\textblockorigin{0.08cm}{0.04cm} %HPLaserJet5000LE
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mybigcard}[7]{%
+	\small Version 0.02
+	\par
+	\vspace{-0.6cm}
+	\parbox[t][7.4cm][c]{9.8cm}{%\vfill
+	\large <TMPL>$league</TMPL> \hfill \\
+	\vspace{-0.1cm}
+	\large \begin{description}
+	\item [Team] #1 \hfill Week: \rule{1.0cm}{0.01cm}
+	\vspace{0.1cm}
+	\item [Points] \rule{1.5cm}{0.01cm}
+	\item Members\normalsize
+	\vspace{0.1cm}
+	\\ Name: #2 \hspace{0.2cm} ID: #3
+	\vspace{0.1cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent \hspace{0.5cm} Working
+	\vspace{0.1cm}
+	\\ Name: #4 \hspace{0.2cm} ID: #5
+	\vspace{0.1cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent \hspace{0.5cm} Working
+	\vspace{0.1cm}
+	\\ Name: #6 \hspace{0.2cm} ID: #7
+	\vspace{0.1cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent \hspace{0.5cm} Working
+	\par
+	\large \item Signed: \rule{2cm}{0.01cm} ID: \rule{1.5cm}{0.01cm}
+	\end{description}
+	}
+}
+\newcommand{\mycard}[5]{%
+	\small Version 0.02
+	\par
+	\vspace{-0.6cm}
+	\parbox[t][7.4cm][c]{9.8cm}{%\vfill
+	\large <TMPL>$league</TMPL> \hfill \\
+	\vspace{0.1cm}
+	\large \begin{description}
+	\item Team #1 \hfill Week: \rule{1.0cm}{0.01cm}
+	\vspace{0.1cm}
+	\item Points \rule{1.5cm}{0.01cm}
+	\item Members\normalsize
+	\vspace{0.2cm}
+	\\ Name: #2 \hspace{0.2cm} ID: #3
+	\vspace{0.2cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent \hspace{0.5cm} Working
+	\vspace{0.2cm}
+	\\ Name: #4 \hspace{0.2cm} ID: #5
+	\vspace{0.2cm}
+	\\\hspace{1cm} OnTime \hspace{0.5cm} Late \hspace{0.5cm} Absent \hspace{0.5cm} Working
+	\par
+	\large \item Signed: \rule{2cm}{0.01cm} ID: \rule{1.5cm}{0.01cm}
+	\end{description}
+	}
+}
+
+\begin{document}
+\fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
