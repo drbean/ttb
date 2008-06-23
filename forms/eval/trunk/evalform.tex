@@ -1,0 +1,117 @@
+\documentclass[a4paper]{article}
+% \usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\textblockorigin{0.00cm}{0.05cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\myeval}[1]{%
+	\begin{description}
+		\item Writer: #1 \hfill Title: \rule{4.5cm}{0.3pt} 
+		% \vspace{-0.3cm}
+		\item #1's Pick: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hfill Group's Pick: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hspace{0.25cm}
+		% \vspace{-0.2cm}
+		\item Best Bet: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hfill Bean's Grade: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hspace{0.25cm}
+		% \vspace{+0.3cm}
+	\end{description}
+}
+\newcommand{\mycard}[6]{%
+	% \vspace{0.1cm}
+	\small #1
+	\vspace{-0.5cm}
+	\normalsize \begin{center} #2 Team Pick-A-Number Week #3\end{center}
+	\vspace{-1.75cm}
+	\parbox[t][8.05cm][c]{9.6cm}{%\vfill
+	\normalsize
+	#4
+	#5
+	#6
+	}
+}
+
+\begin{document}
+% \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
+\begin{textblock}{8}(0,0)
+\textblocklabel{picture1}
+\mycard{evalform}{Red}{4}
+{\myeval{Jerry}}{\myeval{Alice}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,0)
+\textblocklabel{picture1}
+\mycard{evalform}{DarkBlue}{4}
+{\myeval{Marco}}{\myeval{Alina}}{}
+\end{textblock}
+
+\begin{textblock}{8}(0,4)
+\textblocklabel{picture1}
+\mycard{evalform}{DarkGreen}{4}
+{\myeval{Yoko}}{\myeval{Penny}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,4)
+\textblocklabel{picture1}
+\mycard{evalform}{Purple}{4}
+{\myeval{Snake}}{\myeval{Celia}}{\myeval{Wendy}}
+\end{textblock}
+
+\begin{textblock}{8}(0,8)
+\textblocklabel{picture1}
+\mycard{evalform}{White}{4}
+{\myeval{Linda}}{\myeval{Kelly}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,8)
+\textblocklabel{picture1}
+\mycard{evalform}{LightBlue}{4}
+{\myeval{Cola}}{\myeval{Ying2}}{}
+\end{textblock}
+
+\begin{textblock}{8}(0,12)
+\textblocklabel{picture1}
+\mycard{evalform}{Pink}{4}
+{\myeval{Nancy}}{\myeval{Elle}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,12)
+\textblocklabel{picture1}
+\mycard{evalform}{Brown}{4}
+{\myeval{Candy}}{\myeval{Judy}}{\myeval{Lucy}}
+\end{textblock}
+
+
+\begin{tiny}1\end{tiny}\newpage
+
+
+\begin{textblock}{8}(0,0)
+\textblocklabel{picture1}
+\mycard{evalform}{Yellow}{4}
+{\myeval{Jason}}{\myeval{Edison}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,0)
+\textblocklabel{picture1}
+\mycard{evalform}{Black}{4}
+{\myeval{Gerry}}{\myeval{Cross}}{}
+\end{textblock}
+
+\begin{textblock}{8}(0,4)
+\textblocklabel{picture1}
+\mycard{evalform}{Gray}{4}
+{\myeval{Sandy}}{\myeval{Queen}}{}
+\end{textblock}
+
+\begin{textblock}{8}(8,4)
+\textblocklabel{picture1}
+\mycard{evalform}{LightGreen}{4}
+{\myeval{Lin}}{\myeval{WasLili}}{}
+\end{textblock}
+
+\begin{textblock}{8}(0,8)
+\textblocklabel{picture1}
+\mycard{evalform}{Orange}{4}
+{\myeval{May}}{\myeval{Rita}}{}
+\end{textblock}
+
+\end{document}
