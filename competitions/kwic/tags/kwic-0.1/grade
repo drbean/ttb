@@ -1,0 +1,250 @@
+#!/usr/bin/perl
+
+# Last Edit: 2007 Apr 08, 04:24:38 PM
+# $Id$
+
+use strict;
+use warnings;
+
+use List::Util qw/max min reduce sum/;
+my $win = 1;
+my $bye = 1;
+my $draw = 1;
+my $loss = 0.5;
+
+my @roles;
+
+use List::Util qw/reduce sum/;
+
+use Text::Template;
+use YAML qw/ LoadFile DumpFile /;
+use IO::All;
+
+my $round = LoadFile( "./round.yaml" );
+my $league = LoadFile( "../league.yaml" );
+my @members = @{$league->{member}};
+my %ids = map { $_->{name} => $_->{id} } @members;
+my %names = map { $_->{id} => $_->{name} } @members;
+my $absentees = $league->{absent}? $league->{absent}: undef;
+push @$absentees, @{$round->{absent}} if $round->{absent} and $absentees;
+my ($assistants, $assistantScores);
+my $roundN = $round->{round};
+if ( -e '../assistants.yaml' )
+{
+	my $assistantFile = LoadFile '../assistants.yaml';
+	$assistantScores = $assistantFile->{$roundN};
+	$assistants = [keys %$assistantScores];
+}
+elsif ( $round->{assistant} and $round->{assistant} !~ m/No.*ne/ ) {
+	$assistants = $round->{assistant};
+}
+my $byes = $round->{group}->{Bye};
+
+
+my $possibleScores = LoadFile("possible.yaml");
+my $scoresheet = LoadFile "scores.yaml";
+my $gradesheets = $league->{hw};
+my $prevround = $roundN - 1;
+die "Gradesheet for round $roundN, $gradesheets/g$roundN.yaml already exists,"
+			if -e "$gradesheets/g$roundN.yaml";
+my $prevgradefile = "$gradesheets/g$prevround.yaml";
+my $prevgrades = LoadFile( $prevgradefile )
+			or die "No previous $prevgradefile grade file: $!\n";
+
+my %indScores = ();
+my %indScoresByScore = ();
+my %groupScores = ();
+my %groupScoresByScore = ();
+my %points = ();
+my %pointsByPoints = ();
+my @number = qw/First Second Third Fourth Fifth Sixth/;
+my %cumulative = ();
+
+my $groups = $round->{group};
+my @indMatches;
+
+foreach my $group ( keys %$groups )
+{
+	my %group =  %{$groups->{$group}}; 
+	@roles = keys %group;
+	my @player = values %group;
+	my @groupsIds = @ids{@player};
+	if (grep /^Bye$/, @roles )
+	{	
+		my @byes = map { $ids{$_} } @player;
+		for (@byes)
+		{
+			$points{$_} = $bye;
+			push @{$pointsByPoints{$bye}}, "$names{$_} $_  \\\\";
+			die "$_ has $points{$_}?" unless $_ && exists 
+			$prevgrades->{cumulative}->{$_} && exists $points{$_};
+			$cumulative{$_} = $prevgrades->{cumulative}->{$_} +
+								$points{$_};
+			push @indMatches, 
+			"$group&$names{$_} (-)&$cumulative{$_}&$win : 0&BYE&\\\\ \\hline";
+		}
+	}
+	else
+	{
+		my $indMatch = "$group&";
+		my (@nohomework, @groupAllocation);
+		my $questionN = 1;
+		my %correct;
+		$correct{$roles[0]} = sum map { $scoresheet->{$group}->{"$player[0] $groupsIds[0]"}->{"Cloze$_"} } 1..$questionN;
+		$correct{$roles[1]} = sum map { $scoresheet->{$group}->{"$player[1] $groupsIds[1]"}->{"Cloze$_"} } 1..$questionN;
+		my %roleReport;
+		foreach my $role ( @roles )
+		{
+			my $player = $groups->{$group}->{$role};
+			$roleReport{$role} .= "$player ";
+			my $playerId = $ids{$player} 
+				or die "Group $group ${player}'s id?";
+                        die "group is $group?" unless defined $group;
+			die "No $role $player in $group" unless
+				defined $scoresheet->{$group}->{"$player $playerId"};
+			my $participationScore = 
+			$scoresheet->{$group}->{"$player $playerId"}->{Signatures};
+			die "$player particpation?" unless
+					defined $participationScore or $correct{$role};
+			my $indScore = $correct{$role} + $participationScore;
+			if ( $indScore )
+			{
+				push @groupAllocation, $playerId;
+				$indScores{$playerId} = $indScore;
+				push @{$indScoresByScore{$indScore}},
+				"$group. $player $playerId\\\\";
+			}
+			else {
+				 push @nohomework, $playerId;
+				 $indScores{$playerId} = 0;
+				push @{$indScoresByScore{"No play"}},
+				"$group. $player $playerId\\\\";
+			}
+			$roleReport{$role} .= $participationScore?
+				"($indScores{$playerId}/$possibleScores->{$player})&": "(No play)&";
+		}
+		my ( $winner, $winnerName, $winnerScore, %pointsByRole );
+		if ( @nohomework )
+		{
+			$winner = $winnerName = $winnerScore = 'No winner';
+			%pointsByRole = map { my $role = $_;
+				$_ => (grep m/$group{$role}/,
+							@names{@nohomework})?
+				0:$draw;} @roles;
+		}
+		else
+		{	
+			$winner = $correct{$roles[0]}/$possibleScores->{$player[0]} >
+				$correct{$roles[1]}/$possibleScores->{$player[1]} ?
+				$roles[0]:
+				$correct{$roles[0]} < $correct{$roles[1]}?
+				$roles[1]: (rand( 2 ) < 1)?
+				$roles[0]: $roles[1];
+			$winnerName = $group{$winner};
+			$winnerScore = $indScores{$ids{$winnerName}};
+			%pointsByRole = map
+				{ $_ => ($group{$_} eq $winnerName)?
+					$win:$loss; } @roles;
+		}
+		$winner ||= 'No winner';
+		$winnerName ||= 'No winner';
+		my %roles = reverse %group;
+		my $loser;
+		$loser = $winner eq $roles[0]? $roles[1]: $roles[1]
+						unless $winner eq 'No winner';
+		$groupScores{$group} = sum map { $correct{$_} } @roles;
+		my $result = 
+			"$pointsByRole{$roles[0]} : $pointsByRole{$roles[1]}&";
+		my @memberScores = map { "$names{$_}($indScores{$_})" }
+								@groupsIds;
+		# my $possibleScore = sum @$possibleScores{@group};
+		push @{$groupScoresByScore{$winnerScore}},
+			"$group. $winnerName ($winner).\\\\ "
+						unless $winner eq 'No winner';
+		for my $id ( @groupsIds )
+		{
+			my $name = $names{$id};
+			my $role = $roles{$name};
+			my $points = $pointsByRole{$role};
+			$points{$id} = $points;
+			push @{$pointsByPoints{$points}}, "$name $id (Gp $group)\\\\";
+			die "$name has $points?" unless $id && $name &&
+				exists $prevgrades->{cumulative}->{$id} &&
+							defined $points;
+			$cumulative{$id} = $prevgrades->{cumulative}->{$id} +
+								$points;
+			$roleReport{$role} .= "$cumulative{$id}&";
+		}
+		$indMatch .= $roleReport{$roles[0]} . $result . $roleReport{$roles[1]};
+		chop $indMatch;
+		$indMatch .= "\\\\ \\hline\n";
+		push @indMatches, $indMatch;
+	}
+}
+
+map { $points{$_} = 0; } @ids{@$absentees} if $absentees;
+@cumulative{@ids{@$absentees}} = map { $prevgrades->{cumulative}->{$_} + $points{$_} }
+							@ids{@$absentees} if $absentees;
+for ( keys %names )
+{
+	die "$names{$_} $_ did hw? Has $points{$_} points?" unless $_ && 
+		exists $prevgrades->{cumulative}->{$_} && exists $points{$_};
+}
+my %cumulativeByGrades = ();
+push @{$cumulativeByGrades{$cumulative{$_}}}, "$names{$_} $_ \\\\ "
+					foreach keys %names;
+my $grades;
+$grades->{cumulative} = \%cumulative;
+$grades->{$roundN} = \%points;
+my %pairingNumberGrades;
+for my $member ( @members )
+{
+	$pairingNumberGrades{$member->{pairingnumber}} = $points{$member->{id}} 
+				if $member->{pairingnumber};
+}
+
+DumpFile( "$gradesheets/cumulative.yaml", \%cumulative );
+DumpFile( "$gradesheets/g$roundN.yaml", $grades );
+DumpFile( "$gradesheets/$roundN.yaml", \%pairingNumberGrades );
+DumpFile( "round.yaml", $round );
+
+@{$pointsByPoints{$_}} = sort @{$pointsByPoints{$_}} foreach keys %pointsByPoints;
+@{$cumulativeByGrades{$_}} = sort @{$cumulativeByGrades{$_}}
+						foreach keys %cumulativeByGrades;
+my @indReport = map
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$indScoresByScore{$_}}" }
+		sort {$a cmp $b} keys %indScoresByScore;
+my @groupReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$groupScoresByScore{$_}}" }
+		sort {$a<=>$b} keys %groupScoresByScore;
+my @pointReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{-0.5cm}\\\\@{$pointsByPoints{$_}}" }
+		sort {$a<=>$b} keys %pointsByPoints; # XXX move to left someway
+my @cumulReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$cumulativeByGrades{$_}}" }
+		sort {$a<=>$b} keys %cumulativeByGrades;
+my @assistantScores = map
+	{ "\\vspace{-0.4cm} $_: $assistantScores->{$_} \\hspace{0.5cm}" }
+			@$assistants if $assistants;
+my @byeScores = map
+	{ "\\vspace{-0.4cm} $_: $points{$ids{$_}} \\hspace{0.5cm}" }
+								@$byes;
+
+my $report;
+$report->{league} = $league->{league};
+$report->{week} = $round->{week};
+$report->{round} = $roundN;
+$report->{indMatches} = join '', sort @indMatches;
+$report->{indScores} = join '', @indReport;
+$report->{groupScores} = join '', @groupReport;
+$report->{points} = join '', @pointReport;
+$report->{grades} = join '', @cumulReport;
+$report->{assistantScores} = join '', @assistantScores if @assistantScores;
+$report->{byeScores} = join '', @byeScores;
+$report->{role} = join '', \@roles;
+
+$report->{autogen} = "% This file, report.tex was autogenerated on " . localtime() . "by grader.pl out of report.tmpl";
+my $template = Text::Template->new(TYPE => 'FILE', SOURCE => 'report.tmpl'
+				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
+open TEX, ">report.tex";
+print TEX $template->fill_in( HASH => $report );

@@ -1,0 +1,56 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{+0.35cm}{2.15cm}
+% \textblockorigin{+0.35cm}{0.35cm} % HPDeskJet810C
+\textblockorigin{0.35cm}{3.05cm} % w5
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[8]{%
+	\addvspace{0.1cm}
+	% \small #1
+	\normalsize
+	\parbox[t][12.4cm][t]{7.8cm}{
+\begin{large} <TMPL>$league</TMPL>\end{large}
+\vspace{-0.2cm}
+\begin{description}
+	\item [Round:] \hspace{0.5cm} \begin{large}<TMPL>$round</TMPL>\hspace{0.5cm}\end{large}
+	\vspace{-0.2cm}
+	\item [Assistants:] \begin{normalsize}<TMPL>$assistant[0]</TMPL> <TMPL>$assistantId[0]</TMPL>, <TMPL>$assistant[1]</TMPL> <TMPL>$assistantId[1]</TMPL>, <TMPL>$assistant[2]</TMPL> <TMPL>$assistantId[2]</TMPL>, <TMPL>$assistant[3]</TMPL> <TMPL>$assistantId[3]</TMPL> \end{normalsize}
+	\vspace{-0.2cm}
+	\item [Week:] \hspace{0.5cm}<TMPL>$week</TMPL> \hfill \textbf{Bye:} <TMPL>$bye[0]</TMPL> <TMPL>$byeId[0]</TMPL>, <TMPL>$bye[1]</TMPL> <TMPL>$byeId[1]</TMPL> 
+	\vspace{-0.2cm}
+	\item [Group:] #1
+	% \vspace{-0.2cm}
+	\item [Player:]
+	\begin{description}
+	\vspace{-0.2cm}
+	\large
+	\item #2 \hfill \normalsize Signature: \rule{2.0cm}{0.3pt}
+	\vspace{-0.1cm}
+	\item #3 \hfill \vspace{0.2cm}\\
+	\end{description}
+	\vspace{-0.7cm}
+	\item [Partners:] \hfill
+	\begin{description}
+	\vspace{-0.3cm}
+	\item #4 #5 \hfill\\
+	\vspace{-0.4cm}
+	\item #6 #7 \hfill\\
+	\vspace{-0.5cm}
+	\end{description}
+\end{description}
+\textbf Rules: \normalsize
+\vspace{-0.4cm}
+ \begin{enumerate}
+\item COMPETE WITH YOUR PARTNER! TRY TO WIN! \vspace{-0.3cm}
+\item Sign your and partner's card, or lose points.\vspace{-0.3cm}
+\item Your score is i) 1 if you have more letters correct than your partner. ii) 0.5 if you have fewer correct letters. iii) 0.5 if you did the homework and iv) 0, otherwise.
+\end{enumerate}
+\vspace{0.0cm}
+	}
+}
+\begin{document}
+
