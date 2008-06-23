@@ -1,0 +1,110 @@
+<tmpl>$autogen</tmpl>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{pifont}
+\textblockorigin{0.00cm}{1.85cm}
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+\newcommand{\mycard}[9]{%
+\small #1 #2%\\%
+\normalsize
+\begin{minipage}[t]{8.5cm}
+\begin{tabular}[t]{|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|p{0.3cm}|}
+\hline
+\tiny Word &\tiny Letter & ? &\tiny Word & \tiny Letter & ? & \tiny Word & \tiny Letter & ? & \tiny Word & \tiny Letter & ? \\ \hline
+#3
+\end{tabular}
+\normalsize #4's: \large #5\\
+\normalsize #6's: \large #7\\
+\normalsize #8's: \large #9
+\end{minipage}
+}
+
+\newcommand{\x}[0]{%
+	\begin{texdraw} \drawdim cm \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)%
+	\end{texdraw}
+}
+
+\newcommand{\xx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\newcommand{\xxxxxxxxxxxxxx}[0]{%
+	\begin{texdraw} \drawdim cm 
+	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0) \rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}
+}
+
+\begin{document}

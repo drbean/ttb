@@ -1,0 +1,50 @@
+<tmpl>$autogen</tmpl>
+\documentclass[a4paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+\textblockorigin{+0.05cm}{1.80cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[6]{%
+\addvspace{0.1cm}
+\small #1
+\normalsize
+% \parbox[t][12.1cm][t]{7.8cm}{
+\begin{minipage}[t]{9.5cm}
+\begin{normalsize} <tmpl>$league</tmpl> Homework \end{normalsize}
+\vspace{-0.3cm}
+\begin{description}
+\item [Round:] \hspace{0.5cm} \begin{normalsize}<tmpl>$round</tmpl>\hspace{0.5cm}\end{normalsize}
+\vspace{-0.3cm}
+\item [Assistants:] \begin{normalsize}<tmpl>$assistant[0]</tmpl> <tmpl>$id{$assistant[0]}</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$id{$assistant[1]}</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$id{$assistant[2]}</tmpl> \end{normalsize}
+\vspace{-0.3cm}
+\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl>
+\vspace{-0.3cm}
+\item [Table:] #2
+% \vspace{-0.2cm}
+\begin{description}
+	% \vspace{-0.2cm}
+	\item [Player:] #3
+	\vspace{+0.2cm}
+	\item [Versus:]
+	\begin{description}
+	\item #4. Score: \rule{2.0cm}{0.3pt}/30
+	\vspace{+0.2cm}
+	\item #5. Score: \rule{2.0cm}{0.3pt}/30
+	\vspace{+0.2cm}
+	\item #6. Score: \rule{2.0cm}{0.3pt}/30
+	\vspace{+0.2cm}
+	\end{description}
+	\vspace{-0.2cm}
+	\item [Player Points:] 0\hspace{0.25cm}1 \hspace{0.25cm}2 \hspace{0.5cm}Total: \rule{2.0cm}{0.3pt}/90
+	\vspace{-0.2cm}
+\end{description}
+% \vspace{-0.2cm}
+\item [Rules:] \normalsize 1. Play 3 times. Ask partner for letters (eg What's letter number 3, word number 2?). \vspace{-0.2cm} \par 2. NO CHINESE. \vspace{-0.2cm} \vspace{-0.1cm} \par 3. The winner is the player with most correct letters. 
+% \vspace{0.6cm}
+\end{description}
+\end{minipage}
+}
+\begin{document}
+
