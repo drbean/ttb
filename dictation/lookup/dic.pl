@@ -1,10 +1,21 @@
 #!/usr/bin/perl
 
-# Last Edit: 2007 Oct 28, 03:24:12 PM
+# Last Edit: 2008 Jun 26, 05:45:49 PM
 # $Id: /cloze/branches/lookup/dic.pl 1542 2007-10-28T07:32:25.305379Z greg  $
 
 use strict;
 use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+
+my $man = 0;
+my $help = 0;
+
+GetOptions (
+	'help|?' => \$help, man => \$man) or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 use IO::All;
 use YAML qw/LoadFile/;
@@ -220,3 +231,33 @@ sub paging
 	if ($paging == 11) { $threepages = $threepages+3; $paging = 0; }
 	else { $paging++; }
 }
+
+__END__
+
+=head1 NAME
+
+Lookup a dictionary for the words in dialog
+
+=head1 SYNOPSIS
+
+./dic.pl
+
+./form.pl
+
+./scoresheet.pl
+
+./grade
+
+=head1 DESCRIPTION
+
+B<dic.pl> generates a list of all the words in the dialog, which are blanked except for first and last letters.
+
+Students can choose words from the list below the dialog.
+
+B<form.pl> makes up the form for the other side of the piece of paper.
+
+B<scoresheet.pl> creates B<scores.yaml>, a YAML-style template file that can be filled in with the number of letters correct.
+
+B<grade> grades the scores and writes a report.
+
+=cut
