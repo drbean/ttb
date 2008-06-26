@@ -1,0 +1,53 @@
+%Last Edit: 2007 Mar 23, 11:57:19 AM
+<tmpl>$autogen</tmpl>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+% \textblockorigin{+0.35cm}{2.15cm}
+% \textblockorigin{+0.35cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{0.50cm}{1.10cm} % w5
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[4]{%
+	\addvspace{0.1cm}
+	\small #1
+	\normalsize
+	\parbox[t][12.4cm][t]{7.8cm}{
+		\begin{Large} <tmpl>$league</tmpl> Pairwork \end{Large}
+		\begin{description}
+			\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{0.5cm}\end{large}
+			\vspace{-0.2cm}
+			\item [Assistants:] \begin{large}<tmpl>$assistant[0]</tmpl> <tmpl>$id{$assistant[0]}</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$id{$assistant[1]}</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$id{$assistant[2]}</tmpl> \end{large}
+			\vspace{-0.2cm}
+			\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl>
+			\vspace{-0.2cm}
+			\item [Group:] #2
+			\vspace{-0.2cm}
+			\item [A:] #3
+			\item [B:] #4
+			\vspace{-0.2cm}
+			\item [Letters:] \begin{Large}\rule{2.0cm}{0.3pt}/<tmpl>$indLetters</tmpl>\end{Large}
+			\vspace{-0.2cm}
+			\item [Partners' Letters:] \begin{Large}\rule{2.0cm}{0.3pt}/<tmpl>$indLetters</tmpl>\end{Large}
+			\vspace{-0.2cm}
+			\item [Total Letters:] \begin{Large}\rule{2.0cm}{0.3pt}/<tmpl>$groupLetters</tmpl>\end{Large}
+			\vspace{-0.2cm}
+			\item [Points:] \begin{Large}\rule{2.0cm}{0.3pt}/<tmpl>$grades[-1]</tmpl>\end{Large}
+			\vspace{-0.2cm}
+			\item [Rules:] \normalsize 1. Read your partner your words and write his/her words. \vspace{-0.2cm} \par 2. DO NOT PICK YOUR CARD UP FROM THE TABLE. \vspace{-0.2cm} \par 3. DO NOT LOOK OR POINT AT YOUR PARTNER'S CARD. \vspace{-0.2cm} \par 4. NO CHINESE. Everytime you use Chinese you lose 1 of your 15 points. \vspace{-0.2cm} \par 5. Stop after 3 minutes. \vspace{-0.2cm} \par 6. Your score: \begin{description}
+			\vspace{-0.2cm}
+			\item <tmpl>$letters[0]</tmpl> letters=<tmpl>$grades[0]</tmpl> points,
+			\vspace{-0.2cm}
+			\item <tmpl>$letters[1]</tmpl> letters=<tmpl>$grades[1]</tmpl> points,
+			\vspace{-0.2cm}
+			\item <tmpl>$letters[2]</tmpl> letters=<tmpl>$grades[2]</tmpl> points,
+			\vspace{-0.2cm}
+			\item <tmpl>$letters[3]</tmpl> letters=<tmpl>$grades[3]</tmpl> points,
+			\end{description}
+		\end{description}
+	}
+}
+\begin{document}
+

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 Jun 26, 01:13:10 PM
-# $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
+# Last Edit: 2008 Jun 26, 01:12:58 PM
+# $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
 use warnings;
@@ -31,15 +31,10 @@ my %ids = map { $_->{name} => $_->{id} } @members;
 my %names = map { $_->{id} => $_->{name} } @members;
 
 my $textSources = $round->{texts};
+my $unclozedwords = $round->{unclozedwords};
+my $unclozeables = $round->{unclozeables};
 
 my @dir = @$textSources;
-for my $dir ( @$textSources )
-{
-	die "$dir not found or not a directory" unless -d $dir;
-}
-my $next;
-my @blanks = (0)x2;
-	my @files;
 
 sub sequences
 {
@@ -69,13 +64,13 @@ for my $files ( @parallelfiles )
 	my @files = map { io $_ } @$files;
 	my @lines;
 	push @{$lines[$_]}, ( $files[$_]->getlines ) for 0..$#files;
-	my @blanks = (0)x2;
+	my $blanks = { A => 0, B => 0 };
 	my @text;
-	(@blanks[0,1], $text[$_]) = cloze(@blanks, @{$lines[$_]})
-								for 0..$#files;
+	($blanks, $text[$_]) = cloze($blanks, $unclozedwords, $unclozeables,
+				@{$lines[$_]}) for 0..$#files;
 	push @texts, \@text;
 }
-$next = nextText(@texts);
+my $next = nextText(@texts);
 
 my $tmpl = io 'dic.tmpl';
 my $tmplString = $tmpl->all;
@@ -176,7 +171,7 @@ __END__
 
 =head1 NAME
 
-Parallel forms of exam-type pair dictation
+Ctest-clozed format for exam-type pair dictation
 
 =head1 SYNOPSIS
 
@@ -193,6 +188,8 @@ Parallel forms of exam-type pair dictation
 B<dic.pl> generates parallel forms for 2 or 3 conversations from a multiple number of files in directories corresponding to the conversations.
 
 This makes it suitable for a number of different short conversations making up one pair dictation exam sheet.
+
+B<Ctest> clozes only the second half of the word.
 
 B<form.pl> makes up the form for the other side of the piece of paper.
 
