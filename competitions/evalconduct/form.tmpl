@@ -1,0 +1,64 @@
+<tmpl>$autogen</tmpl>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+% \textblockorigin{+0.35cm}{2.15cm}
+\textblockorigin{+0.35cm}{0.35cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[8]{%
+	\addvspace{0.1cm}
+	% \small #1
+	\normalsize
+	\parbox[t][12.4cm][t]{7.8cm}{
+\begin{large} <tmpl>$league</tmpl>\end{large}
+\vspace{-0.2cm}
+\begin{description}
+	\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{0.5cm}\end{large}
+	\vspace{-0.2cm}
+	\item [Assistants:] \begin{normalsize}<tmpl>$assistant[0]</tmpl> <tmpl>$assistantId[0]</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$assistantId[1]</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$assistantId[2]</tmpl> \end{normalsize}
+	\vspace{-0.2cm}
+	\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl> \hfill \textbf{Bye:} <tmpl>$group{Bye}[0]</tmpl> <tmpl>$group{Bye}[1]</tmpl>
+	\vspace{-0.2cm}
+	\item [Group:] #1
+	% \vspace{-0.2cm}
+	\item [Player:]
+	\begin{description}
+	\vspace{-0.2cm}
+	\large
+	\item #2 \hfill \normalsize Signature: \rule{2.0cm}{0.3pt}
+	\vspace{-0.1cm}
+	\item #3 \hfill \vspace{0.2cm} Score: \rule{1.0cm}{0.3pt}\\
+	\end{description}
+	\vspace{-0.7cm}
+	\item [Partners:] \hfill
+	\begin{description}
+	\vspace{-0.3cm}
+	\item #4 #5 \hfill Score: \rule{1.0cm}{0.3pt}\\
+	\vspace{-0.4cm}
+	\item #6 #7 \hfill Score: \rule{1.0cm}{0.3pt}\\
+	\vspace{-0.5cm}
+	\end{description}
+	\item [Points:] \hfill\\
+	#8 \hfill\\
+	0\hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3 \hfill
+	0\hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3 \hfill
+	0\hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3
+	\vspace{-0.4cm}
+\end{description}
+\textbf Rules: \normalsize
+\vspace{-0.4cm}
+ \begin{enumerate}
+\item Play 3 games. \vspace{-0.2cm}
+\item Each game, a new tester and different players.\vspace{-0.2cm}
+\item The tester stops players using Chinese, and looking at each other's cards, and says 'Go' and 'Stop' after \large ONE \normalsize minute. \vspace{-0.2cm}
+\item Dr Bean will rate you as a tester. Were you a good tester? \vspace{-0.2cm}
+\item Your score is i) your letters, ii) your partners' letters and iii) your score for being a tester. \vspace{-0.2cm}
+\item In each group, players gets 3, 2 or 1 points to their grade. If players have equal scores, the player who was tester first gets less points.
+\end{enumerate}
+\vspace{0.6cm}
+	}
+}
+\begin{document}
+

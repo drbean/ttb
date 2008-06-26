@@ -1,0 +1,182 @@
+#!/usr/bin/perl
+
+# Last Edit: 2006 May 03, 04:20:54 PM
+# $Id$
+
+use strict;
+use warnings;
+
+use List::Util qw/reduce sum/;
+
+use Text::Template;
+use YAML qw/ LoadFile DumpFile /;
+use IO::All;
+
+use Games::Tournament::RoundRobin;
+use Games::League::Member;
+
+my @yaml = glob "*.yaml";
+my @roundfile = grep m/^.\d+.yaml$/, @yaml;
+die "too many roundfile" if $#roundfile;
+my $roundfile = $roundfile[0];
+my $round = LoadFile( $roundfile );
+my $league = LoadFile( "../class.yaml" );
+my @members = @{$league->{member}};
+my %ids = map { $_->{name} => $_->{id} } @members;
+my %names = map { $_->{id} => $_->{name} } @members;
+my $absentees = $league->{absent}? $league->{absent}: undef;
+my $assistants = $round->{assistant};
+my $assistantScores = LoadFile("../assistants.yaml");
+my $byes = $round->{group}->{Bye};
+
+my $scoresheet = LoadFile "scores.yaml";
+my $gradesheets = $league->{hw};
+my $roundN = $round->{round};
+my $prevround = $roundN - 1;
+(my $leagueIdentifier = $roundfile) =~ s/^(.).*/$1/;
+my $leagueFile = $leagueIdentifier . $roundN . ".yaml";
+die "Gradesheet for round $roundN, $gradesheets/g$leagueFile already exists,"
+				if -e "$gradesheets/g$leagueFile";
+my $prevgradefile = "$gradesheets/g$leagueIdentifier$prevround.yaml";
+my $prevgrades = LoadFile( $prevgradefile )
+			or die "No previous $prevgradefile grade file: $!\n";
+
+my %indScores = ();
+my %indScoresByScore = ();
+my %groupScores = ();
+my %groupScoresByScore = ();
+my %points = ();
+my %pointsByPoints = ();
+
+my $groups = $round->{group};
+
+foreach my $group ( keys %$groups )
+{
+	my @group =  @{$groups->{$group}}; 
+	my $k;
+	my @lineup = map
+	{
+		my $playerId = $ids{$_};
+		my $member = Games::League::Member->new( 
+			index => $k++, name => $_, id => $playerId);
+	} @group;
+	if ($group eq 'Bye')
+	{	
+		my @byes = map { $ids{$_} } @$byes;
+		@points{ @byes } = (3) x ($#byes+1);
+		push @{$pointsByPoints{3}},
+			"$names{$_} $_  \\\\" foreach @byes;
+	}
+	else
+	{
+		my $roundrobin =
+		Games::Tournament::RoundRobin->new(v => 3, league => \@lineup);
+		my $bye = $roundrobin->member('Bye');
+		my $players = $roundrobin->partners($bye);
+
+		my (@nohomework, @groupAllocation);
+		my $totalScore = 0;
+		foreach my $player ( @$players )
+		{
+			my $playerId = $ids{$player};
+			my %personalScores = 
+			%{$scoresheet->{$group}->{"$player $playerId"}};
+			my $personalScore = sum values %personalScores;
+			$totalScore += $personalScore;
+			if ( grep {$_ != 0} values %personalScores )
+			{
+				push @groupAllocation, $playerId;
+			}
+			else {
+				 push @nohomework, $playerId;
+			}
+
+			my $partners = $roundrobin->realPartners($player);
+			my @partnerScores = map {
+				my $round = $roundrobin->meeting($_, $player);
+				$scoresheet->{$group}->{"$_ $_->{id}"}->
+					{"$round. With $player"}} @$partners;
+			my $partnersHelp = sum @partnerScores;
+			$indScores{$playerId} = $personalScore + $partnersHelp;
+			push @{$indScoresByScore{$indScores{$playerId}}},
+							"$player $playerId\\\\";
+			my @withPartnerScores =
+					values %{$scoresheet->{$player}};
+			$league->{score}->{$player} = [$indScores{$player},
+							\%personalScores];
+		}
+		$groupScores{$group} = $totalScore;
+		my @groupsIds = @ids{@group};
+		my @memberScores = map { "$names{$_}($indScores{$_})" }
+								@groupsIds;
+		push @{$groupScoresByScore{$groupScores{$group}}},
+					"$group. @memberScores\\\\ ";
+		@groupAllocation = sort {$indScores{$a} <=> $indScores{$b}}
+			(reverse @groupAllocation);
+			# tiebreaker: favor player who tests after
+		@points{ @groupAllocation } = 1..$#groupAllocation+1;
+		@points{ @nohomework } = (0) x ($#nohomework+1);
+		push @{$pointsByPoints{0}}, "$names{$_} $_  \\\\"
+							foreach @nohomework;
+		push @{$pointsByPoints{$_+1}},
+		"$names{$groupAllocation[$_]} $groupAllocation[$_]  \\\\"
+						foreach 0..$#groupAllocation;}
+}
+
+map { $points{$_} = 0; } @ids{@$absentees} if $absentees;
+my %cumulative = map {
+	die "$_?" unless $_ && exists $prevgrades->{cumulative}->{$_} &&
+							exists $points{$_};
+	$_ => $prevgrades->{cumulative}->{$_} + $points{$_}; }
+						keys %names;
+my %cumulativeByGrades = ();
+push @{$cumulativeByGrades{$cumulative{$_}}}, "$names{$_} $_ \\\\ "
+					foreach keys %names;
+my $grades;
+$grades->{cumulative} = \%cumulative;
+$grades->{$roundN} = \%points;
+
+DumpFile( "$gradesheets/cumulative.yaml", \%cumulative );
+DumpFile( "$gradesheets/g$roundfile", $grades );
+DumpFile( $roundfile, $round );
+
+@{$pointsByPoints{$_}} = sort @{$pointsByPoints{$_}} foreach keys %pointsByPoints;
+@{$cumulativeByGrades{$_}} = sort @{$cumulativeByGrades{$_}}
+						foreach keys %cumulativeByGrades;
+my @indReport = map
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$indScoresByScore{$_}}" }
+		sort {$a<=>$b} keys %indScoresByScore;
+my @groupReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$groupScoresByScore{$_}}" }
+		sort {$a<=>$b} keys %groupScoresByScore;
+my @pointReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$pointsByPoints{$_}}" }
+		sort {$a<=>$b} keys %pointsByPoints;
+my @cumulReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$cumulativeByGrades{$_}}" }
+		sort {$a<=>$b} keys %cumulativeByGrades;
+my @assistantScores = map
+	{ "\\vspace{-0.4cm} $_: $assistantScores->{$roundN}->{$_} \\hspace{0.5cm}" }
+								@$assistants;
+my @byeScores = map
+	{ "\\vspace{-0.4cm} $_: $points{$ids{$_}} \\hspace{0.5cm}" }
+								@$byes;
+
+my $report;
+$report->{league} = $league->{league};
+$report->{week} = $round->{week};
+$report->{round} = $roundN;
+$report->{indScores} = join '', @indReport;
+$report->{groupScores} = join '', @groupReport;
+$report->{points} = join '', @pointReport;
+$report->{grades} = join '', @cumulReport;
+$report->{assistantScores} = join '', @assistantScores;
+$report->{byeScores} = join '', @byeScores;
+
+
+
+$report->{autogen} = "% This file, report.tex was autogenerated on " . localtime() . "by grader.pl out of report.tmpl";
+my $template = Text::Template->new(TYPE => 'FILE', SOURCE => 'report.tmpl'
+				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
+open TEX, ">report.tex";
+print TEX $template->fill_in( HASH => $report );

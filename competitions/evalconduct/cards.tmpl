@@ -1,0 +1,61 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{2.15cm}
+\textblockorigin{0.30cm}{0.35cm}
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\mytest}[1]{%
+% \begin{minipage}[t]{8.5cm}
+\framebox[8.5cm]{#1's Counts}
+\begin{tabular}[t]{|p{3.81cm}|p{3.81cm}|}
+Chinese & Looking \\ 
+\\
+\\ \hline
+\end{tabular}
+% \end{minipage}
+% \begin{minipage}[c][t]{8.5cm}
+\framebox[8.5cm]{For Assistants' Use when Rating #1}
+\begin{tabular}[t]{|p{3.81cm}|p{3.81cm}|}
+GOOD THINGS & BAD THINGS \\
+$\Box$ True Signatures (+20) & $\Box$ All Finished (-20) \\
+$\Box$ Counts (+20) & $\Box$ No Errors (-20) \\
+$\Box$ Letter Gaps (+20) & $\Box$ Wrong Pen Use (-20) \\
+$\Box$ Crossing Out (+20) & $\Box$ White-Out Use (-20)
+\\ \hline
+\end{tabular}
+% \end{minipage}
+}
+
+\newcommand{\mycard}[6]{%
+\tiny <TMPL>$cardIdentifier</TMPL>\\%
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+\begin{minipage}{8.5cm}
+  \normalsize \ding{220}Game 1 #1\\#2
+\end{minipage}
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+\begin{minipage}{8.5cm}
+  \normalsize \ding{220}Game 2 #3\\#4
+\end{minipage}
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+\begin{minipage}{8.5cm}
+  \normalsize \ding{220}Game 3 #5\\#6
+\end{minipage}
+}
+
+\newcommand{\1}[1]{%
+	\begin{texdraw} \drawdim cm
+	\rlvec(0 -0.5) \rlvec(0.5 0) \textref h:R v:B \htext{\tiny #1} \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.55 0)
+	\end{texdraw}%
+}
+
+\begin{document}
+

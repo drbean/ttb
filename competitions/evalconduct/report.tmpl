@@ -1,0 +1,60 @@
+<TMPL>$autogen</TMPL>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{2.15cm}
+\textblockorigin{0.30cm}{1.35cm}
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+\newcommand{\mycard}[2]{%
+\parbox[b][29.0cm][t]{4.6cm}{ \Large #1\\
+\normalsize
+\begin{description}
+#2
+\end{description}
+}
+}
+
+\begin{document}
+
+\begin{textblock}{15}(0,0)
+\textblocklabel{picture0,0}
+\huge <TMPL>$league</TMPL> Report for Round <TMPL>$round</TMPL>, Week <TMPL>$week</TMPL>\\
+\normalsize AssistantScores: <TMPL>$assistantScores</TMPL> Byes: <TMPL>$byeScores</TMPL>\\
+\end{textblock}
+
+\begin{textblock}{3.5}(0,1.2)
+\textblocklabel{picture0,1.2}
+\mycard
+{Player Total Scores}
+{<TMPL>$indScores</TMPL>}
+\end{textblock}
+
+\begin{textblock}{4.5}(3.5,1.2)
+\textblocklabel{picture3.5,1.2}
+\mycard
+{Group Total Scores}
+{<TMPL>$groupScores</TMPL>}
+\end{textblock}
+
+\begin{textblock}{3.5}(8.0,1.2)
+\textblocklabel{picture8.0,1.2}
+\mycard
+{Points to Grade}
+{<TMPL>$points</TMPL>}
+\end{textblock}
+
+\begin{textblock}{4.0}(11.5,1.2)
+\textblocklabel{picture11.5,1.2}
+\mycard
+{Total Grade}
+{<TMPL>$grades</TMPL>}
+\end{textblock}
+
+\end{document}
