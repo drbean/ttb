@@ -1,0 +1,16 @@
+Some questions with possible answers for your partner. What are the answers to the questions your partner has for you?
+
+The questions are in a file specified in round.yaml, and are of the form:
+
+"A: Where have you been to in Taiwan?":
+  - "B: I went to Hualien."
+  - "B: We're riding around the world."
+
+"A: Is there a cheap place to stay in Keelung?":
+  - "B: I didn't find any cheap hostels."
+  - "B: We can't. We don't have any money."
+
+"A: How did you get to Hualien?":
+  - "B: We rode our bicycles from Keelung."
+  - "B: Have you been down the west coast?"
+

@@ -1,0 +1,220 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{2.15cm}
+% \textblockorigin{0.30cm}{0.35cm} %HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % LaserJet
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\myquestion}[1]{%
+\begin{minipage}{7.5cm}
+  \normalsize \ding{220}1 #1
+  a.hspace{1.0cm}b.%\hspace{1.0cm}c.
+\end{minipage}
+}
+
+%\newcommand{\myAcard}[4]{%
+%% \parbox[t][11.7cm][t]{7.5cm}{
+%\parbox[t][12.1cm][t]{7.5cm}{
+%\begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny} \hspace*{\fill} \\
+%% \vspace{0.20cm}
+%% \begin{large}1\end{large} \normalsize #2%
+%\begin{minipage}{7.5cm}
+%  \normalsize \ding{220} #1:\\
+%  \vspace{0.2cm}
+%  a.\hspace{1.0cm}b.\hspace{1.0cm}c.
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize \ding{220} #2:\\
+%  \vspace{0.2cm}
+%  a.\hspace{1.0cm}b.\hspace{1.0cm}c.
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize \ding{220} #3:\\
+%  \vspace{0.2cm}
+%  a.\hspace{1.0cm}b.\hspace{1.0cm}c.
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize \ding{220}#4:\\
+%  \vspace{0.2cm}
+%  a.\hspace{1.0cm}b.\hspace{1.0cm}c.
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize \ding{220}4 Your question for your partner (write answers down too):\\
+%  \vspace{2.0cm}
+%  \begin{description}
+%  \item[a:]
+%  % \vspace{1.0cm}
+%  \item[b:]
+%  % \vspace{1.0cm}
+%  \item[c:]
+%  \end{description}
+%\end{minipage}
+%}
+%}
+
+\newcommand{\myAcard}[8]{%
+% \parbox[t][11.7cm][t]{7.5cm}{
+\parbox[t][12.1cm][t]{7.5cm}{
+\begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny} \hspace*{\fill} \\
+% \vspace{0.20cm}
+% \begin{large}1\end{large} \normalsize #2%
+\begin{minipage}{7.5cm}
+  \large 1. \normalsize #1\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 2. \normalsize #2\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 3. \normalsize #3\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 4. \normalsize #4\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 5. \normalsize #5
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 6. \normalsize #6
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 7. \normalsize #7
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 8. \normalsize #8
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 9. \normalsize Your partner's question for you (write answers down too):\\
+  \vspace{0.4cm}
+  \begin{description}
+  \item[a:]
+  % \vspace{1.0cm}
+  \item[b:]
+  %\vspace{1.0cm}
+  \end{description}
+\end{minipage}
+}
+}
+
+\newcommand{\myBcard}[8]{%
+% \parbox[t][11.7cm][t]{7.5cm}{
+\parbox[t][12.1cm][t]{7.5cm}{
+\begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny} \hspace*{\fill} \\
+% \vspace{0.20cm}
+% \begin{large}1\end{large} \normalsize #2%
+\begin{minipage}{7.5cm}
+  \large 1. \normalsize #1
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 2. \normalsize #2
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 3. \normalsize #3
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 4. \normalsize #4
+  \vspace{-0.2cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 5. \normalsize #5\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 6. \normalsize #6\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 7. \normalsize #7\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 8. \normalsize #8\\
+  \vspace{-0.2cm}
+  % a.\hspace{1.0cm}b.\hspace{1.0cm}
+\end{minipage}
+\begin{minipage}{7.5cm}
+  \large 9. \normalsize Your partner's question for you (write answers down too):\\
+  \vspace{0.4cm}
+  \begin{description}
+  \item[a:]
+  % \vspace{1.0cm}
+  \item[b:]
+  \end{description}
+\end{minipage}
+}
+}
+
+%\newcommand{\myBcard}[4]{%
+%% \parbox[t][11.7cm][t]{7.5cm}{
+%\parbox[t][12.1cm][t]{7.5cm}{
+%\begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny} \hspace*{\fill} \\
+%% \vspace{0.20cm}
+%% \begin{large}1\end{large} \normalsize #2%
+%\begin{minipage}{7.5cm}
+%  \normalsize #1
+%  \vspace{-0.2cm}
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize #2
+%  \vspace{-0.2cm}
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize #3
+%  \vspace{-0.2cm}
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize #4
+%  \vspace{-0.2cm}
+%\end{minipage}
+%\begin{minipage}{7.5cm}
+%  \normalsize Your partner's question for you (write answers down too):\\
+%  \vspace{0.7cm}
+%  \begin{description}
+%  \item[a:]
+%  % \vspace{1.0cm}
+%  \item[b:]
+%  %\vspace{1.0cm}
+%  \item[c:]
+%  \end{description}
+%\end{minipage}
+%}
+%}
+
+\newcommand{\1}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\makebox(0.5,0.5)[br]{\tiny #1}}
+\put (0,0){\line(0,1){0.5}}
+\put (0,0){\line(1,0){0.5}}
+\put (0,0.5){\line(1,0){0.5}}
+\put (0.5,0){\line(0,1){0.5}}
+\end{picture}%
+}
+
+\begin{document}
+
