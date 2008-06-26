@@ -1,0 +1,37 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+% \textblockorigin{0.30cm}{2.15cm}
+% \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % w5
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\mycard}[1]{%
+\tiny <TMPL>$cardIdentifier</TMPL>\\%
+\begin{minipage}{8.5cm}
+  \normalsize #1
+\end{minipage}
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
+}
+
+\newcommand{\1}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\framebox(0.5,0.5)[br]{\tiny #1}}
+\end{picture}%
+}
+
+\newcommand{\2}{%
+\includegraphics{cards.p2}%
+}
+
+\begin{document}
+
