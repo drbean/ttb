@@ -1,0 +1,41 @@
+<TMPL>$autogen</TMPL>
+\documentclass[b5paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{2.15cm}
+% \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % w5
+\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+\newcommand{\mycard}[<TMPL>$sections</TMPL>]{%
+% \parbox[t][11.7cm][t]{7.5cm}{
+\parbox[t][12.1cm][t]{7.5cm}{
+% \begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny}\\
+% \vspace{0.20cm}
+% \begin{large}1\end{large} \normalsize #2%
+\begin{minipage}{7.5cm}
+  \begin{description}
+<TMPL>$sectionsLatex</TMPL>
+  \end{description}
+\end{minipage}
+}
+}
+
+\newcommand{\1}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\makebox(0.5,0.5)[br]{\tiny #1}}
+\put (0,0){\line(0,1){0.5}}
+\put (0,0){\line(1,0){0.5}}
+\put (0,0.5){\line(1,0){0.5}}
+\put (0.5,0){\line(0,1){0.5}}
+\end{picture}%
+}
+
+\begin{document}
+
