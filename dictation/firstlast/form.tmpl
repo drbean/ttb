@@ -1,0 +1,58 @@
+<tmpl>$autogen</tmpl>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+% \textblockorigin{+0.35cm}{2.15cm}
+\textblockorigin{+0.35cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{+0.35cm}{3.35cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[8]{%
+	\addvspace{0.1cm}
+	% \small #1
+	\normalsize
+	\parbox[t][12.4cm][t]{7.8cm}{
+\begin{large} <tmpl>$league</tmpl>\end{large}
+\vspace{-0.2cm}
+\begin{description}
+	\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{0.5cm}\end{large}
+	\vspace{-0.2cm}
+	\item [Assistants:] \begin{normalsize}<tmpl>$assistant[0]</tmpl> <tmpl>$assistantId[0]</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$assistantId[1]</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$assistantId[2]</tmpl>, <tmpl>$assistant[3]</tmpl> <tmpl>$assistantId[3]</tmpl> \end{normalsize}
+	\vspace{-0.2cm}
+	\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl> \hfill \textbf{Bye:} <tmpl>$group{Bye}[0]</tmpl> <tmpl>$group{Bye}[1]</tmpl>
+	\vspace{-0.2cm}
+	\item [Group:] #1
+	% \vspace{-0.2cm}
+	\item [Player:]
+	\begin{description}
+	\vspace{-0.2cm}
+	\large
+	\item #2 \hfill \normalsize Signature: \rule{2.0cm}{0.3pt}
+	\vspace{-0.1cm}
+	\item #3 \hfill \vspace{0.2cm}\\
+	\end{description}
+	\vspace{-0.7cm}
+	\item [Partners:] \hfill
+	\begin{description}
+	\vspace{-0.3cm}
+	\item #4 #5 \hfill\\
+	\vspace{-0.4cm}
+	\item #6 #7 \hfill\\
+	\vspace{-0.5cm}
+	\end{description}
+\end{description}
+\textbf Rules: \normalsize
+\vspace{-0.4cm}
+ \begin{enumerate}
+\item HELP YOUR PARTNER! WORK TOGETHER! Your score is the sum of your letters correct and your partner's letters correct. \vspace{-0.6cm}
+\item BUT DON'T WRITE #4's letters. #4 must write #4's letters. \vspace{-0.3cm}
+\item And SIGN your card and #4's card, or LOSE points. Prove #4 wrote #4's card.\vspace{-0.3cm}
+\item Help #4, but don't do all #4's work. Make sure #4 works too. \vspace{-0.3cm}
+\item Your score is i) 3 if 80 of both you and #4's letters are correct. ii) 2 if 70 are correct. iii) 1 if you and #4 both signed each other's cards. iv) 0, otherwise.
+\end{enumerate}
+\vspace{0.0cm}
+	}
+}
+\begin{document}
+
