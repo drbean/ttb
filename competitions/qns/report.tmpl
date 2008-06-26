@@ -1,0 +1,77 @@
+<TMPL>$autogen</TMPL>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\TPMargin{0.2cm}
+\usepackage{pifont}
+\usepackage{amsfonts}
+% \textblockorigin{0.30cm}{0.35cm} %HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % LaserJet
+\textblockorigin{0.05cm}{0.05cm} % HPLaserJ5000LE
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+\newcommand{\mycard}[2]{%
+\parbox[b][29.0cm][t]{4.6cm}{ \Large #1\\
+\normalsize
+\begin{description}
+#2
+\end{description}
+}
+}
+
+\begin{document}
+
+\begin{textblock}{20}(0,0)
+\textblocklabel{picture0,0}
+\huge <TMPL>$league</TMPL> Report for Round <TMPL>$round</TMPL>, Week <TMPL>$week</TMPL>\\
+\normalsize AssistantScores: <TMPL>$assistantScores</TMPL> Byes: <TMPL>$byeScores</TMPL>\
+\end{textblock}
+
+\begin{textblock}{12.0}(0,0.7)
+\textblocklabel{picture0,0.7}
+% \begin{tabular}[t]{|p{0.5cm}|p{2.1cm}|p{1.0cm}|p{1.0cm}|p{2.1cm}|p{1.0cm}|}
+% \begin{tabular}[t]{|c|c|c|c|c|c|}
+\begin{small}
+\begin{tabular}[t]{|l|l|l|c|l|l|}
+\hline
+
+ Group&<TMPL>$role[0]</TMPL>(Quns)&Total&Result&<TMPL>$role[1]</TMPL>(Quns)&Total\\ \hline
+\hline
+<TMPL>$indMatches</TMPL>
+\hline
+\end{tabular}
+\end{small}
+\end{textblock}
+
+\begin{textblock}{3.5}(0,4.5)
+\textblocklabel{picture0,5.7}
+\mycard
+{Questions Correct}
+{<TMPL>$indScores</TMPL>}
+\end{textblock}
+
+\begin{textblock}{4.5}(3.5,4.5)
+\textblocklabel{picture3.5,5.7}
+\mycard
+{Group's Winner}
+{<TMPL>$groupScores</TMPL>}
+\end{textblock}
+
+\begin{textblock}{3.5}(8.0,4.5)
+\textblocklabel{picture8.0,5.7}
+\mycard
+{Round <TMPL>$round</TMPL> Grade}
+{<TMPL>$points</TMPL>}
+\end{textblock}
+
+\begin{textblock}{4.0}(11.5,1.5)
+\textblocklabel{picture11.5,5.7}
+\mycard
+{All Homework}
+{<TMPL>$grades</TMPL>}
+\end{textblock}
+
+\end{document}
