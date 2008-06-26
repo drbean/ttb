@@ -1,0 +1,161 @@
+#!/usr/bin/perl
+
+# Last Edit: 2006 Nov 07, 02:02:38 PM
+# $Id$
+
+use strict;
+use warnings;
+
+use List::Util qw/reduce sum/;
+
+use Text::Template;
+use YAML qw/ LoadFile DumpFile /;
+use IO::All;
+
+use Games::Tournament::RoundRobin;
+use Games::League::Member;
+
+my $round = LoadFile( "./round.yaml" );
+my $league = LoadFile( "../league.yaml" );
+my @members = @{$league->{member}};
+my %ids = map { $_->{name} => $_->{id} } @members;
+my %names = map { $_->{id} => $_->{name} } @members;
+my $absentees = $league->{absent}? $league->{absent}: undef;
+my $assistants = $round->{assistant};
+my $assistantScores;
+$assistantScores = LoadFile("../assistants.yaml")
+                                       unless $$assistants[0] =~ m/No.*ne/;
+my $byes = $round->{group}->{Bye};
+
+my $scoresheet = LoadFile "scores.yaml";
+my $gradesheets = $league->{hw};
+my $roundN = $round->{round};
+my $prevround = $roundN - 1;
+die "Gradesheet for round $roundN, $gradesheets/g$roundN.yaml already exists,"
+			if -e "$gradesheets/g$roundN.yaml";
+my $prevgradefile = "$gradesheets/g$prevround.yaml";
+my $prevgrades = LoadFile( $prevgradefile )
+			or die "No previous $prevgradefile grade file: $!\n";
+
+my %indScores = ();
+my %indScoresByScore = ();
+my %groupScores = ();
+my %groupScoresByScore = ();
+my %points = ();
+my %pointsByPoints = ();
+
+my $groups = $round->{group};
+
+foreach my $group ( keys %$groups )
+{
+	my @group =  @{$groups->{$group}}; 
+	if ($group eq 'Bye')
+	{	
+		my @byes = map { $ids{$_} } @$byes;
+		@points{ @byes } = (3) x ($#byes+1);
+		push @{$pointsByPoints{3}},
+			"$names{$_} $_  \\\\" foreach @byes;
+	}
+	else
+	{
+		my (@nohomework, @groupAllocation);
+		my $totalScore = 0;
+		foreach my $player ( @group )
+		{
+			my $playerId = $ids{$player} or die "${player}'s id?";
+                        die "group is $group?" unless $group;
+			die "No score for $player $playerId in $group" unless
+				$scoresheet->{$group}->{"$player $playerId"};
+			my %personalScores = 
+			%{$scoresheet->{$group}->{"$player $playerId"}};
+			die "$player scores?" unless
+					grep m/^-?\d+$/, values %personalScores;
+			my $personalScore = sum values %personalScores;
+			$totalScore += $personalScore;
+			if ( grep {$_ != 0} values %personalScores )
+			{
+				push @groupAllocation, $playerId;
+			}
+			else {
+				 push @nohomework, $playerId;
+			}
+			$indScores{$playerId} = $personalScore;
+			push @{$indScoresByScore{$indScores{$playerId}}},
+							"$player $playerId\\\\";
+		}
+		$totalScore *= 2/3 if $#group == 2;
+		$groupScores{$group} = $totalScore;
+		my @groupsIds = @ids{@group};
+		my @memberScores = map { "$names{$_}($indScores{$_})" }
+								@groupsIds;
+		push @{$groupScoresByScore{$groupScores{$group}}},
+					"$group. @memberScores\\\\ ";
+		my $points;
+		if ( $totalScore >= 194 ) { $points = 3; }
+		elsif ( $totalScore >= 120 ) { $points = 2; }
+		elsif ( $totalScore >= 1 ) { $points = 1; }
+		else { $points = 0; }
+		@points{ @groupAllocation } = ($points) x (@groupAllocation);
+		@points{ @nohomework } = (0) x ($#nohomework+1);
+		push @{$pointsByPoints{0}}, "$names{$_} $_  \\\\"
+							foreach @nohomework;
+		push @{$pointsByPoints{$points}},
+			"$group. @names{@groupAllocation}\\\\" if $points;
+	}
+}
+
+map { $points{$_} = 0; } @ids{@$absentees} if $absentees;
+my %cumulative = map {
+	die "$_ has $points{$_}?" unless $_ && 
+		exists $prevgrades->{cumulative}->{$_} && exists $points{$_};
+	$_ => $prevgrades->{cumulative}->{$_} + $points{$_};
+		} keys %names;
+my %cumulativeByGrades = ();
+push @{$cumulativeByGrades{$cumulative{$_}}}, "$names{$_} $_ \\\\ "
+					foreach keys %names;
+my $grades;
+$grades->{cumulative} = \%cumulative;
+$grades->{$roundN} = \%points;
+
+DumpFile( "$gradesheets/cumulative.yaml", \%cumulative );
+DumpFile( "$gradesheets/g$roundN.yaml", $grades );
+DumpFile( "round.yaml", $round );
+
+@{$pointsByPoints{$_}} = sort @{$pointsByPoints{$_}} foreach keys %pointsByPoints;
+@{$cumulativeByGrades{$_}} = sort @{$cumulativeByGrades{$_}}
+						foreach keys %cumulativeByGrades;
+my @indReport = map
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$indScoresByScore{$_}}" }
+		sort {$a<=>$b} keys %indScoresByScore;
+my @groupReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$groupScoresByScore{$_}}" }
+		sort {$a<=>$b} keys %groupScoresByScore;
+my @pointReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{-0.5cm}\\\\@{$pointsByPoints{$_}}" }
+		sort {$a<=>$b} keys %pointsByPoints; # XXX move to left someway
+my @cumulReport = map 
+	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$cumulativeByGrades{$_}}" }
+		sort {$a<=>$b} keys %cumulativeByGrades;
+my @assistantScores = map
+	{ "\\vspace{-0.4cm} $_: $assistantScores->{$roundN}->{$_} \\hspace{0.5cm}" }
+			@$assistants unless $$assistants[0] =~ m/No.*ne/;
+my @byeScores = map
+	{ "\\vspace{-0.4cm} $_: $points{$ids{$_}} \\hspace{0.5cm}" }
+								@$byes;
+
+my $report;
+$report->{league} = $league->{league};
+$report->{week} = $round->{week};
+$report->{round} = $roundN;
+$report->{indScores} = join '', @indReport;
+$report->{groupScores} = join '', @groupReport;
+$report->{points} = join '', @pointReport;
+$report->{grades} = join '', @cumulReport;
+$report->{assistantScores} = join '', @assistantScores;
+$report->{byeScores} = join '', @byeScores;
+
+$report->{autogen} = "% This file, report.tex was autogenerated on " . localtime() . "by grader.pl out of report.tmpl";
+my $template = Text::Template->new(TYPE => 'FILE', SOURCE => 'report.tmpl'
+				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
+open TEX, ">report.tex";
+print TEX $template->fill_in( HASH => $report );
