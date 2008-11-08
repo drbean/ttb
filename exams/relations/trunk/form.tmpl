@@ -1,0 +1,48 @@
+%Last Edit: 2008 11月 02, 21時03分57秒
+<tmpl>$autogen</tmpl>
+\documentclass[b5paper]{article}
+\usepackage[absolute,showboxes]{textpos}
+\usepackage{amsfonts}
+\usepackage{pifont}
+\textblockorigin{+1.75cm}{0.45cm} % HPLaserJ 2300
+% \textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+% \textblockorigin{0.05cm}{0.70cm} % A4 HPLaserJ5000LE
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\mycard}[6]{%
+	\addvspace{0.1cm}
+	\small #1
+	\normalsize
+	\parbox[t][12.46cm][t]{7.8cm}{
+		\begin{Large} <tmpl>$league</tmpl> Groupwork \end{Large}
+		\begin{description}
+			\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{0.5cm}\end{large}
+			\vspace{-0.2cm}
+			\item [Assistants:] \begin{large}<tmpl>$assistant[0]</tmpl> <tmpl>$id{$assistant[0]}</tmpl>, <tmpl>$assistant[1]</tmpl> <tmpl>$id{$assistant[1]}</tmpl>, <tmpl>$assistant[2]</tmpl> <tmpl>$id{$assistant[2]}</tmpl> \end{large}
+			\vspace{-0.2cm}
+			\item [Week:] \hspace{0.5cm}<tmpl>$week</tmpl>
+			\vspace{-0.2cm}
+			\item [Group:] #2
+			\vspace{-0.2cm}
+			\item [A:] #3
+			\item [B:] #4
+			\item [C:] #5
+			\item [D:] #6
+			\vspace{+0.2cm}
+			\item [Points:] \begin{Large}\rule{2.0cm}{0.3pt}/<tmpl>$grades[-1]</tmpl>\end{Large}
+			\vspace{-0.2cm}
+			\item [Rules:] \normalsize 1. Read your partners your card  and work out how you and they are related. \vspace{-0.2cm} \par 2. DO NOT PICK YOUR CARD UP FROM THE TABLE. \vspace{-0.2cm} \par 3. DO NOT LOOK OR POINT AT YOUR PARTNER'S CARD. \vspace{-0.2cm} \par 4. NO CHINESE. Everytime you use Chinese you lose 1 of your 15 points. \vspace{-0.2cm} \par 5. Stop after 3 minutes. \vspace{-0.2cm} \par 6. Your group's score: \begin{description}
+			\vspace{-0.2cm}
+			\item Average <tmpl>$questions[0]</tmpl> questions=<tmpl>$grades[0]</tmpl> points,
+			\vspace{-0.2cm}
+			\item Average <tmpl>$questions[1]</tmpl> questions=<tmpl>$grades[1]</tmpl> points,
+			\vspace{-0.2cm}
+			\item Average <tmpl>$questions[2]</tmpl> questions=<tmpl>$grades[2]</tmpl> points,
+			\vspace{-0.2cm}
+			\item Average <tmpl>$questions[3]</tmpl> questions=<tmpl>$grades[3]</tmpl> points,
+			\end{description}
+		\end{description}
+	}
+}
+\begin{document}
+
