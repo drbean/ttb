@@ -1,0 +1,202 @@
+---
+league: 夜應外大學二甲
+field: 英語會話(一)
+hw: /home/drbean/class/FLA0018/homework
+member:
+  - Chinese: 徐銘鴻
+    id: N9361748
+    name: Peter
+  - Chinese: 張雅臻
+    id: N9461734
+    name: Jane
+  - Chinese: 彭珠蓮
+    id: N9461736
+    name: Rebecca
+  - Chinese: 劉佳佳
+    id: N9461738
+    name: Sunny
+  - Chinese: 葉又寧
+    id: N9461753
+    name: Albee1
+  - Chinese: 許芷菱
+    id: N9461756
+    name: Anny
+  - Chinese: 邱錦玉
+    id: N9532037
+    name: Rita
+  - Chinese: 劉芳君
+    id: N9561721
+    name: Fenny
+  - Chinese: 唐淑芬
+    id: N9561737
+    name: Nancy
+  - Chinese: 劉發州
+    id: N9561766
+    name: Frank
+  - Chinese: 賴淑惠
+    id: N9661701
+    name: Ivy
+  - Chinese: 周品嫻
+    id: N9661702
+    name: Ashley
+  - Chinese: '?琮婷'
+    id: N9661704
+    name: Albee2
+  - Chinese: 吳嘉怡
+    id: N9661705
+    name: Anne
+  - Chinese: 葉雅婷
+    id: N9661706
+    name: Ting
+  - Chinese: 鄧雅雯
+    id: N9661707
+    name: Yvonne
+  - Chinese: 邱于芳
+    id: N9661708
+    name: Unknown3
+  - Chinese: 徐曉彤
+    id: N9661709
+    name: Irin
+  - Chinese: 胡語倫
+    id: N9661712
+    name: Allen
+  - Chinese: 劉軒齊
+    id: N9661714
+    name: Steven
+  - Chinese: 陳奕學
+    id: N9661715
+    name: Rogers
+  - Chinese: 周雅雯
+    id: N9661716
+    name: Joe
+  - Chinese: 黃路加
+    id: N9661717
+    name: Lucas
+  - Chinese: 鍾明諺
+    id: N9661718
+    name: Fack
+  - Chinese: 周于婷
+    id: N9661719
+    name: Eleven
+  - Chinese: 林碧珍
+    id: N9661720
+    name: Jean
+  - Chinese: 廖婉秀
+    id: N9661722
+    name: Iris
+  - Chinese: 謝文秀
+    id: N9661723
+    name: Jessica
+  - Chinese: 林逸喬
+    id: N9661724
+    name: Jo
+  - Chinese: 吳采薇
+    id: N9661725
+    name: Mico
+  - Chinese: 賴恩聖
+    id: N9661727
+    name: Nelson
+  - Chinese: 黃聖昱
+    id: N9661728
+    name: Moto
+  - Chinese: 劉芯惠
+    id: N9661730
+    name: Unknown1
+  - Chinese: 林庭萱
+    id: N9661731
+    name: Tiffany
+  - Chinese: 陳家洋
+    id: N9661733
+    name: Legend
+  - Chinese: 曾佩茹
+    id: N9661734
+    name: Lucy
+  - Chinese: 廖政福
+    id: N9661737
+    name: Ford
+  - Chinese: 鄭淑鈴
+    id: N9661738
+    name: Linda
+  - Chinese: 汪大智
+    id: N9661740
+    name: Ken
+  - Chinese: 林妤容
+    id: N9661741
+    name: Vivian
+  - Chinese: 吳筱涵
+    id: N9661742
+    name: Daisy
+  - Chinese: 羅惠娟
+    id: N9661743
+    name: Michelle
+  - Chinese: 吳桂麗
+    id: N9661745
+    name: Mary
+  - Chinese: 吳書儀
+    id: N9661746
+    name: Karen
+  - Chinese: 邱靖棋
+    id: N9661747
+    name: Kiki
+  - Chinese: 楊妙雲
+    id: N9661748
+    name: Cloud
+  - Chinese: 王育祥
+    id: N9661750
+    name: Unknown2
+  - Chinese: 蕭郁玲
+    id: U9533039
+    name: Ally
+exams:
+  - exam1
+  - exam2
+  - exam3
+  - exam4
+series:
+  - first
+  - second
+  - third
+  - fourth
+absent:
+  - Unknown1
+  - Unknown2
+  - Unknown3
+  - Fack
+seats:
+  LightBlue : [25, 25a, 26, 26a]
+  Gray      : [23, 15, 24, 16]
+  DarkGreen : [21, 13, 22, 14]
+  DarkBlue  : [19, 11, 20, 12]
+  Brown     : [17, 09, 18, 10]
+  Black     : [01, 02, 03, 04]
+
+  LightGreen: [37, 27, 38, 28]
+  Orange    : [39, 29, 40, 30]
+  Purple    : [41, 31, 42, 32]
+  Red       : [43, 33, 44, 34]
+  White     : [45, 35, 46, 36]
+regions:
+  Left:
+    - Black
+    - Brown
+    - DarkBlue
+    - DarkGreen
+    - Gray
+    - LightBlue
+  Right:
+    - LightGreen
+    - Orange
+    - Purple
+    - Red
+    - White
+expertseats:
+  Left:
+    A: [01, 02, 03, 04, 17, 09]
+    B: [18, 10, 19, 11, 20, 12]
+    C: [21, 13, 22, 14, 23, 15]
+    D: [24, 16, 25, 25a, 26, 26a]
+  Right:
+    A: [37, 27, 38, 28, 39]
+    B: [29, 40, 30, 41, 31]
+    C: [42, 32, 43, 33, 44]
+    D: [34, 45, 35, 46, 36]
