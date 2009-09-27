@@ -39,6 +39,21 @@ sub default :Path {
     $c->response->status(404);
 }
 
+sub auto : Private {
+	my ($self, $c) = @_;
+	my $exercise = $c->request->query_params->{exercise};
+	$c->session->{exercise} = $exercise if $exercise;
+	if ($c->controller eq $c->controller('Login')) {
+	   return 1;
+	}
+	if (!$c->user_exists) {
+	   $c->log->debug('***Root::auto User not found, forwarding to /login');
+	   $c->response->redirect($c->uri_for('/login'));
+	   return 0;
+       }
+       return 1;
+}
+
 =head2 end
 
 Attempt to render a view, if needed.
@@ -59,3 +74,4 @@ it under the same terms as Perl itself.
 =cut
 
 1;
+# vim: set ts=8 sts=4 sw=4 noet:
