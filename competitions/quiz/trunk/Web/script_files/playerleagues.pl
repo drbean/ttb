@@ -22,7 +22,7 @@ BEGIN {
 
 my @leagueids = qw/GL00029 GL00030 GL00031 GL00034 FLA0016 MIA0017 BMA0099 BMA0100 FLA0030 FLA0027/;
 my $dir = ( File::Spec->splitdir(getcwd) )[-1];
-$dir = qr/^(GL000|FL|MIA|BMA)/ if $dir eq 'dic';
+$dir = qr/^(GL000|FL|MIA|BMA)/ if $dir eq 'comp';
 @leagueids = grep m/$dir/, @leagueids;
 
 no strict qw/subs refs/;
@@ -46,7 +46,7 @@ my $leagues = [
 	[ "access", "Self-Access Learning", "Listening" ],
 	];
 
-uptodatepopulate( 'League', $leagues );
+uptodatepopulate( 'Leagues', $leagues );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
@@ -87,8 +87,9 @@ foreach my $league ( 'officials', @leagueids )
 		$players{$_->[0]} = [ $_->[0], $_->[1], $_->[2] ];
 	}
 }
+
 my $playerpopulator = [ [ qw/id name password/ ], values %players ];
-uptodatepopulate( 'Player', $playerpopulator );
+uptodatepopulate( 'Players', $playerpopulator );
 
 my (@allLeaguerolebearers, @allLeaguePlayers);
 foreach my $league ( @leagueids )
@@ -105,15 +106,15 @@ foreach my $league ( @leagueids )
 	push @allLeaguerolebearers, values %rolebearers;
 	$members{193001} = [ $league, 193001 ];
 }
-uptodatepopulate( 'Member', [ [ qw/league player/ ], 
+uptodatepopulate( 'Members', [ [ qw/league player/ ], 
 				@allLeaguePlayers ] );
 
-uptodatepopulate( 'Role', [ [ qw/id role/ ], 
+uptodatepopulate( 'Roles', [ [ qw/id name/ ], 
 [ 1, "official" ],
 [ 2, "player" ],
 [ 3, "amateur" ], ] );
 
-uptodatepopulate( 'Rolebearer', [ [ qw/player role/ ], 
+uptodatepopulate( 'Rolebearers', [ [ qw/player role/ ], 
 				[ 193001, 1 ],
 				@allLeaguerolebearers ] );
 
