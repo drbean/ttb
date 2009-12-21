@@ -4,7 +4,7 @@
   <COL width="40">
   <tr>
     <th>Player ID
-[% FOREACH q IN quiz %]
+[% FOREACH q IN quiz.nsort('id') %]
     <th>[% q.id %]
 [% END %]
     <th>Player Total
