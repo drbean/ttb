@@ -4,15 +4,15 @@
 
 <table>
 <tr><th>Name</th><th>Description</th><th>Type</th><th>Score</th></tr>
-[% FOREACH exercise IN exercises -%]
-  [% id = exercise.id %]
+[% FOREACH quiz IN quizzes -%]
+  [% id = quiz.id %]
   <tr>
-    <td>[% exercise.id %]</td>
-    <td>[% exercise.description %]</td>
-    <td>[% exercise.type %]</td>
+    <td>[% quiz.id %]</td>
+    <td>[% quiz.description %]</td>
+    <td>[% quiz.type %]</td>
     <td>[% letters.$id %]</td>
     <td>
-         <a href="[% Catalyst.uri_for('/play/update/') _ exercise.id %]">Go!</a>
+         <a href="[% c.uri_for('/play/update/') _ quiz.id %]">Go!</a>
     </td>
   </tr>
 [% END -%]

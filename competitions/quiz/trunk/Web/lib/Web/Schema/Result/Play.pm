@@ -15,7 +15,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 15,
   },
-  "exercise",
+  "quiz",
   {
     data_type => "VARCHAR",
     default_value => undef,
@@ -39,7 +39,7 @@ __PACKAGE__->add_columns(
     size => undef,
   },
 );
-__PACKAGE__->set_primary_key("exercise", "player", "blank");
+__PACKAGE__->set_primary_key("quiz", "player", "blank");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53

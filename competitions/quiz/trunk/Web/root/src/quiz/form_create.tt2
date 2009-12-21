@@ -1,7 +1,7 @@
 [% text = text.id %]
-[% META title = "Creating dictation exercise" -%]
+[% META title = "Creating quiz" -%]
 
-<form method="post" action="[% Catalyst.uri_for('form_create_do') %]">
+<form method="post" action="[% c.uri_for('form_create_do') %]">
 <table>
   <tr><td>Id:</td><td><input type="text" name="id"></td></tr>
 </table>
