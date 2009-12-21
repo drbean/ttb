@@ -195,6 +195,131 @@ sub tally : Local {
 }
 
 
+=head2 score
+
+Compare number of correct answers of pairs, choose winners/losers, show a results page
+
+=cut
+ 
+sub score : Local {
+	my ($self, $c, $topic, $story) = @_;
+	my $player = $c->session->{player_id};
+	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
+	my $targetId = $target? $target->role: 'all';
+	my $leagueId = $c->session->{league};
+	my $genre = $c->model("DB::Leaguegenre")->find(
+			{ league => $leagueId } )->genre;
+	my $questions = $genre->questions->search(
+		{ topic => $topic, story => $story } );
+	my @quiz;
+	while ( my $q = $questions->next ) {
+		push @quiz, { content => $q->content, id => $q->id, };
+	}
+	my @quizids = map { $_->{id} } @quiz;
+	my ($tallies, %totals, @playerids);
+	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
+	my $players = $league->members;
+	while ( my $player = $players->next ) {
+		my $pid = $player->profile->id;
+		push @playerids, $pid;
+		my $played = $player->play->search({
+				topic => $topic, story => $story });
+		while (my $question = $played->next ) {
+			my $profile = $question->profile;
+			my $qid = $profile->id;
+			my $correct = $profile->answer eq $question->response?
+					1: 0;
+			$tallies->{$pid}->{$qid} = $correct;
+		}
+		$tallies->{$pid}->{total} = sum map { $tallies->{$pid}->{$_} }
+					keys %{ $tallies->{$pid} };
+	}
+	my $opponents = $c->model('SwissDB::Opponents')->search({
+			round => 1, tournament => $leagueId });
+	my $roles = $c->model('SwissDB::Roles')->search({
+			round => 1, tournament => $leagueId });
+	my ($points, %opponents, %roles, %parity,
+		$byegame, $lategames, $unpairedgames);
+	while ( my $pair = $opponents->next ) {
+		if ( $pair->opponent =~ m/bye/i ) {
+			my $player = $pair->player;
+			$points->{$player} = 5;
+			$byegame = { contestants => {Bye => $player },
+				results => { 'Bye' => $points->{$player} } };
+		}
+		elsif ( $pair->opponent =~ m/late/i ) {
+			my $unpaired = $pair->opponent;
+			for my $unpaired ( @$unpaired ) {
+				$points->{$unpaired} = 1;
+			}
+		}
+		elsif ( $pair->opponent =~ m/unpaired/i ) {
+			my $unpaired = $pair->opponent;
+			for my $unpaired ( @$unpaired ) {
+				$points->{$unpaired} = 0;
+			}
+		}
+		else {
+
+			my $player = $pair->player;
+			my $opponent = $pair->opponent;
+			$opponents{$player} = $opponent;
+			$opponents{$opponent} = $player;
+			$parity{$player}++;
+			$parity{$opponent}++;
+			$roles{$player} = $roles->find({
+					player => $player })->role;
+			$roles{$opponent} = $roles->find({
+					player => $opponent })->role;
+		}
+	}
+	my ($game, %seen);
+	for my $player ( keys %opponents ) {
+		next if $seen{$player};
+		my $opponent = $opponents{$player};
+		die
+"${player}'s opponent is $opponent, but is ${opponent}'s opponent $player?"
+			unless $parity{$opponent} == 2 and
+				$parity{$player} == 2;
+		die "No $player quiz tally?" unless exists $tallies->{$player};
+		my $ourcorrect = $tallies->{$player}->{total};
+		die "No $opponent card against $player?" unless exists
+						$tallies->{$opponent};
+		my $theircorrect = $tallies->{$opponent}->{total};
+$DB::single=1;
+		if ( not defined $ourcorrect ) {
+			$points->{$player} = 0;
+			$points->{$opponent} = defined $theircorrect? 5: 0;
+		}
+		elsif ( not defined $theircorrect ) {
+			$points->{$player} = 5;
+			$points->{$opponent} = 0;
+		}
+		else {
+			$points->{$player} = $ourcorrect > $theircorrect? 5:
+					$ourcorrect < $theircorrect? 3: 4;
+			$points->{$opponent} = $ourcorrect > $theircorrect? 3:
+					$ourcorrect < $theircorrect? 5: 4;
+		}
+		my %rolepair = ( $player => $roles{$player},
+				$opponent => $roles{$opponent});
+		my %role2player = reverse %rolepair;
+		push @$game, { contestants => { White => $role2player{White},
+						Black => $role2player{Black} },
+			results => { White => $points->{$role2player{White}}, 
+				 Black => $points->{$role2player{Black}} } };
+		$seen{$opponent} = 1;
+	}
+	push @$game, $byegame if defined $byegame;
+	$c->stash->{game} = $game;
+	$c->stash->{roles} = [ qw/White Black/ ];
+	$c->stash->{points} = $points;
+	$c->stash->{genre} = $genre->name;
+	$c->stash->{target} = $targetId;
+	$c->stash->{template} = "scores.tt2";
+}
+
+
 =head2 delete
 
 Delete a quiz. Delete of Questions done here too.
