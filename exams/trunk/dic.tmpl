@@ -13,15 +13,15 @@
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 \renewcommand{\baselinestretch}{0.5}
-\newcommand{\mycard}[<TMPL>$sections</TMPL>]{%
-% \parbox[t][11.7cm][t]{7.5cm}{
-\parbox[t][12.1cm][t]{7.5cm}{
+\newcommand{\mycard}[1]{%
+\parbox[t][12.1cm][t]{9.5cm}{
 % \begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny}\\
 % \vspace{0.20cm}
 % \begin{large}1\end{large} \normalsize #2%
-\begin{minipage}{7.5cm}
+\begin{minipage}{8.5cm}
   \begin{description}
-<TMPL>$sectionsLatex</TMPL>
+	\item \parbox{7.3cm}{\normalsize #1}
+	\vspace{0.2cm}
   \end{description}
 \end{minipage}
 }
