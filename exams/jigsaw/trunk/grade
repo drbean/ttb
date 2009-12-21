@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2009 10月 31, 19時47分13秒
+# Last Edit: 2009 10月 31, 19時58分40秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -62,7 +62,8 @@ my @number = qw/First Second Third Fourth Fifth Sixth/;
 my $questions2grade = sub {
         my $questionsRight = shift;
 	my $passingGrade = $topGrade * 60 / 100;
-        return sprintf '%.0f', ( $passingGrade +
+	# return sprintf '%.0f', ( $passingGrade +
+        return ( $passingGrade +
 		($questionsRight-$sixtypercentScore)*( $topGrade-$passingGrade)/
 		($totalQuestions-$sixtypercentScore));
 };
