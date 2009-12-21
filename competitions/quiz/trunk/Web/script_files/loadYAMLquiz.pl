@@ -50,6 +50,7 @@ my $d = $model->connect( @$connect_info );
 
 use YAML qw/LoadFile DumpFile/;
 use IO::All;
+
 my $sequence = LoadFile $ARGV[0];
 my @questions;
 TOPIC: for my $t ( keys %$sequence ) {
@@ -62,7 +63,7 @@ TOPIC: for my $t ( keys %$sequence ) {
 		my $n = 1;
 		for my $qa ( @$quiz ) {
 			push @questions, {
-				genre => 'business',
+				genre => $sequence->{genre},
 				topic => $t,
 				story => $s,
 				id => $n++,
