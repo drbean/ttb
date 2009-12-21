@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2009  4月 22, 20時46分57秒
+# Last Edit: 2009  5月 17, 21時30分39秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -165,12 +165,16 @@ my %adjusted = map
 @adjusted{@assistantIds} = map
 	{
 		my $assistant = $_;
-		my $chinese =
-			min map { die "$assistant Chinese: $assistantRecords{$assistant}->{$_}->{Chinese}?"
+		my @adjusted =
+			map { die "$assistant Chinese: $assistantRecords{$assistant}->{$_}->{Chinese}?"
 				unless defined $assistantRecords{$assistant}->{$_}->{Chinese};
-			$assistantRecords{$assistant}->{$_}->{Chinese} }
+			my $totalScore = $assistantRecords{$assistant}->{$_}->{totalScore};
+			my $groupGrade = $questions2grade->($totalScore/4);
+			my $adjusted = $groupGrade -
+				$assistantRecords{$assistant}->{$_}->{Chinese}
+			}
 					keys %{$assistantRecords{$assistant}};
-		$points{$assistant} - $chinese;
+		max @adjusted;
 	} @assistantIds;
 # @adjusted{@absenteeIds} = (0)x@absenteeIds;
 my %adjustedByGrades = ();
