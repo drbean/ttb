@@ -1,9 +1,9 @@
-%Last Edit: 2008 12月 01, 09時00分25秒
+%Last Edit: 2009  3月 08, 21時31分33秒
 <tmpl>$autogen</tmpl>
 \documentclass[b5paper]{article}
 \usepackage[absolute,showboxes]{textpos}
-\usepackage{amsfonts}
 \usepackage{pifont}
+\usepackage{CJK}
 \textblockorigin{0.30cm}{0.35cm} %HPDeskJet5160
 % \textblockorigin{+1.75cm}{0.45cm} % HPLaserJ 2300
 % \textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
@@ -15,6 +15,7 @@
 	\small #1
 	\normalsize
 	\parbox[t][12.46cm][t]{7.8cm}{
+		\begin{CJK}{UTF8}{song}
 		\begin{Large} <tmpl>$league</tmpl> Groupwork \end{Large}
 		\begin{description}
 			\item [Round:] \hspace{0.5cm} \begin{large}<tmpl>$round</tmpl>\hspace{0.5cm}\end{large}
@@ -43,6 +44,7 @@
 			\item Average <tmpl>$questions[3]</tmpl> questions=<tmpl>$grades[3]</tmpl> points,
 			\end{description}
 		\end{description}
+		\end{CJK}
 	}
 }
 \begin{document}
