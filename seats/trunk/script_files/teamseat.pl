@@ -40,7 +40,7 @@ sub run {
 	my %names = map { $_->{name} => $_ } @$member;
 	my $arrangement = $league->{seats};
 	my $groups = LoadFile "$leagueId/$session/groups.yaml";
-	my $chart;
+	my $chart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
 		my @seats = map { "s$_" } @$seats;
