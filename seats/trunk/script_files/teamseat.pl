@@ -12,6 +12,8 @@ has 'league' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 'l',);
 has 'session' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 's',);
+has 'html' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
+		cmd_aliases => 'h',);
 
 
 package main;
@@ -34,6 +36,7 @@ sub run {
 	my $leagueId = $script->league;
 	my $league = LoadFile "$leagueId/league.yaml";
 	my $session = $script->session;
+	my $filetype = $script->html? "html": "tex";
 	my $series = $league->{series};
 	die "No $session session\n" unless any { $_ eq $session } @$series;
 	my $member = $league->{member};
@@ -56,5 +59,5 @@ sub run {
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$leagueId/seats.tmpl", DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
-	io("$leagueId/$session/groupseat.tex")->print($text);
+	io("$leagueId/$session/groupseat.$filetype")->print($text);
 }
