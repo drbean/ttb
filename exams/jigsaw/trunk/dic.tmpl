@@ -114,11 +114,11 @@
 \makeatother 
 
 \newcommand\SpecifyBlock[1][]{%
-	\begin{minipage}{7.8cm}
+	\parbox[t][12.4cm][c]{7.8cm}{%
 	\begin{description}
   \setkeys{TFQuestions}{#1}%
 	\end{description}
-	\end{minipage}
+	}
 	\vspace{-0.2cm}
 }
 
