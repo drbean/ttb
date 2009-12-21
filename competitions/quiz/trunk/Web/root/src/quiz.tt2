@@ -1,6 +1,6 @@
 [% META title = "Comprehension Quiz" -%]
 
-<form method="post" action="[% c.uri_for('/play/update/') _ exercise_id  +%]">
+<form method="post" action="[% c.uri_for('/play/update/') _ quiz_id  +%]">
   <ol>
     
   [% FOREACH question IN quiz -%]

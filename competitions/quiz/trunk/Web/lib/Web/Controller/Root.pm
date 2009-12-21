@@ -41,8 +41,8 @@ sub default :Path {
 
 sub auto : Private {
 	my ($self, $c) = @_;
-	my $exercise = $c->request->query_params->{exercise};
-	$c->session->{exercise} = $exercise if $exercise;
+	my $quiz = $c->request->query_params->{quiz};
+	$c->session->{quiz} = $quiz if $quiz;
 	if ($c->controller eq $c->controller('Login')) {
 	   return 1;
 	}

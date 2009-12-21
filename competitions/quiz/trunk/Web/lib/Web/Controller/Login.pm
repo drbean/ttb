@@ -19,7 +19,7 @@ Catalyst Controller.
 
 =head2 index
 
-Login logic. We used to let "guest"s in without a password, or ID and also redirect to exercise list. Now we redirect to the exercise, if it appears as the one argument.
+Login logic. We redirect to the quiz, if it appears as the one argument.
 
 =cut
 
@@ -57,13 +57,13 @@ sub index :Path :Args(0)  {
             }
             else {
                 $c->session->{league}   = $leagues[0]->id;
-		if ( defined $c->session->{exercise}) {
-			my $exercise = $c->session->{exercise};
+		if ( defined $c->session->{quiz}) {
+			my $quiz = $c->session->{quiz};
 			$c->response->redirect(
-				$c->uri_for( "/play/update/$exercise" ) );
+				$c->uri_for( "/play/update/$quiz" ) );
 		}
 		else {
-			$c->response->redirect( $c->uri_for("/exercises/list") );
+			$c->response->redirect( $c->uri_for("/quiz/list") );
 		}
                 return;
             }
@@ -94,7 +94,7 @@ sub official : Local {
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
-			$c->response->redirect($c->uri_for("/exercises/list"));
+			$c->response->redirect($c->uri_for("/quiz/list"));
 			return;
 		}
 		else {
@@ -118,8 +118,8 @@ sub membership : Local {
 	my $league = $c->request->params->{league} || "";
 	my $password = $c->request->params->{password} || "";
 	$c->session->{league} = $league;
-	$c->session->{exercise} = undef;
-	$c->response->redirect( $c->uri_for("/exercises/list") );
+	$c->session->{quiz} = undef;
+	$c->response->redirect( $c->uri_for("/quiz/list") );
 	return;
 }
 

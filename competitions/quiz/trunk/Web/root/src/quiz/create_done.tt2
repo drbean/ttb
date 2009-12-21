@@ -1,0 +1,7 @@
+[% META title = "Quiz created" -%]
+
+Try it out!
+
+<form method="post" action="[% c.uri_for('/play/update/') _ quiz_id %]">
+<input type="submit" name="Submit" value="Submit">
+</form>
