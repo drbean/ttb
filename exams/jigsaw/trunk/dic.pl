@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 11月 16, 19時33分42秒
+# Last Edit: 2008 11月 18, 08時35分20秒
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -77,7 +77,7 @@ foreach my $group ( keys %$groups )
 "{\\myTFquestion
 {" . ( $_+1 ) . ". $questions->[$_]->[0]}
 {$questions->[$_]->[1]}
-{$questions->[$_]->[2]}}" } 0..8 ) . "\n";
+{$questions->[$_]->[2]}}" } 0..6 ) . "\n";
 		$tmplString .= "\\par\n";
 		$tmplString .= "\\end{textblock}\n";
 
