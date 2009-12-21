@@ -19,7 +19,7 @@ Catalyst Controller.
 
 =head2 index
 
-Login logic. We redirect to the quiz, if it appears as the one argument.
+Login logic. We redirect to the quiz, if it appears as the one argument. 'name' is reserved in the stash for the application name. Use 'playername'.
 
 =cut
 
@@ -50,7 +50,7 @@ sub index :Path :Args(0)  {
             }
             unless ( @leagues == 1 ) {
                 $c->stash->{id}         = $id;
-                $c->stash->{name}       = $name;
+                $c->stash->{playername}       = $name;
                 $c->stash->{leagues}   = \@leagues;
                 $c->stash->{template}   = 'membership.tt2';
                 return;
