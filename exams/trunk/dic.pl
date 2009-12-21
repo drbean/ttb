@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 Jun 26, 01:12:58 PM
+# Last Edit: 2008  9月 28, 20時24分52秒
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -33,6 +33,8 @@ my %names = map { $_->{id} => $_->{name} } @members;
 my $textSources = $round->{texts};
 my $unclozedwords = $round->{unclozedwords};
 my $unclozeables = $round->{unclozeables};
+my $groups = $round->{group};
+
 
 my @dir = @$textSources;
 
@@ -59,23 +61,20 @@ sub sequences
 
 my @parallelfiles = sequences(@dir);
 my @texts;
-for my $files ( @parallelfiles )
+for my $filesequence ( @parallelfiles[0..keys %$groups] )
 {
-	my @files = map { io $_ } @$files;
+	my @files = map { io $_ } @$filesequence;
 	my @lines;
-	push @{$lines[$_]}, ( $files[$_]->getlines ) for 0..$#files;
-	my $blanks = { A => 0, B => 0 };
-	my @text;
-	($blanks, $text[$_]) = cloze($blanks, $unclozedwords, $unclozeables,
-				@{$lines[$_]}) for 0..$#files;
-	push @texts, \@text;
+	push @lines, ( $files[$_]->getlines ) for 0..$#files;
+	my $lines = join '', @lines;
+	my $text = cloze($unclozedwords, $unclozeables, $lines);
+		# @{$lines[$_]}) for 0..$#files;
+	push @texts, $text;
 }
 my $next = nextText(@texts);
 
 my $tmpl = io 'dic.tmpl';
 my $tmplString = $tmpl->all;
-
-my $groups = $round->{group};
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
@@ -96,7 +95,6 @@ my $threepages = 0;
 
 foreach my $group ( keys %$groups )
 {
-	my @group =  %{$groups->{$group}}; 
 	my $text = $next->();
 	$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
