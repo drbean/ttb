@@ -3,7 +3,7 @@ package Web;
 use strict;
 use warnings;
 
-use Catalyst::Runtime '5.70';
+use Catalyst::Runtime '5.80';
 
 # Set flags and add plugins for the application
 #
@@ -17,9 +17,9 @@ use parent qw/Catalyst/;
 use Catalyst qw/-Debug
                 ConfigLoader
                 Static::Simple
+
 		Authentication
 		Authorization::Roles
-
 		Session
 		Session::Store::FastMmap
 		Session::State::Cookie
@@ -36,11 +36,27 @@ our $VERSION = '0.01';
 # with an external configuration file acting as an override for
 # local deployment.
 
-__PACKAGE__->config( name => 'Web' );
+__PACKAGE__->config({
+	name => 'Web',
+	'Plugin::Authentication' => {
+		default_realm => 'users',
+		users => {
+			credential => {
+				class => 'Password',
+				password_field => 'password',
+				password_type => 'clear'
+			},
+			store => {
+				class => 'DBIx::Class',
+				user_class => 'DB::Players',
+				role_column => 'roles'
+			}
+		}
+	}
+});
 
 # Start the application
 __PACKAGE__->setup();
-
 
 =head1 NAME
 
