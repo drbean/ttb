@@ -43,7 +43,7 @@ sub index :Path :Args(0)  {
                 return;
             }
             my @memberships =
-              $c->model("DB::Member")->search( { player => $id } );
+              $c->model("DB::Members")->search( { player => $id } );
             my @leagues;
             for my $membership (@memberships) {
                 push @leagues, $membership->league;
