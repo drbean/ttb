@@ -93,7 +93,7 @@ sub create : Local {
 
 =head2 check
 
-Check answers, show a page as record.
+Check answers, show a page as record. Fail if quiz has been deleted.
 
 =cut
  
@@ -105,8 +105,8 @@ sub check : Local {
 	my $leagueId = $c->session->{league};
 	my $genre = $c->model("DB::Leaguegenre")->find(
 			{ league => $leagueId } )->genre;
-	my $questions = $genre->questions->search(
-		{ topic => $topic, story => $story } );
+	my $quiz = $genre->quiz->find({ topic => $topic, story => $story});
+	my $questions = $quiz->questions;
 	my ($record, @popquestions);
 	while ( my $question = $questions->next ) {
 		my $qid = $question->id;
