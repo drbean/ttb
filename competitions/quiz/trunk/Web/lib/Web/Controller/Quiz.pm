@@ -140,13 +140,13 @@ sub record : Local {
 }
 
 
-=head2 score
+=head2 tally
 
-Score answers, show a results page
+Tally correct answers, show a results page
 
 =cut
  
-sub score : Local {
+sub tally : Local {
 	my ($self, $c, $topic, $story) = @_;
 	my $player = $c->session->{player_id};
 	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
@@ -161,7 +161,7 @@ sub score : Local {
 		push @quiz, { content => $q->content, id => $q->id, };
 	}
 	my @quizids = map { $_->{id} } @quiz;
-	my ($scores, %totals, @playerids);
+	my ($tallies, %totals, @playerids);
 	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
 	my $players = $league->members;
 	while ( my $player = $players->next ) {
@@ -174,24 +174,24 @@ sub score : Local {
 			my $qid = $profile->id;
 			my $correct = $profile->answer eq $question->response?
 					1: 0;
-			$scores->{$pid}->{$qid} = $correct;
+			$tallies->{$pid}->{$qid} = $correct;
 		}
-		$scores->{$pid}->{total} = sum map { $scores->{$pid}->{$_} }
-					keys %{ $scores->{$pid} };
+		$tallies->{$pid}->{total} = sum map { $tallies->{$pid}->{$_} }
+					keys %{ $tallies->{$pid} };
 	}
 	my %questiontotals;
 	for my $qid ( @quizids ) {
 		for my $pid ( @playerids ) {
-			next unless defined $scores->{$pid}->{$qid};
-			$questiontotals{$qid} += $scores->{$pid}->{$qid};
+			next unless defined $tallies->{$pid}->{$qid};
+			$questiontotals{$qid} += $tallies->{$pid}->{$qid};
 		}
 	}
 	$c->stash->{quiz} = \@quiz;
-	$c->stash->{scores} = $scores;
+	$c->stash->{tallies} = $tallies;
 	$c->stash->{totals} = \%questiontotals;
 	$c->stash->{genre} = $genre->name;
 	$c->stash->{target} = $targetId;
-	$c->stash->{template} = "scores.tt2";
+	$c->stash->{template} = "tallies.tt2";
 }
 
 
