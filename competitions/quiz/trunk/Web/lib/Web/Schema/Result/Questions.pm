@@ -15,7 +15,14 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 15,
   },
-  "text",
+  "topic",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 15,
+  },
+  "story",
   {
     data_type => "VARCHAR",
     default_value => undef,
@@ -51,7 +58,7 @@ __PACKAGE__->add_columns(
     size => 500,
   },
 );
-__PACKAGE__->set_primary_key("genre", "text", "id");
+__PACKAGE__->set_primary_key("genre", "topic", "story", "id");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
