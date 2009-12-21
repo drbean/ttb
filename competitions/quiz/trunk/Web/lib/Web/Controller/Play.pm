@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use parent 'Catalyst::Controller';
 
-use List::Util qw/sum/;
-
 =head1 NAME
 
 Web::Controller::Play - Catalyst Controller
@@ -19,13 +17,13 @@ Catalyst Controller.
 =cut
 
 
-=head2 start
+=head2 play
 
 Show a created quiz from the database.
 
 =cut
  
-sub start : Local {
+sub play : Global {
 	my ($self, $c, $topic, $story) = @_;
 	my $questions = $c->model('DB::Questions')->search({
 		topic => $topic, story => $story });
@@ -38,110 +36,6 @@ sub start : Local {
 	$c->stash->{questions} = \@questions;
     $c->stash->{template} = 'play.tt2';
 }
-
-
-=head2 check
-
-Check answers, show a page as record.
-
-=cut
- 
-sub check : Local {
-	my ($self, $c, $topic, $story) = @_;
-	my $player = $c->session->{player_id};
-	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
-	my $targetId = $target? $target->role: 'all';
-	my $leagueId = $c->session->{league};
-	my $genre = $c->model("DB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
-	my $questions = $genre->questions->search(
-		{ topic => $topic, story => $story } );
-	my (@record, @popquestions);
-	while ( my $question = $questions->next ) {
-		my $qid = $question->id;
-		my $response = $c->request->params->{$qid};
-		if ( my $played = $question->played->find({ player => $player,
-				league => $leagueId }) ) {
-			push @record, { question => $question->id,
-				content => $question->content,
-				response => $played->response,
-				newresponse => $response
-			};
-			$c->stash->{error_msg} =
-		"You already submitted your answers. They cannot be changed.";
-		}
-		else {
-			my $correct = $response eq $question->answer? 1: 0;
-			push @record, { question => $qid,
-				content => $question->content,
-				response => $response, };
-			push @popquestions, { league => $leagueId,
-				player => $player, topic => $topic,
-				story => $story, question => $qid,
-				response => $response };
-		}
-	}
-	$c->model('DB::Play')->populate( \@popquestions ) if @popquestions;
-	$c->stash->{questions} = \@record;
-	$c->stash->{genre} = $genre->name;
-	$c->stash->{target} = $targetId;
-	$c->stash->{template} = "record.tt2";
-	}
-
-
-=head2 score
-
-Score answers, show a results page
-
-=cut
- 
-sub score : Local {
-	my ($self, $c, $topic, $story) = @_;
-	my $player = $c->session->{player_id};
-	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
-	my $targetId = $target? $target->role: 'all';
-	my $leagueId = $c->session->{league};
-	my $genre = $c->model("DB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
-	my $questions = $genre->questions->search(
-		{ topic => $topic, story => $story } );
-	my @quiz;
-	while ( my $q = $questions->next ) {
-		push @quiz, { content => $q->content, id => $q->id, };
-	}
-	my @quizids = map { $_->{id} } @quiz;
-	my ($scores, %totals, @playerids);
-	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
-	my $players = $league->members;
-	while ( my $player = $players->next ) {
-		my $pid = $player->profile->id;
-		push @playerids, $pid;
-		my $played = $player->play->search({
-				topic => $topic, story => $story });
-		while (my $question = $played->next ) {
-			my $profile = $question->profile;
-			my $qid = $profile->id;
-			my $correct = $profile->answer eq $question->response?
-					1: 0;
-			$scores->{$pid}->{$qid} = $correct;
-		}
-		$scores->{$pid}->{total} = sum map { $scores->{$pid}->{$_} }
-					keys %{ $scores->{$pid} };
-	}
-	my %questiontotals;
-	for my $qid ( @quizids ) {
-		for my $pid ( @playerids ) {
-			next unless defined $scores->{$pid}->{$qid};
-			$questiontotals{$qid} += $scores->{$pid}->{$qid};
-		}
-	}
-	$c->stash->{quiz} = \@quiz;
-	$c->stash->{scores} = $scores;
-	$c->stash->{totals} = \%questiontotals;
-	$c->stash->{genre} = $genre->name;
-	$c->stash->{target} = $targetId;
-	$c->stash->{template} = "scores.tt2";
-	}
 
 
 =head2 list
