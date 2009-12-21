@@ -13,16 +13,26 @@ my $points;
 # $p->{correct} = $c->{correct};
 
 for my $player ( keys %$opponents ) {
-	next if $player eq 'Bye';
+	if $player eq 'bye' {
+		my $byer = $opponents->{$player};
+		$points->{$byer} = 5;
+		next;
+	}
+	if $player eq 'unpaired' {
+		my $unpaired = $opponents->{$player};
+		for my $unpaired ( @$unpaired ) {
+			$points->{$unpaired} = 0;
+		}
+	}
 	my $opponent = $opponents->{$player};
 	my $opponentopponent = $opponents->{$opponent};
 	die
 "${player}'s opponent is $opponent, but
 ${opponent}'s opponent is $opponentopponent" unless
 	$opponent and $opponentopponent and $player eq $opponentopponent;
-	die "$player returned quiz card?" unless exists $correct->{$player};
+	die "No $player quiz card?" unless exists $correct->{$player};
 	my $ourcorrect = $correct->{$player};
-	die "$opponent returned card against $player?" unless exists $correct->{$opponent} or $opponent eq 'Bye';
+	die "No $opponent card against $player?" unless exists $correct->{$opponent};
 	my $theircorrect = $correct->{$opponent};
 	if ( not defined $ourcorrect ) {
 		$points->{$player} = 0;
