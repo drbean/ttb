@@ -131,7 +131,7 @@ sub score : Local {
 	my %questiontotals;
 	for my $qid ( @quizids ) {
 		for my $pid ( @playerids ) {
-			next unless $scores->{$pid}->{$qid};
+			next unless defined $scores->{$pid}->{$qid};
 			$questiontotals{$qid} += $scores->{$pid}->{$qid};
 		}
 	}
