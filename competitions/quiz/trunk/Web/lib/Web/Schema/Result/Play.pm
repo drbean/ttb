@@ -57,7 +57,7 @@ __PACKAGE__->set_primary_key("league", "player", "topic", "story", "question");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0BXbV56QfIi2TAp+aZrDqA
 
-__PACKAGE__->belongs_to('question', 'Web::Schema::Result::Questions', {
+__PACKAGE__->belongs_to('profile', 'Web::Schema::Result::Questions', {
 	'foreign.topic' => 'self.topic', 'foreign.story' => 'self.story',
 	'foreign.id' => 'self.question' } );
 
