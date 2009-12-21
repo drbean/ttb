@@ -57,21 +57,27 @@ my %genreid = (intermediate => 1, business => 2, intercultural => 3, access=>4);
 my $genre = $sequence->{genre};
 my $genreid = $genreid{ lc $genre };
 
-TOPIC: for my $t ( keys %$sequence ) {
-	next if $t eq 'genre';
-	if ( $ARGV[1] ) { next unless $t eq $ARGV[1]; }
-	my $topic = $sequence->{$t};
-	STORY: for my $s ( keys %$topic ) {
-		if ( $ARGV[2] ) { next unless $s eq $ARGV[2]; }
-		my $story = $topic->{$s};
+#TOPIC: for my $t ( keys %$sequence ) {
+#	next if $t eq 'genre';
+#	if ( $ARGV[1] ) { next unless $t eq $ARGV[1]; }
+# my $topic = $sequence->{$t};
+	my $topic = $sequence->{$ARGV[1]};
+	my $compcomp = $topic->{compcomp};
+	# STORY: for my $s ( keys %$compcomp ) {
+	# if ( $ARGV[2] ) { next unless $s eq $ARGV[2]; }
+	# my $story = $topic->{$s};
+$DB::single=1;
+		my $story = $compcomp->{$ARGV[2]};
 		my $identifier = $story->{identifier};
 		my $quiz = $story->{quiz};
 		my $n = 1;
 		for my $qa ( @$quiz ) {
 			push @questions, {
 				genre => $genreid,
-				topic => $t,
-				story => $s,
+				# topic => $t,
+				topic => $ARGV[1],
+				# story => $s,
+				story => $ARGV[2],
 				id => $n++,
 				description => $identifier,
 				target => 'all',
@@ -79,7 +85,7 @@ TOPIC: for my $t ( keys %$sequence ) {
 				answer => $qa->{answer},
 			};
 		}
-	}
-}
+		# }
+# }
 my $q = $d->resultset('Questions');
 $q->populate(\@questions);
