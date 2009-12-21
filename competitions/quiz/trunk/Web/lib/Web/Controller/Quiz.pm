@@ -91,13 +91,13 @@ sub create : Local {
 }
 
 
-=head2 check
+=head2 record
 
-Check answers, show a page as record. Fail if quiz has been deleted.
+Record answers, show a page as record. Fail if quiz has been deleted.
 
 =cut
  
-sub check : Local {
+sub record : Local {
 	my ($self, $c, $topic, $story) = @_;
 	my $player = $c->session->{player_id};
 	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
