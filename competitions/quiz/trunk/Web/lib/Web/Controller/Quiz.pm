@@ -167,7 +167,8 @@ sub tally : Local {
 	while ( my $player = $players->next ) {
 		my $pid = $player->profile->id;
 		push @playerids, $pid;
-		my $played = $player->play->search({
+		# my $played = $player->play->search({
+		my $played = $c->model('DB::Play')->search({ player => $pid,
 				topic => $topic, story => $story });
 		while (my $question = $played->next ) {
 			my $profile = $question->profile;
@@ -293,7 +294,6 @@ sub score : Local {
 		die "No $opponent card against $player?" unless exists
 						$tallies->{$opponent};
 		my $theircorrect = $tallies->{$opponent}->{total};
-$DB::single=1;
 		if ( not defined $ourcorrect ) {
 			$points->{$player} = 0;
 			$points->{$opponent} = defined $theircorrect? 5: 0;
