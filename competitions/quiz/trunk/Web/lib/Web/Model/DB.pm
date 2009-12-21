@@ -7,7 +7,7 @@ use Catalyst;
 use Web;
 
 my $name = Web->config->{database};
-my $db = Web->path_to( '..', '..', 'dic', 'db', $name );
+my $db = Web->path_to( '../' x 2, 'dic', 'db', $name );
 
 my $connect_info;
 if ( $^O eq 'linux' ) { $connect_info = [ "dbi:SQLite:$db", '', '', ]; }
