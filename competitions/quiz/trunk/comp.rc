@@ -18,6 +18,13 @@ for my $player ( keys %$opponents ) {
 		$points->{$byer} = 5;
 		next;
 	}
+	if ( $player eq 'late' ) {
+		my $unpaired = $opponents->{$player};
+		for my $unpaired ( @$unpaired ) {
+			$points->{$unpaired} = 1;
+		}
+		next;
+	}
 	if ( $player eq 'unpaired' ) {
 		my $unpaired = $opponents->{$player};
 		for my $unpaired ( @$unpaired ) {
