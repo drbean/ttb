@@ -1,0 +1,7 @@
+[% META title = "Exercise created" -%]
+
+Try it out!
+
+<form method="post" action="[% Catalyst.uri_for('/play/update/') _ exercise_id %]">
+<input type="submit" name="Submit" value="Submit">
+</form>
