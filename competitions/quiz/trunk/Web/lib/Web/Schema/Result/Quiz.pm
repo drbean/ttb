@@ -1,4 +1,4 @@
-package Web::Schema::Result::Exercises;
+package Web::Schema::Result::Quiz;
 
 use strict;
 use warnings;
@@ -6,23 +6,23 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "Core");
-__PACKAGE__->table("exercises");
+__PACKAGE__->table("quiz");
 __PACKAGE__->add_columns(
   "genre",
   {
-    data_type => "VARCHAR",
+    data_type => "INT",
     default_value => undef,
     is_nullable => 0,
-    size => 15,
+    size => undef,
   },
-  "id",
+  "topic",
   {
     data_type => "VARCHAR",
     default_value => undef,
     is_nullable => 0,
     size => 15,
   },
-  "text",
+  "story",
   {
     data_type => "VARCHAR",
     default_value => undef,
@@ -36,15 +36,8 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 50,
   },
-  "type",
-  {
-    data_type => "VARCHAR",
-    default_value => undef,
-    is_nullable => 0,
-    size => 15,
-  },
 );
-__PACKAGE__->set_primary_key("genre", "id");
+__PACKAGE__->set_primary_key("genre", "topic", "story");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
