@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2008  9月 29, 12時12分15秒
+# Last Edit: 2008  9月 29, 12時59分51秒
 # $Id: /dic/branches/ctest/Cloze.pm 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -49,8 +49,8 @@ sub cloze
 		{
 	my $reader = '';
 	my @writers = ();
-			my $punctuation = qr/[^A-Za-z0-9']/;
-			# my $punctuation = qr/.,?!\n\t/;
+			# my $punctuation = qr/[^A-Za-z0-9']/;
+			my $punctuation = qr/[.,?!\n]/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
 			my ($a, $b, $c, $d) = (qr/^Claudio:/, qr/^Cecilia:/, qr/^Frank:/, qr/^Paula:/);
 			my $letters = qr/[A-Za-z0-9']+/;
@@ -59,26 +59,24 @@ sub cloze
 			my ($index, $inCloze, $clozedletters) = (0) x 3;
 		}
 		text: section(s) end | <error>
-		section: vspace header line(s) | header eol line(s) | line(s)
+		section: vspace eol header eol line(s) | header eol line(s) | line(s)
 		# line: vspace m/$/ | header m/$/ | token(s) m/$/
 		vspace: m/vspace{\d?.\d+cm}/ {
+			$reader = undef;
 			@writers = qw/A B C D/;
-			$Cloze::clozeline{$reader} .= "\\\\$item[1]\\\\par";
 			@Cloze::clozeline{@writers} .= ( "\\\\$item[1]\\\\par" ) x 3;
 			}
 		header: m/\d\W+/ {
 			$reader = undef;
 			@writers = qw/A B C D/;
-			# $Cloze::clozeline{$reader} .= $item[1];
 			@Cloze::clozeline{$_} .= $item[1] for @writers;
 			}
 		line: token(s) eol
 		token: a | b | c | d | punctuation | word
-		eol: m/$/m {
+		eol: m/\\\\\\\\/ {
 			$reader = undef;
 			@writers = qw/A B C D/;
-			$Cloze::clozeline{$reader} .= "\n";
-			@Cloze::clozeline{$_} .= "\n" for @writers;
+			@Cloze::clozeline{$_} .= "\\\\\\\\\n" for @writers;
 			}
 		a: m/$a/ {
 			($reader, @writers) = ('A','B', 'C', 'D');
