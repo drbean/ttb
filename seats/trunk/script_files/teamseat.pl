@@ -20,6 +20,7 @@ package main;
 
 use strict;
 use warnings;
+use Pod::Usage;
 use Text::Template;
 use IO::All;
 use YAML qw/LoadFile/;
