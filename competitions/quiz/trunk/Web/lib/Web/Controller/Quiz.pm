@@ -186,6 +186,8 @@ sub tally : Local {
 			$questiontotals{$qid} += $tallies->{$pid}->{$qid};
 		}
 	}
+	$c->stash->{league} = $leagueId;
+	$c->stash->{topicstory} = $topic . '_' . $story;
 	$c->stash->{quiz} = \@quiz;
 	$c->stash->{tallies} = $tallies;
 	$c->stash->{totals} = \%questiontotals;
