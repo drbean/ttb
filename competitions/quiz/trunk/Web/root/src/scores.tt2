@@ -1,0 +1,30 @@
+[% META title = 'Scores List' -%]
+
+<table>
+  <COL width="40">
+  <tr>
+    <th>Player ID
+[% FOREACH q IN quiz %]
+    <th>[% q.id %]
+[% END %]
+    <th>Player Total
+  </tr>
+[% FOREACH player IN scores.keys.sort -%]
+  <tr>
+      <td>[% player %]</td>
+  [% FOREACH q IN quiz -%]
+  	[% id = q.id %]
+      <td>[% IF scores.$player.$id.defined %][% scores.$player.$id -%]
+	[%- ELSE %]_[% END %]
+  [% END -%]
+      <td>[% scores.$player.total %]
+  </tr>
+[% END -%]
+
+  <tr>
+      <td>Totals
+[% FOREACH question IN totals.keys.sort -%]
+    <td>[% totals.$question %]
+[% END -%]
+
+</table>
