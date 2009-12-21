@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2008  9月 29, 13時53分46秒
+# Last Edit: 2008  9月 29, 15時15分18秒
 # $Id: /dic/branches/ctest/Cloze.pm 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -147,7 +147,7 @@ sub cloze
 	# defined $letterParser->line($line) or die "letterparse died: $?\n";
 	defined $letterParser->text($Cloze::lines) or die "letterparse died: $?\n";
 	# }
-	return \%Cloze::clozeline;
+	return %Cloze::clozeline;
 
 }
 
