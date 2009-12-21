@@ -186,8 +186,11 @@ sub tally : Local {
 			$questiontotals{$qid} += $tallies->{$pid}->{$qid};
 		}
 	}
+	my $round = $c->model('SwissDB::Round')->find({ tournament => $leagueId
+			})->round;
 	$c->stash->{league} = $leagueId;
 	$c->stash->{topicstory} = $topic . '_' . $story;
+	$c->stash->{round} = $round;
 	$c->stash->{quiz} = \@quiz;
 	$c->stash->{tallies} = $tallies;
 	$c->stash->{totals} = \%questiontotals;
