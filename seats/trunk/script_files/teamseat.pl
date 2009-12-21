@@ -24,7 +24,7 @@ use Pod::Usage;
 use Text::Template;
 use IO::All;
 use YAML qw/LoadFile/;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any all/;
 use Cwd;
 
 run() unless caller();
@@ -43,6 +43,8 @@ sub run {
 	my $series = $league->{series};
 	die "No $session session\n" unless any { $_ eq $session } @$series;
 	my $member = $league->{member};
+	die "Not all members have names in $league->{id} league"
+		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
 	my $arrangement = $league->{seats};
 	my $groups = LoadFile "$leagueId/$session/groups.yaml";
