@@ -167,8 +167,7 @@ sub tally : Local {
 	while ( my $player = $players->next ) {
 		my $pid = $player->profile->id;
 		push @playerids, $pid;
-		# my $played = $player->play->search({
-		my $played = $c->model('DB::Play')->search({ player => $pid,
+		my $played = $player->play->search({
 				topic => $topic, story => $story });
 		while (my $question = $played->next ) {
 			my $profile = $question->profile;
