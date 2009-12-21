@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 10月 07, 20時44分24秒
+# Last Edit: 2008 10月 17, 08時19分24秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -64,9 +64,7 @@ foreach my $group ( keys %$groups )
 	my $letters = $scoresheet->{letters}->{$group};
 	my $chinese = $scoresheet->{Chinese}->{$group};
 	my %rolebearers = reverse %group;
-	my $assistantId;
-	my %assistedRecord;
-
+	my @assistantPlayers;
 	my (@noexam, $groupGrade);
 	my $totalScore = 0;
 	foreach my $player ( values %group )
@@ -81,17 +79,24 @@ foreach my $group ( keys %$groups )
 
 		if (grep m/$playerId/, @assistantIds)
 		{
-			$assistantId = $playerId;
+			push @assistantPlayers, $playerId;
+			my $assistantId = $playerId;
+			my %assistedRecord;
 			$assistedRecord{personalScore} = $personalScore,
 			$assistedRecord{Chinese} = $chinese;
+			$assistedRecord{group} = $group;
+			$assistantRecords{$assistantId}->{$group} = 
+				\%assistedRecord;
 		}
 		$indScores{$playerId} = $personalScore;
 		push @{$indScoresByScore{$personalScore}},
 							"$player $playerId\\\\";
 	}
-	$assistedRecord{totalScore} = $totalScore;
-	push @{$assistantRecords{$assistantId}}, \%assistedRecord if
-								$assistantId;
+	foreach my $assistantId ( @assistantPlayers )
+	{
+		$assistantRecords{$assistantId}->{$group}->{totalScore} =
+						$totalScore;
+	}
 	$groupScores{$group} = $totalScore;
 	my @memberNames = values %group;
 	my @groupsIds = @ids{@memberNames};
@@ -109,16 +114,19 @@ foreach my $group ( keys %$groups )
 
 @indScores{@assistantIds} = map {
 		my $assistant = $_;
-		max map { $_->{personalScore} }
-			@{$assistantRecords{$assistant}} } @assistantIds
-					if $assistants;
+		my $score = max map { $assistantRecords{$assistant}->{$_}->{personalScore} }
+			keys %{$assistantRecords{$assistant}};
+		$score;
+				} @assistantIds if $assistants;
 @points{@assistantIds} = map {
 		my $assistant = $_;
-		max map { 
-			my $totalScore = $_->{totalScore};
-			my $groupGrade = $totalScore/2;
+		my $points = max map {
+			my $totalScore = $assistantRecords{$assistant}->{$_}->{totalScore};
+		my $groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
 			$groupGrade > $topGrade? $topGrade: $groupGrade;
-		} @{$assistantRecords{$assistant}} } @assistantIds;
+		} keys %{$assistantRecords{$assistant}};
+		$points;
+		} @assistantIds;
 
 @indScores{@absenteeIds} = (0)x@absenteeIds;
 push @{$indScoresByScore{0}}, "$names{$_} $_\\\\" foreach @absenteeIds;
@@ -136,8 +144,10 @@ my %adjusted = map
 	{
 		my $assistant = $_;
 		my $chinese =
-		min map { die "$assistant Chinese: $_->{Chinese}?" unless defined $_->{Chinese}; $_->{Chinese} }
-					@{$assistantRecords{$assistant}};
+			min map { die "$assistant Chinese: $assistantRecords{$assistant}->{$_}->{Chinese}?"
+				unless defined $assistantRecords{$assistant}->{$_}->{Chinese};
+			$assistantRecords{$assistant}->{$_}->{Chinese} }
+					keys %{$assistantRecords{$assistant}};
 		$points{$assistant} - $chinese;
 	} @assistantIds;
 @adjusted{@absenteeIds} = (0)x@absenteeIds;
@@ -184,3 +194,12 @@ my $template = Text::Template->new(TYPE => 'FILE', SOURCE => 'report.tmpl'
 				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
 open TEX, ">report.tex";
 print TEX $template->fill_in( HASH => $report );
+
+=begin comment text
+sub scores2grade {
+	my $score = shift;
+	$groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
+	$groupGrade = $groupGrade > $topGrade? $topGrade: $groupGrade;
+	return $groupGrade;
+}
+
