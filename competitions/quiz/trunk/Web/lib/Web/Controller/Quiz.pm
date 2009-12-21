@@ -31,7 +31,7 @@ sub form_create : Local {
 
 =head2 list
 
-Fetch all Exercise objects and pass to quiz/list.tt2 in stash to be displayed
+Fetch all Quiz objects in the league's genre and pass to quiz/list.tt2 in stash to be displayed
 
 =cut
  
@@ -42,8 +42,7 @@ sub list : Local {
     my ($self, $c) = @_;
     my $leagueid = $c->session->{league};
     my $league = $c->model('DB::Leagues')->find({id=>$leagueid});
-    my $genre = $c->model('DB::Leaguegenre')->next({league=>$leagueid})->genre;
-    # my $genre = $league->genre->genre;
+    my $genre = $league->genre->genre->name;
     # Retrieve all of the text records as text model objects and store in
     # stash where they can be accessed by the TT template
     $c->stash->{quiz} = [$c->model('DB::Quiz')->search(
@@ -54,20 +53,12 @@ sub list : Local {
     my $player = $c->session->{player_id};
     my @play = $c->model('DB::Play')->search(
 	    { league => $leagueid, player => $player },
-		{ select => [ 'quiz', { sum => 'correct' } ],
-		'group_by' => [qw/quiz/],
-		as => [ qw/quiz letters/ ],
+		{ select => [ 'topic', 'story', { sum => 'correct' } ],
+		'group_by' => [qw/topic story/],
+		as => [ qw/topic story questions/ ],
 		});
-    my %letterscores = map { $_->quiz => $_->get_column('letters') } @play;
-    $c->stash->{letters} = \%letterscores;
-    my @quiz = $c->model('DB::Quiz')->search(
-	    { league => $league, player => $player },
-		{ select => [ 'quiz', { sum => 'correct' } ],
-		'group_by' => [qw/quiz/],
-		as => [ qw/quiz questions/ ],
-		});
-    my %quizscores = map { $_->quiz => $_->get_column('questions') } @quiz;
-    $c->stash->{questions} = \%quizscores;
+    my %questionscores = map { $_->quiz => $_->get_column('questions') } @play;
+    $c->stash->{questions} = \%questionscores;
     $c->stash->{league} = $league->name;
     $c->stash->{template} = 'quiz/list.tt2';
 }
@@ -77,19 +68,23 @@ sub list : Local {
 
 http://server.school.edu/dic/quiz/create/topicId/storyId
 
-Create comprehension questions.
+Create comprehension questions. The quizId is not the Quiz result source's primary key. It is not even in there.
 
 =cut
 
 sub create : Local {
 	my ($self, $c, $topic, $story) = @_;
-	my $questions = $c->model('DB::Questions')->search( {
-			topic => $topic, story => $story } );
-	my $genre = $questions->next->genre;
+	my $question1 = $c->model('DB::Questions')->search( {
+			topic => $topic, story => $story } )->next;
+	my $genre = $question1->genre;
+	my $description = $question1->description;
 	my $quizId = "$topic$story";
 	my $quiz = $c->model('DB::Quiz')->update_or_create({
-			id => $topic,
-			genre => $genre });
+			genre => $genre,
+			topic => $topic,
+			story => $story,
+			description => $description,
+			});
 	$c->stash->{quiz_id} = $quizId;
 	$c->stash->{template} = 'quiz/list.tt2';
 }
