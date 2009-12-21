@@ -15,7 +15,7 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => undef,
   },
-  "role",
+  "name",
   {
     data_type => "VARCHAR",
     default_value => undef,
@@ -29,6 +29,7 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T3ndmtJmb68WQ/4XgURYfw
 
+__PACKAGE__->has_many(rolebearers => 'Web::Schema::Result::Rolebearers', 'player');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
