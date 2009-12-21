@@ -49,7 +49,7 @@ __PACKAGE__->config({
 			store => {
 				class => 'DBIx::Class',
 				user_class => 'DB::Players',
-				role_column => 'roles'
+				role_column => 'authroles'
 			}
 		}
 	}
