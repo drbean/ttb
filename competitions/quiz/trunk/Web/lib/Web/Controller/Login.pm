@@ -36,9 +36,9 @@ sub index :Path :Args(0)  {
             my $officialrole = 1;
             if ( $c->check_user_roles($officialrole) ) {
                 $c->stash->{id}   = $id;
-                $c->stash->{name} = $name;
+                $c->stash->{officialname} = $name;
                 $c->stash->{leagues} =
-                  [ $c->model('DB::League')->search( {} ) ];
+                  [ $c->model('DB::Leagues')->search( {} ) ];
                 $c->stash->{template} = 'official.tt2';
                 return;
             }
