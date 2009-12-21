@@ -4,9 +4,11 @@
 
 <table border=2>
 <tr><td>Number<th>Question<th>Answer
-[% FOREACH q IN questions -%]
+[% FOREACH n IN questions.keys.nsort -%]
 
-  <tr><td>[% q.question %]<td>[%- q.content -%] <td>[% q.response %]
+  <tr><td>[% questions.$n.id %]
+      <td>[% questions.$n.content %]
+      <td>[% questions.$n.response %]
 
 [% END %]
 
