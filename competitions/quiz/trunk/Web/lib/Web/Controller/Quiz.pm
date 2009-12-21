@@ -261,10 +261,8 @@ sub score : Local {
 			}
 		}
 		elsif ( $pair->opponent =~ m/unpaired/i ) {
-			my $unpaired = $pair->opponent;
-			for my $unpaired ( @$unpaired ) {
-				$points->{$unpaired} = 0;
-			}
+			my $unpaired = $pair->player;
+			$points->{$unpaired} = 0;
 		}
 		else {
 
