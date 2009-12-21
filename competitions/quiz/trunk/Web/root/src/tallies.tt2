@@ -9,12 +9,12 @@
 [% END %]
     <th>Player Total
   </tr>
-[% FOREACH player IN scores.keys.sort -%]
+[% FOREACH player IN tallies.keys.sort -%]
   <tr>
       <td>[% player %]</td>
   [% FOREACH q IN quiz -%]
   	[% id = q.id %]
-      <td>[% IF scores.$player.$id.defined %][% scores.$player.$id -%]
+      <td>[% IF tallies.$player.$id.defined %][% tallies.$player.$id -%]
 	[%- ELSE %]_[% END %]
   [% END -%]
       <td>[% scores.$player.total %]
