@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 12月 09, 20時55分13秒
+# Last Edit: 2009  1月 12, 12時46分28秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -85,6 +85,7 @@ foreach my $group ( keys %$groups )
 	foreach my $player ( values %group )
 	{
 		my $playerId = $ids{$player};
+		warn "$player has no id.\n" unless $playerId;
 		my $role = $rolebearers{$player};
 		my $personalScore = sum map
 			{
