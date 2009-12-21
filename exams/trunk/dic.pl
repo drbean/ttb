@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008  9月 29, 10時36分59秒
+# Last Edit: 2008  9月 29, 15時15分36秒
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,6 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
+use Algorithm::Numerical::Sample qw/sample/;
 
 my $man = 0;
 my $help = 0;
@@ -60,16 +61,18 @@ sub sequences
 }
 
 my @parallelfiles = sequences(@dir);
+
+my $size = keys %$groups;
+my @sampleforms = sample( set=> \@parallelfiles, sample_size => $size );
 my @texts;
-for my $filesequence ( @parallelfiles[0..keys %$groups] )
+for my $filesequence ( @sampleforms )
 {
 	my @files = map { io $_ } @$filesequence;
 	my @lines;
 	push @lines, ( $files[$_]->getlines ) for 0..$#files;
 	my $lines = join '', @lines;
-	my $text = cloze($unclozedwords, $unclozeables, $lines);
-		# @{$lines[$_]}) for 0..$#files;
-	push @texts, $text;
+	my %text = cloze($unclozedwords, $unclozeables, $lines);
+	push @texts, \%text;
 }
 my $next = nextText(@texts);
 
