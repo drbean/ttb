@@ -23,7 +23,7 @@
 
   <tr>
       <td>Totals
-[% FOREACH question IN totals.keys.sort -%]
+[% FOREACH question IN totals.keys.sort.nsort('id') -%]
     <td>[% totals.$question %]
 [% END -%]
 
