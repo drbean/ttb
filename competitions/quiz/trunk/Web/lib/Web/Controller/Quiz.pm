@@ -189,7 +189,8 @@ sub tally : Local {
 	my $round = $c->model('SwissDB::Round')->find({ tournament => $leagueId
 			})->round;
 	$c->stash->{league} = $leagueId;
-	$c->stash->{topicstory} = $topic . '_' . $story;
+	$c->stash->{topic} = $topic;
+	$c->stash->{story} = $story;
 	$c->stash->{round} = $round;
 	$c->stash->{quiz} = \@quiz;
 	$c->stash->{tallies} = $tallies;
@@ -315,6 +316,10 @@ sub score : Local {
 		$seen{$opponent} = 1;
 	}
 	push @$game, $byegame if defined $byegame;
+	$c->stash->{league} = $leagueId;
+	$c->stash->{topic} = $topic;
+	$c->stash->{story} = $story;
+	$c->stash->{round} = $round;
 	$c->stash->{game} = $game;
 	$c->stash->{roles} = [ qw/White Black/ ];
 	$c->stash->{points} = $points;
