@@ -96,24 +96,13 @@ Delete a quiz. Delete of Questions done here too.
 =cut
 
 sub delete : Local {
-	my ($self, $c, $id) = @_;
-	my $quiz = $c->model('DB::Quiz');
-	my $words = $quiz->find({id => $id})->words;
-	my %entries;
-	while (my $word = $words->next)
-	{
-		my $token = $word->published;
-		my $entry = $word->dictionary;
-		if ( $entry )
-		{
-			my $count = $entry->count;
-			$entry->update( {count => --$count} );
-		}
-	}
-	$quiz->search({id => $id})->delete_all;
+	my ($self, $c, $topic, $story) = @_;
+	my $quiz = $c->model('DB::Quiz')->find({
+			topic => $topic, story => $story });
+	$quiz->delete_all;
 	$c->stash->{status_msg} = "Quiz deleted.";
-       $c->response->redirect($c->uri_for('list',
-                   {status_msg => "Quiz deleted."}));
+	$c->response->redirect($c->uri_for('list',
+		   {status_msg => "Quiz deleted."}));
 }
 
 
