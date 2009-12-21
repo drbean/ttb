@@ -60,5 +60,5 @@ sub run {
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$leagueId/seats.tmpl", DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
-	io("$leagueId/$session/groupseat.$filetype")->print($text);
+	io("$leagueId/$session/teamseat.$filetype")->print($text);
 }
