@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 10月 06, 14時09分55秒
+# Last Edit: 2008 10月 07, 20時44分24秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -98,8 +98,9 @@ foreach my $group ( keys %$groups )
 	my @memberScores = map { "$names{$_}($indScores{$_})" } @groupsIds;
 	push @{$groupScoresByScore{$groupScores{$group}}},
 				"$group. @memberScores. Chinese: $chinese\\\\ ";
-	$groupGrade = int (((60/100)*$topGrade/sqrt($sixtypercentScore)) *
-						sqrt($totalScore));
+	# $groupGrade = int (((60/100)*$topGrade/sqrt($sixtypercentScore)) *
+	# 					sqrt($totalScore));
+	$groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
 	$groupGrade = $groupGrade > $topGrade? $topGrade: $groupGrade;
 	@points{ @groupsIds } = ($groupGrade) x @groupsIds;
 	push @{$pointsByPoints{$groupGrade}},
