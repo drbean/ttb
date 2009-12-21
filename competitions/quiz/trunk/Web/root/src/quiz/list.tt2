@@ -3,19 +3,16 @@
 <p>[% league %] League</p>
 
 <table>
-<tr><th>Id</th><th>Name</th></tr>
+<tr><th>Topic<th>Story<th>Name
 [% FOREACH q IN quiz -%]
   [% topic = q.topic story = q.story %]
   <tr>
-    <td>[% q.id %]</td>
+    <td>[% q.topic %]</td>
+    <td>[% q.story %]</td>
     <td>[% q.description %]</td>
-    <td>[% topic %]</td>
-    <td>[% story %]</td>
     <td>
-	<a href="[% c.uri_for('/play/start/') _ q.topic _ '/' _ q.story %]">Go!</a>
+	<a href="[% c.uri_for('/play/') _ q.topic _ '/' _ q.story %]">Go!</a>
     </td>
   </tr>
 [% END -%]
 </table>
-
-<h3>Back to <a href=http://web.nuu.edu.tw/~greg/[% genre.ucfirst %].html>soundfiles and commentary</a></h3>
