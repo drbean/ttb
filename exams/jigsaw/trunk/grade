@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2009  1月 12, 17時27分12秒
+# Last Edit: 2009  4月 19, 22時33分19秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -20,7 +20,7 @@ my @examfiles = grep m/^round.yaml$/, @yaml;
 die "too many examfiles" if $#examfiles;
 my $examfile = $examfiles[0];
 my $exam = LoadFile( $examfile );
-my $league = LoadFile( "../league.yaml" );
+my $league = LoadFile( "../../league.yaml" );
 my @members = @{$league->{member}};
 my %ids = map { $_->{name} => $_->{id} } @members;
 my %names = map { $_->{id} => $_->{name} } @members;
@@ -78,6 +78,7 @@ foreach my $group ( keys %$groups )
 	my %group =  %{$groups->{$group}}; 
 	my $letters = $scoresheet->{letters}->{$group};
 	my $chinese = $scoresheet->{Chinese}->{$group};
+	my $story = $scoresheet->{letters}->{$group}->{story};
 	my %rolebearers = reverse %group;
 	my @assistantPlayers;
 	my (@noexam, $groupGrade);
@@ -129,7 +130,7 @@ foreach my $group ( keys %$groups )
 	$groupGrade = $groupGrade > $topGrade? $topGrade: $groupGrade;
 	@points{ @groupsIds } = ($groupGrade) x @groupsIds;
 	push @{$pointsByPoints{$groupGrade}},
-		"$group. @names{@groupsIds}\\\\";
+		"$group. @names{@groupsIds} ($story)\\\\";
 }
 
 @indScores{@assistantIds} = map {
