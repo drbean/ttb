@@ -50,12 +50,14 @@ sub run {
 		my $order = 0;
 		for my $expertgroup ( sort keys %$arrangement ) {
 			my $seats = $arrangement->{$expertgroup};
-			my @members = map { my $name = $groups->{$_}->[$order];
-				{
-				name => $name,
-				id => $names{$name}->{id},
-				team => $_ }			}
-						@$regionalgroups;
+			my @members;
+			for my $group ( @$regionalgroups ) {
+				my $name = $groups->{$group}->[$order];
+				push @members, {
+					name => $name,
+					id => $names{$name}->{id},
+					team => $_ } if $name;
+			}
 			my @seats = map { "s$_" } @$seats;
 			for my $number ( 0 .. $#seats ) {
 				$chart->{$seats[$number]} = $members[$number];
