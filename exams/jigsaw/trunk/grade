@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 10月 17, 08時19分24秒
+# Last Edit: 2008 12月 09, 08時22分19秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -105,7 +105,8 @@ foreach my $group ( keys %$groups )
 				"$group. @memberScores. Chinese: $chinese\\\\ ";
 	# $groupGrade = int (((60/100)*$topGrade/sqrt($sixtypercentScore)) *
 	# 					sqrt($totalScore));
-	$groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
+	# $groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
+	$groupGrade = $questions2grade->($totalScore/4);
 	$groupGrade = $groupGrade > $topGrade? $topGrade: $groupGrade;
 	@points{ @groupsIds } = ($groupGrade) x @groupsIds;
 	push @{$pointsByPoints{$groupGrade}},
@@ -122,7 +123,8 @@ foreach my $group ( keys %$groups )
 		my $assistant = $_;
 		my $points = max map {
 			my $totalScore = $assistantRecords{$assistant}->{$_}->{totalScore};
-		my $groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
+		my $groupGrade = $questions2grade->($totalScore/4);
+		# my $groupGrade = int ((($totalScore/4)*( 9**2.3/$sixtypercentScore ))**(1/2.3) );
 			$groupGrade > $topGrade? $topGrade: $groupGrade;
 		} keys %{$assistantRecords{$assistant}};
 		$points;
@@ -194,6 +196,20 @@ my $template = Text::Template->new(TYPE => 'FILE', SOURCE => 'report.tmpl'
 				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
 open TEX, ">report.tex";
 print TEX $template->fill_in( HASH => $report );
+
+my $questions2grade = sub {
+        my $questionsRight = shift;
+        return 1 + int ( 9 +
+		($questionsRight-$sixtypercentScore)*(15-9)/
+		($questions-$sixtypercentScore));
+};
+
+my $grade2questions = sub {
+        my $grade = shift;
+        return 1 + int ( $passquestions +
+		($grade-$passGrade)*($totalQuestions-$passquestions)/
+		($perfectGrade-$passGrade));
+};
 
 =begin comment text
 sub scores2grade {
