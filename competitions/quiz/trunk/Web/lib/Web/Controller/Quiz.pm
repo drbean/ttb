@@ -107,13 +107,13 @@ sub check : Local {
 			{ league => $leagueId } )->genre;
 	my $questions = $genre->questions->search(
 		{ topic => $topic, story => $story } );
-	my (@record, @popquestions);
+	my ($record, @popquestions);
 	while ( my $question = $questions->next ) {
 		my $qid = $question->id;
 		my $response = $c->request->params->{$qid};
 		if ( my $played = $question->played->find({ player => $player,
 				league => $leagueId }) ) {
-			push @record, { question => $question->id,
+			$record->{$qid} = { id => $question->id,
 				content => $question->content,
 				response => $played->response,
 				newresponse => $response
@@ -123,7 +123,7 @@ sub check : Local {
 		}
 		else {
 			my $correct = $response eq $question->answer? 1: 0;
-			push @record, { question => $qid,
+			$record->{$qid} = { id => $qid,
 				content => $question->content,
 				response => $response, };
 			push @popquestions, { league => $leagueId,
@@ -133,7 +133,7 @@ sub check : Local {
 		}
 	}
 	$c->model('DB::Play')->populate( \@popquestions ) if @popquestions;
-	$c->stash->{questions} = \@record;
+	$c->stash->{questions} = $record;
 	$c->stash->{genre} = $genre->name;
 	$c->stash->{target} = $targetId;
 	$c->stash->{template} = "record.tt2";
