@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2009  4月 19, 22時33分19秒
+# Last Edit: 2009  4月 22, 20時46分57秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -150,10 +150,10 @@ foreach my $group ( keys %$groups )
 		$points;
 		} @assistantIds;
 
-@indScores{@absenteeIds} = (0)x@absenteeIds;
-push @{$indScoresByScore{0}}, "$names{$_} $_\\\\" foreach @absenteeIds;
-@points{ @absenteeIds } = (0)x@absenteeIds;
-push @{$pointsByPoints{0}}, "$names{$_} $_\\\\" foreach @absenteeIds;
+# @indScores{@absenteeIds} = (0)x@absenteeIds;
+# push @{$indScoresByScore{0}}, "$names{$_} $_\\\\" foreach @absenteeIds;
+# @points{ @absenteeIds } = (0)x@absenteeIds;
+# push @{$pointsByPoints{0}}, "$names{$_} $_\\\\" foreach @absenteeIds;
 
 my %adjusted = map
 	{
@@ -172,13 +172,14 @@ my %adjusted = map
 					keys %{$assistantRecords{$assistant}};
 		$points{$assistant} - $chinese;
 	} @assistantIds;
-@adjusted{@absenteeIds} = (0)x@absenteeIds;
+# @adjusted{@absenteeIds} = (0)x@absenteeIds;
 my %adjustedByGrades = ();
 map
 {
-	die "$names{$_} $_?" unless exists $adjusted{$_}
-					&& exists $names{$_} && defined $_;
-	push @{$adjustedByGrades{$adjusted{$_}}}, "$names{$_} $_ \\\\ ";
+	# die "$names{$_} $_?" unless exists $adjusted{$_}
+					# && exists $names{$_} && defined $_;
+	push @{$adjustedByGrades{$adjusted{$_}}}, "$names{$_} $_ \\\\ "
+		unless $points{$_} == 0;
 } values %ids;
 
 die "g.yaml already exists" if -e "g.yaml";
