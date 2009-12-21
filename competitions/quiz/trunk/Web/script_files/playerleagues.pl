@@ -118,7 +118,7 @@ foreach my $league ( @leagueids )
 uptodatepopulate( 'Members', [ [ qw/league player/ ], 
 				@allLeaguePlayers ] );
 
-uptodatepopulate( 'Roles', [ [ qw/id name/ ], 
+uptodatepopulate( 'AuthRoles', [ [ qw/id name/ ], 
 [ 1, "official" ],
 [ 2, "player" ],
 [ 3, "amateur" ], ] );
