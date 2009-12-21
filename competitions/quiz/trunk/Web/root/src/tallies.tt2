@@ -12,7 +12,7 @@
 [% FOREACH player IN tallies.keys.sort -%]
   <tr>
       <td>[% player %]</td>
-  [% FOREACH q IN quiz -%]
+  [% FOREACH q IN quiz.nsort('id') -%]
   	[% id = q.id %]
       <td>[% IF tallies.$player.$id.defined %][% tallies.$player.$id -%]
 	[%- ELSE %]_[% END %]
