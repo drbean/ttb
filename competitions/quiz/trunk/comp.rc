@@ -23,6 +23,7 @@ for my $player ( keys %$opponents ) {
 		for my $unpaired ( @$unpaired ) {
 			$points->{$unpaired} = 0;
 		}
+		next;
 	}
 	my $opponent = $opponents->{$player};
 	my $opponentopponent = $opponents->{$opponent};
