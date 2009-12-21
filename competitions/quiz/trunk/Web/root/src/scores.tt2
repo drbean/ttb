@@ -1,6 +1,6 @@
 [% META title = 'Scores List' -%]
 
-<table>
+<table border=1>
   <COL width="40">
   <tr>
     <th>Player ID
