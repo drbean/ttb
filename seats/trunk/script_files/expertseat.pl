@@ -56,7 +56,7 @@ sub run {
 				push @members, {
 					name => $name,
 					id => $names{$name}->{id},
-					team => $_ } if $name;
+					team => $group } if $name;
 			}
 			my @seats = map { "s$_" } @$seats;
 			for my $number ( 0 .. $#seats ) {
