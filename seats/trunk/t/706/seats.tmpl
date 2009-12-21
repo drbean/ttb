@@ -7,14 +7,17 @@
 \definecolor{DarkBlue}{cmyk}  {0.7,0.7,0.0,0.2}
 \definecolor{DarkGreen}{cmyk} {0.5,0.1,0.5,0.1}
 \definecolor{Gray}{cmyk}      {0  ,0  ,0  ,0.1}
+\definecolor{Blue}{cmyk}      {0.2,0.0,0.0,0  }
+\definecolor{Green}{cmyk}     {0.3,0  ,0.3,0.1}
 \definecolor{LightBlue}{cmyk} {0.2,0.0,0.0,0  }
 \definecolor{LightGreen}{cmyk}{0.3,0  ,0.3,0.1}
 \definecolor{Orange}{cmyk}    {0  ,0.3,0.8,0.0}
-\definecolor{Pink}{cmyk}      {0  ,0.0,0.0,0.1}
+\definecolor{Pink}{cmyk}      {0  ,0.3,0.3,0.1}
 \definecolor{Purple}{cmyk}    {0.3,0.8,0.2,0.1}
 \definecolor{Red}{cmyk}       {0  ,0.5,0.5,0.2}
 \definecolor{White}{cmyk}     {0  ,0  ,0  ,0  }
-\definecolor{Yellow}{cmyk}    {0  ,0.1,0.0,0  }
+\definecolor{Yellow}{cmyk}    {0  ,0.0,0.5,0  }
+\definecolor{BlackBlack}{cmyk}{0  ,0.0,0.0,0.4}
 \TPMargin{0.2cm}
 \textblockorigin{0.30cm}{0.35cm} % w5 LaserJet
 \pagestyle{empty}
@@ -23,13 +26,13 @@
 \newcommand{\myseat}[4]{%
 \vspace{-0.1cm}
 % \vspace{0.1cm}
-\parbox[t][1.2][t]{2.5}{
-\small #1 \normalsize
+\parbox[t][2.2cm][t]{3.5cm}{
+\small #1 % \normalsize
 \begin{description}
 \vspace{-0.1cm}
-\item [ID:] #3
+\item [ID:] #2
 \vspace{-0.1cm}
-\item [Team:] #2 \normalsize
+\item [Team:] #3 \normalsize
 \vspace{-0.1cm}
 \item \Large #4
 \vspace{-0.1cm}
