@@ -38,6 +38,6 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->belongs_to( genre => 'Web::Schema::Result::Leaguegenre', 
 	 { 'foreign.league' => 'self.id' } );
-
+__PACKAGE__->has_many( members => 'Web::Schema::Result::Members', 'league' );
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
