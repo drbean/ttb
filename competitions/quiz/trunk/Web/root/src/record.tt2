@@ -1,0 +1,13 @@
+[% META title = "Quiz" -%]
+
+  Questions:
+
+<table border=2>
+<tr><td>Number<th>Question<th>Answer
+[% FOREACH q IN questions -%]
+
+  <tr><td>[% q.question %]<td>[%- q.content -%] <td>[% q.response %]
+
+[% END %]
+
+</table>
