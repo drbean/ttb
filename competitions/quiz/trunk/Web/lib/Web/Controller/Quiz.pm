@@ -234,10 +234,12 @@ sub score : Local {
 		$tallies->{$pid}->{total} = sum map { $tallies->{$pid}->{$_} }
 					keys %{ $tallies->{$pid} };
 	}
+	my $round = $c->model('SwissDB::Round')->find({ tournament => $leagueId
+			})->round;
 	my $opponents = $c->model('SwissDB::Opponents')->search({
-			round => 1, tournament => $leagueId });
+			round => $round, tournament => $leagueId });
 	my $roles = $c->model('SwissDB::Roles')->search({
-			round => 1, tournament => $leagueId });
+			round => $round, tournament => $leagueId });
 	my ($points, %opponents, %roles, %parity,
 		$byegame, $lategames, $unpairedgames);
 	while ( my $pair = $opponents->next ) {
