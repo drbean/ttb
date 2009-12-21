@@ -53,11 +53,13 @@ use IO::All;
 
 my $sequence = LoadFile $ARGV[0];
 my @questions;
+
 TOPIC: for my $t ( keys %$sequence ) {
-	next unless $t = $ARGV[1];
+	next if $t eq 'genre';
+	if ( $ARGV[1] ) { next unless $t eq $ARGV[1]; }
 	my $topic = $sequence->{$t};
-	for my $s ( keys %$topic ) {
-		next unless $s = $ARGV[2];
+	STORY: for my $s ( keys %$topic ) {
+		if ( $ARGV[2] ) { next unless $s eq $ARGV[2]; }
 		my $story = $topic->{$s};
 		my $quiz = $story->{quiz};
 		my $n = 1;
@@ -72,7 +74,6 @@ TOPIC: for my $t ( keys %$sequence ) {
 				answer => $qa->{answer},
 			};
 		}
-		last TOPIC;
 	}
 }
 my $q = $d->resultset('Questions');
