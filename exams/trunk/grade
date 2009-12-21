@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2007 Mar 29, 05:29:34 PM
+# Last Edit: 2008 10月 06, 14時09分55秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -63,6 +63,7 @@ foreach my $group ( keys %$groups )
 	my %group =  %{$groups->{$group}}; 
 	my $letters = $scoresheet->{letters}->{$group};
 	my $chinese = $scoresheet->{Chinese}->{$group};
+	my %rolebearers = reverse %group;
 	my $assistantId;
 	my %assistedRecord;
 
@@ -71,9 +72,10 @@ foreach my $group ( keys %$groups )
 	foreach my $player ( values %group )
 	{
 		my $playerId = $ids{$player};
+		my $role = $rolebearers{$player};
 		my $personalScore = sum map
 			{
-				$letters->{$player}->{"Conversation$number[$_]"}
+				$letters->{$role}
 			} 0;
 		$totalScore += $personalScore;
 
@@ -153,7 +155,7 @@ DumpFile( "g.yaml", \%adjusted );
 @{$adjustedByGrades{$_}} = sort @{$adjustedByGrades{$_}}
 						foreach keys %adjustedByGrades;
 my @indReport = map
-	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$indScoresByScore{$_}}" }
+	{ "\\begin{small}\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$indScoresByScore{$_}}\\end{small}" }
 		sort {$a<=>$b} keys %indScoresByScore;
 my @groupReport = map 
 	{ "\\vspace{-0.4cm} \\item [$_:] \\hspace*{0.5cm}\\\\@{$groupScoresByScore{$_}}" }
