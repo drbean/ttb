@@ -39,6 +39,8 @@ PAGELOOP: while ( my $group = each %$groups )
 {$group}
 {\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{A}</tmpl> <tmpl>$ids{$groups->{$group}->{A}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
 {<tmpl>$groups->{$group}->{B}</tmpl> <tmpl>$ids{$groups->{$group}->{B}}</tmpl>}
+{<tmpl>$groups->{$group}->{C}</tmpl> <tmpl>$ids{$groups->{$group}->{C}}</tmpl>}
+{<tmpl>$groups->{$group}->{D}</tmpl> <tmpl>$ids{$groups->{$group}->{D}}</tmpl>}
 \\end{textblock}
 
 \\begin{textblock}{8}(8,0)
@@ -47,16 +49,18 @@ PAGELOOP: while ( my $group = each %$groups )
 {$group}
 {<tmpl>$groups->{$group}->{A}</tmpl> <tmpl>$ids{$groups->{$group}->{A}}</tmpl>}
 {\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{B}</tmpl> <tmpl>$ids{$groups->{$group}->{B}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
+{<tmpl>$groups->{$group}->{C}</tmpl> <tmpl>$ids{$groups->{$group}->{C}}</tmpl>}
+{<tmpl>$groups->{$group}->{D}</tmpl> <tmpl>$ids{$groups->{$group}->{D}}</tmpl>}
 \\end{textblock}
-";
-	$group = each %$groups;
-	$tmplString .= "
+
 \\begin{textblock}{8}(0,8)
 \\textblocklabel{picture3}
 \\mycard{\$\\diamondsuit\$}
 {$group}
-{\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{A}</tmpl> <tmpl>$ids{$groups->{$group}->{A}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
+{<tmpl>$groups->{$group}->{A}</tmpl> <tmpl>$ids{$groups->{$group}->{A}}</tmpl>}
 {<tmpl>$groups->{$group}->{B}</tmpl> <tmpl>$ids{$groups->{$group}->{B}}</tmpl>}
+{\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{C}</tmpl> <tmpl>$ids{$groups->{$group}->{C}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
+{<tmpl>$groups->{$group}->{D}</tmpl> <tmpl>$ids{$groups->{$group}->{D}}</tmpl>}
 \\end{textblock}
 
 \\begin{textblock}{8}(8,8)
@@ -64,7 +68,9 @@ PAGELOOP: while ( my $group = each %$groups )
 \\mycard{\$\\clubsuit\$}
 {$group}
 {<tmpl>$groups->{$group}->{A}</tmpl> <tmpl>$ids{$groups->{$group}->{A}}</tmpl>}
-{\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{B}</tmpl> <tmpl>$ids{$groups->{$group}->{B}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
+{<tmpl>$groups->{$group}->{B}</tmpl> <tmpl>$ids{$groups->{$group}->{B}}</tmpl>}
+{<tmpl>$groups->{$group}->{C}</tmpl> <tmpl>$ids{$groups->{$group}->{C}}</tmpl>}
+{\\begin{Large}\\ding{220}<tmpl>$groups->{$group}->{D}</tmpl> <tmpl>$ids{$groups->{$group}->{D}}</tmpl>\\end{Large} \\begin{tiny}Signature:\\hrulefill\\end{tiny}}
 \\end{textblock}
 
 \\begin{tiny}$n\\end{tiny}\\\\

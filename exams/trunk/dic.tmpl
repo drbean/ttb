@@ -1,5 +1,5 @@
 <TMPL>$autogen</TMPL>
-\documentclass[b5paper]{article}
+\documentclass[a4paper]{article}
 \usepackage[T1]{fontenc}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute,showboxes]{textpos}
@@ -9,18 +9,20 @@
 % \textblockorigin{0.30cm}{2.15cm}
 % \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
 % \textblockorigin{0.30cm}{3.35cm} % w5
-\textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+% \textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+% \textblockorigin{0.00cm}{0.00cm} % A4 HPLaserJ5000LE
+\textblockorigin{0.05cm}{0.70cm} % A4 HPLaserJ5000LE
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 \renewcommand{\baselinestretch}{0.5}
 \newcommand{\mycard}[1]{%
-\parbox[t][12.1cm][t]{9.5cm}{
+\parbox[t][14.1cm][t]{9.5cm}{
 % \begin{tiny}{<TMPL>$cardIdentifier</TMPL>}\end{tiny}\\
 % \vspace{0.20cm}
 % \begin{large}1\end{large} \normalsize #2%
-\begin{minipage}{8.5cm}
+\begin{minipage}{9.5cm}
   \begin{description}
-	\item \parbox{7.3cm}{\normalsize #1}
+	\item \parbox{8.3cm}{\normalsize #1}
 	\vspace{0.2cm}
   \end{description}
 \end{minipage}
