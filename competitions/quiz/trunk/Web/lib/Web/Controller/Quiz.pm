@@ -51,14 +51,14 @@ sub list : Local {
     # in your action methods (actions methods respond to user input in
     # your controllers).
     my $player = $c->session->{player_id};
-    my @play = $c->model('DB::Play')->search(
-	    { league => $leagueid, player => $player },
-		{ select => [ 'topic', 'story', { sum => 'correct' } ],
-		'group_by' => [qw/topic story/],
-		as => [ qw/topic story questions/ ],
-		});
-    my %questionscores = map { $_->quiz => $_->get_column('questions') } @play;
-    $c->stash->{questions} = \%questionscores;
+    #my @play = $c->model('DB::Play')->search(
+    #        { league => $leagueid, player => $player },
+    #    	{ select => [ 'topic', 'story', { sum => 'correct' } ],
+    #    	'group_by' => [qw/topic story/],
+    #    	as => [ qw/topic story questions/ ],
+    #    	});
+    #my %questionscores = map { $_->quiz => $_->get_column('questions') } @play;
+    #$c->stash->{questions} = \%questionscores;
     $c->stash->{league} = $league->name;
     $c->stash->{template} = 'quiz/list.tt2';
 }
