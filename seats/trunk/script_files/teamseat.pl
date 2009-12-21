@@ -37,7 +37,9 @@ sub run {
 	my $leagueId = $script->league;
 	my $league = LoadFile "$leagueId/league.yaml";
 	my $session = $script->session;
-	my $filetype = $script->html? "html": "tex";
+	my $html = $script->html;
+	my $filetype = $html? "html": "tex";
+	my $fileprefix = $html? "html": "";
 	my $series = $league->{series};
 	die "No $session session\n" unless any { $_ eq $session } @$series;
 	my $member = $league->{member};
@@ -58,7 +60,8 @@ sub run {
 			}
 		}
 	my $t = Text::Template->new(TYPE=>'FILE',
-		SOURCE=>"$leagueId/seats.tmpl", DELIMITERS => ['[*', '*]']);
+		SOURCE=>"$leagueId/${fileprefix}seats.tmpl",
+						DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
 	io("$leagueId/$session/teamseat.$filetype")->print($text);
 }
