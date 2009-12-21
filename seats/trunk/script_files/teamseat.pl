@@ -54,6 +54,7 @@ sub run {
 		for my $number ( 0 .. $#seats ) {
 			my $name = $member->[$number];
 			my $id = $names{$name}->{id};
+			warn "$team team member in $seats[$number]?" unless $id;
 			$chart->{$seats[$number]} = { id => $id,
 						name => $name,
 						team => $team };
