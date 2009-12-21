@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+\usepackage{CJK}
 \usepackage[absolute,showboxes]{textpos}
 % \usepackage[absolute]{textpos}
 \usepackage[usenames]{color}
@@ -41,41 +42,43 @@
 }
 \begin{document}
 
-	\begin{textblock}{2.5}(0,0)
-	\textblocklabel{47}
-	\textblockcolor{[* $s47{team} *]}
-	\myseat{47}{[* $s47{id} *]}{[* $s47{team} *]}{[* $s47{name} *]}
-	\end{textblock}
+\begin{CJK}{UTF8}{cyberbit}
 
-	\begin{textblock}{2.5}(2.5,0)
-	\textblocklabel{37}
-	\textblockcolor{[* $s37{team} *]}
-	\myseat{37}{[* $s37{id} *]}{[* $s37{team} *]}{[* $s37{name} *]}
-	\end{textblock}
+\begin{textblock}{2.5}(0,0)
+\textblocklabel{47}
+\textblockcolor{[* $s47{team} *]}
+\myseat{47}{[* $s47{id} *]}{[* $s47{team} *]}{[* $s47{name} *]}
+\end{textblock}
 
-	\begin{textblock}{2.5}(5,0)
-	\textblocklabel{27}
-	\textblockcolor{[* $s27{team} *]}
-	\myseat{27}{[* $s27{id} *]}{[* $s27{team} *]}{[* $s27{name} *]}
-	\end{textblock}
+\begin{textblock}{2.5}(2.5,0)
+\textblocklabel{37}
+\textblockcolor{[* $s37{team} *]}
+\myseat{37}{[* $s37{id} *]}{[* $s37{team} *]}{[* $s37{name} *]}
+\end{textblock}
 
-	\begin{textblock}{2.5}(7.5,0)
-	\textblocklabel{17}
-	\textblockcolor{[* $s17{team} *]}
-	\myseat{17}{[* $s17{id} *]}{[* $s17{team} *]}{[* $s17{name} *]}
-	\end{textblock}
+\begin{textblock}{2.5}(5,0)
+\textblocklabel{27}
+\textblockcolor{[* $s27{team} *]}
+\myseat{27}{[* $s27{id} *]}{[* $s27{team} *]}{[* $s27{name} *]}
+\end{textblock}
 
-	\begin{textblock}{2.5}(10,0)
-	\textblocklabel{09}
-	\textblockcolor{[* $s09{team} *]}
-	\myseat{09}{[* $s09{id} *]}{[* $s09{team} *]}{[* $s09{name} *]}
-	\end{textblock}
+\begin{textblock}{2.5}(7.5,0)
+\textblocklabel{17}
+\textblockcolor{[* $s17{team} *]}
+\myseat{17}{[* $s17{id} *]}{[* $s17{team} *]}{[* $s17{name} *]}
+\end{textblock}
 
-	\begin{textblock}{2.5}(12.5,0)
-	\textblocklabel{01}
-	\textblockcolor{[* $s01{team} *]}
-	\myseat{01}{[* $s01{id} *]}{[* $s01{team} *]}{[* $s01{name} *]}
-	\end{textblock}
+\begin{textblock}{2.5}(10,0)
+\textblocklabel{09}
+\textblockcolor{[* $s09{team} *]}
+\myseat{09}{[* $s09{id} *]}{[* $s09{team} *]}{[* $s09{name} *]}
+\end{textblock}
+
+\begin{textblock}{2.5}(12.5,0)
+\textblocklabel{01}
+\textblockcolor{[* $s01{team} *]}
+\myseat{01}{[* $s01{id} *]}{[* $s01{team} *]}{[* $s01{name} *]}
+\end{textblock}
 
 
 \begin{textblock}{2.5}(0,1.4)
@@ -402,6 +405,14 @@
 \myseat{26b}{[*$s26b{id}*]}{[* $s26b{team}*]}{[* $s26b{name}*]}
 \end{textblock}
 
-%\end{tabular}
-%\end{picture}
+\begin{textblock}{7.5}(7.5,14)
+\textblocklabel{title}
+\textblockcolor{}
+\parbox[t][2.2cm][t]{9.5cm}{%
+\large Room 706, [* $league *]: [* $session *] session, Week: 
+}
+\end{textblock}
+
+\end{CJK}
+
 \end{document}
