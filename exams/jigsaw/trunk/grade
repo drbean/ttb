@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2009 10月 31, 19時58分40秒
+# Last Edit: 2009 12月 07, 22時21分27秒
 # $Id: /dic/branches/ctest/grade 1160 2007-03-29T09:31:06.466606Z greg  $
 
 use strict;
@@ -19,7 +19,7 @@ my @examfiles = grep m/^round.yaml$/, @yaml;
 die "too many examfiles" if $#examfiles;
 my $examfile = $examfiles[0];
 my $exam = LoadFile( $examfile );
-my $league = LoadFile( "../../league.yaml" );
+my $league = LoadFile( "../league.yaml" );
 my @members = @{$league->{member}};
 my %ids = map { $_->{name} => $_->{id} } @members;
 my %names = map { $_->{id} => $_->{name} } @members;
@@ -92,10 +92,10 @@ foreach my $group ( keys %$groups )
 		my $role = $rolebearers{$player};
 		warn "$player has no role.\n" if not defined $role;
 		warn "$player has no letters.\n" if not defined
-							$letters->{$role};
+							$letters->{$playerId};
 		my $personalScore = sum map
 			{
-				$letters->{$role}
+				$letters->{$playerId}
 			} 0;
 		$totalScore += $personalScore;
 
