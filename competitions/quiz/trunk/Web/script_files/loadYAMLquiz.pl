@@ -53,7 +53,7 @@ use IO::All;
 
 my $sequence = LoadFile $ARGV[0];
 my @questions;
-my %genreid = ( immediate => 1, business => 2, intercultural => 3, access => 4);
+my %genreid = (intermediate => 1, business => 2, intercultural => 3, access=>4);
 my $genre = $sequence->{genre};
 my $genreid = $genreid{ lc $genre };
 
