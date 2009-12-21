@@ -53,6 +53,9 @@ use IO::All;
 
 my $sequence = LoadFile $ARGV[0];
 my @questions;
+my %genreid = ( immediate => 1, business => 2, intercultural => 3, access => 4);
+my $genre = $sequence->{genre};
+my $genreid = $genreid{ lc $genre };
 
 TOPIC: for my $t ( keys %$sequence ) {
 	next if $t eq 'genre';
@@ -61,14 +64,16 @@ TOPIC: for my $t ( keys %$sequence ) {
 	STORY: for my $s ( keys %$topic ) {
 		if ( $ARGV[2] ) { next unless $s eq $ARGV[2]; }
 		my $story = $topic->{$s};
+		my $identifier = $story->{identifier};
 		my $quiz = $story->{quiz};
 		my $n = 1;
 		for my $qa ( @$quiz ) {
 			push @questions, {
-				genre => $sequence->{genre},
+				genre => $genreid,
 				topic => $t,
 				story => $s,
 				id => $n++,
+				description => $identifier,
 				target => 'all',
 				content => $qa->{question},
 				answer => $qa->{answer},
