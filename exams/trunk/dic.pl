@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008  9月 28, 20時24分52秒
+# Last Edit: 2008  9月 29, 10時36分59秒
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -99,7 +99,7 @@ foreach my $group ( keys %$groups )
 	$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard" . (join "\n", map { "{$text->[$_]->{A}}" } 0..$#$textSources) . "
+\\mycard{$text->{A}}
 \\end{textblock}\n";
 
 		&paging;
@@ -107,7 +107,23 @@ foreach my $group ( keys %$groups )
 		$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard" . (join "\n", map { "{$text->[$_]->{B}}" } 0..$#$textSources) . "
+\\mycard{$text->{B}}
+\\end{textblock}\n";
+
+		&paging;
+
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard{$text->{C}}
+\\end{textblock}\n";
+
+		&paging;
+
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard{$text->{D}}
 \\end{textblock}\n";
 
 		&paging;
