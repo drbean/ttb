@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2008  9月 29, 12時05分07秒
+# Last Edit: 2008  9月 29, 12時12分15秒
 # $Id: /dic/branches/ctest/Cloze.pm 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -59,7 +59,7 @@ sub cloze
 			my ($index, $inCloze, $clozedletters) = (0) x 3;
 		}
 		text: section(s) end | <error>
-		section: vspace header line(s) | header line(s) | line(s)
+		section: vspace header line(s) | header eol line(s) | line(s)
 		# line: vspace m/$/ | header m/$/ | token(s) m/$/
 		vspace: m/vspace{\d?.\d+cm}/ {
 			@writers = qw/A B C D/;
@@ -77,8 +77,8 @@ sub cloze
 		eol: m/$/m {
 			$reader = undef;
 			@writers = qw/A B C D/;
-			# $Cloze::clozeline{$reader} .= "\n";
-			# @Cloze::clozeline{$_} .= "\n" for @writers;
+			$Cloze::clozeline{$reader} .= "\n";
+			@Cloze::clozeline{$_} .= "\n" for @writers;
 			}
 		a: m/$a/ {
 			($reader, @writers) = ('A','B', 'C', 'D');
