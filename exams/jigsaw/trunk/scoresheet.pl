@@ -9,7 +9,7 @@ use IO::All;
 die "scores.yaml scoresheet already exists: $!\n" if -e 'scores.yaml';
 
 my $round = LoadFile( 'round.yaml' );
-my $league = LoadFile( "../league.yaml" );
+my $league = LoadFile( "../../league.yaml" );
 my @members = @{$league->{member}};
 my %ids = map { $_->{name} => $_->{id} } @members;
 my %names = map { $_->{id} => $_->{name} } @members;
@@ -27,6 +27,7 @@ foreach my $group ( keys %$groups )
 		next;
 	}
 	$sched->{Chinese}->{$group} = 0;
+	$sched->{letters}->{$group}->{story} = 0;
 	my @roles =  sort keys %{$groups->{$group}}; 
 	foreach my $role ( @roles )
 	{
