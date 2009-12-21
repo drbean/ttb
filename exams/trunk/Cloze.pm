@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2008  9月 29, 13時38分10秒
+# Last Edit: 2008  9月 29, 13時53分46秒
 # $Id: /dic/branches/ctest/Cloze.pm 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -72,11 +72,11 @@ sub cloze
 			@writers = qw/A B C D/;
 			@Cloze::clozeline{$_} .= $item[1] for @writers;
 			}
-		line: token(s) eol | eol
-		eos: m/^\\\\\\\\$/ {
+		line: eos | token(s) eol
+		eos: m/\\\\\\\\/ {
 			$reader = undef;
 			@writers = qw/A B C D/;
-			@Cloze::clozeline{$_} .= "\\\\\\\\\n" for @writers;
+			@Cloze::clozeline{$_} .= "\\\\vspace{0.2cm}\n\\\\par\n" for @writers;
 			}
 		token: a | b | c | d | punctuation | word
 		eol: m/\\\\\\\\/ {
@@ -86,32 +86,26 @@ sub cloze
 			}
 		a: m/$a/ {
 			($reader, @writers) = ('A','B', 'C', 'D');
-			$Cloze::clozeline{$reader} .= $item[1];
 			@Cloze::clozeline{$_} .= $item[1] for $reader, @writers;
 			}
 		b: m/$b/ {
 			($reader, @writers) = ('B','A', 'C', 'D');
-			$Cloze::clozeline{$reader} .= $item[1];
-			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			@Cloze::clozeline{$_} .= $item[1] for $reader, @writers;
 			}
 		c: m/$c/ {
 			($reader, @writers) = ('C','A', 'B', 'D');
-			$Cloze::clozeline{$reader} .= $item[1];
-			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			@Cloze::clozeline{$_} .= $item[1] for $reader, @writers;
 			}
 		d: m/$d/ {
 			($reader, @writers) = ('D','A', 'B', 'C');
-			$Cloze::clozeline{$reader} .= $item[1];
-			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			@Cloze::clozeline{$_} .= $item[1] for $reader, @writers;
 			}
 		punctuation: m/$punctuation/ {
-			@Cloze::clozeline{$_} .= $item[1] for @writers;
-			$Cloze::clozeline{$reader} .= $item[1];
+			@Cloze::clozeline{$_} .= $item[1] for $reader, @writers;
 			}
 		word: unclozedword | clozedword
 		unclozedword:   m/$Cloze::unclozeable/ {
-			$Cloze::clozeline{$reader} .= ' ' . $item[1];
-			@Cloze::clozeline{$_} .= ' ' . $item[1] for @writers;
+			@Cloze::clozeline{$_} .= ' ' . $item[1] for $reader, @writers;
 			}
 		# clozedword: letter(s) |
 		clozedword: m/$letters/ {
