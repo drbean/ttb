@@ -17,7 +17,7 @@
       <td>[% IF tallies.$player.$id.defined %][% tallies.$player.$id -%]
 	[%- ELSE %]_[% END %]
   [% END -%]
-      <td>[% scores.$player.total %]
+      <td>[% tallies.$player.total %]
   </tr>
 [% END -%]
 
