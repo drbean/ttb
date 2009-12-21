@@ -4,9 +4,9 @@
 
 <form method="post" action="[% c.uri_for('/play/check/') _ topic _ '/' _ story %]">
 <table border=2>
-<tr><th>Question<th>Answer
+<tr><th>Number<th>Question<th>Answer
 [% FOREACH q IN questions -%]
-  <tr><td>[%- q.content -%]
+  <tr><td>[% q.id %]<td>[%- q.content -%]
   
   <td><INPUT type="radio" name="[% q.id %]" value="True"> True
   <INPUT type="radio" name="[% q.id %]" value="False"> False
