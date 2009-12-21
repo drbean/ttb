@@ -48,19 +48,28 @@ my $leagues = [
 
 uptodatepopulate( 'Leagues', $leagues );
 
+my $enres = [
+			[ qw/id name/ ],
+			[ 1, "intermediate" ],
+			[ 2, "business" ],
+			[ 3, "intercultural" ],
+			[ 4, "access" ],
+		];
+uptodatepopulate( 'Genre', $enres );
+
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "GL00029",	"intermediate" ],
-			[ "GL00030",	"intermediate" ],
-			[ "GL00031",	"intermediate" ],
-			[ "GL00034",	"intermediate" ],
-			[ "FLA0016",	"intermediate" ],
-			[ "MIA0017",	"business" ],
-			[ "BMA0099",	"business" ],
-			[ "BMA0100",	"business" ],
-			[ "FLA0030",	"business" ],
-			[ "FLA0027",	"intercultural" ],
-			[ "access",	"access" ],
+			[ "GL00029",	1 ],
+			[ "GL00030",	1 ],
+			[ "GL00031",	1 ],
+			[ "GL00034",	1 ],
+			[ "FLA0016",	1 ],
+			[ "MIA0017",	2 ],
+			[ "BMA0099",	2 ],
+			[ "BMA0100",	2 ],
+			[ "FLA0030",	2 ],
+			[ "FLA0027",	3 ],
+			[ "access",	4 ],
 		];
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
