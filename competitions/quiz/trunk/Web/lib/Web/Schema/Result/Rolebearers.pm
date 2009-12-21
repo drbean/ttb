@@ -25,7 +25,7 @@ __PACKAGE__->set_primary_key("player", "role");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T3TmOtj4Cz53qIYPVYXMow
 
 __PACKAGE__->belongs_to(
-        role => 'Web::Schema::Result::AuthRoles', 'role' );
+        role => 'Web::Schema::Result::Roles', 'role' );
 __PACKAGE__->belongs_to( profile =>'Web::Schema::Result::Players', 'player' );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
