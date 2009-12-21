@@ -97,12 +97,28 @@
 \indent True \hspace{0.5cm} False\\%
 \vspace{-0.2cm}
 }%
+\define@key{TFQuestions}{Question12}[Your question?]{%
+\item \textbf{#1} \\
+\par
+\vspace{-0.1cm}
+\indent True \hspace{0.5cm} False\\%
+\vspace{-0.2cm}
+}%
+\define@key{TFQuestions}{Question13}[Your question?]{%
+\item \textbf{#1} \\
+\par
+\vspace{-0.1cm}
+\indent True \hspace{0.5cm} False\\%
+\vspace{-0.2cm}
+}%
 \makeatother 
 
 \newcommand\SpecifyBlock[1][]{%
+	\begin{minipage}{7.8cm}
 	\begin{description}
   \setkeys{TFQuestions}{#1}%
 	\end{description}
+	\end{minipage}
 	\vspace{-0.2cm}
 }
 
