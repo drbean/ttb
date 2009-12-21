@@ -105,27 +105,42 @@ sub score : Local {
 			{ league => $leagueId } )->genre;
 	my $questions = $genre->questions->search(
 		{ topic => $topic, story => $story } );
-	my (%scores, %totals);
+	my @quiz;
+	while ( my $q = $questions->next ) {
+		push @quiz, { content => $q->content, id => $q->id, };
+	}
+	my @quizids = map { $_->{id} } @quiz;
+	my ($scores, %totals, @playerids);
 	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
-	my $players = $league->players;
+	my $players = $league->members;
 	while ( my $player = $players->next ) {
-		my $id = $player->id;
+		my $pid = $player->profile->id;
+		push @playerids, $pid;
 		my $played = $player->play->search({
 				topic => $topic, story => $story });
-		my $scores = $scores{$id};
 		while (my $question = $played->next ) {
 			my $profile = $question->profile;
-			my $id = $profile->id;
+			my $qid = $profile->id;
 			my $correct = $profile->answer eq $question->response?
 					1: 0;
-			my $scores->{$id} = $correct;
+			$scores->{$pid}->{$qid} = $correct;
 		}
-		my $scores->{total} = sum map { $scores->{$_} } keys %$scores;
+		$scores->{$pid}->{total} = sum map { $scores->{$pid}->{$_} }
+					keys %{ $scores->{$pid} };
 	}
-	$c->stash->{scores} = \%scores;
+	my %questiontotals;
+	for my $qid ( @quizids ) {
+		for my $pid ( @playerids ) {
+			next unless $scores->{$pid}->{$qid};
+			$questiontotals{$qid} += $scores->{$pid}->{$qid};
+		}
+	}
+	$c->stash->{quiz} = \@quiz;
+	$c->stash->{scores} = $scores;
+	$c->stash->{totals} = \%questiontotals;
 	$c->stash->{genre} = $genre->name;
 	$c->stash->{target} = $targetId;
-	$c->stash->{template} = "record.tt2";
+	$c->stash->{template} = "scores.tt2";
 	}
 
 
