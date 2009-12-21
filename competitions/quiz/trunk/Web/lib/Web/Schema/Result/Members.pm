@@ -32,6 +32,7 @@ __PACKAGE__->set_primary_key("league", "player");
 #__PACKAGE__->has_many( role => 'Web::Schema::Result::Rolebearers',
 #	'foreign.league' => 'self.league', 'foreign.player' => 'self.player'} );
 __PACKAGE__->belongs_to( profile => 'Web::Schema::Result::Players', 'player' );
+__PACKAGE__->belongs_to( league => 'Web::Schema::Result::Leagues', 'league' );
 __PACKAGE__->has_many( play => 'Web::Schema::Result::Play', {
 	'foreign.league' => 'self.league', 'foreign.player' => 'self.player'} );
 
