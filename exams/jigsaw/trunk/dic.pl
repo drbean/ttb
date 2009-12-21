@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 12月 01, 09時23分10秒
+# Last Edit: 2009  3月 11, 21時17分16秒
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -73,7 +73,7 @@ foreach my $group ( keys %$groups )
 \\textblocklabel{picture$latex[$paging]->{xy}}
 ";
 
-		$tmplString .= "\\begin{tiny}$cardIdentifier\\end{tiny}";
+		$tmplString .= "\\begin{tiny}$cardIdentifier\\end{tiny}\\\\";
 		my $n = 0;
 		$tmplString .= "\\SpecifyBlock[\n" .
 		(join "\n", map {
