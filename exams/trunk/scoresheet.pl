@@ -26,17 +26,18 @@ foreach my $group ( keys %$groups )
 		$sched->{Absent} = $groups->{$group};
 		next;
 	}
+	$sched->{Chinese}->{$group} = 0;
 	my @roles =  sort keys %{$groups->{$group}}; 
-	map
+	foreach my $role ( @roles )
 	{
-		my $name = $groups->{$group}->{$_};
-		$sched->{Chinese}->{$group} = 0;
-		map
-		{
-			$sched->{letters}->{$group}->{$name}
-				->{"Conversation$number[$_]"} = 0;
-		} 0..0
-	} @roles;
+		my $name = $groups->{$group}->{$role};
+		$sched->{letters}->{$group}->{$role} = 0;
+		#foreach (0..0)
+		#{
+		#	$sched->{letters}->{$group}->{$role}
+		#		->{"Conversation$number[$_]"} = 0;
+		#}
+	}
 }
 
 DumpFile( 'scores.yaml', $sched );
