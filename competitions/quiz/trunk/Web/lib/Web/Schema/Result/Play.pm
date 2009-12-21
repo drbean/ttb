@@ -15,36 +15,51 @@ __PACKAGE__->add_columns(
     is_nullable => 0,
     size => 15,
   },
-  "quiz",
+  "player",
+  {
+	  data_type => "VARCHAR",
+	  default_value => undef,
+	  is_nullable => 0,
+	  size => 10
+  },
+  "topic",
   {
     data_type => "VARCHAR",
     default_value => undef,
     is_nullable => 0,
     size => 15,
   },
-  "player",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => undef },
-  "blank",
+  "story",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 15,
+  },
+  "question",
   {
     data_type => "SMALLINT",
     default_value => undef,
     is_nullable => 0,
     size => undef,
   },
-  "correct",
+  "response",
   {
-    data_type => "TINYINT",
+    data_type => "BOOL",
     default_value => undef,
     is_nullable => 0,
     size => undef,
   },
 );
-__PACKAGE__->set_primary_key("quiz", "player", "blank");
+__PACKAGE__->set_primary_key("league", "player", "topic", "story", "question");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0BXbV56QfIi2TAp+aZrDqA
 
+__PACKAGE__->belongs_to('question', 'Web::Schema::Result::Questions', {
+	'foreign.topic' => 'self.topic', 'foreign.story' => 'self.story',
+	'foreign.id' => 'self.question' } );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
