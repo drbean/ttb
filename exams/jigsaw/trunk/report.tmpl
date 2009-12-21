@@ -4,10 +4,10 @@
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute,showboxes]{textpos}
 \TPMargin{0.2cm}
-\usepackage{pifont}
-\usepackage{amsfonts}
+\usepackage{CJK}
 % \textblockorigin{0.30cm}{0.35cm} % HP810C
-\textblockorigin{0.30cm}{2.35cm} % w5 LaserJet
+% \textblockorigin{0.30cm}{2.35cm} % w5 LaserJet
+\textblockorigin{0.00cm}{0.05cm} % hp deskjet 5160
 \usepackage{texdraw}
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
@@ -22,6 +22,7 @@
 }
 
 \begin{document}
+\begin{CJK}{UTF8}{song}
 
 \begin{textblock}{15}(0,0)
 \textblocklabel{picture0,0}
@@ -56,4 +57,5 @@
 {<TMPL>$grades</TMPL>}
 \end{textblock}
 
+\end{CJK}
 \end{document}
