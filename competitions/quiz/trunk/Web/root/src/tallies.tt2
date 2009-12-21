@@ -1,8 +1,7 @@
 [% META title = 'Questions Correct Tally' -%]
 
 <h2>[% league %] League, Round [% round %]</h2>
-<h2>[% topicstory %] Topic</h2>
-<h2>Round [% round %]</h2>
+<h2>[% topic _ story %] Topic</h2>
 
 <table border=1>
   <COL width="40">

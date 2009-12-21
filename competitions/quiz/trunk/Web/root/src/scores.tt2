@@ -1,6 +1,9 @@
 [% META title = 'Scores' -%]
 [% n = 1 %]
 
+<h2>[% league %] League, Round [% round %]</h2>
+<h2>[% topic _ story %] Topic</h2>
+
 <table>
 <caption><h1>[% tournament %] Tournament Result, Round [% round %]</h1></caption>
   <TR><TH colspan="4"><H2>[% roles.0 %]</H2>
