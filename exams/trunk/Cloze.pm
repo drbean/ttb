@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2007 Jun 22, 10:15:20 AM
+# Last Edit: 2008  9月 28, 21時00分04秒
 # $Id: /dic/branches/ctest/Cloze.pm 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -23,107 +23,125 @@ use Parse::RecDescent;
 sub cloze
 {
 	our %score;
-	my $score = shift;
-	@score{qw/A B/} = ( $score->{A}, $score->{B} );
+	# my $score = shift;
+	@score{qw/A B C D/} = (0) x 4;
+	# ( $score->{A}, $score->{B}, $score->{C}, $score->{D} );
 	our ($unclozedcount, $unclozedwords);
 	$unclozedcount = $unclozedwords = shift;
 	my $unclozeables = join '|', @{shift()};
 	our $unclozeable = qr/(?:$unclozeables)/;
+	# our $unclozeable = qr/Claudio|Cecilia|Frank|Paula/;
+	our $inword = 0;
 
-	my %text = ();
+	our %text = ();
 
-	my @lines = @_;
+	our $lines = shift;
 
-	my @players = ( 'A' .. 'B' );
+	my @players = ( 'A' .. 'D' );
 
 	my $lineN = 0;
 
-	foreach my $line ( @lines )
-	{
+	# foreach my $line ( @lines )
+	# {
 	our %clozeline;
-@clozeline{'A', 'B' } = ('') x 2;
+@clozeline{'A', 'B', 'C', 'D' } = ('') x 2;
 	my $letterGrammar = q[
 		{
 	my $reader = '';
-	my $writer = '';
+	my @writers = ();
 			my $punctuation = qr/[^A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^A: /, qr/^B: /);
-			my $letter = qr/[A-Za-z0-9']/;
-			my $skip = '';
+			my ($a, $b, $c, $d) = (qr/^Claudio:/, qr/^Cecilia:/, qr/^Frank:/, qr/^Paula:/);
+			my $letters = qr/[A-Za-z0-9']+/;
+			# my $skip = '';
 			my @cword;
 			my ($index, $inCloze, $clozedletters) = (0) x 3;
 		}
-		line: vspace end | header end | token(s) end | <error>
+		text: section(s) end | <error>
+		section: vspace header line(s) | header line(s) | line(s)
+		# line: vspace m/$/ | header m/$/ | token(s) m/$/
 		vspace: m/vspace{\d?.\d+cm}/ {
-			($reader, $writer) = ('A','B');
+			($reader, @writers) = ('A','B', 'C', 'D');
 			$Cloze::clozeline{$reader} .= "\\\\$item[1]\\\\par";
-			$Cloze::clozeline{$writer} .= "\\\\$item[1]\\\\par"; }
+			@Cloze::clozeline{@writers} .= ( "\\\\$item[1]\\\\par" ) x 3;
+			}
 		header: m/\d\W+/ {
-			($reader, $writer) = ('A','B');
+			($reader, @writers) = ('A','B', 'C', 'D');
 			$Cloze::clozeline{$reader} .= $item[1];
-			$Cloze::clozeline{$writer} .= $item[1]; }
-		token: a | b | unclozedword | clozedword
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			}
+		line: token(s) m/$/m
+		token: a | b | c | d | punctuation | word
 		a: m/$a/ {
-			($reader, $writer) = ('A','B');
+			($reader, @writers) = ('A','B', 'C', 'D');
 			$Cloze::clozeline{$reader} .= $item[1];
-			$Cloze::clozeline{$writer} .= $item[1]; }
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			}
 		b: m/$b/ {
-			($reader, $writer) = ('B','A');
+			($reader, @writers) = ('B','A', 'C', 'D');
 			$Cloze::clozeline{$reader} .= $item[1];
-			$Cloze::clozeline{$writer} .= $item[1]; }
-		#unclozedword: <reject: $clozed> m/[A-Za-z0-9']+$punctuation/ {
-		unclozedword: <reject: not $Cloze::unclozedcount> m/[A-Za-z0-9']+[^-A-Za-z0-9']+/ {
-			$Cloze::unclozedcount--;
-			$Cloze::clozeline{$reader} .= $item[2];
-			$Cloze::clozeline{$writer} .= $item[2];
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
 			}
-		clozedword: <reject: $Cloze::unclozedcount> pass | clozeletter(s) | punctuation
-		clozeletter:  firstletter | middleletter | lastletter
-		# clozeletter: <reject: not $clozed> pass | firstletter | middleletter | lastletter | punctuation
-		pass: <reject: $inCloze> m/($Cloze::unclozeable|--|\w)[^-A-Za-z0-9']+/
+		c: m/$c/ {
+			($reader, @writers) = ('C','A', 'B', 'D');
+			$Cloze::clozeline{$reader} .= $item[1];
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			}
+		d: m/$d/ {
+			($reader, @writers) = ('D','A', 'B', 'C');
+			$Cloze::clozeline{$reader} .= $item[1];
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			}
+		punctuation: m/$punctuation/ {
+			@Cloze::clozeline{$_} .= $item[1] for @writers;
+			$Cloze::clozeline{$reader} .= $item[1];
+			}
+		word: unclozedword | clozedword
+		unclozedword:   m/$Cloze::unclozeable/ {
+			$Cloze::clozeline{$reader} .= ' ' . $item[1];
+			@Cloze::clozeline{$_} .= ' ' . $item[1] for @writers;
+			}
+		# clozedword: letter(s) |
+		clozedword: m/$letters/ {
+			$Cloze::inword=1;
+			$Cloze::clozeline{$reader} .= ' ' . $item[1];
+			my $length = length $item[1];
+			for my $writer (@writers)
 			{
-				$Cloze::clozeline{$reader} .= $item[2];
-				$Cloze::clozeline{$writer} .= $item[2];
+				@Cloze::clozeline{$writer} .= ' ' .
+				join '',
+					map { "\\\\1{@{[++$Cloze::score{$writer}]}}" }
+						1 .. $length;
 			}
-		firstletter: <reject: $inCloze> m/[A-Za-z0-9](?!$punctuation)/ 
-			{ $inCloze=1; $index = 0; @cword = ();
-				$Cloze::clozeline{$reader} .= $item[2];
-				push @cword, $item[2];
 			}
-		middleletter: <reject: not $inCloze> m/$letter(?!$punctuation)/
-			{
-				$index++;
-				$Cloze::clozeline{$reader} .= $item[2];
-				push @cword, $item[2];
-			}
-		lastletter: <reject: not $inCloze> m/$letter(?=$punctuation)/
-			{
-				$inCloze=0;
-				$Cloze::unclozedcount=$Cloze::unclozedwords;
-				$index++;
-				$Cloze::clozeline{$reader} .= $item[2];
-				push @cword, $item[2];
-				$clozedletters = int $#cword-($#cword-1)/2;
-				$Cloze::score{$writer} += $clozedletters;
-				$Cloze::clozeline{$writer} .= join '', (@cword[0..$#cword/2], map {"\\\\1{@{[$Cloze::score{$writer}-$_]}}"} reverse 0 .. $clozedletters-1);
-				# $Cloze::clozeline{$writer} .= join '', @cword[0..$#cword/2], "<input type=\"text\" name=\"$Cloze::score{$writer}\" length=\"".(int @cword/2)."\" size=\"".(int @cword/2)."\"/>";
-			}
-		punctuation: m/$punctuation/
-			{
-				$Cloze::clozeline{$writer} .= $item[1];
-				$Cloze::clozeline{$reader} .= $item[1];
-			}
+		# letter: m/$letter/ {
+		# 	$Cloze::clozeline{$reader} .= $item[1];
+		# 	@Cloze::clozeline{$_} .= '_' for @writers;
+		# 	#join '',
+		# 	#map { $writer = $_; 
+		# 	#	map $Cloze::score{$writer}} @writers;
+		# 	#$length = length $item[2];
+		# 	}
+			#lastletter: <reject: not $inCloze> m/$letter(?=$punctuation)/
+			#{
+			#	$inCloze=0;
+			#	$Cloze::unclozedcount=$Cloze::unclozedwords;
+			#	$index++;
+			#	$Cloze::clozeline{$reader} .= $item[2];
+			#	push @cword, $item[2];
+			#	$clozedletters = int $#cword-($#cword-1)/2;
+			#	$Cloze::score{@writers} += $clozedletters;
+			#	$Cloze::clozeline{@writers} .= join '', (@cword[0..$#cword/2], map {"\\\\1{@{[$Cloze::score{@writers}-$_]}}"} reverse 0 .. $clozedletters-1);
+			#	# $Cloze::clozeline{@writers} .= join '', @cword[0..$#cword/2], "<input type=\"text\" name=\"$Cloze::score{@writers}\" length=\"".(int @cword/2)."\" size=\"".(int @cword/2)."\"/>";
+			#}
 		end: m/^\Z/
 	]; 
 
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
-	defined $letterParser->line($line) or die "letterparse died: $?\n";
-	$text{A} .= $clozeline{A};
-	$text{B} .= $clozeline{B};
-		$lineN++;
-	}
-	return \%score, \%text;
+	# defined $letterParser->line($line) or die "letterparse died: $?\n";
+	defined $letterParser->text($Cloze::lines) or die "letterparse died: $?\n";
+	# }
+	return \%Cloze::clozeline;
 
 }
 
