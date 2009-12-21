@@ -2,7 +2,7 @@
 
   Questions:
 
-<form method="post" action="[% c.uri_for('/play/check/') _ topic _ '/' _ story %]">
+<form method="post" action="[% c.uri_for('/quiz/check/') _ topic _ '/' _ story %]">
 <table border=2>
 <tr><th>Number<th>Question<th>Answer
 [% FOREACH q IN questions -%]
