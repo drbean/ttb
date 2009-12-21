@@ -10,10 +10,10 @@ __PACKAGE__->table("questions");
 __PACKAGE__->add_columns(
   "genre",
   {
-    data_type => "VARCHAR",
+    data_type => "INT",
     default_value => undef,
     is_nullable => 0,
-    size => 15,
+    size => undef,
   },
   "topic",
   {
@@ -35,6 +35,13 @@ __PACKAGE__->add_columns(
     default_value => undef,
     is_nullable => 0,
     size => 15,
+  },
+  "description",
+  {
+    data_type => "VARCHAR",
+    default_value => undef,
+    is_nullable => 0,
+    size => 50,
   },
   "target",
   {
@@ -58,12 +65,16 @@ __PACKAGE__->add_columns(
     size => 500,
   },
 );
-__PACKAGE__->set_primary_key("genre", "topic", "story", "id");
+__PACKAGE__->set_primary_key("topic", "story", "id");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:56gkl7nOCoZnA1omiRu98A
 
+__PACKAGE__->has_many('played', 'Web::Schema::Result::Play', {
+		'foreign.topic' => 'self.topic',
+		'foreign.story' => 'self.story',
+		'foreign.question' => 'self.id', } );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
