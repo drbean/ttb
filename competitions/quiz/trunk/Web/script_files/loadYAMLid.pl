@@ -10,7 +10,9 @@ loadYAMLid.pl data/business.yaml careercandidate
 
 =head1 DESCRIPTION
 
-Cut and paste from YAML into texts, questions tables 
+Cut and paste from YAML into questions tables. The YAML file is organized into topics, each of which has stories, with each of the latter having quizzes.
+
+The difference with loadYAML.pl is this only loads questions for one story from one topic.
 
 But be careful with targets
 
@@ -48,16 +50,29 @@ my $d = $model->connect( @$connect_info );
 
 use YAML qw/LoadFile DumpFile/;
 use IO::All;
-my ($text, $question) = LoadFile $ARGV[0];
-my @text;
-push @text, shift @$text;
-$_->[2] = 'intermediate' for @$text;
-push @text, grep { $_->[0] eq $ARGV[1] } @$text;
-my @qn;
-push @qn, shift @$question;
-$_->[0] = 'intermediate' for @$question;
-push @qn, grep { $_->[1] eq $ARGV[1] } @$question;
-my $t = $d->resultset('Text');
-$t->populate(\@text);
-my $q = $d->resultset('Question');
-$q->populate(\@qn);
+my $sequence = LoadFile $ARGV[0];
+my @questions;
+TOPIC: for my $t ( keys %$sequence ) {
+	next unless $t = $ARGV[1];
+	my $topic = $sequence->{$t};
+	for my $s ( keys %$topic ) {
+		next unless $s = $ARGV[2];
+		my $story = $topic->{$s};
+		my $quiz = $story->{quiz};
+		my $n = 1;
+		for my $qa ( @$quiz ) {
+			push @questions, {
+				genre => 'business',
+				topic => $t,
+				story => $s,
+				id => $n++,
+				target => 'all',
+				content => $qa->{question},
+				answer => $qa->{answer},
+			};
+		}
+		last TOPIC;
+	}
+}
+my $q = $d->resultset('Questions');
+$q->populate(\@questions);
