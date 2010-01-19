@@ -85,6 +85,7 @@ sub create : Local {
 			topic => $topic,
 			story => $story,
 			description => $description,
+			action => 'False',
 			});
 	$c->response->redirect($c->uri_for('list',
 		   {status_msg => "Quiz added"}));
@@ -120,6 +121,14 @@ sub record : Local {
 			};
 			$c->stash->{error_msg} =
 		"You already submitted your answers. They cannot be changed.";
+		}
+		elsif ( $quiz->action eq 'False' ) {
+			$record->{$qid} = { id => $question->id,
+				content => $question->content,
+				response => '',
+			};
+			$c->stash->{error_msg} =
+"Too late. The $topic$story quiz has closed. You cannot submit answers.";
 		}
 		else {
 			my $correct = $response eq $question->answer? 1: 0;
