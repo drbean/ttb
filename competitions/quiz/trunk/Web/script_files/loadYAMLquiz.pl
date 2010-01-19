@@ -66,7 +66,6 @@ my $genreid = $genreid{ lc $genre };
 	# STORY: for my $s ( keys %$compcomp ) {
 	# if ( $ARGV[2] ) { next unless $s eq $ARGV[2]; }
 	# my $story = $topic->{$s};
-$DB::single=1;
 		my $story = $compcomp->{$ARGV[2]};
 		my $identifier = $story->{identifier};
 		my $quiz = $story->{quiz};
