@@ -25,16 +25,60 @@ Show a created quiz from the database.
  
 sub play : Global {
 	my ($self, $c, $topic, $story) = @_;
+	my $quiz = $c->model('DB::Quiz')->find({
+		topic => $topic, story => $story });
+	$c->stash->{topic} = $topic;
+	$c->stash->{story} = $story;
+	$c->stash->{template} = 'play.tt2';
+	my $stateofplay = $quiz->action;
+	if ( $stateofplay eq 'False' ) {
+		$c->stash->{status_msg} =
+"The $topic$story quiz has either finished, or not yet started. See Dr Bean.\n";
+		return;
+	}
 	my $questions = $c->model('DB::Questions')->search({
 		topic => $topic, story => $story });
 	my @questions;
 	while ( my $q = $questions->next ) {
 		push @questions, { content => $q->content, id => $q->id, };
 	}
+	$c->stash->{questions} = \@questions;
+}
+
+
+=head2 go
+
+Allow play action to show questions.
+
+=cut
+
+sub go : Global {
+	my ($self, $c, $topic, $story) = @_;
+	my $quiz = $c->model('DB::Quiz')->find({
+		topic => $topic, story => $story });
+	$quiz->update({ action => 'True' });
 	$c->stash->{topic} = $topic;
 	$c->stash->{story} = $story;
-	$c->stash->{questions} = \@questions;
-    $c->stash->{template} = 'play.tt2';
+	$c->stash->{status_msg} = "The $topic$story quiz has started.\n";
+	$c->stash->{template} = 'play.tt2';
+}
+
+
+=head2 stop
+
+Prevent play action from showing questions.
+
+=cut
+
+sub stop : Global {
+	my ($self, $c, $topic, $story) = @_;
+	my $quiz = $c->model('DB::Quiz')->find({
+		topic => $topic, story => $story });
+	$quiz->update({ action => 'False' });
+	$c->stash->{topic} = $topic;
+	$c->stash->{story} = $story;
+	$c->stash->{status_msg} = "The $topic$story quiz has ended.\n";
+	$c->stash->{template} = 'play.tt2';
 }
 
 
