@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+#LastEdit:
+# $Id$
+
 =head1 NAME
 
 loadYAMLid.pl -- Load one text with questions from a YAML file
