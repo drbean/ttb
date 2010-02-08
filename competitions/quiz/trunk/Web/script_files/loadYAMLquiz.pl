@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#LastEdit:
+#Last Edit: 2010  2月 02, 21時14分02秒
 # $Id$
 
 =head1 NAME
