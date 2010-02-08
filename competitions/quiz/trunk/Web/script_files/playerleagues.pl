@@ -9,21 +9,21 @@ use Cwd;
 use File::Spec;
 use List::MoreUtils qw/all/;
 use YAML qw/LoadFile/;
+use FindBin qw/$Bin/;
+
 
 BEGIN {
-	my @MyAppConf = glob( '*.conf' );
+	my @MyAppConf = glob( "$Bin/../*.conf" );
 	die "Which of @MyAppConf is the configuration file?"
 				unless @MyAppConf == 1;
-	my %config = Config::General->new($MyAppConf[0])->getall;
-	$::name = $config{name};
+	%::config = Config::General->new($MyAppConf[0])->getall;
+	$::name = $::config{name};
 	require "$::name.pm"; $::name->import;
 	require "$::name/Schema.pm"; $::name->import;
 }
 
-my @leagueids = qw/GL00029 GL00030 GL00031 GL00034 FLA0016 MIA0017 BMA0099 BMA0100 FLA0030 FLA0027/;
-my $dir = ( File::Spec->splitdir(getcwd) )[-1];
-$dir = qr/^(GL000|FL|MIA|BMA)/ if $dir eq 'comp';
-@leagueids = grep m/$dir/, @leagueids;
+my $leaguedirs = $::config{leagues};
+my @leagueids = qw/GL00029 emile/;
 
 no strict qw/subs refs/;
 my $connect_info = "${::name}::Model::DB"->config->{connect_info};
@@ -34,51 +34,33 @@ use strict;
 my $leagues = [
 		[ qw/id name field/ ],
 	[ "GL00029", "GL00029日語文共同學制虛擬班二", "中級英文聽說訓練" ],
-	[ "GL00030", "GL00030日語文共同學制虛擬班二", "中級英文聽說訓練" ],
-	[ "GL00031", "GL00031日語文共同學制虛擬班二", "中級英文聽說訓練" ],
-	[ "GL00034", "GL00034日語文共同學制虛擬班二", "中級英文聽說訓練" ],
-	[ "FLA0016", "FLA0016夜應外大學二甲", "英語會話" ],
-	[ "MIA0017", "MIA0012日資管大學二甲", "商用英文實務" ],
-	[ "BMA0099", "BMA0099日經管大學二甲", "商用英文實務" ],
-	[ "BMA0100", "BMA0100日經管大學二乙", "商用英文實務" ],
-	[ "FLA0030", "FLA0030夜應外大學四甲", "商用英文" ],
-	[ "FLA0027", "FLA0027夜應外大學二甲", "跨文化溝通" ],
-	[ "access", "Self-Access Learning", "Listening" ],
+	[ "emile", "Rousseau Cram School", "Pretentialism" ],
 	];
 
 uptodatepopulate( 'Leagues', $leagues );
 
-my $enres = [
+my $genres = [
 			[ qw/id name/ ],
 			[ 1, "intermediate" ],
 			[ 2, "business" ],
 			[ 3, "intercultural" ],
 			[ 4, "access" ],
 		];
-uptodatepopulate( 'Genre', $enres );
+uptodatepopulate( 'Genre', $genres );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
 			[ "GL00029",	1 ],
-			[ "GL00030",	1 ],
-			[ "GL00031",	1 ],
-			[ "GL00034",	1 ],
-			[ "FLA0016",	1 ],
-			[ "MIA0017",	2 ],
-			[ "BMA0099",	2 ],
-			[ "BMA0100",	2 ],
-			[ "FLA0030",	2 ],
-			[ "FLA0027",	3 ],
-			[ "access",	4 ],
+			[ "emile",	2 ],
 		];
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
 my ($leaguefile, $players);
 
-for my $league ( 'GL00029', 'GL00030', 'GL00031', 'GL00034', 'FLA0016', 'MIA0017', 'BMA0099', 'BMA0100', 'FLA0030', 'FLA0027', ) {
-	$leaguefile = LoadFile "/home/drbean/class/$league/league.yaml";
+for my $league ( 'GL00029', 'emile' ) {
+	$leaguefile = LoadFile "$leaguedirs/$league/league.yaml";
 	push @{$players->{$league}},
-		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
+		map {[ $_->{id}, $_->{name}, $_->{password} ]}
 					@{$leaguefile->{member}};
 }
 
