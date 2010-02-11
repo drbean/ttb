@@ -41,13 +41,11 @@ die "Which of @MyAppConf is the configuration file?"
 my %config = Config::General->new($MyAppConf[0])->getall;
 my $name = $config{name};
 require $name . ".pm";
-my $model = "${name}::Schema";
-my $modelfile = "$name/Model/DB.pm";
+my $schema = "${name}::Schema";
 my $modelmodule = "${name}::Model::DB";
-# require $modelfile;
 
 my $connect_info = $modelmodule->config->{connect_info};
-my $d = $model->connect( @$connect_info );
+my $d = $schema->connect( @$connect_info );
 my $s = $d->resultset(shift @ARGV);
 my @columns = $s->result_source->columns;
 $, = "\t";
