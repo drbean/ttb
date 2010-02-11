@@ -3,6 +3,8 @@ package Web::SwissSchema;
 use strict;
 use warnings;
 
+use lib '../../swiss/web/lib';
+
 use base 'DBIx::Class::Schema';
 
 __PACKAGE__->load_namespaces(
