@@ -10,7 +10,7 @@ use File::Spec;
 use List::MoreUtils qw/all/;
 use YAML qw/LoadFile/;
 use FindBin qw/$Bin/;
-
+use lib "$Bin/../lib/";
 
 BEGIN {
 	my @MyAppConf = glob( "$Bin/../*.conf" );

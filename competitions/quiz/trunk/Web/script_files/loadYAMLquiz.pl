@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#Last Edit: 2010  2月 02, 21時14分02秒
+#Last Edit: 2010  2月 09, 18時07分23秒
 # $Id$
 
 =head1 NAME
@@ -33,11 +33,11 @@ it under the same terms as Perl itself.
 
 use strict;
 use warnings;
-use lib 'lib';
-
+use FindBin qw/$Bin/;
+use lib "$Bin/../lib";
 use Config::General;
+my @MyAppConf = glob( "$Bin/../*.conf" );
 
-my @MyAppConf = glob( '*.conf' );
 die "Which of @MyAppConf is the configuration file?"
 			unless @MyAppConf == 1;
 my %config = Config::General->new($MyAppConf[0])->getall;
@@ -72,8 +72,10 @@ my $genreid = $genreid{ lc $genre };
 		my $story = $compcomp->{$ARGV[2]};
 		my $identifier = $story->{identifier};
 		my $quiz = $story->{quiz};
+		die "No quiz in $ARGV[1] topic, story $ARGV[2]," unless $quiz;
 		my $n = 1;
 		for my $qa ( @$quiz ) {
+			die "No question $n in $ARGV[1] topic, story $ARGV[2]," unless $qa;
 			push @questions, {
 				genre => $genreid,
 				# topic => $t,
