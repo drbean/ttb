@@ -11,23 +11,27 @@
   <TR><TH>Table<TH>Name<TH>Rating<TH>Score<TH>Result<TH>Name<TH>Rating<TH>Score
 [% FOREACH n IN [ 0 .. game.max ] %]
 [% UNLESS game.$n.contestants.size == 1 %]
-[%- white = game.$n.contestants.$roles.0 %]
-[%- black = game.$n.contestants.$roles.1 %]
+  [%- white = game.$n.contestants.$roles.0 %]
+  [%- black = game.$n.contestants.$roles.1 %]
+  [%- result = game.$n.results %]
   <TR>
     <td>[% n + 1 %]
     <td>[% white.name %]
-    <td>[% rating.${white.id} %]
-    <td>[[% game.$n.results.$roles.0.defined ? game.$n.results.$roles.0 : '-' %]]
+    <td>[% white.rating %]
+    <td>[[% result.$roles.0.defined ? result.$roles.0 : '-' %]]
     <td> :
     <td>[% black.name %]
-    <td>[% rating.${black.id} %]
-    <td>[[% game.$n.results.$roles.1.defined ? game.$n.results.$roles.1 : '-' %]]
+    <td>[% black.rating %]
+    <td>[[% result.$roles.1.defined ? result.$roles.1 : '-' %]]
 [% ELSE %]
+  [%- bye = game.$n.contestants.Bye %]
+  [%- score = game.$n.scores %]
   <TR>
     <td>[% n + 1 %]
-    <td>[% game.$n.contestants.Bye %]
-    <td>[[% game.$n.results.Bye.defined ? game.$n.results.Bye : '-' %]]
-    <td> 
+    <td>[% bye.name %]
+    <td>[% bye.rating %]
+    <td>[[% score.Bye.defined ? score.Bye : '-' %]]
+    <td> Bye
 
 
 [% END %]
