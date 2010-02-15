@@ -291,7 +291,10 @@ Compare number of correct answers of pairs, choose winners/losers, show a result
 
 =cut
  
-sub crosstable :Path('/cross') :Args(2)  {
+sub crosstable :Path('/cross') :Args(1)  {
+	my ( $self, $c, $leagueId ) = @_;
+    my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
+	my $crosstable = $c->model( 'Crosstable', { league => $league } );
 }
 
 
