@@ -2,8 +2,9 @@ package Web::SwissSchema;
 
 use strict;
 use warnings;
+use FindBin qw/$Bin/;
 
-use lib '../../swiss/web/lib';
+use lib "$Bin/../../../swiss/web/lib";
 
 use base 'DBIx::Class::Schema';
 
