@@ -8,19 +8,19 @@
 <caption><h1>[% tournament %] Tournament Draw Table, Round [% round %]</h1></caption>
   <TR><TH colspan="4"><H2>[% roles.0 %]</H2>
       <TH colspan="3"><H2>[% roles.1 %]</H2>
-  <TR><TH>Table<TH>ID<TH>Rating<TH>Score<TH>Result<TH>ID<TH>Rating<TH>Score
+  <TR><TH>Table<TH>Name<TH>Rating<TH>Score<TH>Result<TH>Name<TH>Rating<TH>Score
 [% FOREACH n IN [ 0 .. game.max ] %]
 [% UNLESS game.$n.contestants.size == 1 %]
-[%- white = game.$n.contestants.$roles.0.id %]
-[%- black = game.$n.contestants.$roles.1.id %]
+[%- white = game.$n.contestants.$roles.0 %]
+[%- black = game.$n.contestants.$roles.1 %]
   <TR>
     <td>[% n + 1 %]
-    <td>[% game.$n.contestants.$roles.0.name %]
-    <td>[% rating.$white %]
+    <td>[% white.name %]
+    <td>[% rating.${white.id} %]
     <td>[[% game.$n.results.$roles.0.defined ? game.$n.results.$roles.0 : '-' %]]
     <td> :
-    <td>[% game.$n.contestants.$roles.1.name %]
-    <td>[% rating.$black %]
+    <td>[% black.name %]
+    <td>[% rating.${black.id} %]
     <td>[[% game.$n.results.$roles.1.defined ? game.$n.results.$roles.1 : '-' %]]
 [% ELSE %]
   <TR>
