@@ -1,6 +1,6 @@
 package Web::Controller::Login;
 
-# Last Edit: 2010  2月 13, 14時25分41秒
+# Last Edit: 2010  2月 14, 11時10分21秒
 # $Id$
 
 use strict;
@@ -71,7 +71,6 @@ sub index :Path :Args(0)  {
 					$c->stash->{round} = $draw->[0];
 					$c->stash->{game} = $draw->[1];
 					$c->stash->{unpaired} = $draw->[2];
-					$c->forward( 'Quiz', 'ratings' );
 					$c->stash->{league} = $leagueId;
 					$c->stash->{roles} = [ qw/White Black/ ];
 					$c->stash->{template} = 'draw.tt2';
