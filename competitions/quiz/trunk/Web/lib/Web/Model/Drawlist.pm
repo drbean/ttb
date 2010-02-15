@@ -1,10 +1,13 @@
 package Web::Model::Drawlist;
 
-# Last Edit: 2010  2月 13, 14時14分22秒
+# Last Edit: 2010  2月 13, 17時46分40秒
 # $Id$
 
 use strict;
 use warnings;
+
+use FindBin qw/$Bin/;
+use lib "$Bin/../../../swiss/web/lib";
 
 =head1 NAME
 
