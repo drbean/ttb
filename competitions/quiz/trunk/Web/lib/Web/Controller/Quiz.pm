@@ -222,6 +222,7 @@ sub score : Local {
 	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
 	my $targetId = $target? $target->role: 'all';
 	my $leagueId = $c->session->{league};
+	$c->stash->{league} = $leagueId;
 	my $genre = $c->model("DB::Leaguegenre")->find(
 			{ league => $leagueId } )->genre;
 	my $questions = $genre->questions->search(
@@ -249,94 +250,91 @@ sub score : Local {
 		$tallies->{$pid}->{total} = sum map { $tallies->{$pid}->{$_} }
 					keys %{ $tallies->{$pid} };
 	}
-	my $round = $c->model('SwissDB::Round')->find({ tournament => $leagueId
-			})->round;
-	my $opponents = $c->model('SwissDB::Opponents')->search({
-			round => $round, tournament => $leagueId });
-	my $roles = $c->model('SwissDB::Roles')->search({
-			round => $round, tournament => $leagueId });
-	my ($points, %opponents, %roles, %parity,
-		$byegame, $lategames, $unpairedgames);
-	while ( my $pair = $opponents->next ) {
-		if ( $pair->opponent =~ m/bye/i ) {
-			my $player = $pair->player;
-			$points->{$player} = 5;
-			$byegame = { contestants => {Bye => $player },
-				results => { 'Bye' => $points->{$player} } };
-		}
-		elsif ( $pair->opponent =~ m/late/i ) {
-			my $unpaired = $pair->opponent;
-			for my $unpaired ( @$unpaired ) {
-				$points->{$unpaired} = 1;
-			}
-		}
-		elsif ( $pair->opponent =~ m/unpaired/i ) {
-			my $unpaired = $pair->player;
-			$points->{$unpaired} = 0;
-		}
-		else {
-
-			my $player = $pair->player;
-			my $opponent = $pair->opponent;
-			$opponents{$player} = $opponent;
-			$opponents{$opponent} = $player;
-			$parity{$player}++;
-			$parity{$opponent}++;
-			$roles{$player} = $roles->find({
-					player => $player })->role;
-			$roles{$opponent} = $roles->find({
-					player => $opponent })->role;
-		}
-	}
-	my ($game, %seen);
-	for my $player ( keys %opponents ) {
-		next if $seen{$player};
-		my $opponent = $opponents{$player};
-		die
-"${player}'s opponent is $opponent, but is ${opponent}'s opponent $player?"
-			unless $parity{$opponent} == 2 and
-				$parity{$player} == 2;
+	$c->forward( 'drawlist' );
+	my $games = $c->stash->{games};
+	my @games;
+	for my $game ( @$games ) {
+		my $players = $game->{contestants};
+		my ( $role, $us ) = each %$players;
 		die "No $player quiz tally?" unless exists $tallies->{$player};
-		my $ourcorrect = $tallies->{$player}->{total};
-		die "No $opponent card against $player?" unless exists
-						$tallies->{$opponent};
-		my $theircorrect = $tallies->{$opponent}->{total};
+		my ( $otherrole, $them ) = each %$players;
+		my $ourcorrect = $tallies->{$us}->{total};
+		die "No $them card against $us?" unless exists
+						$tallies->{$them};
+		my $theircorrect = $tallies->{$them}->{total};
+		my ( $ourpoints, $theirpoints );
 		if ( not defined $ourcorrect ) {
-			$points->{$player} = 0;
-			$points->{$opponent} = defined $theircorrect? 5: 0;
+			$ourpoints = 0;
+			$theirpoints = defined $theircorrect? 5: 0;
 		}
 		elsif ( not defined $theircorrect ) {
-			$points->{$player} = 5;
-			$points->{$opponent} = 0;
+			$ourpoints = 5;
+			$theirpoints = 0;
 		}
 		else {
-			$points->{$player} = $ourcorrect > $theircorrect? 5:
+			$ourpoints = $ourcorrect > $theircorrect? 5:
 					$ourcorrect < $theircorrect? 3: 4;
-			$points->{$opponent} = $ourcorrect > $theircorrect? 3:
+			$theirpoints = $ourcorrect > $theircorrect? 3:
 					$ourcorrect < $theircorrect? 5: 4;
 		}
-		my %rolepair = ( $player => $roles{$player},
-				$opponent => $roles{$opponent});
-		my %role2player = reverse %rolepair;
-		push @$game, { contestants => { White => $role2player{White},
-						Black => $role2player{Black} },
-			results => { White => $points->{$role2player{White}}, 
-				 Black => $points->{$role2player{Black}} } };
-		$seen{$opponent} = 1;
+		push @games, { contestants => { $role => $us, $otherrole => $them },
+					results => { $role => $ourpoints, 
+				 $otherrole => $theirpoints } };
 	}
-	push @$game, $byegame if defined $byegame;
-	$c->stash->{league} = $leagueId;
+	my $byegame = $c->stash->{byegame};
+	push @games, $byegame if defined $byegame;
 	$c->stash->{topic} = $topic;
 	$c->stash->{story} = $story;
-	$c->stash->{round} = $round;
-	$c->stash->{game} = $game;
+	$c->stash->{game} = \@games;
 	$c->stash->{roles} = [ qw/White Black/ ];
-	$c->stash->{points} = $points;
 	$c->stash->{genre} = $genre->name;
 	$c->stash->{target} = $targetId;
 	$c->stash->{template} = "scores.tt2";
 }
 
+
+=head2 drawlist
+
+Get draw table from SwissDB. Method used by login and score actions.
+
+=cut
+ 
+sub drawlist : Private {
+	my ($self, $c) = @_;
+	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
+		$c->stash->{league} });
+	my $round = $league->round->round;
+	my $opponents = $league->opponents->search({ round => $round });
+	my $roles = $league->roles->search({ round => $round });
+	my ( @games, @unpaired, %seen );
+	while ( my $pair = $opponents->next ) {
+		if ( $pair->opponent =~ m/bye/i ) {
+			$c->stash->{byegame} = { contestants => {Bye => $pair->player } };
+		}
+		elsif ( $pair->opponent =~ m/unpaired/i ) {
+			push @unpaired, $pair->player;
+		}
+		else {
+			my $player = $pair->player;
+			my $opponent = $pair->opponent;
+			if ( $seen{$player} ) {
+				die
+"${player}'s opponent is $opponent, but is ${opponent}'s opponent $player?"
+				unless $seen{$opponent} == 1 and $seen{$player} == 1;
+				next;
+			}
+			$seen{$player}++;
+			$seen{$opponent}++;
+			my $roleplayer = $roles->find({ player => $player })->role;
+			my $roleopponent = $roles->find({ player => $opponent })->role;
+			push @games, { contestants => { $roleplayer => $player,
+					$roleopponent => $opponent } };
+		}
+	}
+	$c->stash->{unpaired} = \@unpaired;
+	$c->stash->{round} = $round;
+	$c->stash->{games} = \@games;
+}
 
 =head2 delete
 
