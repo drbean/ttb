@@ -30,7 +30,7 @@ __PACKAGE__->set_primary_key("league", "genre");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oKMh+EQxWD0CslwaUfED3A
 
 __PACKAGE__->belongs_to( league => 'Web::Schema::Result::Leagues', 'league' );
-__PACKAGE__->belongs_to( genre => 'Web::Schema::Result::Genre', 'genre' );
+__PACKAGE__->belongs_to( data => 'Web::Schema::Result::Genre', 'genre' );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
