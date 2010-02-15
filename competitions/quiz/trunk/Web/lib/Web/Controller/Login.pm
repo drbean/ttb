@@ -1,5 +1,8 @@
 package Web::Controller::Login;
 
+# Last Edit: 2010  2月 12, 15時05分14秒
+# $Id$
+
 use strict;
 use warnings;
 use parent 'Catalyst::Controller';
@@ -56,15 +59,20 @@ sub index :Path :Args(0)  {
                 return;
             }
             else {
-                $c->session->{league}   = $leagues[0]->id;
-		if ( defined $c->session->{quiz}) {
-			my $quiz = $c->session->{quiz};
-			$c->response->redirect(
-				$c->uri_for( "/play/update/$quiz" ) );
-		}
-		else {
-			$c->response->redirect( $c->uri_for("/quiz/list") );
-		}
+                my $leagueId   = $leagues[0]->id;
+                $c->session->{league}   = $leagueId;
+				if ( defined $c->session->{quiz}) {
+					my $quiz = $c->session->{quiz};
+					$c->response->redirect(
+						$c->uri_for( "/play/update/$quiz" ) );
+				}
+				else {
+					$c->stash->{league} = $leagueId;
+					$c->forward( 'Quiz', 'drawlist' );
+					$c->forward( 'Quiz', 'ratings' );
+					$c->stash->{roles} = [ qw/White Black/ ];
+					$c->stash->{template} = 'draw.tt2';
+				}
                 return;
             }
         }
