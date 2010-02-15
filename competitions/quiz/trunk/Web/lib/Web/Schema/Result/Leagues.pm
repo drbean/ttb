@@ -36,7 +36,7 @@ __PACKAGE__->set_primary_key("id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LOzcmKBw2qRaekGGclQtKQ
 
-__PACKAGE__->belongs_to( genre => 'Web::Schema::Result::Leaguegenre', 
+__PACKAGE__->has_one( genre => 'Web::Schema::Result::Leaguegenre', 
 	 { 'foreign.league' => 'self.id' } );
 __PACKAGE__->has_many( members => 'Web::Schema::Result::Members', 'league' );
 # You can replace this text with custom content, and it will be preserved on regeneration
