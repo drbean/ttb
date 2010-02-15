@@ -44,7 +44,7 @@ sub list : Local {
     my ($self, $c) = @_;
     my $leagueid = $c->session->{league};
     my $league = $c->model('DB::Leagues')->find({id=>$leagueid});
-    my $genre = $league->genre->genre->id;
+    my $genre = $league->genre->data->id;
     $c->stash->{quiz} = [$c->model('DB::Quiz')->search( { genre => $genre })];
     # Retrieve all of the text records as text model objects and store in
     # stash where they can be accessed by the TT template
@@ -73,7 +73,7 @@ Create comprehension questions. The quizId is not the Quiz result source's prima
 
 =cut
 
-sub create : Local {
+sub create :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
 	my $question1 = $c->model('DB::Questions')->search( {
 			topic => $topic, story => $story } )->next;
@@ -98,15 +98,13 @@ Record answers, show a page as record. Fail if quiz has been deleted.
 
 =cut
  
-sub record : Local {
+sub record :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
 	my $player = $c->session->{player_id};
-	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
-	my $targetId = $target? $target->role: 'all';
 	my $leagueId = $c->session->{league};
-	my $genre = $c->model("DB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
-	my $quiz = $genre->quiz->find({ topic => $topic, story => $story});
+    my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
+	my $genre = $league->genre->data;
+	my $quiz = $genre->quiz->find({ topic => $topic, story => $story });
 	my $questions = $quiz->questions;
 	my ($record, @popquestions);
 	while ( my $question = $questions->next ) {
@@ -144,7 +142,6 @@ sub record : Local {
 	$c->model('DB::Play')->populate( \@popquestions ) if @popquestions;
 	$c->stash->{questions} = $record;
 	$c->stash->{genre} = $genre->name;
-	$c->stash->{target} = $targetId;
 	$c->stash->{template} = "record.tt2";
 }
 
@@ -155,23 +152,19 @@ Tally correct answers, show a results page
 
 =cut
  
-sub tally : Local {
+sub tally :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
-	my $player = $c->session->{player_id};
-	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
-	my $targetId = $target? $target->role: 'all';
 	my $leagueId = $c->session->{league};
-	my $genre = $c->model("DB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
-	my $questions = $genre->questions->search(
-		{ topic => $topic, story => $story } );
+    my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
+	my $genre = $league->genre->data;
+	my $quiz = $genre->quiz->find({ topic => $topic, story => $story });
+	my $questions = $quiz->questions;
 	my @quiz;
 	while ( my $q = $questions->next ) {
 		push @quiz, { content => $q->content, id => $q->id, };
 	}
 	my @quizids = map { $_->{id} } @quiz;
 	my ($tallies, %totals, @playerids);
-	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
 	my $players = $league->members;
 	while ( my $player = $players->next ) {
 		my $pid = $player->profile->id;
@@ -200,12 +193,10 @@ sub tally : Local {
 	$c->stash->{league} = $leagueId;
 	$c->stash->{topic} = $topic;
 	$c->stash->{story} = $story;
-	$c->stash->{round} = $round;
 	$c->stash->{quiz} = \@quiz;
 	$c->stash->{tallies} = $tallies;
 	$c->stash->{totals} = \%questiontotals;
 	$c->stash->{genre} = $genre->name;
-	$c->stash->{target} = $targetId;
 	$c->stash->{template} = "tallies.tt2";
 }
 
@@ -216,24 +207,12 @@ Compare number of correct answers of pairs, choose winners/losers, show a result
 
 =cut
  
-sub score : Local {
+sub score :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
-	my $player = $c->session->{player_id};
-	my $target = $c->model('DB::Jigsawroles')->find({ player => $player });
-	my $targetId = $target? $target->role: 'all';
 	my $leagueId = $c->session->{league};
 	$c->stash->{league} = $leagueId;
-	my $genre = $c->model("DB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
-	my $questions = $genre->questions->search(
-		{ topic => $topic, story => $story } );
-	my @quiz;
-	while ( my $q = $questions->next ) {
-		push @quiz, { content => $q->content, id => $q->id, };
-	}
-	my @quizids = map { $_->{id} } @quiz;
+    my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
 	my ($tallies, %totals, @playerids);
-	my $league = $c->model('DB::Leagues')->find({ id => $leagueId });
 	my $players = $league->members;
 	while ( my $player = $players->next ) {
 		my $pid = $player->profile->id;
@@ -254,66 +233,65 @@ sub score : Local {
 	$c->stash->{round} = $draw->[0];
 	my $games = $draw->[1];
 	$c->stash->{unpaired} = $draw->[2];
+	my $roles = [ qw/White Black/ ];
 	my @games;
 	for my $game ( @$games ) {
-		my $players = $game->{contestants};
-		my ( $role, $us ) = each %$players;
-		die "No $player quiz tally?" unless exists $tallies->{$player};
-		my ( $otherrole, $them ) = each %$players;
-		my $ourcorrect = $tallies->{$us}->{total};
-		die "No $them card against $us?" unless exists
-						$tallies->{$them};
-		my $theircorrect = $tallies->{$them}->{total};
-		my ( $ourpoints, $theirpoints );
-		if ( not defined $ourcorrect ) {
+		my $players = $game->contestants;
+		my $role = exists $players->{$roles->[0]}? $roles->[0]: "Bye";
+		my $us = $players->{$role};
+		my $ourid = $us->id;
+		die "No $player quiz tally?" unless exists $tallies->{$ourid};
+		my $ourcorrect = $tallies->{$ourid}->{total};
+		my $otherrole = $roles->[1];
+		my $them = $players->{$otherrole};
+		my $theirid; $theirid = $them->id if defined $them;
+		die "No $them tally against $us?" unless defined $theirid and exists
+						$tallies->{$theirid} or $role eq 'Bye';
+		my $theircorrect; $theircorrect = $tallies->{$theirid}->{total}
+			if defined $theirid;
+		my ( $ourpoints, $theirpoints, $result );
+		if ( $role eq 'Bye' ) {
+			$ourpoints = 5;
+			$result = 'Bye'
+		}
+		elsif ( not defined $ourcorrect ) {
 			$ourpoints = 0;
 			$theirpoints = defined $theircorrect? 5: 0;
+			$result = defined $theircorrect? 'Forfeit:Win': 'Forfeit:Forfeit';
 		}
 		elsif ( not defined $theircorrect ) {
 			$ourpoints = 5;
 			$theirpoints = 0;
+			$result = "Win:Forfeit";
 		}
 		else {
 			$ourpoints = $ourcorrect > $theircorrect? 5:
 					$ourcorrect < $theircorrect? 3: 4;
 			$theirpoints = $ourcorrect > $theircorrect? 3:
 					$ourcorrect < $theircorrect? 5: 4;
+			$result = $ourcorrect > $theircorrect? "Win:Loss":
+					$ourcorrect < $theircorrect? "Loss:Win": "Draw:Draw";
 		}
-		push @games, { contestants => { $role => $us, $otherrole => $them },
-					results => { $role => $ourpoints, 
-				 $otherrole => $theirpoints } };
+		my $game = { contestants => $game->contestants, result => $result,
+					scores => { $role => $ourpoints, } };
+		$game->{scores}->{$otherrole} = $theirpoints if $otherrole;
+		push @games, $game;
 	}
-	my $byegame = $c->stash->{byegame};
-	push @games, $byegame if defined $byegame;
 	$c->stash->{topic} = $topic;
 	$c->stash->{story} = $story;
 	$c->stash->{game} = \@games;
-	$c->stash->{roles} = [ qw/White Black/ ];
-	$c->stash->{genre} = $genre->name;
-	$c->stash->{target} = $targetId;
+	$c->stash->{roles} = $roles;
 	$c->stash->{template} = "scores.tt2";
 }
 
 
-=head2 ratings
+=head2 crosstable
 
-Get ratings from SwissDB. Do things with them. Put new ones back.
+Compare number of correct answers of pairs, choose winners/losers, show a results page
 
 =cut
-
-sub ratings : Local {
-	my ($self, $c) = @_;
-	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
-		$c->stash->{league} });
-	my $round = $league->round->round - 1;
-	my %ratings;
-	my $ratings = $league->ratings->search({ tournament => $c->stash->{league},
-			round => $round });
-	while ( my $rating = $ratings->next ) {
-		my $id = $rating->player;
-		$ratings{$id} = $rating->value;
-	}
-	$c->stash->{rating} = \%ratings;
+ 
+sub crosstable :Path('/cross') :Args(2)  {
 }
 
 
@@ -323,7 +301,7 @@ Delete a quiz. Delete of Questions done here too.
 
 =cut
 
-sub delete : Local {
+sub delete :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
 	my $quiz = $c->model('DB::Quiz')->find({
 			topic => $topic, story => $story });
