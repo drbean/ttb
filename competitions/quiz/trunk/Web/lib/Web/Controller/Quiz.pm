@@ -250,8 +250,10 @@ sub score : Local {
 		$tallies->{$pid}->{total} = sum map { $tallies->{$pid}->{$_} }
 					keys %{ $tallies->{$pid} };
 	}
-	$c->forward( 'drawlist' );
-	my $games = $c->stash->{game};
+	my $draw = $c->model( 'Drawlist', { league => $leagueId } );
+	$c->stash->{round} = $draw->[0];
+	my $games = $draw->[1];
+	$c->stash->{unpaired} = $draw->[2];
 	my @games;
 	for my $game ( @$games ) {
 		my $players = $game->{contestants};
@@ -290,51 +292,6 @@ sub score : Local {
 	$c->stash->{genre} = $genre->name;
 	$c->stash->{target} = $targetId;
 	$c->stash->{template} = "scores.tt2";
-}
-
-
-=head2 drawlist
-
-Get draw table from SwissDB. Method used by login and score actions.
-
-=cut
- 
-sub drawlist : Private {
-	my ($self, $c) = @_;
-	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
-		$c->stash->{league} });
-	my $round = $league->round->round;
-	my $opponents = $league->opponents->search({ round => $round });
-	my $roles = $league->roles->search({ round => $round });
-	my ( @games, @unpaired, %seen );
-	while ( my $pair = $opponents->next ) {
-		if ( $pair->opponent =~ m/bye/i ) {
-			$c->stash->{byegame} = { contestants => {Bye => $pair->ego->name} };
-		}
-		elsif ( $pair->opponent =~ m/unpaired/i ) {
-			push @unpaired, $pair->player;
-		}
-		else {
-			my $player = $pair->ego;
-			my $opponent = $pair->other;
-			if ( $seen{ $player->id } ) {
-				die $player->id . "'s opponent is " . $opponent->id .
-				 ", but is " . $opponent->id . "'s opponent " . $player->id .
-				 "?" unless $seen{$opponent->id} == 1 and
-							 $seen{$player->id} == 1;
-				next;
-			}
-			$seen{$player->id}++;
-			$seen{$opponent->id}++;
-			my $roleplayer = $roles->find({ player => $player->id })->role;
-			my $roleopponent = $roles->find({ player => $opponent->id })->role;
-			push @games, { contestants => { $roleplayer => $player,
-					$roleopponent => $opponent } };
-		}
-	}
-	$c->stash->{unpaired} = \@unpaired;
-	$c->stash->{round} = $round;
-	$c->stash->{game} = \@games;
 }
 
 
