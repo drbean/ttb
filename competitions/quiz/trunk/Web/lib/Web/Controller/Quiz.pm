@@ -251,7 +251,7 @@ sub score : Local {
 					keys %{ $tallies->{$pid} };
 	}
 	$c->forward( 'drawlist' );
-	my $games = $c->stash->{games};
+	my $games = $c->stash->{game};
 	my @games;
 	for my $game ( @$games ) {
 		my $players = $game->{contestants};
@@ -309,32 +309,56 @@ sub drawlist : Private {
 	my ( @games, @unpaired, %seen );
 	while ( my $pair = $opponents->next ) {
 		if ( $pair->opponent =~ m/bye/i ) {
-			$c->stash->{byegame} = { contestants => {Bye => $pair->player } };
+			$c->stash->{byegame} = { contestants => {Bye => $pair->ego->name} };
 		}
 		elsif ( $pair->opponent =~ m/unpaired/i ) {
 			push @unpaired, $pair->player;
 		}
 		else {
-			my $player = $pair->player;
-			my $opponent = $pair->opponent;
-			if ( $seen{$player} ) {
-				die
-"${player}'s opponent is $opponent, but is ${opponent}'s opponent $player?"
-				unless $seen{$opponent} == 1 and $seen{$player} == 1;
+			my $player = $pair->ego;
+			my $opponent = $pair->other;
+			if ( $seen{ $player->id } ) {
+				die $player->id . "'s opponent is " . $opponent->id .
+				 ", but is " . $opponent->id . "'s opponent " . $player->id .
+				 "?" unless $seen{$opponent->id} == 1 and
+							 $seen{$player->id} == 1;
 				next;
 			}
-			$seen{$player}++;
-			$seen{$opponent}++;
-			my $roleplayer = $roles->find({ player => $player })->role;
-			my $roleopponent = $roles->find({ player => $opponent })->role;
+			$seen{$player->id}++;
+			$seen{$opponent->id}++;
+			my $roleplayer = $roles->find({ player => $player->id })->role;
+			my $roleopponent = $roles->find({ player => $opponent->id })->role;
 			push @games, { contestants => { $roleplayer => $player,
 					$roleopponent => $opponent } };
 		}
 	}
 	$c->stash->{unpaired} = \@unpaired;
 	$c->stash->{round} = $round;
-	$c->stash->{games} = \@games;
+	$c->stash->{game} = \@games;
 }
+
+
+=head2 ratings
+
+Get ratings from SwissDB. Do things with them. Put new ones back.
+
+=cut
+
+sub ratings : Local {
+	my ($self, $c) = @_;
+	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
+		$c->stash->{league} });
+	my $round = $league->round->round - 1;
+	my %ratings;
+	my $ratings = $league->ratings->search({ tournament => $c->stash->{league},
+			round => $round });
+	while ( my $rating = $ratings->next ) {
+		my $id = $rating->player;
+		$ratings{$id} = $rating->value;
+	}
+	$c->stash->{rating} = \%ratings;
+}
+
 
 =head2 delete
 
