@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Last Edit: 2010  2月 20, 20時52分25秒
+# $Id$
+
 package Script;
 use strict;
 use warnings;
@@ -40,14 +43,17 @@ sub run {
 	my $html = $script->html;
 	my $filetype = $html? "html": "tex";
 	my $fileprefix = $html? "html": "";
-	my $series = $league->{series};
-	die "No $session session\n" unless any { $_ eq $session } @$series;
+	my $groupworkdirs = $league->{groupwork};
+	my $sessionpath = "$leagueId/$groupworkdirs";
+	my @subdirs = grep { -d } glob "$sessionpath/*";
+	my @series = sort { $a <=> $b } map m/^$sessionpath\/(\d+)$/, @subdirs;
+	die "No $session session\n" unless any { $_ eq $session } @series;
 	my $member = $league->{member};
 	die "Not all members have names in $league->{id} league"
 		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
 	my $arrangement = $league->{seats};
-	my $groups = LoadFile "$leagueId/$session/groups.yaml";
+	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $chart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
@@ -67,5 +73,5 @@ sub run {
 		SOURCE=>"$leagueId/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
-	io("$leagueId/$session/teamseat.$filetype")->print($text);
+	io("$sessionpath/$session/teamseat.$filetype")->print($text);
 }
