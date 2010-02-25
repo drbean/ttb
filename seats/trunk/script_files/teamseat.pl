@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  2月 20, 20時52分25秒
+# Last Edit: 2010  2月 25, 09時30分10秒
 # $Id$
 
 package Script;
@@ -67,8 +67,8 @@ sub run {
 			$chart->{$seats[$number]} = { id => $id,
 						name => $name,
 						team => $team };
-			}
 		}
+	}
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$leagueId/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
