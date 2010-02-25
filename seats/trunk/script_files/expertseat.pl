@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Last Edit: 2010  2月 25, 09時33分32秒
+# $Id: /mi/ttb/seats/trunk/script_files/teamseat.pl 4344 2010-02-20T12:46:04.449172Z drbean  $
+
 package Script;
 use strict;
 use warnings;
@@ -23,7 +26,7 @@ use Pod::Usage;
 use Text::Template;
 use IO::All;
 use YAML qw/LoadFile/;
-use List::MoreUtils qw/any/;
+use List::MoreUtils qw/any all/;
 use Cwd;
 
 run() unless caller();
@@ -35,14 +38,19 @@ sub run {
 	my $leagueId = $script->league;
 	my $league = LoadFile "$leagueId/league.yaml";
 	my $session = $script->session;
-	my $filetype = $script->html? "html": "tex";
-	my $series = $league->{series};
-	die "No $session session\n" unless any { $_ eq $session } @$series;
+	my $html = $script->html;
+	my $filetype = $html? "html": "tex";
+	my $fileprefix = $html? "html": "";
+	my $groupworkdirs = $league->{groupwork};
+	my $sessionpath = "$leagueId/$groupworkdirs";
+	my @subdirs = grep { -d } glob "$sessionpath/*";
+	my @series = sort { $a <=> $b } map m/^$sessionpath\/(\d+)$/, @subdirs;
+	die "No $session session\n" unless any { $_ eq $session } @series;
 	my $member = $league->{member};
 	my %names = map { $_->{name} => $_ } @$member;
 	my $regions = $league->{regions};
 	my $expertseats = $league->{expertseats};
-	my $groups = LoadFile "$leagueId/$session/groups.yaml";
+	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $chart;
 	for my $region ( keys %$regions ) {
 		my $regionalgroups = $regions->{$region};
@@ -65,8 +73,10 @@ sub run {
 			$order++;
 		}
 	}
-	my $t = Text::Template->new(TYPE=>'FILE', SOURCE=>"$leagueId/htmlseats.tmpl", DELIMITERS => ['[*', '*]']);
+	my $t = Text::Template->new(TYPE=>'FILE',
+		SOURCE=>"$leagueId/${fileprefix}seats.tmpl",
+						DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
-	io("$leagueId/$session/expertseat.html")->print($text);
-	io("$leagueId/$session/expertseat.$filetype")->print($text);
+	io("$sessionpath/$session/expertseat.html")->print($text);
+	io("$sessionpath/$session/expertseat.$filetype")->print($text);
 }
