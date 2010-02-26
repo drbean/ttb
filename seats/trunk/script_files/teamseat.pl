@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  2月 25, 09時30分10秒
+# Last Edit: 2010  2月 26, 12時01分20秒
 # $Id$
 
 package Script;
@@ -15,7 +15,7 @@ has 'league' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 'l',);
 has 'session' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 's',);
-has 'html' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
+has 'latex' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
 		cmd_aliases => 'h',);
 
 
@@ -37,12 +37,16 @@ sub run {
 	my $script = Script->new_with_options( league => getcwd );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
+	my $leagues = "/home/drbean/class";
 	my $leagueId = $script->league;
 	my $league = LoadFile "$leagueId/league.yaml";
 	my $session = $script->session;
-	my $html = $script->html;
-	my $filetype = $html? "html": "tex";
-	my $fileprefix = $html? "html": "";
+	my $latex = $script->latex;
+	my $filetype = $latex? "tex": "html";
+	my $fileprefix = $latex? "latex": "html";
+	my $room = $league->{room};
+	my $rooms = "$leagues/rooms";
+	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
 	my $groupworkdirs = $league->{groupwork};
 	my $sessionpath = "$leagueId/$groupworkdirs";
 	my @subdirs = grep { -d } glob "$sessionpath/*";
@@ -52,7 +56,7 @@ sub run {
 	die "Not all members have names in $league->{id} league"
 		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
-	my $arrangement = $league->{seats};
+	my $arrangement = $roomconfig->{fours};
 	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $chart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
@@ -70,7 +74,7 @@ sub run {
 		}
 	}
 	my $t = Text::Template->new(TYPE=>'FILE',
-		SOURCE=>"$leagueId/${fileprefix}seats.tmpl",
+		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $text = $t->fill_in( HASH => $chart );
 	io("$sessionpath/$session/teamseat.$filetype")->print($text);
