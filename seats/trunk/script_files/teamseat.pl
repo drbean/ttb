@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  2月 26, 12時01分20秒
+# Last Edit: 2010  2月 27, 13時52分06秒
 # $Id$
 
 package Script;
@@ -63,9 +63,13 @@ sub run {
 		my $seats = $arrangement->{$team};
 		my @seats = map { "s$_" } @$seats;
 		my $member = $groups->{$team};
+		unless ( $member ) {
+			warn "No $team team in $leagueId league\n";
+			next;
+		}
 		for my $number ( 0 .. $#seats ) {
 			my $name = $member->[$number];
-			my $id = $names{$name}->{id};
+			my $id; $id = $names{$name}->{id} if $name;
 			warn "$team team member " . ($number+1) .
 					" in $seats[$number]?" unless $id;
 			$chart->{$seats[$number]} = { id => $id,
