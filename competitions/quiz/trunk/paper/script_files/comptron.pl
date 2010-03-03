@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 03, 14時40分31秒
+# Last Edit: 2010  3月 03, 18時15分56秒
 # $Id$
 
 =head1 NAME
@@ -10,11 +10,11 @@ comptron.pl - Scantron form for CompComp responses
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS 
 
@@ -34,7 +34,7 @@ use FindBin qw/$Bin/;
 use lib "$Bin/../../Web/lib";
 use Config::General;
 
-use YAML qw/LoadFile DumpFile/;
+use YAML qw/Dump/;
 use Grades;
 
 BEGIN {
@@ -70,7 +70,7 @@ my $pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
 my ($n, @response, %seen);
-my $qn = 5;
+my $qn = 4;
 
 while ( my $pair = $pairs->next ) {
     my $player = $pair->player;
