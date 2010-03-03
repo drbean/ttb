@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  2月 24, 10時12分49秒
+# Last Edit: 2010  3月 03, 14時40分31秒
 # $Id$
 
 =head1 NAME
@@ -16,47 +16,75 @@ Version 0.01
 
 our $VERSION = '0.01';
 
+=head1 SYNOPSIS 
+
+comptron.pl -l BMA0077 -r 1 > BMA0077/classwork/1/response.yaml
+
+=cut
+
+=head1 DESCRIPTION
+
+This script generates a YAML file which allows easy transcription from a paper record sheet by 2 competitors of their separate responses to CompComp quiz questions, so you can keep all the data that originally existed on the record sheet. This data can be returned later in a finer-grained grading report than would be possible only inputting the number correct.
+
+=cut
+
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
-use lib "$Bin/../lib";
+use lib "$Bin/../../Web/lib";
+use Config::General;
 
 use YAML qw/LoadFile DumpFile/;
 use Grades;
 
+BEGIN {
+    my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
+    die "Which of @MyAppConf is the configuration file?"
+                unless @MyAppConf == 1;
+    %::config = Config::General->new($MyAppConf[0])->getall;
+    $::name = $::config{name};
+    $::leagues = $::config{leagues};
+    require "$::name.pm"; $::name->import;
+    # require "$::name/SwissSchema.pm"; $::name->import;
+}
+
+no strict qw/subs refs/;
+my $connect_info = "${::name}::Model::SwissDB"->config->{connect_info};
+# my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
+my $schema = "${::name}::SwissSchema"->connect( @$connect_info );
+use strict;
+
+
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
-my $exam = $scantron->exam;
+my $round = $scantron->round;
 
-my $league = League->new( id => $id );
+my $league = League->new( id => "$::leagues/$id" );
 my $grades = Grades->new( league => $league );
 
 my $members = $league->members;
 
 my %members = map { $_->{name} => $_ } @$members;
-my $compschema = 
-my $pairs = $grades->jigsawGroups( $exam );
 
-=head1 DESCRIPTION
+my $pairs = $schema->resultset('Opponents')->search({
+	tournament => $id, round => $round });
 
-This script allows easy transcription from a record sheet by 2 competitors of their separate responses to CompComp quiz questions, thus keeping all the data that originally existed on the record sheet. This data can be returned later in a fine-grained grading report.
+my ($n, @response, %seen);
+my $qn = 5;
 
-=cut
-
-run unless caller;
-
-sub run {
-
-my ($n, @r, %seen);
-
-my $o = LoadFile 'comp/1/opponent.yaml';
-for ( keys %$o ) { $n++; push @r, { $n++ => { $_ => {1 => 1, 2 => 1, 3 => 1}, $o->{$_} => {1 => 1, 2 => 1, 3 => 1} } } unless $seen{ $o->{$_} }; $seen{$_}++; $seen{$o->{$_}}++; } ;
-@r;
-$_REPL->load_plugin('DumpHistory');
-
-DumpFile 'comp/1/response.yaml', \@r;
-
+while ( my $pair = $pairs->next ) {
+    my $player = $pair->player;
+    my $opponent = $pair->opponent;
+    my %questions; @questions{1..$qn } = ( 0 ) x $qn;
+    next if $seen{ $player };
+    push @response,
+	{ ++$n => { $player => \%questions, $opponent => \%questions } };
+    $seen{$player}++;
+    $seen{$opponent}++;
 }
+
+$YAML::UseAliases = 0;
+print Dump \@response;
 
 =head1 AUTHOR
 
