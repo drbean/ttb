@@ -10,6 +10,7 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
     },
+	script_files => [ qw[ paper/script_files/comptron.pl ] ],
     add_to_cleanup      => [ 'Comp-*' ],
     create_makefile_pl => 'traditional',
 );

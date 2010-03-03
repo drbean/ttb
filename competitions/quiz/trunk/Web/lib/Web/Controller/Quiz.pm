@@ -240,7 +240,7 @@ sub score :Global :Args(2)  {
 		my $role = exists $players->{$roles->[0]}? $roles->[0]: "Bye";
 		my $us = $players->{$role};
 		my $ourid = $us->id;
-		die "No $player quiz tally?" unless exists $tallies->{$ourid};
+		die "No $ourid player quiz tally?" unless exists $tallies->{$ourid};
 		my $ourcorrect = $tallies->{$ourid}->{total};
 		my $otherrole = $roles->[1];
 		my $them = $players->{$otherrole};
