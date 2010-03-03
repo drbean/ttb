@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 03, 18時15分56秒
+# Last Edit: 2010  3月 03, 21時16分12秒
 # $Id$
 
 =head1 NAME
@@ -31,14 +31,14 @@ This script generates a YAML file which allows easy transcription from a paper r
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
-use lib "$Bin/../../Web/lib";
+use lib "$Bin/../lib";
 use Config::General;
 
 use YAML qw/Dump/;
 use Grades;
 
 BEGIN {
-    my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
+    my @MyAppConf = glob( "$Bin/../*.conf" );
     die "Which of @MyAppConf is the configuration file?"
                 unless @MyAppConf == 1;
     %::config = Config::General->new($MyAppConf[0])->getall;
@@ -70,13 +70,14 @@ my $pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
 my ($n, @response, %seen);
-my $qn = 4;
+my $qn = 3;
 
 while ( my $pair = $pairs->next ) {
     my $player = $pair->player;
     my $opponent = $pair->opponent;
     my %questions; @questions{1..$qn } = ( 0 ) x $qn;
     next if $seen{ $player };
+    next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
     push @response,
 	{ ++$n => { $player => \%questions, $opponent => \%questions } };
     $seen{$player}++;
