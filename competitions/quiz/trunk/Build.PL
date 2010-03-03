@@ -6,7 +6,8 @@ my $builder = Module::Build->new(
     module_name         => 'Comp',
     license             => 'perl',
     dist_author         => 'Dr Bean <<drbean at, ie, (a) cpan dot, ie . org>>',
-    dist_version_from   => 'lib/Comp.pm',
+	dist_abstract	=> "Paired Comprehension Competitions",
+    dist_version   => '0.02',
     build_requires => {
         'Test::More' => 0,
     },

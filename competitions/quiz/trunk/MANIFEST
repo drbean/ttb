@@ -2,7 +2,6 @@ Build.PL
 Changes
 MANIFEST
 README
-lib/Comp.pm
 t/00-load.t
 t/pod-coverage.t
 t/pod.t
