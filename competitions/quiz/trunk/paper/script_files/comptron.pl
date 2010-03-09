@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 03, 21時16分12秒
+# Last Edit: 2010  3月 09, 13時50分43秒
 # $Id$
 
 =head1 NAME
@@ -75,7 +75,7 @@ my $qn = 3;
 while ( my $pair = $pairs->next ) {
     my $player = $pair->player;
     my $opponent = $pair->opponent;
-    my %questions; @questions{1..$qn } = ( 0 ) x $qn;
+    my %questions; @questions{1..$qn } = ( undef ) x $qn;
     next if $seen{ $player };
     next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
     push @response,
