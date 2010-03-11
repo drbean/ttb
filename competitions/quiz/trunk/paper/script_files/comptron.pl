@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 09, 13時50分43秒
+# Last Edit: 2010  3月 11, 10時55分46秒
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
 my $round = $scantron->round;
 
-my $league = League->new( id => "$::leagues/$id" );
+my $league = League->new( leagues => $::leagues, id => $id );
 my $grades = Grades->new( league => $league );
 
 my $members = $league->members;
