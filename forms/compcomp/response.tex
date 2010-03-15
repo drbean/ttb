@@ -1,0 +1,90 @@
+\documentclass[a4paper]{article}
+% \usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+\textblockorigin{0.00cm}{0.05cm}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\newcommand{\myresponse}[1]{%
+	\begin{description}
+		\item #1: \normalsize
+		Name: \rule{2.5cm}{0.3pt} Id: \rule{2.5cm}{0.3pt} 
+	
+		% \vspace{-0.3cm}
+		\item 1: \hspace{0.25cm}T\hspace{0.25cm}
+					F\hspace{0.75cm}
+			2: \hspace{0.25cm}T\hspace{0.25cm}
+					F \hspace{0.75cm}
+			3: \hspace{0.25cm}T\hspace{0.25cm}
+					F \hspace{0.75cm}
+			4: \hspace{0.25cm}T\hspace{0.25cm}
+					F \hspace{0.75cm}
+			5: \hspace{0.25cm}T\hspace{0.25cm}
+					F
+	\end{description}
+}
+\newcommand{\mycard}[0]{%
+	% \vspace{+0.5cm}
+	\Large \begin{center} Comprehension competition \end{center}
+	% \vspace{-1.75cm}
+	\parbox[7.45cm][c]{9.6cm}{%\vfill
+		\parbox[c]{9.6cm}{%\vfill
+			% \vspace{-0.9cm}
+			\myresponse{\large White}
+		}
+		\rule{10.3cm}{1.8pt}
+		\parbox[c]{9.6cm}{%\vfill
+			% \vspace{-0.9cm}
+			\myresponse{\large Black}
+		}
+	}
+}
+
+\begin{document}
+% \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
+\begin{textblock}{8}(0,0)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,0)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(0,4)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,4)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(0,8)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,8)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(0,12)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+\begin{textblock}{8}(8,12)
+\textblocklabel{picture1}
+\mycard
+\end{textblock}
+
+
+\begin{tiny}1\end{tiny}\newpage
+
+
+\end{document}
