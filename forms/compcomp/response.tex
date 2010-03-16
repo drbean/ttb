@@ -1,5 +1,5 @@
 \documentclass[a4paper]{article}
-% version 0.01
+% version 0.02
 % \usepackage[T1]{fontenc}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute,showboxes]{textpos}
@@ -28,17 +28,22 @@
 			10: \myresponse
 	\end{description}
 }
-\newcommand{\mycard}[2]{%
+\newcommand{\mycard}[3]{%
+\usepackage[absolute]{textpos}
 	\begin{textblock}{8}(#1)
 	\textblocklabel{picture1}
 	\Large \begin{center} Comprehension competition \end{center}
-	\parbox[t][2.05cm][b]{9.6cm}{%\vfill
+	\end{textblock}
+\usepackage[absolute,showboxes]{textpos}
+	\begin{textblock}{8}(#2)
+	\textblocklabel{picture2}
+	\parbox[t][3.7cm][b]{9.6cm}{%\vfill
 		% \vspace{-0.9cm}
 		\myhalf{White}
 	}
 	\end{textblock}
-	\begin{textblock}{8}(#2)
-	\textblocklabel{picture1}
+	\begin{textblock}{8}(#3)
+	\textblocklabel{picture3}
 	\parbox[t][3.7cm][c]{9.6cm}{%\vfill
 		% \vspace{-0.9cm}
 		\myhalf{Black}
@@ -49,10 +54,10 @@
 \begin{document}
 % \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
 
-\mycard{0,0}{0,2}	\mycard{8,0}{8,2}
-\mycard{0,4}{0,6}	\mycard{8,4}{8,6}
-\mycard{0,8}{0,10}	\mycard{8,8}{8,10}
-\mycard{0,12}{0,14}	\mycard{8,12}{8,14}
+\mycard{0,0}{0,0}{0,2}		\mycard{8,0}{8,0}{8,2}
+\mycard{0,4}{0,4}{0,6}		\mycard{8,4}{8,4}{8,6}
+\mycard{0,8}{0,8}{0,10}		\mycard{8,8}{8,8}{8,10}
+\mycard{0,12}{0,12}{0,14}	\mycard{8,12}{8,12}{8,14}
 
 \begin{tiny}1\end{tiny}\newpage
 
