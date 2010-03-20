@@ -2,7 +2,9 @@
 % version 0.02
 % \usepackage[T1]{fontenc}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
-\usepackage[absolute,showboxes]{textpos}
+\usepackage{multicol}
+\usepackage[absolute]{textpos}
+% \usepackage[absolute,showboxes]{textpos}
 \textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
@@ -15,26 +17,26 @@
 		Name: \rule{2.5cm}{0.3pt} Id: \rule{2.5cm}{0.3pt} 
 	
 		% \vspace{-0.3cm}
+		\begin{multicols}{3}
 		\item \hspace{0.55cm}
-			1: \myresponse
-			2: \myresponse
-			3: \myresponse \\
-			4: \myresponse
-			5: \myresponse
-			6: \myresponse \\
-			7: \myresponse
-			8: \myresponse
-			9: \myresponse \\
-			10: \myresponse
+			1: \myresponse\\
+			2: \myresponse\\
+			3: \myresponse\\
+			4: \myresponse\\
+			5: \myresponse\\
+			6: \myresponse\\
+			7: \myresponse\\
+			8: \myresponse\\
+			9: \myresponse\\
+			10:\myresponse\\
+		\end{multicols}
 	\end{description}
 }
 \newcommand{\mycard}[3]{%
-\usepackage[absolute]{textpos}
 	\begin{textblock}{8}(#1)
 	\textblocklabel{picture1}
-	\Large \begin{center} Comprehension competition \end{center}
+	\large Comprehension competition \normalsize Table: \rule{0.5cm}{0.3pt} Subject: \rule{1.7cm}{0.3pt}\\
 	\end{textblock}
-\usepackage[absolute,showboxes]{textpos}
 	\begin{textblock}{8}(#2)
 	\textblocklabel{picture2}
 	\parbox[t][3.7cm][b]{9.6cm}{%\vfill
