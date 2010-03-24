@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 11, 10時55分46秒
+# Last Edit: 2010  3月 24, 21時12分18秒
 # $Id$
 
 =head1 NAME
@@ -69,7 +69,7 @@ my %members = map { $_->{name} => $_ } @$members;
 my $pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
-my ($n, @response, %seen);
+my ($n, $response, %seen);
 my $qn = 3;
 
 while ( my $pair = $pairs->next ) {
@@ -78,8 +78,7 @@ while ( my $pair = $pairs->next ) {
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     next if $seen{ $player };
     next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
-    push @response,
-	{ ++$n => { $player => \%questions, $opponent => \%questions } };
+    $response->{++$n} = { $player => \%questions, $opponent => \%questions } };
     $seen{$player}++;
     $seen{$opponent}++;
 }
