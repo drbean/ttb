@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 24, 21時14分14秒
+# Last Edit: 2010  3月 25, 10時19分06秒
 # $Id$
 
 =head1 NAME
@@ -84,7 +84,7 @@ while ( my $pair = $pairs->next ) {
 }
 
 $YAML::UseAliases = 0;
-print Dump \@response;
+print Dump $response;
 
 =head1 AUTHOR
 
