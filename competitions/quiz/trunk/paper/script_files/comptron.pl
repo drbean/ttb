@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 27, 15時06分24秒
+# Last Edit: 2010  3月 27, 19時41分14秒
 # $Id$
 
 =head1 NAME
@@ -37,6 +37,9 @@ use Config::General;
 use YAML qw/Dump Bless/;
 use Grades;
 
+use Games::Tournament::Contestant::Swiss;
+use Games::Tournament::Swiss;
+
 BEGIN {
     my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
     die "Which of @MyAppConf is the configuration file?"
@@ -65,6 +68,10 @@ my $grades = Grades->new( league => $league );
 my $members = $league->members;
 
 my %members = map { $_->{name} => $_ } @$members;
+my @dbmembers = $schema->resultset('Members')->search({ tournament => $id }); 
+my $lineup = map { Games::Tournament::Contestant::Swiss->new(
+	id => $_->player, name => $_->ego->profile->name,
+	score => $_->ego->score, rating => $_->ego->rating ) } @dbmembers;
 
 my @pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
