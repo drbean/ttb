@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use 5.10;
 
 use YAML qw/Bless Dump/;
 use Grades;
@@ -36,7 +37,7 @@ for my $pair ( keys %$pairs ) {
 	for my $id ( @$idsbyRole ) {
 		my $score = 0;
 		for my $n ( 0 .. $#$quiz ) {
-			my $myanswer = $responses->{$id}->{$n+1};
+			my $myanswer = $responses->{$id}->{$n+1} // '??';
 			my $theanswer = $codedvalue->[$n]->{
 				$quiz->[$n]->{answer} };
 			unless ( $myanswer eq 'T' or $myanswer eq 'F' ) {
