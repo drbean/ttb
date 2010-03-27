@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 27, 14時56分16秒
+# Last Edit: 2010  3月 27, 15時06分24秒
 # $Id$
 
 =head1 NAME
@@ -66,13 +66,14 @@ my $members = $league->members;
 
 my %members = map { $_->{name} => $_ } @$members;
 
-my $pairs = $schema->resultset('Opponents')->search({
+my @pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
+@pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
 my ($n, $response, %seen);
 my $qn = 6;
 
-while ( my $pair = $pairs->next ) {
+for my $pair ( @pairs ) {
     my $player = $pair->player;
     my $opponent = $pair->opponent;
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
