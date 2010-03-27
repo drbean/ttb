@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 27, 19時51分11秒
+# Last Edit: 2010  3月 27, 20時27分42秒
 # $Id$
 
 =head1 NAME
@@ -73,6 +73,7 @@ my $lineup = map { Games::Tournament::Contestant::Swiss->new(
 	id => $_->player, name => $_->profile->name, score => $_->score,
 	rating => $_->rating->find({ round => $round }) ) } @dbmembers;
 
+
 my @pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
@@ -86,18 +87,18 @@ for my $pair ( @pairs ) {
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     next if $seen{ $player };
     next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
-    $response->{++$n} = { $player => \%questions, $opponent => \%questions };
     $seen{$player}++;
     $seen{$opponent}++;
     my $playerrole = $pair->ego->role->find({
             tournament => $id, round => $round });
-    my $roleorder = ( $playerrole and $playerrole->role eq 'White' )?
-	[ $player, $opponent ]: [ $opponent, $player ];
-    Bless( $response->{$n} )->keys( $roleorder );
+    my ( $first, $second ) = ( $playerrole and $playerrole->role eq 'White' )?
+	( $player, $opponent ): ( $opponent, $player );
+    $response->{$first} = { $player => \%questions, $opponent => \%questions };
+    Bless( $response->{ $first } )->keys( [ $first, $second ] );
 }
 
 
-Bless( $response )->keys([ 1 .. $n ]);
+# Bless( $response )->keys([ 1 .. $n ]);
 $YAML::UseAliases = 0;
 print Dump $response;
 
