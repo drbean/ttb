@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 25, 10時19分06秒
+# Last Edit: 2010  3月 27, 14時56分16秒
 # $Id$
 
 =head1 NAME
@@ -24,21 +24,21 @@ comptron.pl -l BMA0077 -r 1 > BMA0077/classwork/1/response.yaml
 
 =head1 DESCRIPTION
 
-This script generates a YAML file which allows easy transcription from a paper record sheet by 2 competitors of their separate responses to CompComp quiz questions, so you can keep all the data that originally existed on the record sheet. This data can be returned later in a finer-grained grading report than would be possible only inputting the number correct.
+This script generates a YAML file which allows easy transcription from a paper record sheet by 2 competitors of their separate White and Black responses to CompComp quiz questions in order, so you can keep all the data that originally existed on the record sheet. This data can be returned later in a finer-grained grading report than would be possible only inputting the number correct.
 
 =cut
 
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
-use lib "$Bin/../lib";
+use lib "$Bin/../../Web/lib";
 use Config::General;
 
-use YAML qw/Dump/;
+use YAML qw/Dump Bless/;
 use Grades;
 
 BEGIN {
-    my @MyAppConf = glob( "$Bin/../*.conf" );
+    my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
     die "Which of @MyAppConf is the configuration file?"
                 unless @MyAppConf == 1;
     %::config = Config::General->new($MyAppConf[0])->getall;
@@ -70,7 +70,7 @@ my $pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
 my ($n, $response, %seen);
-my $qn = 3;
+my $qn = 6;
 
 while ( my $pair = $pairs->next ) {
     my $player = $pair->player;
@@ -81,8 +81,15 @@ while ( my $pair = $pairs->next ) {
     $response->{++$n} = { $player => \%questions, $opponent => \%questions };
     $seen{$player}++;
     $seen{$opponent}++;
+    my $playerrole = $pair->ego->role->find({
+            tournament => $id, round => $round });
+    my $roleorder = ( $playerrole and $playerrole->role eq 'White' )?
+	[ $player, $opponent ]: [ $opponent, $player ];
+    Bless( $response->{$n} )->keys( $roleorder );
 }
 
+
+Bless( $response )->keys([ 1 .. $n ]);
 $YAML::UseAliases = 0;
 print Dump $response;
 
