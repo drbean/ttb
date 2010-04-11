@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  3月 27, 20時27分42秒
+# Last Edit: 2010  4月 11, 11時54分56秒
 # $Id$
 
 =head1 NAME
@@ -73,18 +73,20 @@ my $lineup = map { Games::Tournament::Contestant::Swiss->new(
 	id => $_->player, name => $_->profile->name, score => $_->score,
 	rating => $_->rating->find({ round => $round }) ) } @dbmembers;
 
-
 my @pairs = $schema->resultset('Opponents')->search({
 	tournament => $id, round => $round });
 
+die "No pairing in round $round in $id tournament," unless @pairs;
+
+my $roundconfig = $grades->config( 'CompComp', $round );
+# my $tables = $grades->pairs( $round );
 @pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
+
 my ($n, $response, %seen);
-my $qn = 6;
 
 for my $pair ( @pairs ) {
     my $player = $pair->player;
     my $opponent = $pair->opponent;
-    my %questions; @questions{1..$qn } = ( undef ) x $qn;
     next if $seen{ $player };
     next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
     $seen{$player}++;
@@ -93,7 +95,11 @@ for my $pair ( @pairs ) {
             tournament => $id, round => $round });
     my ( $first, $second ) = ( $playerrole and $playerrole->role eq 'White' )?
 	( $player, $opponent ): ( $opponent, $player );
+    my $qn = $grades->compqn( $round, $first);
+    my %questions; @questions{1..$qn } = ( undef ) x $qn;
     $response->{$first} = { $player => \%questions, $opponent => \%questions };
+    Bless( $response->{ $first }->{$first} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $first }->{$second} )->keys( [ 1 .. $qn ] );
     Bless( $response->{ $first } )->keys( [ $first, $second ] );
 }
 
