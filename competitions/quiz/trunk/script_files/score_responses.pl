@@ -2,19 +2,20 @@
 
 use strict;
 use warnings;
-use 5.10;
+use 5.10.0;
 
 use YAML qw/Bless Dump/;
 use Grades;
+use Cwd; use File::Basename;
 
 my $answers = Grades::Script->new_with_options;
-my $id = $answers->league;
+my $id = $answers->league || basename( getcwd );
 my $round = $answers->round;
 
 my $league = League->new( id => $id );
 my $grades = Grades->new( league => $league );
 
-my $config = $grades->compConfig( $round );
+my $config = $grades->config( "CompComp", $round );
 my $pairs = $config->{pair};
 
 my $response;
@@ -41,8 +42,8 @@ for my $pair ( keys %$pairs ) {
 			my $theanswer = $codedvalue->[$n]->{
 				$quiz->[$n]->{answer} };
 			unless ( $myanswer eq 'T' or $myanswer eq 'F' ) {
-				warn "${id}'s answer, $myanswer, on question " . ($n+1) .
-					" in " . $topic . $form . " quiz?";
+				warn "${id}'s answer, $myanswer, to question " . ($n+1) .
+					" in " . $topic . $form . " quiz,";
 				next;
 			}
 			unless ( $theanswer eq 'T' or $theanswer eq 'F' ) {
