@@ -1,7 +1,7 @@
 package FileServer::Controller::Read;
 
 # Created: 西元2010年04月18日 14時34分53秒
-# Last Edit: 2010  4月 18, 14時53分38秒
+# Last Edit: 2010  4月 18, 14時56分48秒
 # $Id$
 
 =head1 NAME
@@ -24,6 +24,8 @@ use warnings;
 Read the files using a form to choose the file. 
 
 =cut
+
+__PACKAGE__->config->{namespace} = '';
 
 use CatalystX::Declare;
 
