@@ -1,7 +1,7 @@
 package FileServer;
 
 # Created: 西元2010年04月18日 12時45分36秒
-# Last Edit: 2010  4月 18, 14時14分24秒
+# Last Edit: 2010  4月 18, 14時40分00秒
 # $Id$
 
 =head1 NAME
@@ -31,52 +31,6 @@ application FileServer with Static::Simple {
 
     $CLASS->config(name => 'FileServer');
 
-}
-
-use CatalystX::Declare;
-
-controller FileServer::Controller::Foo
-     with FileServer::ControllerRole::Bar {
-
-   use MooseX::Types::Moose qw( Str );
-
-   has welcome_message => (
-       is          => 'rw',
-       isa         => Str,
-       required    => 1,
-       lazy_build  => 1,
-   );
-
-   method _build_welcome_message { 'Welcome' }
-
-   action base under '/' as '';
-
-   under base {
-
-       final action welcome {
-	   $ctx->response->body( $self->welcome_message );
-       }
-   }
-}
-
-controller_role FileServer::ControllerRole::Bar {
-
-   # use MyApp::Types qw( Username );
-
-   around _build_welcome_message { $self->$orig . '!' }
-
-   after welcome (Object $ctx) {
-
-       $ctx->response->body(join "\n",
-	   $ctx->response->body,
-	   time(),
-       );
-   }
-
-   final action special_welcome (Str $name) under base {
-
-       $ctx->response->body('Hugs to ' . $name);
-   }
 }
 
 
