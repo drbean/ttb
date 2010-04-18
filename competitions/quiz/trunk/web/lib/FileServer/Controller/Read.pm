@@ -1,7 +1,7 @@
 package FileServer::Controller::Read;
 
 # Created: 西元2010年04月18日 14時34分53秒
-# Last Edit: 2010  4月 18, 14時37分48秒
+# Last Edit: 2010  4月 18, 14時53分38秒
 # $Id$
 
 =head1 NAME
@@ -70,10 +70,6 @@ controller_role FileServer::ControllerRole::Bar {
        $ctx->response->body('Hugs to ' . $name);
    }
 }
-
-
-
-<+text+>
 
 =head1 AUTHOR
 
