@@ -1,7 +1,7 @@
 package FileServer::Controller::Read;
 
 # Created: 西元2010年04月18日 14時34分53秒
-# Last Edit: 2010  4月 18, 14時56分48秒
+# Last Edit: 2010  4月 18, 15時03分11秒
 # $Id$
 
 =head1 NAME
@@ -43,9 +43,9 @@ controller FileServer::Controller::Read
 
    method _build_welcome_message { 'Welcome' }
 
-   action base under '/' as '';
+   action default under '/' as '';
 
-   under base {
+   under default {
 
        final action welcome {
        $ctx->response->body( $self->welcome_message );
