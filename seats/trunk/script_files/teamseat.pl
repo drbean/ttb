@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  2月 27, 13時52分06秒
+# Last Edit: 2010  3月 06, 11時38分50秒
 # $Id$
 
 package Script;
@@ -57,6 +57,7 @@ sub run {
 		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
 	my $arrangement = $roomconfig->{fours};
+	my $colors = $roomconfig->{colors};
 	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $chart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
@@ -74,6 +75,7 @@ sub run {
 					" in $seats[$number]?" unless $id;
 			$chart->{$seats[$number]} = { id => $id,
 						name => $name,
+						color => $colors->{$team} || $team,
 						team => $team };
 		}
 	}
