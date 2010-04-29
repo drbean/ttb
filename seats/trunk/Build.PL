@@ -13,7 +13,6 @@ my $builder = Module::Build->new(
     add_to_cleanup      => [ 'Seats-*' ],
     create_makefile_pl => 'traditional',
     script_files	=>  [qw[
-    				script_files/expertseat.pl
 				script_files/teamseat.pl]],
 );
 
