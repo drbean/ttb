@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  3月 06, 11時38分50秒
+# Last Edit: 2010  4月 29, 11時56分43秒
 # $Id$
 
 package Script;
@@ -18,7 +18,6 @@ has 'session' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 has 'latex' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
 		cmd_aliases => 'h',);
 
-
 package main;
 
 use strict;
@@ -29,9 +28,9 @@ use IO::All;
 use YAML qw/LoadFile/;
 use List::MoreUtils qw/any all/;
 use Cwd;
+use Net::FTP;
 
 run() unless caller();
-
 
 sub run {
 	my $script = Script->new_with_options( league => getcwd );
@@ -58,8 +57,10 @@ sub run {
 	my %names = map { $_->{name} => $_ } @$member;
 	my $arrangement = $roomconfig->{fours};
 	my $colors = $roomconfig->{colors};
+	my $regions = $roomconfig->{regions};
+	my $expertseats = $roomconfig->{fourexperts};
 	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
-	my $chart = { league => $league->{id}, session => $session };
+	my $teamchart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
 		my @seats = map { "s$_" } @$seats;
@@ -73,15 +74,47 @@ sub run {
 			my $id; $id = $names{$name}->{id} if $name;
 			warn "$team team member " . ($number+1) .
 					" in $seats[$number]?" unless $id;
-			$chart->{$seats[$number]} = { id => $id,
+			$teamchart->{$seats[$number]} = { id => $id,
 						name => $name,
 						color => $colors->{$team} || $team,
 						team => $team };
 		}
 	}
+	my $expertchart;
+	for my $region ( keys %$regions ) {
+		my $regionalgroups = $regions->{$region};
+		my $arrangement = $expertseats->{$region};
+		my $order = 0;
+		for my $expertgroup ( sort keys %$arrangement ) {
+			my $seats = $arrangement->{$expertgroup};
+			my @members;
+			for my $group ( @$regionalgroups ) {
+				my $name = $groups->{$group}->[$order];
+				push @members, {
+					name => $name,
+					id => $names{$name}->{id},
+					team => $group } if $name;
+			}
+			my @seats = map { "s$_" } @$seats;
+			for my $number ( 0 .. $#seats ) {
+				$expertchart->{$seats[$number]} = $members[$number];
+			}
+			$order++;
+		}
+	}
+	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
+	$web->login("greg", "1514") or warn "login: greg?"; 
+	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
-	my $text = $t->fill_in( HASH => $chart );
-	io("$sessionpath/$session/teamseat.$filetype")->print($text);
+	my $teamtext = $t->fill_in( HASH => $teamchart );
+	io("$sessionpath/$session/teamseat.$filetype")->print($teamtext);
+	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
+			or die "put teamseat.html?"; 
+	my $experttext = $t->fill_in( HASH => $expertchart );
+	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
+	$web->put( "$sessionpath/$session/expertseat.$filetype",
+			"${leagueId}fex.html" ) or die "put expertseat.html?"; 
+
 }
