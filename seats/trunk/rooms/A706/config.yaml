@@ -85,6 +85,9 @@ colors:
 
   25: #c5c5c5
   26: #f0f0f0
+  Gray: #f0f0f0
+  Black: #c5c5c5
+  BlackBlack: #909090
 fours:
   Orange    : [25, 25a, 26, 26a]
   Green     : [23, 15, 24, 16]
