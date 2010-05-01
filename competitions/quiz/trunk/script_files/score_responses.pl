@@ -35,6 +35,8 @@ for my $pair ( keys %$pairs ) {
 	}
 	my $idsbyRole = $grades->idsbyCompRole( $round, $pair );
 	my $responses = $grades->compResponses( $round, $pair );
+	die "Table ${pair}'s responses to $topic quiz, form $form,"
+				unless defined $responses;
 	for my $id ( @$idsbyRole ) {
 		my $score = 0;
 		for my $n ( 0 .. $#$quiz ) {
