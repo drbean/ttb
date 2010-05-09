@@ -20,6 +20,7 @@ my $pairs = $config->{pair};
 
 my $response;
 for my $pair ( keys %$pairs ) {
+	next if $pair eq 'Bye';
 	# $response->{Chinese}->{$pair} = 0;
 	my $quiz = $grades->compQuiz( $round, $pair );
 	my $topic = $grades->compTopic($round, $pair);
