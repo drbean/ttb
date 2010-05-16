@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+# Created: 西元2010年04月04日 19時52分56秒
+# Last Edit: 2010  5月 16, 19時40分24秒
+# $Id$
+
 use strict;
 use warnings;
 use 5.10.0;
@@ -13,18 +17,18 @@ my $id = $answers->league || basename( getcwd );
 my $round = $answers->round;
 
 my $league = League->new( id => $id );
-my $grades = Grades->new( league => $league );
+my $comp = CompComp->new( league => $league );
 
-my $config = $grades->config( "CompComp", $round );
+my $config = $comp->config( "CompComp", $round );
 my $pairs = $config->{pair};
 
 my $response;
 for my $pair ( keys %$pairs ) {
 	next if $pair eq 'Bye';
 	# $response->{Chinese}->{$pair} = 0;
-	my $quiz = $grades->compQuiz( $round, $pair );
-	my $topic = $grades->compTopic($round, $pair);
-	my $form = $grades->compForm($round, $pair);
+	my $quiz = $comp->compQuiz( $round, $pair );
+	my $topic = $comp->compTopic($round, $pair);
+	my $form = $comp->compForm($round, $pair);
 	my ($codedvalue, $n);
 	for my $item ( @$quiz ) {
 		if ( $item->{option} ) {
@@ -34,8 +38,8 @@ for my $pair ( keys %$pairs ) {
 		}
 		else { $codedvalue->[$n++] = { True => 'T', False => 'F' }; }
 	}
-	my $idsbyRole = $grades->idsbyCompRole( $round, $pair );
-	my $responses = $grades->compResponses( $round, $pair );
+	my $idsbyRole = $comp->idsbyCompRole( $round, $pair );
+	my $responses = $comp->compResponses( $round, $pair );
 	die "Table ${pair}'s responses to $topic quiz, form $form,"
 				unless defined $responses;
 	for my $id ( @$idsbyRole ) {
@@ -57,8 +61,8 @@ for my $pair ( keys %$pairs ) {
 		}
 		$response->{letters}->{$pair}->{$id} = $score;
 		$response->{letters}->{$pair}->{story} =
-				$grades->compTopic( $round, $pair ) .
-				$grades->compForm( $round, $pair );
+				$comp->compTopic( $round, $pair ) .
+				$comp->compForm( $round, $pair );
 	}
 	Bless( $response->{letters}->{$pair} )->keys([ @$idsbyRole, 'story' ]);
 }
