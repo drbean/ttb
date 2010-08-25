@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Created: 西元2010年04月04日 19時52分56秒
-# Last Edit: 2010  5月 16, 19時40分24秒
+# Last Edit: 2010 Aug 25, 01:42:19 PM
 # $Id$
 
 use strict;
@@ -19,7 +19,7 @@ my $round = $answers->round;
 my $league = League->new( id => $id );
 my $comp = CompComp->new( league => $league );
 
-my $config = $comp->config( "CompComp", $round );
+my $config = $comp->config( $round );
 my $pairs = $config->{pair};
 
 my $response;
