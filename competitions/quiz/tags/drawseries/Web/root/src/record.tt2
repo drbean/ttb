@@ -1,0 +1,15 @@
+[% META title = "Quiz" -%]
+
+  Questions:
+
+<table border=2>
+<tr><td>Number<th>Question<th>Answer
+[% FOREACH n IN questions.keys.nsort -%]
+
+  <tr><td>[% questions.$n.id %]
+      <td>[% questions.$n.content %]
+      <td>[% questions.$n.response %]
+
+[% END %]
+
+</table>
