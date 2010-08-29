@@ -1,0 +1,18 @@
+[% META title = "Comprehension Quiz" -%]
+
+<form method="post" action="[% c.uri_for('/play/update/') _ quiz_id  +%]">
+  <ol>
+    
+  [% FOREACH question IN quiz -%]
+  <li>[%- question -%]   
+    <br>  
+    <INPUT type="radio" name="answer" value="True"> True
+    <INPUT type="radio" name="answer" value="False"> False
+    <INPUT type="radio" name="answer" value="Don't know" checked> Don't know
+  [% END %]
+
+  <input type="submit" name="Submit" value="Sure?">
+  </ol>
+</form>
+
+

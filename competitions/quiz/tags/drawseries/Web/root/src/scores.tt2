@@ -1,0 +1,45 @@
+[% META title = 'Scores' -%]
+[% n = 1 %]
+
+<h2>[% league %] League, Round [% round %]</h2>
+<h2>[% topic _ story %] Topic</h2>
+
+<table>
+<caption><h1>[% tournament %] Tournament Result, Round [% round %]</h1></caption>
+  <TR><TH colspan="4"><H2>[% roles.0 %]</H2>
+      <TH colspan="3"><H2>[% roles.1 %]</H2>
+  <TR><TH>Table<TH>Name<TH>Score<TH>Result<TH>Name<TH>Score
+[% FOREACH n IN [ 0 .. game.max ] %]
+[% UNLESS game.$n.contestants.size == 1 %]
+  [%- white = game.$n.contestants.$roles.0 %]
+  [%- black = game.$n.contestants.$roles.1 %]
+  [%- score = game.$n.scores %]
+  <TR>
+    <td>[% n + 1 %]
+    <td>[% white.name %]
+    <td>[% score.$roles.0.defined ? score.$roles.0 : '-' %]
+    <td align="char" char=":">[% game.$n.result %]
+    <td>[% black.name %]
+    <td>[% score.$roles.1.defined ? score.$roles.1 : '-' %]
+[% ELSE %]
+  [%- bye = game.$n.contestants.Bye %]
+  [%- score = game.$n.scores %]
+  <TR>
+    <td>[% n + 1 %]
+    <td>[% bye.name %]
+    <td>[% score.Bye.defined ? score.Bye : '-' %]
+    <td>[% game.$n.result %]
+
+
+[% END %]
+[% END %]
+  <TR><TH colspan="8">5: Win, 3: Loss, 4: Draw, 1: Late, 0: Forfeit
+</table>
+
+[%- IF log %]
+<H2>FIDE Pairing Procedure Log</H2>
+
+<PRE>[% log %]</PRE>
+[% END %]
+
+[%- IF pairtable %][% INCLUDE pairtable.tt2 round = round + 1 %][% END %]

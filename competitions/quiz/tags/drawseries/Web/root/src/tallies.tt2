@@ -1,0 +1,33 @@
+[% META title = 'Questions Correct Tally' -%]
+
+<h2>[% league %] League, Round [% round %]</h2>
+<h2>[% topic _ story %] Topic</h2>
+
+<table border=1>
+  <COL width="40">
+  <tr>
+    <th>Player ID
+[% FOREACH q IN quiz.nsort('id') %]
+    <th>[% q.id %]
+[% END %]
+    <th>Player Total
+  </tr>
+[% FOREACH player IN tallies.keys.sort -%]
+  <tr>
+      <td>[% player %]</td>
+  [% FOREACH q IN quiz.nsort('id') -%]
+  	[% id = q.id %]
+      <td>[% IF tallies.$player.$id.defined %][% tallies.$player.$id -%]
+	[%- ELSE %]_[% END %]
+  [% END -%]
+      <td>[% tallies.$player.total %]
+  </tr>
+[% END -%]
+
+  <tr>
+      <td>Totals
+[% FOREACH question IN totals.keys.sort.nsort('id') -%]
+    <td>[% totals.$question %]
+[% END -%]
+
+</table>
