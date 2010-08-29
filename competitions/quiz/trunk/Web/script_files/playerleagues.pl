@@ -33,7 +33,6 @@ use strict;
 
 my $leagues = [
 		[ qw/id name field/ ],
-	[ "GL00029", "GL00029日語文共同學制虛擬班二", "中級英文聽說訓練" ],
 	[ "emile", "Rousseau Cram School", "Pretentialism" ],
 	];
 
@@ -50,14 +49,13 @@ uptodatepopulate( 'Genre', $genres );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "GL00029",	1 ],
 			[ "emile",	2 ],
 		];
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
 my ($leaguefile, $players);
 
-for my $league ( 'GL00029', 'emile' ) {
+for my $league ( 'emile' ) {
 	$leaguefile = LoadFile "$leaguedirs/$league/league.yaml";
 	push @{$players->{$league}},
 		map {[ $_->{id}, $_->{name}, $_->{password} ]}
