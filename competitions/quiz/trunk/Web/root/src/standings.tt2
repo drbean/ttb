@@ -1,43 +1,25 @@
-[% META title = 'Draw list' -%]
+[% META title = 'Standings' -%]
 [% n = 1 %]
 
 <h2>[% tournament %] League</h2>
 
 <table>
-<caption><h1>[% tournament %] Tournament Draw Table</h1></caption>
-  <TR><TH colspan="4"><H2>[% roles.0 %]</H2>
-      <TH colspan="3"><H2>[% roles.1 %]</H2>
-  <TR><TH>Table<TH>Name<TH>Rating<TH>Score<TH>Result<TH>Name<TH>Rating<TH>Score
-[% FOREACH round IN games.keys.sort %]
-<TR><TH colspan="4"><H2>Round [% round %]</H2>
-[% game = games.$round %]
-[% FOREACH n IN [ 0 .. game.max ] %]
-[% UNLESS game.$n.contestants.size == 1 %]
-  [%- white = game.$n.contestants.$roles.0 %]
-  [%- black = game.$n.contestants.$roles.1 %]
-  [%- result = game.$n.results %]
+<caption><h1>[% tournament %] Tournament Standings</h1></caption>
+  <TR><TH colspan="3"><H2>Player</H2>
+      <TH colspan="[% rounds %]"><H2>Rounds</H2>
+  <TR><TH>Number<TH>Name<TH>Rating[% FOREACH round IN [ 1 .. rounds ] %]<TH>[% round %][% END %]<TH>Score
+[% n = 0 %]
+[% FOREACH player IN players %]
+[% n = n + 1 %]
   <TR>
-    <td>[% n + 1 %]
-    <td>[% white.name %]
-    <td>[% white.rating %]
-    <td>[[% result.$roles.0.defined ? result.$roles.0 : '-' %]]
-    <td> :
-    <td>[% black.name %]
-    <td>[% black.rating %]
-    <td>[[% result.$roles.1.defined ? result.$roles.1 : '-' %]]
-[% ELSE %]
-  [%- bye = game.$n.contestants.Bye %]
-  [%- score = game.$n.scores %]
-  <TR>
-    <td>[% n + 1 %]
-    <td>[% bye.name %]
-    <td>[% bye.rating %]
-    <td>[[% score.Bye.defined ? score.Bye : '-' %]]
-    <td> Bye
-
-
+    <td>[% n %]
+    <td>[% player.name %]
+    <td>[% player.rating %]
+    [% id = player.id %]
+[% FOREACH round IN [ 1 .. rounds ] %]
+    <td>[% play.$round.$id.role %],[% play.$round.$id.opponent %],[% play.$round.$id.point %]
 [% END %]
-[% END %]
+    <td>[% player.score %]
 [% END %]
   <TR><TH colspan="8">5: Win, 3: Loss, 4: Draw, 1: Late, 0: Forfeit
 </table>
