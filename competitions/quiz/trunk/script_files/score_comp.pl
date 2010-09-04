@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # Created: 西元2010年04月04日 19時52分56秒
-# Last Edit: 2010 Aug 25, 01:42:19 PM
+# Last Edit: 2010  9月 04, 20時53分18秒
 # $Id$
 
 use strict;
@@ -50,7 +50,7 @@ for my $pair ( keys %$pairs ) {
 				$quiz->[$n]->{answer} };
 			unless ( $myanswer eq 'T' or $myanswer eq 'F' ) {
 				warn "${id}'s answer, $myanswer, to question " . ($n+1) .
-					" in " . $topic . $form . " quiz,";
+					" in " . $topic . $form . " quiz at Table $pair,";
 				next;
 			}
 			unless ( $theanswer eq 'T' or $theanswer eq 'F' ) {
