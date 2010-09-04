@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  4月 11, 11時54分56秒
+# Last Edit: 2010  9月 04, 20時34分54秒
 # $Id$
 
 =head1 NAME
@@ -18,7 +18,13 @@ our $VERSION = '0.02';
 
 =head1 SYNOPSIS 
 
-comptron.pl -l BMA0077 -r 1 > BMA0077/classwork/1/response.yaml
+comptron.pl -l BMA0077 -r 1 -x 3 > BMA0077/classwork/1/response.yaml
+
+ Options:
+   -x --exercise      number of questions from exam
+   -r --round         the round
+   -l --league        league's id
+ 
 
 =cut
 
@@ -28,6 +34,7 @@ This script generates a YAML file which allows easy transcription from a paper r
 
 =cut
 
+use 5.010;
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
@@ -61,9 +68,10 @@ use strict;
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
 my $round = $scantron->round;
+my $qn = $scantron->exercise;
 
 my $league = League->new( leagues => $::leagues, id => $id );
-my $grades = Grades->new( league => $league );
+my $comp = CompComp->new( league => $league );
 
 my $members = $league->members;
 
@@ -78,11 +86,11 @@ my @pairs = $schema->resultset('Opponents')->search({
 
 die "No pairing in round $round in $id tournament," unless @pairs;
 
-my $roundconfig = $grades->config( 'CompComp', $round );
-# my $tables = $grades->pairs( $round );
-@pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
+my $roundconfig = $comp->config( $round );
+# my $tables = $comp->pairs( $round );
+# @pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
 
-my ($n, $response, %seen);
+my ($n, $response, %seen, %formorder);
 
 for my $pair ( @pairs ) {
     my $player = $pair->player;
@@ -95,7 +103,10 @@ for my $pair ( @pairs ) {
             tournament => $id, round => $round });
     my ( $first, $second ) = ( $playerrole and $playerrole->role eq 'White' )?
 	( $player, $opponent ): ( $opponent, $player );
-    my $qn = $grades->compqn( $round, $first);
+    my $form = $comp->compTopic( $round, $first ) .
+		    $comp->compForm( $round, $first );
+    push @{ $formorder{$form} }, $first;
+    $qn ||= $comp->compqn( $round, $first);
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     $response->{$first} = { $player => \%questions, $opponent => \%questions };
     Bless( $response->{ $first }->{$first} )->keys( [ 1 .. $qn ] );
@@ -103,8 +114,8 @@ for my $pair ( @pairs ) {
     Bless( $response->{ $first } )->keys( [ $first, $second ] );
 }
 
-
-# Bless( $response )->keys([ 1 .. $n ]);
+my @formorders = values %formorder;
+Bless( $response )->keys([ map { sort @$_ } @formorders ]);
 $YAML::UseAliases = 0;
 print Dump $response;
 
