@@ -52,6 +52,9 @@ uptodatepopulate( 'Genre', $genres );
 
 my $leaguegenres = [
 			[ qw/league genre/ ],
+			[ GL00006, 1 ],
+			[ GL00014, 1 ],
+			[ GL00041, 1 ],
 			[ "emile",	2 ],
 		];
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
