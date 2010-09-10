@@ -1,0 +1,160 @@
+# This is a sample Vroom input file. It should help you get started.
+#
+# Edit this file with your content. Then run `vroom --vroom` to start
+# the show!
+#
+# See `perldoc Vroom::Vroom` for complete details.
+#
+---- config
+# Basic config options.
+title: BMA0076
+indent: 5
+height: 18
+width: 50
+skip: 0
+
+----
+== CompComp
+
+Comprehension competition
+
++ 2 people in a group competing to understand each other's information
+
+----
+== Rules
+
+No Chinese
+No looking at partner's card
+No showing partner your card
+Tell the truth
+
+----
+
+You can't change your answer
++ I will just change it back
+
+No pencils
+
+----
+I must see the paper is folded
++ (Zero or one point for unfolded cards)
+
+---
+If you don't know who to work with,
+DON'T work with someone who doesn't know 
+who their partner is!!
+
++ TELL ME.
+
++ If you work with the wrong partner, you only get 1 point.
+
+----
+Table number at top of card
+Subject of discussion also at top
+
+----
+It doesn't matter if you don't finish 5 questions. 
+What is important is the difference in how many 
+answers you and your partner get correct.
+
++ If you both answer some questions and you both 
+get all the wrong answers, you get 4 points.
+
++ That said, try to answer 5 questions.
+
+----
+== A measurement of how well you communicate in relation to the other students
+
+ Beginner       GEPT Elementary         GEPT Intermediate        Native Speaker
+
+ -----------------------------------------------------------------------------
+ 700             1200                   1800                     5000
+
+----
+== Grades
+
+         Rating below 1200                Rating above 1200
+      -------------------------------------------------------
+      |                              |
+Hard  |          ?                   |           O
+Worker|                              |
+      |                              |
+      -------------------------------------------------------
+Half  |                              |
+homework        X                    |           X
+Misses|                              |
+3 classses                           |
+      -------------------------------------------------------
+----
++ 1: A rating is like a GEPT score, but is measured in a very different way to the GEPT.
+----
++ 2: The conversation activities in class involve both cooperation and competition.
+----
++ 3: Student with high ratings don't have to do a lot of work in the class.
+----
++ 4: If a student who speaks English well does half the homework and misses 2 or 3 classes, they will probably pass.
+----
++ 5: If a good student is absent, his/her rating will go down.
+----
++ 6: After students understand their own information, they ask about their partner's information. Then they answer Dr Bean's questions.
+----
++ 7: The winner get 5 points, and the loser gets 3 points.
+----
++ 8: The winner's rating goes up and the loser's rating goes down.
+----
++ 9: You can use a pencil.
+----
++ 10: You can't change your answers.
+----
+== The End
+
+---- center
+Comprehension Competition
+
+by Dr Bean
+
+(hint: press the spacebar or Backspace)
+
+----
+== Ways of working
+
+There are 2 ways of working in the class
+
+* 4 people in a group cooperating to share information
+
+and 
+
+----
+== Classwork
+
+Each week we will:
+
+* co-operate in a group of 4 to share information
+* compete in a group of 2 to get information from each other
+
+----
+== Grades
+
+* Classwork. Each week you get points:
+  * 0, if absent
+  * 1, if late for 2-partner competition
+  * 3, if you lose to your partner
+  * 4, if you draw with your partner
+  * 5, if you beat your partner
+
++* Homework. Each week listen to a sound file and fill in the missing words for 2 points.
+  * http://web.nuu.edu.tw/~greg/DictationExercises
+
++* Exams.
+  * Week 4, 9, 13, 18
+    * a 4-partner jigsaw activity with your group for 4 points
+    * 1 or 2 2-partner discussions for 5 or 10 points
+
+----
+== Grade computation
+* Classwork: 70 percent
+* Homework: 15 percent
+* Exams: 15 percent
+
+----
+== The End
