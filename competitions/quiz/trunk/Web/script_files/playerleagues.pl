@@ -58,7 +58,7 @@ uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
 my ($leaguefile, $players);
 
-for my $league ( 'emile' ) {
+for my $league ( qw/GL00006 GL00014 GL00041 emile/ ) {
 	$leaguefile = LoadFile "$leaguedirs/$league/league.yaml";
 	push @{$players->{$league}},
 		map {[ $_->{id}, $_->{name}, $_->{password} ]}
