@@ -1,7 +1,7 @@
 package FileServer::Controller::Read;
 
 # Created: 西元2010年04月18日 14時34分53秒
-# Last Edit: 2010  4月 18, 15時14分21秒
+# Last Edit: 2010  9月 10, 21時36分43秒
 # $Id$
 
 =head1 NAME
@@ -46,7 +46,8 @@ controller FileServer::Controller::Read
    under base {
 
        final action welcome {
-       $ctx->response->body( $self->welcome_message );
+	   # $ctx->stash( $ctx->model('Files')->topicforms );
+	   $ctx->stash->{template} = 'files.tt2';
        }
    }
 }
