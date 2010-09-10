@@ -33,6 +33,9 @@ use strict;
 
 my $leagues = [
 		[ qw/id name field/ ],
+	[ "GL00006", "日語文共同學制虛擬班二甲", "中級英文聽說訓練" ],
+	[ "GL00014", "日語文共同學制虛擬班二乙", "中級英文聽說訓練" ],
+	[ "GL00041", "日語文共同學制虛擬班二丙", "中級英文聽說訓練" ],
 	[ "emile", "Rousseau Cram School", "Pretentialism" ],
 	];
 
