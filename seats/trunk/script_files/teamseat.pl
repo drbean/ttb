@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  4月 29, 11時56分43秒
+# Last Edit: 2010  4月 30, 18時14分21秒
 # $Id$
 
 package Script;
@@ -27,18 +27,23 @@ use Text::Template;
 use IO::All;
 use YAML qw/LoadFile/;
 use List::MoreUtils qw/any all/;
-use Cwd;
+use Cwd; use File::Basename;
 use Net::FTP;
+use Grades;
 
 run() unless caller();
 
 sub run {
-	my $script = Script->new_with_options( league => getcwd );
+	my $script = Script->new_with_options( league => basename(getcwd) );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
 	my $leagues = "/home/drbean/class";
 	my $leagueId = $script->league;
-	my $league = LoadFile "$leagueId/league.yaml";
+	my $leagueO = League->new( id => $leagueId );
+	my $leaguedirs = $leagueO->leagues; 
+	$leagueId = basename( getcwd ) if $leagueId eq '.';
+	my $leaguePath = $leaguedirs . '/'. $leagueId;
+	my $league = LoadFile "$leaguePath/league.yaml";
 	my $session = $script->session;
 	my $latex = $script->latex;
 	my $filetype = $latex? "tex": "html";
@@ -47,7 +52,7 @@ sub run {
 	my $rooms = "$leagues/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
 	my $groupworkdirs = $league->{groupwork};
-	my $sessionpath = "$leagueId/$groupworkdirs";
+	my $sessionpath = "$leaguePath/$groupworkdirs";
 	my @subdirs = grep { -d } glob "$sessionpath/*";
 	my @series = sort { $a <=> $b } map m/^$sessionpath\/(\d+)$/, @subdirs;
 	die "No $session session\n" unless any { $_ eq $session } @series;
@@ -111,10 +116,10 @@ sub run {
 	my $teamtext = $t->fill_in( HASH => $teamchart );
 	io("$sessionpath/$session/teamseat.$filetype")->print($teamtext);
 	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
-			or die "put teamseat.html?"; 
+			or die "put teamseat.html?" if $filetype eq "html"; 
 	my $experttext = $t->fill_in( HASH => $expertchart );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
 	$web->put( "$sessionpath/$session/expertseat.$filetype",
-			"${leagueId}fex.html" ) or die "put expertseat.html?"; 
+			"${leagueId}fex.html" ) or die "put expertseat.html?" if $filetype eq "html"; 
 
 }
