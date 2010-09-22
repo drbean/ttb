@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  9月 04, 20時34分54秒
+# Last Edit: 2010  9月 18, 19時08分35秒
 # $Id$
 
 =head1 NAME
@@ -81,7 +81,7 @@ my $lineup = map { Games::Tournament::Contestant::Swiss->new(
 	id => $_->player, name => $_->profile->name, score => $_->score,
 	rating => $_->rating->find({ round => $round }) ) } @dbmembers;
 
-my @pairs = $schema->resultset('Opponents')->search({
+my @pairs = $schema->resultset('Matches')->search({
 	tournament => $id, round => $round });
 
 die "No pairing in round $round in $id tournament," unless @pairs;
@@ -93,25 +93,19 @@ my $roundconfig = $comp->config( $round );
 my ($n, $response, %seen, %formorder);
 
 for my $pair ( @pairs ) {
-    my $player = $pair->player;
-    my $opponent = $pair->opponent;
-    next if $seen{ $player };
-    next if $opponent eq 'Unpaired' or $opponent eq 'Bye';
-    $seen{$player}++;
-    $seen{$opponent}++;
-    my $playerrole = $pair->ego->role->find({
-            tournament => $id, round => $round });
-    my ( $first, $second ) = ( $playerrole and $playerrole->role eq 'White' )?
-	( $player, $opponent ): ( $opponent, $player );
-    my $form = $comp->compTopic( $round, $first ) .
-		    $comp->compForm( $round, $first );
-    push @{ $formorder{$form} }, $first;
-    $qn ||= $comp->compqn( $round, $first);
+    my $white = $pair->white;
+    my $black = $pair->black;
+    my $table = $pair->pair;
+    next if $black eq 'Bye';
+    my $form = $comp->compTopic( $round, $table ) .
+		    $comp->compForm( $round, $table );
+    push @{ $formorder{$form} }, $table;
+    $qn ||= $comp->compqn( $round, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
-    $response->{$first} = { $player => \%questions, $opponent => \%questions };
-    Bless( $response->{ $first }->{$first} )->keys( [ 1 .. $qn ] );
-    Bless( $response->{ $first }->{$second} )->keys( [ 1 .. $qn ] );
-    Bless( $response->{ $first } )->keys( [ $first, $second ] );
+    $response->{$table} = { $white => \%questions, $black => \%questions };
+    Bless( $response->{ $table }->{$white} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table }->{$black} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table } )->keys( [ $white, $black ] );
 }
 
 my @formorders = values %formorder;
