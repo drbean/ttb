@@ -21,9 +21,9 @@ BEGIN {
 	require "$::name/Schema.pm"; $::name->import;
 }
 
-my @leagueids = qw/GL00029 GL00030 GL00031 FLA0016 FLA0027 BMA0099 MIA0017 BMA0100 FLA0030/;
+my @leagueids = qw/GL00006 GL00013 CLA0023 FLA0014 MIA0014 BMA0071 FLA0017 FLA0030/;
 my $dir = ( File::Spec->splitdir(getcwd) )[-1];
-$dir = qr/^(GL000|BMA|FL|MIA)/ if $dir eq 'target';
+$dir = qr/^(GL000|BMA|FL|MIA|CLA)/ if $dir eq 'dic';
 @leagueids = grep m/$dir/, @leagueids;
 
 no strict qw/subs refs/;
