@@ -2,8 +2,8 @@
 # expected.  you have been warned
 use inc::Module::Install;
 
-name 'Web';
-all_from 'lib/Web.pm';
+name 'CompComp';
+all_from 'lib/CompComp.pm';
 
 requires 'Catalyst::Runtime' => '5.80003';
 requires 'Catalyst::Plugin::ConfigLoader';

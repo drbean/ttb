@@ -1,4 +1,4 @@
-package Web::Controller::Quiz;
+package CompComp::Controller::Quiz;
 
 use strict;
 use warnings;

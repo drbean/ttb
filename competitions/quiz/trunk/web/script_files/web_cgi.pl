@@ -6,9 +6,9 @@ use strict;
 use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Web;
+use CompComp;
 
-Web->run;
+CompComp->run;
 
 1;
 

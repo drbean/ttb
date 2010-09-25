@@ -1,4 +1,4 @@
-package Web::Schema::Result::Questions;
+package CompComp::Schema::Result::Questions;
 
 use strict;
 use warnings;
@@ -71,7 +71,7 @@ __PACKAGE__->set_primary_key("topic", "story", "id");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:56gkl7nOCoZnA1omiRu98A
 
-__PACKAGE__->has_many('played', 'Web::Schema::Result::Play', {
+__PACKAGE__->has_many('played', 'CompComp::Schema::Result::Play', {
 		'foreign.topic' => 'self.topic',
 		'foreign.story' => 'self.story',
 		'foreign.question' => 'self.id', } );

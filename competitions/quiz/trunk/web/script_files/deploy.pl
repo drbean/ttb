@@ -3,11 +3,11 @@
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
-use lib "$Bin/../../Web/lib";
+use lib "$Bin/../../CompComp/lib";
 use Config::General;
 
 BEGIN {
-	my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
+	my @MyAppConf = glob( "$Bin/../../CompComp/*.conf" );
 	die "Which of @MyAppConf is the configuration file?"
 				unless @MyAppConf == 1;
 	my %config = Config::General->new($MyAppConf[0])->getall;

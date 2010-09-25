@@ -1,4 +1,4 @@
-package Web;
+package CompComp;
 
 use strict;
 use warnings;
@@ -37,7 +37,7 @@ our $VERSION = '0.01';
 # local deployment.
 
 __PACKAGE__->config({
-	name => 'Web',
+	name => 'CompComp',
 	'Plugin::Authentication' => {
 		default_realm => 'users',
 		users => {
@@ -61,7 +61,7 @@ __PACKAGE__->setup();
 
 =head1 NAME
 
-Web - Catalyst based application
+CompComp - Catalyst based application
 
 =head1 SYNOPSIS
 
@@ -73,7 +73,7 @@ Web - Catalyst based application
 
 =head1 SEE ALSO
 
-L<Web::Controller::Root>, L<Catalyst>
+L<CompComp::Controller::Root>, L<Catalyst>
 
 =head1 AUTHOR
 

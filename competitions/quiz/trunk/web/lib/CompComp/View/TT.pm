@@ -1,4 +1,4 @@
-package Web::View::TT;
+package CompComp::View::TT;
 
 use strict;
 use base 'Catalyst::View::TT';
@@ -8,7 +8,7 @@ use base 'Catalyst::View::TT';
 __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt2',
                        # Set the location for TT files
                INCLUDE_PATH => [
-                       Web->path_to( 'root', 'src' ),
+                       CompComp->path_to( 'root', 'src' ),
                    ],
                 TIMER => 0,
                 WRAPPER => 'wrapper.tt2',
@@ -17,17 +17,17 @@ __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt2',
 
 =head1 NAME
 
-Web::View::TT - TT View for Web
+CompComp::View::TT - TT View for CompComp
 
 =head1 DESCRIPTION
 
-TT View for Web. 
+TT View for CompComp. 
 
 =head1 AUTHOR
 
 =head1 SEE ALSO
 
-L<Web>
+L<CompComp>
 
 Dr Bean
 

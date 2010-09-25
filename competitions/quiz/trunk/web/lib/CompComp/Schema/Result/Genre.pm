@@ -1,4 +1,4 @@
-package Web::Schema::Result::Roles;
+package CompComp::Schema::Result::Genre;
 
 use strict;
 use warnings;
@@ -6,11 +6,11 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "Core");
-__PACKAGE__->table("roles");
+__PACKAGE__->table("genre");
 __PACKAGE__->add_columns(
   "id",
   {
-    data_type => "INTEGER",
+    data_type => "INT",
     default_value => undef,
     is_nullable => 0,
     size => undef,
@@ -20,16 +20,19 @@ __PACKAGE__->add_columns(
     data_type => "VARCHAR",
     default_value => undef,
     is_nullable => 0,
-    size => 15,
+    size => 25,
   },
 );
-__PACKAGE__->set_primary_key("id");
+__PACKAGE__->set_primary_key("id" );
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T3ndmtJmb68WQ/4XgURYfw
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oKMh+EQxWD0CslwaUfED3A
 
-__PACKAGE__->has_many(rolebearers => 'Web::Schema::Result::Rolebearers', 'role');
+__PACKAGE__->has_many( leaguegenre => 'CompComp::Schema::Result::Leaguegenre',
+	'genre' );
+__PACKAGE__->has_many( quiz => 'CompComp::Schema::Result::Quiz', 'genre' );
+__PACKAGE__->has_many( questions => 'CompComp::Schema::Result::Questions', 'genre' );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

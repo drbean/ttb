@@ -2,5 +2,5 @@ use strict;
 use warnings;
 use Test::More tests => 1;
 
-BEGIN { use_ok 'Web::Model::DB' }
+BEGIN { use_ok 'CompComp::Model::DB' }
 

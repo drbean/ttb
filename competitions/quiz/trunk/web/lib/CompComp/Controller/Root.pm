@@ -1,4 +1,4 @@
-package Web::Controller::Root;
+package CompComp::Controller::Root;
 
 use strict;
 use warnings;
@@ -12,7 +12,7 @@ __PACKAGE__->config->{namespace} = '';
 
 =head1 NAME
 
-Web::Controller::Root - Root Controller for Web
+CompComp::Controller::Root - Root Controller for CompComp
 
 =head1 DESCRIPTION
 
