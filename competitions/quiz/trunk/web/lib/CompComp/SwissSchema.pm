@@ -1,4 +1,4 @@
-package Web::SwissSchema;
+package CompComp::SwissSchema;
 
 use strict;
 use warnings;

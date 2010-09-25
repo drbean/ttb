@@ -1,4 +1,4 @@
-package Web::Schema::Result::Members;
+package CompComp::Schema::Result::Members;
 
 use strict;
 use warnings;
@@ -29,11 +29,11 @@ __PACKAGE__->set_primary_key("league", "player");
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gJHWIeNlHGuuGlCZHyMJSQ
 
-#__PACKAGE__->has_many( role => 'Web::Schema::Result::Rolebearers',
+#__PACKAGE__->has_many( role => 'CompComp::Schema::Result::Rolebearers',
 #	'foreign.league' => 'self.league', 'foreign.player' => 'self.player'} );
-__PACKAGE__->belongs_to( profile => 'Web::Schema::Result::Players', 'player' );
-__PACKAGE__->belongs_to( league => 'Web::Schema::Result::Leagues', 'league' );
-__PACKAGE__->has_many( play => 'Web::Schema::Result::Play', {
+__PACKAGE__->belongs_to( profile => 'CompComp::Schema::Result::Players', 'player' );
+__PACKAGE__->belongs_to( league => 'CompComp::Schema::Result::Leagues', 'league' );
+__PACKAGE__->has_many( play => 'CompComp::Schema::Result::Play', {
 	'foreign.league' => 'self.league', 'foreign.player' => 'self.player'} );
 
 # You can replace this text with custom content, and it will be preserved on regeneration

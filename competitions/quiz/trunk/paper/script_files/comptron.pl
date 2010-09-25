@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  9月 18, 19時08分35秒
+# Last Edit: 2010  9月 25, 11時15分43秒
 # $Id$
 
 =head1 NAME
@@ -38,7 +38,7 @@ use 5.010;
 use strict;
 use warnings;
 use FindBin qw/$Bin/;
-use lib "$Bin/../../Web/lib";
+use lib "$Bin/../../web/lib";
 use Config::General;
 
 use YAML qw/Dump Bless/;
@@ -48,7 +48,7 @@ use Games::Tournament::Contestant::Swiss;
 use Games::Tournament::Swiss;
 
 BEGIN {
-    my @MyAppConf = glob( "$Bin/../../Web/*.conf" );
+    my @MyAppConf = glob( "$Bin/../../web/*.conf" );
     die "Which of @MyAppConf is the configuration file?"
                 unless @MyAppConf == 1;
     %::config = Config::General->new($MyAppConf[0])->getall;

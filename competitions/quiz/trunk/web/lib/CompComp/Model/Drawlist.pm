@@ -1,6 +1,6 @@
-package Web::Model::Crosstable;
+package CompComp::Model::Drawlist;
 
-# Last Edit: 2010  2月 15, 22時15分50秒
+# Last Edit: 2010  9月 25, 11時05分09秒
 # $Id$
 
 use strict;
@@ -8,7 +8,7 @@ use warnings;
 
 =head1 NAME
 
-Web::Model::Crosstable - With controller context
+CompComp::Model::Drawlist - With controller context
 
 =head1 DESCRIPTION
 
@@ -19,13 +19,19 @@ Moose role Catalyst::Component::InstancePerContext allows passing of Catalyst co
 use Moose;
 with 'Catalyst::Component::InstancePerContext';
 
-=head2 crosstable
+BEGIN { $Games::Tournament::Swiss::Config::algorithm =
+							'Games::Tournament::Swiss::Procedure::FIDE'; }
+require Games::Tournament::Contestant::Swiss;
+require Games::Tournament::Swiss;
+require Games::Tournament::Card;
 
-Create crosstable from SwissDB data. Method used by cross(table) action.
+=head2 drawlist
+
+Get draw table from SwissDB. Method used by login and score actions.
 
 =cut
  
-sub crosstable {
+sub drawlist {
 	my ($self, $c, $args) = @_;
 	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
 		$args->{league} });
@@ -81,13 +87,13 @@ sub crosstable {
 
 =head2 build_per_context_instance
 
-The method that $c->component( 'Crosstable', $args ) will call.
+The method that $c->component( 'Drawlist', $args ) will call.
 
 =cut
  
 sub build_per_context_instance {
 	my ($self, $c, $args) = @_;
-	return $self->crosstable( $c, $args );
+	return $self->drawlist( $c, $args );
 }
 
 

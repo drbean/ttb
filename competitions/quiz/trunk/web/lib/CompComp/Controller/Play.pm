@@ -1,4 +1,4 @@
-package Web::Controller::Play;
+package CompComp::Controller::Play;
 
 use strict;
 use warnings;
@@ -6,7 +6,7 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-Web::Controller::Play - Catalyst Controller
+CompComp::Controller::Play - Catalyst Controller
 
 =head1 DESCRIPTION
 

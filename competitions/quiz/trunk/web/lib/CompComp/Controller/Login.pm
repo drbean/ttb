@@ -1,6 +1,6 @@
-package Web::Controller::Login;
+package CompComp::Controller::Login;
 
-# Last Edit: 2010  2月 14, 11時10分21秒
+# Last Edit: 2010  9月 25, 11時06分21秒
 # $Id$
 
 use strict;
@@ -9,7 +9,7 @@ use parent 'Catalyst::Controller';
 
 =head1 NAME
 
-Web::Controller::Login - Catalyst Controller
+CompComp::Controller::Login - Catalyst Controller
 
 =head1 DESCRIPTION
 

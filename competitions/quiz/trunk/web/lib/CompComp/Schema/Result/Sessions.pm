@@ -1,4 +1,4 @@
-package Web::Schema::Result::Rolebearers;
+package CompComp::Schema::Result::Sessions;
 
 use strict;
 use warnings;
@@ -6,27 +6,26 @@ use warnings;
 use base 'DBIx::Class';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "Core");
-__PACKAGE__->table("rolebearers");
+__PACKAGE__->table("sessions");
 __PACKAGE__->add_columns(
-  "player",
+  "id",
+  { data_type => "CHAR", default_value => undef, is_nullable => 0, size => 72 },
+  "session_data",
   {
     data_type => "VARCHAR",
     default_value => undef,
     is_nullable => 0,
-    size => 10,
+    size => 7500,
   },
-  "role",
+  "expires",
   { data_type => "INT", default_value => undef, is_nullable => 0, size => undef },
 );
-__PACKAGE__->set_primary_key("player", "role");
+__PACKAGE__->set_primary_key("id");
 
 
 # Created by DBIx::Class::Schema::Loader v0.04005 @ 2009-09-22 15:03:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:T3TmOtj4Cz53qIYPVYXMow
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DM4MrW51PC8mPAWdPPbIsQ
 
-__PACKAGE__->belongs_to(
-        role => 'Web::Schema::Result::Roles', 'role' );
-__PACKAGE__->belongs_to( profile =>'Web::Schema::Result::Players', 'player' );
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
