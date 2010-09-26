@@ -109,7 +109,7 @@ sub list : Local {
 
 sub index : Private {
     my ( $self, $c ) = @_;
-    $c->response->body('Matched dic::Controller::Play in Play.');
+    $c->response->body('Matched CompComp::Controller::Play in Play.');
 }
 
 
