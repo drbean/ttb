@@ -8,7 +8,7 @@ use List::Util qw/sum/;
 
 =head1 NAME
 
-dic::Controller::Exercises - Catalyst Controller
+CompComp::Controller::Exercises - Catalyst Controller
 
 =head1 DESCRIPTION
 
