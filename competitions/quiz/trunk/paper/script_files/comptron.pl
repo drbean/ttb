@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010  9月 25, 11時15分43秒
+# Last Edit: 2010 10月 05, 13時52分11秒
 # $Id$
 
 =head1 NAME
@@ -47,31 +47,20 @@ use Grades;
 use Games::Tournament::Contestant::Swiss;
 use Games::Tournament::Swiss;
 
-BEGIN {
-    my @MyAppConf = glob( "$Bin/../../web/*.conf" );
-    die "Which of @MyAppConf is the configuration file?"
-                unless @MyAppConf == 1;
-    %::config = Config::General->new($MyAppConf[0])->getall;
-    $::name = $::config{name};
-    $::leagues = $::config{leagues};
-    require "$::name.pm"; $::name->import;
-    # require "$::name/SwissSchema.pm"; $::name->import;
-}
+use CompComp;
 
-no strict qw/subs refs/;
-my $connect_info = "${::name}::Model::SwissDB"->config->{connect_info};
-# my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
-my $schema = "${::name}::SwissSchema"->connect( @$connect_info );
-use strict;
+my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
+my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
+my $leagues = CompComp->config->{leagues};
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
 my $round = $scantron->round;
 my $qn = $scantron->exercise;
 
-my $league = League->new( leagues => $::leagues, id => $id );
-my $comp = CompComp->new( league => $league );
+my $league = League->new( leagues => $leagues, id => $id );
+my $comp = Compcomp->new( league => $league );
 
 my $members = $league->members;
 
