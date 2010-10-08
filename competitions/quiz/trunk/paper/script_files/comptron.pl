@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 10月 05, 13時52分11秒
+# Last Edit: 2010 10月 05, 22時05分25秒
 # $Id$
 
 =head1 NAME
@@ -91,14 +91,21 @@ for my $pair ( @pairs ) {
     push @{ $formorder{$form} }, $table;
     $qn ||= $comp->compqn( $round, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
-    $response->{$table} = { $white => \%questions, $black => \%questions };
-    Bless( $response->{ $table }->{$white} )->keys( [ 1 .. $qn ] );
-    Bless( $response->{ $table }->{$black} )->keys( [ 1 .. $qn ] );
+    $response->{$table} = {	$white => {	q => \%questions,
+						a => \%questions},
+				$black => {	q => \%questions,
+					   	a => \%questions } };
+    Bless( $response->{ $table }->{$white}->{q} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table }->{$white}->{a} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table }->{$white} )->keys( [ 'q', 'a'] );
+    Bless( $response->{ $table }->{$black}->{q} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table }->{$black}->{a} )->keys( [ 1 .. $qn ] );
+    Bless( $response->{ $table }->{$black} )->keys( [ 'q', 'a'] );
     Bless( $response->{ $table } )->keys( [ $white, $black ] );
 }
 
 my @formorders = values %formorder;
-Bless( $response )->keys([ map { sort @$_ } @formorders ]);
+Bless( $response )->keys([ map { sort { $a <=> $b } @$_ } @formorders ]);
 $YAML::UseAliases = 0;
 print Dump $response;
 
