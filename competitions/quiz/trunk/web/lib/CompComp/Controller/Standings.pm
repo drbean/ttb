@@ -1,4 +1,4 @@
-package CompComp::Controller::Standings;
+package Web::Controller::Standings;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ use List::Util qw/sum first/;
 
 =head1 NAME
 
-CompComp::Controller::Standings - Catalyst Controller
+Web::Controller::Standings - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -38,8 +38,8 @@ sub index : Local {
 	my (%playerlist, @absentees);
 	while ( my $member = $members->next ) {
 		my $player = { map { $_ => $member->profile->$_ } @columns };
-		$player->{score} = $member->score->value;
 		$player->{firstround} = $member->firstround;
+		$player->{score} = $member->score->value if $member->score ;
 		my $rating = $member->profile->rating->find({
 				tournament => $tourid, round => $rounds-1 });
 		$player->{rating} = $rating->value if $player->{firstround} <= $rounds;
