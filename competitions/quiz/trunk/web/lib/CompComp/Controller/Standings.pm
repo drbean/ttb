@@ -1,4 +1,4 @@
-package Web::Controller::Standings;
+package CompComp::Controller::Standings;
 
 use strict;
 use warnings;
@@ -8,7 +8,7 @@ use List::Util qw/sum first/;
 
 =head1 NAME
 
-Web::Controller::Standings - Catalyst Controller
+CompComp::Controller::Standings - Catalyst Controller
 
 =head1 DESCRIPTION
 
