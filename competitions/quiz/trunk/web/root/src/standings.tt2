@@ -17,7 +17,7 @@
     <td>[% player.rating %]
     [% id = player.id %]
 [% FOREACH round IN [ 1 .. rounds ] %]
-    <td>[% play.$round.$id.role %],[% play.$round.$id.opponent %],[% play.$round.$id.point %]
+    <td>[% play.$round.$id.role.substr(0,1) %],[% play.$round.$id.opponent %],[% play.$round.$id.point.substr(0,1) %]
 [% END %]
     <td>[% player.score %]
 [% END %]
