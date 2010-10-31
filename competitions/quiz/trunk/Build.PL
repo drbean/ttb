@@ -12,7 +12,7 @@ my $builder = Module::Build->new(
         'Test::More' => 0,
     },
 	script_files => [ qw[ paper/script_files/comptron.pl
-							script_files/score_comp.pl ] ],
+							paper/script_files/score_comp.pl ] ],
     add_to_cleanup      => [ 'Comp-*' ],
     create_makefile_pl => 'traditional',
 );
