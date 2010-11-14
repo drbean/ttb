@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年11月01日 09時25分27秒
-# Last Edit: 2010 11月 03, 12時06分26秒
+# Last Edit: 2010 11月 14, 20時15分32秒
 # $Id$
 
 =head1 NAME
@@ -51,7 +51,8 @@ if ( $config->{bye} ) {
 if ( $config->{late} ) {
 	my $tardies = $config->{late};
 	for my $tardy ( @$tardies ) {
-	push @ids, @$tardy unless any { $tardy eq $_ } @ids;
+	    push @ids, @$tardy unless any { $tardy eq $_ } @ids;
+	}
 }
 my @sorted = sort @ids;
 my @members = map { $members{$_} } @sorted;
