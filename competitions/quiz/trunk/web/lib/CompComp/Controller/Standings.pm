@@ -42,7 +42,7 @@ sub index : Local {
 		$player->{score} = $member->score->value if $member->score ;
 		my $rating = $member->profile->rating->find({
 				tournament => $tourid, round => $rounds-1 });
-		$player->{rating} = $rating->value if $player->{firstround} <= $rounds;
+		$player->{rating} = $rating->value if $rating;
 		$playerlist{ $player->{id} } = $player;
 		push @absentees, $player if $member->absent eq 'True';
 	}
