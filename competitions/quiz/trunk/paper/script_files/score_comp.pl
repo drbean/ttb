@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 10月 31, 19時54分01秒
+# Last Edit: 2010 11月 15, 09時08分12秒
 # $Id$
 
 =head1 NAME
@@ -44,17 +44,25 @@ my $g = Compcomp->new( league => $league );
 my $dir = $g->compcompdirs;
 my $responses = LoadFile "$dir/$round/response.yaml";
 
-my %scores = map	{
-			    my $table = $_; my $r = $responses->{$table};
-			    $table =>
-			    { map	{
-					    my $p = $r->{$_}; $_ =>
-					    sum (	values( %{$p->{q}} ),
-							values( %{$p->{a}} ) )
-					} keys %$r }
-			} keys %$responses;
+my $scores;
+for my $table ( keys %$responses ) {
+    my %tally;
+    my $topics = $responses->{$table};
+    for my $topic ( keys %$topics ) {
+	my $forms = $topics->{$topic};
+	for my $form ( keys %$forms ) {
+	    my $pair = $forms->{$form};
+	    for my $player ( keys %$pair ) {
+		my $play = $pair->{$player};
+		$tally{$player} += sum ( values( %{ $play->{q} } ),
+				values( %{ $play->{a} } ) );
+	    }
+	}
+    }
+    @{$scores->{$table}}{keys %tally} = @tally{keys %tally};
+}
 
-print Dump \%scores;
+print Dump $scores;
 
 =head1 DESCRIPTION
 
