@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 11月 14, 21時06分27秒
+# Last Edit: 2010 11月 18, 15時43分03秒
 # $Id$
 
 =head1 NAME
@@ -92,15 +92,14 @@ for my $pair ( @pairs ) {
     $qn ||= $comp->compqn( $round, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $selection = $comp->compQuizSelection( $round );
+    my $ans = $response->{ $table };
     for my $topic ( keys %$selection ) {
 	for my $form ( keys %{ $selection->{$topic} } ) {
-
-	    $response->{$table}->{$topic}->{$form} =
+	    $ans->{$topic}->{$form} =
 	    {	$white => {	q => \%questions,
 						a => \%questions},
 				$black => {	q => \%questions,
 					   	a => \%questions } };
-	    my $ans = $response->{ $table };
 	    Bless( $ans->{$topic}->{$form}->{$white}->{q} )->keys([ 1 .. $qn ]);
 	    Bless( $ans->{$topic}->{$form}->{$white}->{a} )->keys([ 1 .. $qn ]);
 	    Bless( $ans->{$topic}->{$form}->{$white} )->keys( [ 'q', 'a'] );
@@ -110,6 +109,7 @@ for my $pair ( @pairs ) {
 	    Bless( $ans->{$topic}->{$form} )->keys( [ $white, $black ] );
 	}
     }
+    $response->{ $table } = $ans;
 }
 
 my @formorders = values %formorder;
