@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 11月 15, 09時08分12秒
+# Last Edit: 2010 11月 24, 20時54分25秒
 # $Id$
 
 =head1 NAME
@@ -54,6 +54,8 @@ for my $table ( keys %$responses ) {
 	    my $pair = $forms->{$form};
 	    for my $player ( keys %$pair ) {
 		my $play = $pair->{$player};
+$DB::single=1 unless ref( $play ) eq 'HASH';
+$DB::single=1 unless ref( $play->{q} ) eq 'HASH' and ref( $play->{a} ) eq 'HASH';
 		$tally{$player} += sum ( values( %{ $play->{q} } ),
 				values( %{ $play->{a} } ) );
 	    }
