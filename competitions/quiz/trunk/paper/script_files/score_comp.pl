@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 11月 15, 09時08分12秒
+# Last Edit: 2010 12月 10, 11時03分57秒
 # $Id$
 
 =head1 NAME
@@ -42,6 +42,7 @@ my $league = League->new( leagues => $leagues, id => $id );
 my $g = Compcomp->new( league => $league );
 
 my $dir = $g->compcompdirs;
+my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
 
 my $scores;
@@ -51,11 +52,60 @@ for my $table ( keys %$responses ) {
     for my $topic ( keys %$topics ) {
 	my $forms = $topics->{$topic};
 	for my $form ( keys %$forms ) {
-	    my $pair = $forms->{$form};
-	    for my $player ( keys %$pair ) {
-		my $play = $pair->{$player};
-		$tally{$player} += sum ( values( %{ $play->{q} } ),
-				values( %{ $play->{a} } ) );
+	    my $sources = $forms->{$form};
+	    for my $source ( keys %$sources ) {
+		my $pairwork = $sources->{$source};
+		die
+		"Table ${table}'s responses to $source $topic quiz, form $form,"
+						unless defined $pairwork;
+		my @players = keys %$pairwork;
+		if ( $source eq 'free' ) {
+		    for my $player ( @players ) {
+			my $play = $pairwork->{$player};
+			$tally{$player} += sum ( values( %{ $play->{q} } ),
+					values( %{ $play->{a} } ) );
+		    }
+		}
+		elsif ( $source eq 'set' ) {
+		    my $cardfile = $config->{text};
+		    my $cards = LoadFile $cardfile or die "$cardfile?";
+		    my $quiz =
+			     $cards->{$topic}->{compcomp}->{$form}->{quiz};
+		    my ($codedvalue, $n);
+		    for my $item ( @$quiz ) {
+			if ( $item->{option} ) {
+			    my $option = $item->{option};
+			    $codedvalue->[$n++] = { map {
+				    $option->[$_] => $_ } 0..$#$option };
+			}
+			else {
+			    $codedvalue->[$n++] =
+				{ True => 'T', False => 'F' }; }
+			}
+			for my $id ( @players ) {
+			    my $score = 0;
+			    for my $n ( 0 .. $#$quiz ) {
+				my $myanswer = $pairwork->{$id}->{$n+1} //
+					'??';
+				my $theanswer = $codedvalue->[$n]->{
+					$quiz->[$n]->{answer} };
+				unless ($myanswer eq 'T' or $myanswer eq 'F') {
+				    warn
+		"${id}'s answer, $myanswer, to question " . ($n+1) .
+			    " in " . $topic . $form . " quiz at Table $table,";
+				    next;
+				}
+				unless ($theanswer eq 'T' or $theanswer eq 'F')
+				{
+				    die
+		"Right answer is $theanswer, on question " . ($n+1) .
+					    " in " . $topic . $form . " quiz?";
+				}
+				$score++ if $myanswer eq $theanswer;
+			    }
+			    $tally{$id} += $score;
+		        }
+		   }
 	    }
 	}
     }
