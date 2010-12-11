@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年11月01日 09時25分27秒
-# Last Edit: 2010 11月 23, 12時25分38秒
+# Last Edit: 2010 12月 08, 20時42分10秒
 # $Id$
 
 =head1 NAME
@@ -45,7 +45,17 @@ my $config = $g->config($round);
 my @roles = qw/White Black/;
 
 my $tables = $g->tables($round);
-my @ids = map { @$_{@roles} } @$tables;
+my @ids;
+my $n = 0;
+for my $table ( @$tables ) {
+    my @players = map { $table->{$_} } @roles;
+    for my $player ( @players ) {
+	die "$player at table $n is not a player, " unless 
+	    any { $player eq $_ } keys %members;
+	push @ids, $player;
+    }
+    $n++;
+}
 if ( $config->{bye} ) {
 	push @ids, $config->{bye};
 }
@@ -57,6 +67,7 @@ if ( $config->{late} ) {
 }
 my @sorted = sort @ids;
 my @members = map { $members{$_} } @sorted;
+die 
 
 print Dump \@members;
 
