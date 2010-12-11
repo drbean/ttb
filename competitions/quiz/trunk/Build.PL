@@ -14,6 +14,7 @@ my $builder = Module::Build->new(
 	script_files => [ qw[ paper/script_files/comptron.pl
 							paper/script_files/score_comp.pl
 							paper/script_files/lineup.pl
+							paper/script_files/rewrite_response.pl
 							] ],
     add_to_cleanup      => [ 'Comp-*' ],
     create_makefile_pl => 'traditional',
