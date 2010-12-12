@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 06, 09時39分03秒
+# Last Edit: 2010 12月 10, 12時09分22秒
 # $Id$
 
 =head1 NAME
@@ -21,24 +21,25 @@ comptron.pl -l BMA0077 -r 1 > BMA0077/comp/1/response.yaml
 
 =head1 DESCRIPTION
 
-With new ideas about Compcomp approach, eg free and set questions, it is necessary to rewrite old forms so they can be accessed by new methods. The code needs to be updated to do this.
+With new ideas about Compcomp approach, eg free and set questions, it is necessary to rewrite old forms so they can be accessed by new methods. The code needs to be updated to do this. TODO Redirecting output to file being read from doesn't work.
 
 =cut
 
 use strict;
 use warnings;
 use IO::All;
-use YAML qw/LoadFile Bless Dump/;
+use YAML qw/LoadFile Bless DumpFile/;
+use List::Util qw/max/;
 use Cwd; use File::Basename;
 
 use Moose::Autobox;
 use Grades;
 
 my $script = Grades::Script->new_with_options;
-my $id = $scantron->league || basename( getcwd );
-my $round = $scantron->round;
-my $qn = $scantron->exercise || 1;
-my $l = League->new( leagues => '/home/drbean/class', id => $dir );
+my $id = $script->league || basename( getcwd );
+my $round = $script->round;
+my $qn = $script->exercise || 1;
+my $l = League->new( leagues => '/home/drbean/class', id => $id );
 my $g = Grades->new({ league => $l });
 
 my $config = LoadFile "comp/$round/round.yaml";
@@ -70,6 +71,10 @@ for my $table ( keys %$old ) {
 			else {
 				( $black, $white ) = @player;
 			}
+			$qn = max( scalar keys %{ $free->{$white}->{q} },
+						scalar keys %{ $free->{$white}->{a} },
+						scalar keys %{ $free->{$black}->{q} },
+						scalar keys %{ $free->{$black}->{a} } );
 			Bless( $free->{$white}->{q} )->keys([1 .. $qn ]);
             Bless( $free->{$white}->{a} )->keys([1 .. $qn ]);
             Bless( $free->{$white} )->keys( [ 'q', 'a'] );
@@ -86,4 +91,22 @@ for my $table ( keys %$old ) {
 	}
 }
 
-print Dump $new;
+rename "comp/$round/response.yaml", "comp/$round/response.yaml.orig";
+DumpFile "comp/$round/response.yaml", $new;
+
+=head1 AUTHOR
+
+Dr Bean C<< <drbean at cpan, then a dot, (.), and org> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2010 Dr Bean, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+# vim: set ts=8 sts=4 sw=4 noet:
+
+
