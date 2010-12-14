@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 11月 18, 15時43分03秒
+# Last Edit: 2010 12月 14, 14時12分28秒
 # $Id$
 
 =head1 NAME
@@ -95,11 +95,9 @@ for my $pair ( @pairs ) {
     my $ans = $response->{ $table };
     for my $topic ( keys %$selection ) {
 	for my $form ( keys %{ $selection->{$topic} } ) {
-	    $ans->{$topic}->{$form} =
-	    {	$white => {	q => \%questions,
-						a => \%questions},
-				$black => {	q => \%questions,
-					   	a => \%questions } };
+	    $ans->{$topic}->{$form} = {
+		$white => { q => \%questions, a => \%questions},
+		$black => { q => \%questions, a => \%questions } };
 	    Bless( $ans->{$topic}->{$form}->{$white}->{q} )->keys([ 1 .. $qn ]);
 	    Bless( $ans->{$topic}->{$form}->{$white}->{a} )->keys([ 1 .. $qn ]);
 	    Bless( $ans->{$topic}->{$form}->{$white} )->keys( [ 'q', 'a'] );
@@ -109,6 +107,7 @@ for my $pair ( @pairs ) {
 	    Bless( $ans->{$topic}->{$form} )->keys( [ $white, $black ] );
 	}
     }
+    Bless( $ans )->keys( [ qw/macaulay douglas/ ] );
     $response->{ $table } = $ans;
 }
 
