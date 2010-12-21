@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 10, 12時09分22秒
+# Last Edit: 2010 12月 21, 11時11分39秒
 # $Id$
 
 =head1 NAME
@@ -10,7 +10,7 @@ rewrite_response.pl - Refactor response forms for newer access methods
 
 =head1 SYNOPSIS 
 
-comptron.pl -l BMA0077 -r 1 > BMA0077/comp/1/response.yaml
+comptron.pl -l BMA0077 -r 9 | sponge BMA0077/comp/9/response.yaml
 
  Options:
    -r --round         the round
@@ -21,14 +21,14 @@ comptron.pl -l BMA0077 -r 1 > BMA0077/comp/1/response.yaml
 
 =head1 DESCRIPTION
 
-With new ideas about Compcomp approach, eg free and set questions, it is necessary to rewrite old forms so they can be accessed by new methods. The code needs to be updated to do this. TODO Redirecting output to file being read from doesn't work.
+With new ideas about Compcomp approach, eg free and set questions, it is necessary to rewrite old forms so they can be accessed by new methods. The code needs to be updated to do this. Don't redirect output to file. It clobbers it before reading it. Use moreutil's sponge.
 
 =cut
 
 use strict;
 use warnings;
 use IO::All;
-use YAML qw/LoadFile Bless DumpFile/;
+use YAML qw/LoadFile Bless Dump/;
 use List::Util qw/max/;
 use Cwd; use File::Basename;
 
@@ -71,14 +71,14 @@ for my $table ( keys %$old ) {
 			else {
 				( $black, $white ) = @player;
 			}
-			$qn = max( scalar keys %{ $free->{$white}->{q} },
-						scalar keys %{ $free->{$white}->{a} },
-						scalar keys %{ $free->{$black}->{q} },
-						scalar keys %{ $free->{$black}->{a} } );
+			$qn = scalar keys %{ $free->{$white}->{q} };
 			Bless( $free->{$white}->{q} )->keys([1 .. $qn ]);
+			$qn = scalar keys %{ $free->{$white}->{a} };
             Bless( $free->{$white}->{a} )->keys([1 .. $qn ]);
             Bless( $free->{$white} )->keys( [ 'q', 'a'] );
+			$qn = scalar keys %{ $free->{$black}->{q} };
             Bless( $free->{$black}->{q} )->keys([1 .. $qn ]);
+			$qn = scalar keys %{ $free->{$black}->{a} };
             Bless( $free->{$black}->{a} )->keys([1 .. $qn ]);
             Bless( $free->{$black} )->keys( [ 'q', 'a'] );
             Bless( $free )->keys( [ $white, $black ] );
@@ -87,12 +87,12 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
+			Bless( $new->{$table} )->keys( [ qw/ikea dictation flicker/ ] );
 		}
 	}
 }
 
-rename "comp/$round/response.yaml", "comp/$round/response.yaml.orig";
-DumpFile "comp/$round/response.yaml", $new;
+print Dump $new;
 
 =head1 AUTHOR
 
