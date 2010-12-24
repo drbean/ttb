@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 21, 11時11分39秒
+# Last Edit: 2010 12月 22, 16時36分44秒
 # $Id$
 
 =head1 NAME
@@ -87,9 +87,11 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
-			Bless( $new->{$table} )->keys( [ qw/ikea dictation flicker/ ] );
+			Bless( $new->{$table} )->keys( [ qw/xmas shopping/ ] );
 		}
 	}
+	Bless( $new->{$table}->{xmas} )->keys( [ qw/easter australia/ ] ) if
+			$new->{$table}->{xmas};
 }
 
 print Dump $new;
