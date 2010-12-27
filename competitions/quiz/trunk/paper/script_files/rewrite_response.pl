@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 22, 16時36分44秒
+# Last Edit: 2010 12月 27, 13時09分17秒
 # $Id$
 
 =head1 NAME
@@ -49,7 +49,8 @@ for my $topic ( keys %$activity ) {
 	my $forms = $activity->{$topic};
 	for my $form ( keys %$forms ) {
 		my $tables = $activity->{$topic}->{$form};
-		for my $table ( @$tables ) {
+		for my $n ( keys %$tables ) {
+			my $table = $tables->{$n};
 			@color{ values %$table } = keys %$table;
 		}
 	}
@@ -87,11 +88,8 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
-			Bless( $new->{$table} )->keys( [ qw/xmas shopping/ ] );
 		}
 	}
-	Bless( $new->{$table}->{xmas} )->keys( [ qw/easter australia/ ] ) if
-			$new->{$table}->{xmas};
 }
 
 print Dump $new;
