@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年11月01日 09時25分27秒
-# Last Edit: 2010 12月 08, 20時42分10秒
+# Last Edit: 2010 12月 27, 11時56分32秒
 # $Id$
 
 =head1 NAME
@@ -47,7 +47,8 @@ my @roles = qw/White Black/;
 my $tables = $g->tables($round);
 my @ids;
 my $n = 0;
-for my $table ( @$tables ) {
+for my $n ( keys %$tables ) {
+    my $table = $tables->{$n};
     my @players = map { $table->{$_} } @roles;
     for my $player ( @players ) {
 	die "$player at table $n is not a player, " unless 
