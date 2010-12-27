@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 12月 10, 11時03分57秒
+# Last Edit: 2010 12月 26, 21時21分20秒
 # $Id$
 
 =head1 NAME
@@ -21,6 +21,7 @@ use warnings;
 use IO::All;
 use YAML qw/LoadFile Dump/;
 use List::Util qw/sum/;
+use Scalar::Util qw/looks_like_number/;
 use Cwd; use File::Basename;
 use Grades;
 
@@ -46,7 +47,7 @@ my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
 
 my $scores;
-for my $table ( keys %$responses ) {
+for my $table ( sort keys %$responses ) {
     my %tally;
     my $topics = $responses->{$table};
     for my $topic ( keys %$topics ) {
@@ -61,9 +62,22 @@ for my $table ( keys %$responses ) {
 		my @players = keys %$pairwork;
 		if ( $source eq 'free' ) {
 		    for my $player ( @players ) {
+			my $score = 0;
 			my $play = $pairwork->{$player};
-			$tally{$player} += sum ( values( %{ $play->{q} } ),
-					values( %{ $play->{a} } ) );
+			my ( $qs, $as ) = @$play{qw/q a/};
+			for my $rs ( $qs, $as ) {
+			    for my $r ( keys %$rs ) {
+				my $point = $rs->{$r};
+				unless ( looks_like_number $point ) {
+				    $point = '';
+				    warn
+"$player scored $point at table $table in $topic $form free question $r,";
+				    next;
+				}
+				$score += $point;
+			    }
+			}
+			$tally{$player} += $score;
 		    }
 		}
 		elsif ( $source eq 'set' ) {
@@ -75,31 +89,31 @@ for my $table ( keys %$responses ) {
 		    for my $item ( @$quiz ) {
 			if ( $item->{option} ) {
 			    my $option = $item->{option};
-			    $codedvalue->[$n++] = { map {
+			    $codedvalue->[++$n] = { map {
 				    $option->[$_] => $_ } 0..$#$option };
 			}
 			else {
-			    $codedvalue->[$n++] =
+			    $codedvalue->[++$n] =
 				{ True => 'T', False => 'F' }; }
 			}
 			for my $id ( @players ) {
 			    my $score = 0;
-			    for my $n ( 0 .. $#$quiz ) {
-				my $myanswer = $pairwork->{$id}->{$n+1} //
-					'??';
+			    my $answers = $pairwork->{$id};
+			    for my $n ( sort keys %$answers ) {
+				my $myanswer = $answers->{$n} // '';
 				my $theanswer = $codedvalue->[$n]->{
-					$quiz->[$n]->{answer} };
+					$quiz->[$n-1]->{answer} };
 				unless ($myanswer eq 'T' or $myanswer eq 'F') {
 				    warn
-		"${id}'s answer, $myanswer, to question " . ($n+1) .
-			    " in " . $topic . $form . " quiz at Table $table,";
+		"${id}'s answer, $myanswer to set question $n" .
+			    " in $topic $form quiz at Table $table,";
 				    next;
 				}
 				unless ($theanswer eq 'T' or $theanswer eq 'F')
 				{
 				    die
-		"Right answer is $theanswer, on question " . ($n+1) .
-					    " in " . $topic . $form . " quiz?";
+		"Right answer is $theanswer, on set question $n" .
+					    " in $topic $form quiz?";
 				}
 				$score++ if $myanswer eq $theanswer;
 			    }
