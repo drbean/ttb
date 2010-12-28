@@ -1,6 +1,6 @@
 package CompComp::Controller::Login;
 
-# Last Edit: 2010  9月 25, 11時06分21秒
+# Last Edit: 2010 12月 28, 14時43分52秒
 # $Id$
 
 use strict;
@@ -104,7 +104,7 @@ sub official : Local {
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
-			$c->response->redirect($c->uri_for("/quiz/list"));
+			$c->response->redirect($c->uri_for("/standings/index"));
 			return;
 		}
 		else {
@@ -129,7 +129,7 @@ sub membership : Local {
 	my $password = $c->request->params->{password} || "";
 	$c->session->{league} = $league;
 	$c->session->{quiz} = undef;
-	$c->response->redirect( $c->uri_for("/quiz/list") );
+	$c->response->redirect( $c->uri_for("/standings/index") );
 	return;
 }
 
