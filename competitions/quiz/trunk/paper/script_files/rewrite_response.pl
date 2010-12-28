@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 27, 13時09分17秒
+# Last Edit: 2010 12月 28, 11時03分18秒
 # $Id$
 
 =head1 NAME
@@ -91,6 +91,9 @@ for my $table ( keys %$old ) {
 		}
 	}
 }
+
+my @tables = sort {$a <=> $b} keys %$new;
+Bless( $new )->keys([ @tables ]);
 
 print Dump $new;
 
