@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 12月 26, 21時21分20秒
+# Last Edit: 2010 12月 28, 11時00分43秒
 # $Id$
 
 =head1 NAME
@@ -19,7 +19,7 @@ our $VERSION = '0.01';
 use strict;
 use warnings;
 use IO::All;
-use YAML qw/LoadFile Dump/;
+use YAML qw/LoadFile Dump Bless/;
 use List::Util qw/sum/;
 use Scalar::Util qw/looks_like_number/;
 use Cwd; use File::Basename;
@@ -47,7 +47,8 @@ my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
 
 my $scores;
-for my $table ( sort keys %$responses ) {
+my @tables = sort {$a <=> $b} keys %$responses;
+for my $table ( @tables ) {
     my %tally;
     my $topics = $responses->{$table};
     for my $topic ( keys %$topics ) {
@@ -125,6 +126,8 @@ for my $table ( sort keys %$responses ) {
     }
     @{$scores->{$table}}{keys %tally} = @tally{keys %tally};
 }
+
+Bless( $scores )->keys([ @tables ]);
 
 print Dump $scores;
 
