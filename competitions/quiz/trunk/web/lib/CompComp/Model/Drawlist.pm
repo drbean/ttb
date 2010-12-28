@@ -1,6 +1,6 @@
 package CompComp::Model::Drawlist;
 
-# Last Edit: 2010  9月 25, 11時05分09秒
+# Last Edit: 2010 12月 28, 14時46分40秒
 # $Id$
 
 use strict;
@@ -35,7 +35,7 @@ sub drawlist {
 	my ($self, $c, $args) = @_;
 	my $league = $c->model('SwissDB::Tournaments')->find({ id =>
 		$args->{league} });
-	my $round = $league->round->round;
+	my $round = $league->round->value;
 	my $opponents = $league->opponents->search({ round => $round });
 	my $roles = $league->roles->search({ round => $round });
 	my $scores = $league->scores;
