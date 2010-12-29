@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2010 12月 28, 11時00分43秒
+# Last Edit: 2010 12月 29, 11時33分00秒
 # $Id$
 
 =head1 NAME
@@ -102,8 +102,11 @@ for my $table ( @tables ) {
 			    my $answers = $pairwork->{$id};
 			    for my $n ( sort keys %$answers ) {
 				my $myanswer = $answers->{$n} // '';
-				my $theanswer = $codedvalue->[$n]->{
-					$quiz->[$n-1]->{answer} };
+				my $theanswer =
+				    $quiz->[$n-1] && $quiz->[$n-1]->{answer}?
+				    $codedvalue->[$n]->{
+						    $quiz->[$n-1]->{answer} }:
+				    '';
 				unless ($myanswer eq 'T' or $myanswer eq 'F') {
 				    warn
 		"${id}'s answer, $myanswer to set question $n" .
