@@ -1,47 +1,60 @@
 \documentclass[a4paper]{article}
 % version 0.02
 % \usepackage[T1]{fontenc}
-% \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage{multicol}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute]{textpos}
 % \usepackage[absolute,showboxes]{textpos}
-\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+\textblockorigin{0.00cm}{0.15cm} %HPDeskJet5160
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 \newcommand{\myresponse}[0]{%
-			\hspace{0.15cm}T\hspace{0.25cm} F \hspace{0.75cm}
+			\hspace{0.12cm}T\hspace{0.22cm} F
+}
+\newcommand{\mysubject}[0]{%
+			\rule{2.1cm}{0.3pt}
 }
 \newcommand{\myhalf}[1]{%
-	\begin{description}
-		\item \Large #1: \large
+		\Large #1: \large
 		Name: \rule{2.5cm}{0.3pt} Id: \rule{2.5cm}{0.3pt} 
 	
-		% \vspace{-0.3cm}
-		\begin{multicols}{3}
-		\item \hspace{0.55cm}
+		\vspace{-0.3cm}
+		\begin{multicols}{4}
+			\mysubject\\
 			1: \myresponse\\
 			2: \myresponse\\
 			3: \myresponse\\
+			\columnbreak
 			4: \myresponse\\
+			\mysubject\\
 			5: \myresponse\\
 			6: \myresponse\\
 			7: \myresponse\\
+			\columnbreak
 			8: \myresponse\\
+			\mysubject\\
 			9: \myresponse\\
-			10:\myresponse\\
+			10: \myresponse\\
+			11: \myresponse\\
+			\columnbreak
+			12: \myresponse\\
+			\mysubject\\
+			13: \myresponse\\
+			14: \myresponse\\
+			15: \myresponse\\
+			16: \myresponse\\
 		\end{multicols}
-	\end{description}
 }
-\newcommand{\mycard}[3]{%
+\newcommand{\mycard}[4]{%
 	\begin{textblock}{8}(#1)
 	\textblocklabel{picture1}
-	\vspace{0.5cm}
-	\large Comprehension competition \normalsize Table: \rule{0.5cm}{0.3pt} Subject: \rule{1.7cm}{0.3pt}\\
+	\vspace{0.2cm}
+	\Large Comprehension competition. \normalsize Table: \rule{0.5cm}{0.3pt} \hfill \begin{tiny} #4 \end{tiny}\hspace{0.5cm}
 	\end{textblock}
 	\begin{textblock}{8}(#2)
 	\textblocklabel{picture2}
-	\parbox[t][3.7cm][b]{9.6cm}{%\vfill
-		% \vspace{-0.9cm}
+	\parbox[t][3.7cm][c]{9.6cm}{%\vfill
 		\myhalf{White}
 	}
 	\end{textblock}
@@ -57,11 +70,50 @@
 \begin{document}
 % \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
 
-\mycard{0,0}{0,0.5}{0,2}		\mycard{8,0}{8,0.5}{8,2}
-\mycard{0,4}{0,4.5}{0,6}		\mycard{8,4}{8,4.5}{8,6}
-\mycard{0,8}{0,8.5}{0,10}		\mycard{8,8}{8,8.5}{8,10}
-\mycard{0,12}{0,12.5}{0,14}	\mycard{8,12}{8,12.5}{8,14}
 
-\begin{tiny}1\end{tiny}\newpage
+\mycard{0,0}{0,0.4}{0,2.3}{abc}		\mycard{8,0}{8,0.4}{8,2.3}{acb}
+\mycard{0,4}{0,4.4}{0,6.3}{bac}		\mycard{8,4}{8,4.4}{8,6.3}{bca}
+\mycard{0,8}{0,8.4}{0,10.3}{cab}	\mycard{8,8}{8,8.4}{8,10.3}{cba}
+\mycard{0,12}{0,12.4}{0,14.3}{}	\mycard{8,12}{8,12.4}{8,14.3}{}
+
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(7.59,3.92)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(7.59,7.92)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(7.59,11.92)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(2,4)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(12,4)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(2,8)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(12,8)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(2,12)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
+			%\TPshowboxesfalse
+			\begin{textblock}{1}(12,12)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			%\TPshowboxestrue
 
 \end{document}
