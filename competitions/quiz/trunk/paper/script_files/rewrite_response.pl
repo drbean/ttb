@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 28, 11時03分18秒
+# Last Edit: 2011  1月 15, 19時26分09秒
 # $Id$
 
 =head1 NAME
@@ -88,6 +88,7 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
+			Bless( $new->{$table} )->keys( [ qw/duplantier desilvey conant harllee/ ] );
 		}
 	}
 }
