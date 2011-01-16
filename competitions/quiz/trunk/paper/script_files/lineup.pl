@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年11月01日 09時25分27秒
-# Last Edit: 2010 12月 27, 11時56分32秒
+# Last Edit: 2011  1月 16, 11時23分07秒
 # $Id$
 
 =head1 NAME
@@ -68,7 +68,6 @@ if ( $config->{late} ) {
 }
 my @sorted = sort @ids;
 my @members = map { $members{$_} } @sorted;
-die 
 
 print Dump \@members;
 
