@@ -1,5 +1,5 @@
 ---
-id: A705
+id: A902
 pairs:
   1 : [02, 01]
   2 : [04, 03]
@@ -141,19 +141,25 @@ fours:
   Gray        : [04, 03, 12, 11]
   Black       : [02, 01, 10, 09]
 
-  Yellow      : [24, 23, 32, 31]
+
   Purple      : [22, 21, 30, 29]
   Green       : [20, 19, 28, 27]
   Blue        : [18, 17, 26, 25]
 
-  YellowYellow: [40, 39, 48, 47]
+
   Red         : [38, 37, 46, 45]
   Orange      : [36, 35, 44, 43]
   Brown       : [34, 33, 42, 41]
 
-  BlackBlack  : [50, 49, 60, 64]
-  BlueBlue    : [52, 51, 62, 61]
-  BrownBrown  : [54, 53, 54a, 53a]
-  GrayGray    : [56, 55, 56a, 55a]
+  WhiteWhite  : [56, 55, 64, 63]
+  PinkPink    : [54, 53, 62, 61]
+  GrayGray    : [52, 51, 60, 59]
+  BlackBlack  : [50, 49, 58, 57]
 
-  WhiteWhite  : [56b, 55b, 54b, 53b]
+  YellowYellow: [72, 71, 80, 79]
+  PurplePurple: [70, 69, 78, 77]
+  GreenGreen  : [68, 67, 76, 75]
+  BlueBlue    : [66, 65, 74, 73]
+
+  BrownBrown  : [83, 82, 81]
+  OrangeOrange: [86, 85, 84]
