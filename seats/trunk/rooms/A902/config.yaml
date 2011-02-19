@@ -86,22 +86,29 @@ colors:
   25: #c5c5c5
   26: #f0f0f0
   Black     : #c5c5c5
-  BlackBlack:
+  BlackBlack: #909090
   Blue      :
+  BlueBlue  : Blue
   Brown     :
+  BrownBrown: Brown
   DarkBlue  :
   DarkGreen :
   Gray      :
+  GrayGray  : #c5c5c5
   Green     :
+  GreenGreen: Green
   LightBlue :
   LightGreen:
   Orange    :
+  OrangeOrange: Orange
   Pink      :
+  PinkPink  : Pink
   Purple    :
+  PurplePurple: Purple
   Red       :
   White     :
   Yellow    :
-  YellowYellow:
+  YellowYellow: Yellow
 regions:
   Front:
     - Black
