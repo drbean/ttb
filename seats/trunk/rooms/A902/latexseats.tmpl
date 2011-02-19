@@ -1,7 +1,5 @@
 \documentclass[a4paper]{article}
 \usepackage{CJK}
-\newcommand{\printlandscape}{\special{landscape}}
-\printlandscape
 \usepackage[absolute,showboxes]{textpos}
 % \usepackage[usenames]{color}
 % \definecolor{Black}{cmyk}     {0  ,0.0,0.0,0.4}
@@ -22,683 +20,611 @@
 % \definecolor{BlackBlack}{cmyk}{0  ,0.0,0.0,0.4}
 % \definecolor{BlueBlue}{cmyk}      {0.2,0.0,0.0,0  }
 \TPMargin{0.2cm}
-\textblockorigin{0.30cm}{0.35cm} %
+\textblockorigin{-0.20cm}{0.25cm} %
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 \usepackage{array}
 \newcommand{\myseat}[5]{%
-\vspace{-0.1cm} \hspace{-0.5cm}
-\parbox[t][2.2cm][t]{3.5cm}{%
-\small #1 % \normalsize
-\begin{description}
-\vspace{-0.1cm}
-\item [ID:] #2
-\vspace{-0.1cm}
-\item [Team:] #3 \normalsize
-\vspace{-0.1cm}
-\item \normalsize #4 #5
-\vspace{-0.1cm}
-\end{description}
+	\vspace{-0.1cm} \hspace{-0.5cm}
+	\parbox[t][2.2cm][t]{3.5cm}{%
+		\small #1 % \normalsize
+		\begin{description}
+		\vspace{-0.1cm}
+		\item [ID:] #2
+		\vspace{-0.1cm}
+		\item [Team:] #3 \normalsize
+		\vspace{-0.1cm}
+		\item \normalsize #4 #5
+		\vspace{-0.1cm}
+		\end{description}
+	}
 }
+\newcommand{\myseatAB}[5]{%
+	\vspace{-0.1cm} \hspace{-0.5cm}
+	\parbox[t][2.26cm][t]{3.5cm}{%
+		\small #1 % \normalsize
+		\begin{description}
+		\vspace{-0.1cm}
+		\item [ID:] #2
+		\vspace{-0.1cm}
+		\item [Team:] #3 \normalsize
+		\vspace{-0.1cm}
+		\item \normalsize #4 #5
+		\vspace{-0.1cm}
+		\end{description}
+	}
+}
+\newcommand{\myseatCD}[5]{%
+\vspace{-0.1cm} \hspace{-0.5cm}
+	\parbox[t][2.2cm][t]{3.5cm}{%
+		\small #1 % \normalsize
+		\begin{description}
+		\vspace{-0.1cm}
+		\item [ID:] #2
+		\vspace{-0.1cm}
+		\item [Team:] #3 \normalsize
+		\vspace{-0.1cm}
+		\item \normalsize #4 #5
+		\vspace{-0.1cm}
+		\end{description}
+	}
 }
 \begin{document}
 
 \begin{CJK}{UTF8}{cyberbit}
 
-\begin{textblock}{2.5}(2.0,0)
+\begin{textblock}{2.0}(0.0,0)
 \textblocklabel{08}
 \textblockcolor{[* $s08{team} *]}
-\myseat{08}{[* $s08{id} *]}{[* $s08{team} *]}{[* $s08{name} *]}{[* $s08{rating} *]}
+\myseatAB{08}{[* $s08{id} *]}{[* $s08{team} *]}{[* $s08{name} *]}{[* $s08{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,0)
+\begin{textblock}{2.0}(2.0,0)
 \textblocklabel{07}
 \textblockcolor{[* $s07{team} *]}
-\myseat{07}{[* $s07{id} *]}{[* $s07{team} *]}{[* $s07{name} *]}{[* $s07{rating} *]}
+\myseatAB{07}{[* $s07{id} *]}{[* $s07{team} *]}{[* $s07{name} *]}{[* $s07{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,0)
+\begin{textblock}{2.0}(4.03,0)
 \textblocklabel{06}
 \textblockcolor{[* $s06{team} *]}
-\myseat{06}{[* $s06{id} *]}{[* $s06{team} *]}{[* $s06{name} *]}{[* $s06{rating} *]}
+\myseatAB{06}{[* $s06{id} *]}{[* $s06{team} *]}{[* $s06{name} *]}{[* $s06{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,0)
+\begin{textblock}{2.0}(6.03,0)
 \textblocklabel{05}
 \textblockcolor{[* $s05{team} *]}
-\myseat{05}{[* $s05{id} *]}{[* $s05{team} *]}{[* $s05{name} *]}{[* $s05{rating} *]}
+\myseatAB{05}{[* $s05{id} *]}{[* $s05{team} *]}{[* $s05{name} *]}{[* $s05{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,0)
+\begin{textblock}{2.0}(8.06,0)
 \textblocklabel{04}
 \textblockcolor{[* $s04{team} *]}
-\myseat{04}{[* $s04{id} *]}{[* $s04{team} *]}{[* $s04{name} *]}{[* $s04{rating} *]}
+\myseatAB{04}{[* $s04{id} *]}{[* $s04{team} *]}{[* $s04{name} *]}{[* $s04{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,0)
+\begin{textblock}{2.0}(10.06,0)
 \textblocklabel{03}
 \textblockcolor{[* $s03{team} *]}
-\myseat{03}{[* $s03{id} *]}{[* $s03{team} *]}{[* $s03{name} *]}{[* $s03{rating} *]}
+\myseatAB{03}{[* $s03{id} *]}{[* $s03{team} *]}{[* $s03{name} *]}{[* $s03{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,0)
+\begin{textblock}{2.0}(12.09,0)
 \textblocklabel{02}
 \textblockcolor{[* $s02{team} *]}
-\myseat{02}{[* $s02{id} *]}{[* $s02{team} *]}{[* $s02{name} *]}{[* $s02{rating} *]}
+\myseatAB{02}{[* $s02{id} *]}{[* $s02{team} *]}{[* $s02{name} *]}{[* $s02{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,0)
+\begin{textblock}{2.0}(14.09,0)
 \textblocklabel{01}
 \textblockcolor{[* $s01{team} *]}
-\myseat{01}{[* $s01{id} *]}{[* $s01{team} *]}{[* $s01{name} *]}{[* $s01{rating} *]}
+\myseatAB{01}{[* $s01{id} *]}{[* $s01{team} *]}{[* $s01{name} *]}{[* $s01{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2.0,1.4)
+\begin{textblock}{2.0}(0.0,1.4)
 \textblocklabel{16}
 \textblockcolor{[* $s16{team} *]}
-\myseat{16}{[* $s16{id} *]}{[* $s16{team} *]}{[* $s16{name} *]}{[* $s16{rating} *]}
+\myseatCD{16}{[* $s16{id} *]}{[* $s16{team} *]}{[* $s16{name} *]}{[* $s16{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,1.4)
+\begin{textblock}{2.0}(2.0,1.4)
 \textblocklabel{15}
 \textblockcolor{[* $s15{team} *]}
-\myseat{15}{[* $s15{id} *]}{[* $s15{team} *]}{[* $s15{name} *]}{[* $s15{rating} *]}
+\myseatCD{15}{[* $s15{id} *]}{[* $s15{team} *]}{[* $s15{name} *]}{[* $s15{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,1.4)
+\begin{textblock}{2.0}(4.03,1.4)
 \textblocklabel{14}
 \textblockcolor{[* $s14{team} *]}
-\myseat{14}{[* $s14{id} *]}{[* $s14{team} *]}{[* $s14{name} *]}{[* $s14{rating} *]}
+\myseatCD{14}{[* $s14{id} *]}{[* $s14{team} *]}{[* $s14{name} *]}{[* $s14{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,1.4)
+\begin{textblock}{2.0}(6.03,1.4)
 \textblocklabel{13}
 \textblockcolor{[* $s13{team} *]}
-\myseat{13}{[* $s13{id} *]}{[* $s13{team} *]}{[* $s13{name} *]}{[* $s13{rating} *]}
+\myseatCD{13}{[* $s13{id} *]}{[* $s13{team} *]}{[* $s13{name} *]}{[* $s13{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,1.4)
+\begin{textblock}{2.0}(8.06,1.4)
 \textblocklabel{12}
 \textblockcolor{[* $s12{team} *]}
-\myseat{12}{[* $s12{id} *]}{[* $s12{team} *]}{[* $s12{name} *]}{[* $s12{rating} *]}
+\myseatCD{12}{[* $s12{id} *]}{[* $s12{team} *]}{[* $s12{name} *]}{[* $s12{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,1.4)
+\begin{textblock}{2.0}(10.06,1.4)
 \textblocklabel{11}
 \textblockcolor{[* $s11{team} *]}
-\myseat{11}{[* $s11{id} *]}{[* $s11{team} *]}{[* $s11{name} *]}{[* $s11{rating} *]}
+\myseatCD{11}{[* $s11{id} *]}{[* $s11{team} *]}{[* $s11{name} *]}{[* $s11{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,1.4)
+\begin{textblock}{2.0}(12.09,1.4)
 \textblocklabel{10}
 \textblockcolor{[* $s10{team} *]}
-\myseat{10}{[* $s10{id} *]}{[* $s10{team} *]}{[* $s10{name} *]}{[* $s10{rating} *]}
+\myseatCD{10}{[* $s10{id} *]}{[* $s10{team} *]}{[* $s10{name} *]}{[* $s10{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,1.4)
+\begin{textblock}{2.0}(14.09,1.4)
 \textblocklabel{09}
 \textblockcolor{[* $s09{team} *]}
-\myseat{09}{[* $s09{id} *]}{[* $s09{team} *]}{[* $s09{name} *]}{[* $s09{rating} *]}
+\myseatCD{09}{[* $s09{id} *]}{[* $s09{team} *]}{[* $s09{name} *]}{[* $s09{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2.0,2.8)
+\begin{textblock}{2.0}(0.0,2.8)
 \textblocklabel{24}
 \textblockcolor{[* $s24{team} *]}
-\myseat{24}{[* $s24{id} *]}{[* $s24{team} *]}{[* $s24{name} *]}{[* $s24{rating} *]}
+\myseatAB{24}{[* $s24{id} *]}{[* $s24{team} *]}{[* $s24{name} *]}{[* $s24{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,2.8)
+\begin{textblock}{2.0}(2.0,2.8)
 \textblocklabel{23}
 \textblockcolor{[* $s23{team} *]}
-\myseat{23}{[* $s23{id} *]}{[* $s23{team} *]}{[* $s23{name} *]}{[* $s23{rating} *]}
+\myseatAB{23}{[* $s23{id} *]}{[* $s23{team} *]}{[* $s23{name} *]}{[* $s23{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,2.8)
+\begin{textblock}{2.0}(4.03,2.8)
 \textblocklabel{22}
 \textblockcolor{[* $s22{team} *]}
-\myseat{22}{[* $s22{id} *]}{[* $s22{team} *]}{[* $s22{name} *]}{[* $s22{rating} *]}
+\myseatAB{22}{[* $s22{id} *]}{[* $s22{team} *]}{[* $s22{name} *]}{[* $s22{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,2.8)
+\begin{textblock}{2.0}(6.03,2.8)
 \textblocklabel{21}
 \textblockcolor{[* $s21{team} *]}
-\myseat{21}{[* $s21{id} *]}{[* $s21{team} *]}{[* $s21{name} *]}{[* $s21{rating} *]}
+\myseatAB{21}{[* $s21{id} *]}{[* $s21{team} *]}{[* $s21{name} *]}{[* $s21{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,2.8)
+\begin{textblock}{2.0}(8.06,2.8)
 \textblocklabel{20}
 \textblockcolor{[* $s20{team} *]}
-\myseat{20}{[* $s20{id} *]}{[* $s20{team} *]}{[* $s20{name} *]}{[* $s20{rating} *]}
+\myseatAB{20}{[* $s20{id} *]}{[* $s20{team} *]}{[* $s20{name} *]}{[* $s20{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,2.8)
+\begin{textblock}{2.0}(10.06,2.8)
 \textblocklabel{19}
 \textblockcolor{[* $s19{team} *]}
-\myseat{19}{[* $s19{id} *]}{[* $s19{team} *]}{[* $s19{name} *]}{[* $s19{rating} *]}
+\myseatAB{19}{[* $s19{id} *]}{[* $s19{team} *]}{[* $s19{name} *]}{[* $s19{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,2.8)
+\begin{textblock}{2.0}(12.09,2.8)
 \textblocklabel{18}
 \textblockcolor{[* $s18{team} *]}
-\myseat{18}{[* $s18{id} *]}{[* $s18{team} *]}{[* $s18{name} *]}{[* $s18{rating} *]}
+\myseatAB{18}{[* $s18{id} *]}{[* $s18{team} *]}{[* $s18{name} *]}{[* $s18{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,2.8)
+\begin{textblock}{2.0}(14.09,2.8)
 \textblocklabel{17}
 \textblockcolor{[* $s17{team} *]}
-\myseat{17}{[* $s17{id} *]}{[* $s17{team} *]}{[* $s17{name} *]}{[* $s17{rating} *]}
+\myseatAB{17}{[* $s17{id} *]}{[* $s17{team} *]}{[* $s17{name} *]}{[* $s17{rating} *]}
 \end{textblock}
 
 
-% \begin{textblock}{2.5}(2.0,4.2)
+% \begin{textblock}{2.0}(0.0,4.2)
 % \textblocklabel{32}
 % \textblockcolor{[* $s32{team} *]}
 % \myseat{32}{[* $s32{id} *]}{[* $s32{team} *]}{[* $s32{name} *]}{[* $s32{rating} *]}
 % \end{textblock}
 % 
-% \begin{textblock}{2.5}(4.5,4.2)
+% \begin{textblock}{2.0}(2.0,4.2)
 % \textblocklabel{31}
 % \textblockcolor{[* $s31{team} *]}
 % \myseat{31}{[* $s31{id} *]}{[* $s31{team} *]}{[* $s31{name} *]}{[* $s31{rating} *]}
 % \end{textblock}
 
-\begin{textblock}{2.5}(7.0,4.2)
+\begin{textblock}{2.0}(4.03,4.2)
 \textblocklabel{30}
 \textblockcolor{[* $s30{team} *]}
 \myseat{30}{[* $s30{id} *]}{[* $s30{team} *]}{[* $s30{name} *]}{[* $s30{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,4.2)
+\begin{textblock}{2.0}(6.03,4.2)
 \textblocklabel{29}
 \textblockcolor{[* $s29{team} *]}
 \myseat{29}{[* $s29{id} *]}{[* $s29{team} *]}{[* $s29{name} *]}{[* $s29{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,4.2)
+\begin{textblock}{2.0}(8.06,4.2)
 \textblocklabel{28}
 \textblockcolor{[* $s28{team} *]}
 \myseat{28}{[* $s28{id} *]}{[* $s28{team} *]}{[* $s28{name} *]}{[* $s28{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,4.2)
+\begin{textblock}{2.0}(10.06,4.2)
 \textblocklabel{27}
 \textblockcolor{[* $s27{team} *]}
 \myseat{27}{[* $s27{id} *]}{[* $s27{team} *]}{[* $s27{name} *]}{[* $s27{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,4.2)
+\begin{textblock}{2.0}(12.09,4.2)
 \textblocklabel{26}
 \textblockcolor{[* $s26{team} *]}
 \myseat{26}{[* $s26{id} *]}{[* $s26{team} *]}{[* $s26{name} *]}{[* $s26{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,4.2)
+\begin{textblock}{2.0}(14.09,4.2)
 \textblocklabel{25}
 \textblockcolor{[* $s25{team} *]}
 \myseat{25}{[* $s25{id} *]}{[* $s25{team} *]}{[* $s25{name} *]}{[* $s25{rating} *]}
 \end{textblock}
 
 
-% \begin{textblock}{2.5}(2.0,5.6)
+% \begin{textblock}{2.0}(0.0,5.6)
 % \textblocklabel{40}
 % \textblockcolor{[* $s40{team} *]}
-% \myseat{40}{[* $s40{id} *]}{[* $s40{team} *]}{[* $s40{name} *]}{[* $s40{rating} *]}
+% \myseatAB{40}{[* $s40{id} *]}{[* $s40{team} *]}{[* $s40{name} *]}{[* $s40{rating} *]}
 % \end{textblock}
 % 
-% \begin{textblock}{2.5}(4.5,5.6)
+% \begin{textblock}{2.0}(2.0,5.6)
 % \textblocklabel{39}
 % \textblockcolor{[* $s39{team} *]}
-% \myseat{39}{[* $s39{id} *]}{[* $s39{team} *]}{[* $s39{name} *]}{[* $s39{rating} *]}
+% \myseatAB{39}{[* $s39{id} *]}{[* $s39{team} *]}{[* $s39{name} *]}{[* $s39{rating} *]}
 % \end{textblock}
 
-\begin{textblock}{2.5}(7.0,5,6)
+\begin{textblock}{2.0}(4.03,5,6)
 \textblocklabel{38}
 \textblockcolor{[* $s38{team} *]}
-\myseat{38}{[* $s38{id} *]}{[* $s38{team} *]}{[* $s38{name} *]}{[* $s38{rating} *]}
+\myseatAB{38}{[* $s38{id} *]}{[* $s38{team} *]}{[* $s38{name} *]}{[* $s38{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,5,6)
+\begin{textblock}{2.0}(6.03,5,6)
 \textblocklabel{37}
 \textblockcolor{[* $s37{team} *]}
-\myseat{37}{[* $s37{id} *]}{[* $s37{team} *]}{[* $s37{name} *]}{[* $s37{rating} *]}
+\myseatAB{37}{[* $s37{id} *]}{[* $s37{team} *]}{[* $s37{name} *]}{[* $s37{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,5.6)
+\begin{textblock}{2.0}(8.06,5.6)
 \textblocklabel{36}
 \textblockcolor{[* $s36{team} *]}
-\myseat{36}{[* $s36{id} *]}{[* $s36{team} *]}{[* $s36{name} *]}{[* $s36{rating} *]}
+\myseatAB{36}{[* $s36{id} *]}{[* $s36{team} *]}{[* $s36{name} *]}{[* $s36{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,5.6)
+\begin{textblock}{2.0}(10.06,5.6)
 \textblocklabel{35}
 \textblockcolor{[* $s35{team} *]}
-\myseat{35}{[* $s35{id} *]}{[* $s35{team} *]}{[* $s35{name} *]}{[* $s35{rating} *]}
+\myseatAB{35}{[* $s35{id} *]}{[* $s35{team} *]}{[* $s35{name} *]}{[* $s35{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,5.6)
+\begin{textblock}{2.0}(12.09,5.6)
 \textblocklabel{34}
 \textblockcolor{[* $s34{team} *]}
-\myseat{34}{[* $s34{id} *]}{[* $s34{team} *]}{[* $s34{name} *]}{[* $s34{rating} *]}
+\myseatAB{34}{[* $s34{id} *]}{[* $s34{team} *]}{[* $s34{name} *]}{[* $s34{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,5.6)
+\begin{textblock}{2.0}(14.09,5.6)
 \textblocklabel{33}
 \textblockcolor{[* $s33{team} *]}
-\myseat{33}{[* $s33{id} *]}{[* $s33{team} *]}{[* $s33{name} *]}{[* $s33{rating} *]}
+\myseatAB{33}{[* $s33{id} *]}{[* $s33{team} *]}{[* $s33{name} *]}{[* $s33{rating} *]}
 \end{textblock}
 
 
-% \begin{textblock}{2.5}(2.0,7.0)
+% \begin{textblock}{2.0}(0.0,7.0)
 % \textblocklabel{48}
 % \textblockcolor{[* $s48{team} *]}
 % \myseat{48}{[* $s48{id} *]}{[* $s48{team} *]}{[* $s48{name} *]}{[* $s48{rating} *]}
 % \end{textblock}
 % 
-% \begin{textblock}{2.5}(4.5,7.0)
+% \begin{textblock}{2.0}(2.0,7.0)
 % \textblocklabel{47}
 % \textblockcolor{[* $s47{team} *]}
 % \myseat{47}{[* $s47{id} *]}{[* $s47{team} *]}{[* $s47{name} *]}{[* $s47{rating} *]}
 % \end{textblock}
 
-\begin{textblock}{2.5}(7.0,7.0)
+\begin{textblock}{2.0}(4.03,7.0)
 \textblocklabel{46}
 \textblockcolor{[* $s46{team} *]}
 \myseat{46}{[* $s46{id} *]}{[* $s46{team} *]}{[* $s46{name} *]}{[* $s46{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,7.0)
+\begin{textblock}{2.0}(6.03,7.0)
 \textblocklabel{45}
 \textblockcolor{[* $s45{team} *]}
 \myseat{45}{[* $s45{id} *]}{[* $s45{team} *]}{[* $s45{name} *]}{[* $s45{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,7.0)
+\begin{textblock}{2.0}(8.06,7.0)
 \textblocklabel{44}
 \textblockcolor{[* $s44{team} *]}
 \myseat{44}{[* $s44{id} *]}{[* $s44{team} *]}{[* $s44{name} *]}{[* $s44{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,7.0)
+\begin{textblock}{2.0}(10.06,7.0)
 \textblocklabel{43}
 \textblockcolor{[* $s43{team} *]}
 \myseat{43}{[* $s43{id} *]}{[* $s43{team} *]}{[* $s43{name} *]}{[* $s43{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,7.0)
+\begin{textblock}{2.0}(12.09,7.0)
 \textblocklabel{42}
 \textblockcolor{[* $s42{team} *]}
 \myseat{42}{[* $s42{id} *]}{[* $s42{team} *]}{[* $s42{name} *]}{[* $s42{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,7.0)
+\begin{textblock}{2.0}(14.09,7.0)
 \textblocklabel{41}
 \textblockcolor{[* $s41{team} *]}
 \myseat{41}{[* $s41{id} *]}{[* $s41{team} *]}{[* $s41{name} *]}{[* $s41{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2.0,8.4)
+\begin{textblock}{2.0}(0.0,8.4)
 \textblocklabel{56}
 \textblockcolor{[* $s56{team} *]}
-\myseat{56}{[* $s56{id} *]}{[* $s56{team} *]}{[* $s56{name} *]}{[* $s56{rating} *]}
+\myseatAB{56}{[* $s56{id} *]}{[* $s56{team} *]}{[* $s56{name} *]}{[* $s56{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,8.4)
+\begin{textblock}{2.0}(2.0,8.4)
 \textblocklabel{55}
 \textblockcolor{[* $s55{team} *]}
-\myseat{55}{[* $s55{id} *]}{[* $s55{team} *]}{[* $s55{name} *]}{[* $s55{rating} *]}
+\myseatAB{55}{[* $s55{id} *]}{[* $s55{team} *]}{[* $s55{name} *]}{[* $s55{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,8.4)
+\begin{textblock}{2.0}(4.03,8.4)
 \textblocklabel{54}
 \textblockcolor{[* $s54{team} *]}
-\myseat{54}{[* $s54{id} *]}{[* $s54{team} *]}{[* $s54{name} *]}{[* $s54{rating} *]}
+\myseatAB{54}{[* $s54{id} *]}{[* $s54{team} *]}{[* $s54{name} *]}{[* $s54{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,8.4)
+\begin{textblock}{2.0}(6.03,8.4)
 \textblocklabel{53}
 \textblockcolor{[* $s53{team} *]}
-\myseat{53}{[* $s53{id} *]}{[* $s53{team} *]}{[* $s53{name} *]}{[* $s53{rating} *]}
+\myseatAB{53}{[* $s53{id} *]}{[* $s53{team} *]}{[* $s53{name} *]}{[* $s53{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,8.4)
+\begin{textblock}{2.0}(8.06,8.4)
 \textblocklabel{52}
 \textblockcolor{[* $s52{team} *]}
-\myseat{52}{[* $s52{id} *]}{[* $s52{team} *]}{[* $s52{name} *]}{[* $s52{rating} *]}
+\myseatAB{52}{[* $s52{id} *]}{[* $s52{team} *]}{[* $s52{name} *]}{[* $s52{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,8.4)
+\begin{textblock}{2.0}(10.06,8.4)
 \textblocklabel{51}
 \textblockcolor{[* $s51{team} *]}
-\myseat{51}{[* $s51{id} *]}{[* $s51{team} *]}{[* $s51{name} *]}{[* $s51{rating} *]}
+\myseatAB{51}{[* $s51{id} *]}{[* $s51{team} *]}{[* $s51{name} *]}{[* $s51{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2,5}(17.0,8.4)
+\begin{textblock}{2,0}(12.09,8.4)
 \textblocklabel{50}
 \textblockcolor{[* $s50{team} *]}
-\myseat{50}{[* $s50{id} *]}{[* $s50{team} *]}{[* $s50{name} *]}{[* $s50{rating} *]}
+\myseatAB{50}{[* $s50{id} *]}{[* $s50{team} *]}{[* $s50{name} *]}{[* $s50{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,8.4)
+\begin{textblock}{2.0}(14.09,8.4)
 \textblocklabel{49}
 \textblockcolor{[* $s49{team} *]}
-\myseat{49}{[* $s49{id} *]}{[* $s49{team} *]}{[* $s49{name} *]}{[* $s49{rating} *]}
+\myseatAB{49}{[* $s49{id} *]}{[* $s49{team} *]}{[* $s49{name} *]}{[* $s49{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2.0,9.8)
+\begin{textblock}{2.0}(0.0,9.8)
 \textblocklabel{64}
 \textblockcolor{[* $s64{team} *]}
 \myseat{64}{[* $s64{id} *]}{[* $s64{team} 
 *]}{[* $s64{name} *]}{[* $s64{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,9.8)
+\begin{textblock}{2.0}(2.0,9.8)
 \textblocklabel{63}
 \textblockcolor{[* $s63{team} *]}
 \myseat{63}{[* $s63{id} *]}{[* $s63{team} 
 *]}{[* $s63{name} *]}{[* $s63{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,9.8)
+\begin{textblock}{2.0}(4.03,9.8)
 \textblocklabel{62}
 \textblockcolor{[* $s62{team} *]}
 \myseat{62}{[* $s62{id} *]}{[* $s62{team} 
 *]}{[* $s62{name} *]}{[* $s62{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,9.8)
+\begin{textblock}{2.0}(6.03,9.8)
 \textblocklabel{61}
 \textblockcolor{[* $s61{team} *]}
 \myseat{61}{[* $s61{id} *]}{[* $s61{team} 
 *]}{[* $s61{name} *]}{[* $s61{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,9.8)
+\begin{textblock}{2.0}(8.06,9.8)
 \textblocklabel{60}
 \textblockcolor{[* $s60{team} *]}
 \myseat{60}{[* $s60{id} *]}{[* $s60{team} *]}{[* $s60{name} *]}{[* $s60{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,9.8)
+\begin{textblock}{2.0}(10.06,9.8)
 \textblocklabel{59}
 \textblockcolor{[* $s59{team} *]}
 \myseat{59}{[* $s59{id} *]}{[* $s59{team} *]}{[* $s59{name} *]}{[* $s59{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,9.8)
+\begin{textblock}{2.0}(12.09,9.8)
 \textblocklabel{58}
 \textblockcolor{[* $s58{team} *]}
 \myseat{58}{[* $s58{id} *]}{[* $s58{team} *]}{[* $s58{name} *]}{[* $s58{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,9.8)
+\begin{textblock}{2.0}(14.09,9.8)
 \textblocklabel{57}
 \textblockcolor{[* $s57{team} *]}
 \myseat{57}{[* $s57{id} *]}{[* $s57{team} *]}{[* $s57{name} *]}{[* $s57{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2,11.2)
+\begin{textblock}{2.0}(0.0,11.2)
 \textblocklabel{72}
 \textblockcolor{[* $s72{team} *]}
-\myseat{72}{[* $s72{id} *]}{[* $s72{team} *]}{[* $s72{name} *]}{[* $s72{rating} *]}
+\myseatAB{72}{[* $s72{id} *]}{[* $s72{team} *]}{[* $s72{name} *]}{[* $s72{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,11.2)
+\begin{textblock}{2.0}(2.0,11.2)
 \textblocklabel{71}
 \textblockcolor{[* $s71{team} *]}
-\myseat{71}{[* $s71{id} *]}{[* $s71{team} *]}{[* $s71{name} *]}{[* $s71{rating} *]}
+\myseatAB{71}{[* $s71{id} *]}{[* $s71{team} *]}{[* $s71{name} *]}{[* $s71{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,11.2)
+\begin{textblock}{2.0}(4.03,11.2)
 \textblocklabel{70}
 \textblockcolor{[* $s70{team} *]}
-\myseat{70}{[* $s70{id} *]}{[* $s70{team} *]}{[* $s70{name} *]}{[* $s70{rating} *]}
+\myseatAB{70}{[* $s70{id} *]}{[* $s70{team} *]}{[* $s70{name} *]}{[* $s70{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,11.2)
+\begin{textblock}{2.0}(6.03,11.2)
 \textblocklabel{69}
 \textblockcolor{[* $s69{team} *]}
-\myseat{69}{[* $s69{id} *]}{[* $s69{team} *]}{[* $s69{name} *]}{[* $s69{rating} *]}
+\myseatAB{69}{[* $s69{id} *]}{[* $s69{team} *]}{[* $s69{name} *]}{[* $s69{rating} *]}
 \end{textblock}
 
-
-\begin{textblock}{2.5}(12.0,11.2)
+\begin{textblock}{2.0}(8.06,11.2)
 \textblocklabel{68}
 \textblockcolor{[* $s68{team} *]}
-\myseat{68}{[* $s68{id} *]}{[* $s68{team} *]}{[* $s68{name} *]}{[* $s68{rating} *]}
+\myseatAB{68}{[* $s68{id} *]}{[* $s68{team} *]}{[* $s68{name} *]}{[* $s68{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,11.2)
+\begin{textblock}{2.0}(10.06,11.2)
 \textblocklabel{67}
 \textblockcolor{[* $s67{team} *]}
-\myseat{67}{[* $s67{id} *]}{[* $s67{team} *]}{[* $s67{name} *]}{[* $s67{rating} *]}
+\myseatAB{67}{[* $s67{id} *]}{[* $s67{team} *]}{[* $s67{name} *]}{[* $s67{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,11.2)
+\begin{textblock}{2.0}(12.09,11.2)
 \textblocklabel{66}
 \textblockcolor{[* $s66{team} *]}
-\myseat{66}{[* $s66{id} *]}{[* $s66{team} *]}{[* $s66{name} *]}{[* $s66{rating} *]}
+\myseatAB{66}{[* $s66{id} *]}{[* $s66{team} *]}{[* $s66{name} *]}{[* $s66{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,11.2)
+\begin{textblock}{2.0}(14.09,11.2)
 \textblocklabel{65}
 \textblockcolor{[* $s65{team} *]}
-\myseat{65}{[* $s65{id} *]}{[* $s65{team} *]}{[* $s65{name} *]}{[* $s65{rating} *]}
+\myseatAB{65}{[* $s65{id} *]}{[* $s65{team} *]}{[* $s65{name} *]}{[* $s65{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2.0,9.8)
-\textblocklabel{64}
-\textblockcolor{[* $s64{team} *]}
-\myseat{64}{[* $s64{id} *]}{[* $s64{team} 
-*]}{[* $s64{name} *]}{[* $s64{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(4.5,9.8)
-\textblocklabel{63}
-\textblockcolor{[* $s63{team} *]}
-\myseat{63}{[* $s63{id} *]}{[* $s63{team} 
-*]}{[* $s63{name} *]}{[* $s63{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(7.0,9.8)
-\textblocklabel{62}
-\textblockcolor{[* $s62{team} *]}
-\myseat{62}{[* $s62{id} *]}{[* $s62{team} 
-*]}{[* $s62{name} *]}{[* $s62{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(9.5,9.8)
-\textblocklabel{61}
-\textblockcolor{[* $s61{team} *]}
-\myseat{61}{[* $s61{id} *]}{[* $s61{team} 
-*]}{[* $s61{name} *]}{[* $s61{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(12.0,9.8)
-\textblocklabel{60}
-\textblockcolor{[* $s60{team} *]}
-\myseat{60}{[* $s60{id} *]}{[* $s60{team} *]}{[* $s60{name} *]}{[* $s60{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(14.5,9.8)
-\textblocklabel{59}
-\textblockcolor{[* $s59{team} *]}
-\myseat{59}{[* $s59{id} *]}{[* $s59{team} *]}{[* $s59{name} *]}{[* $s59{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(17.0,9.8)
-\textblocklabel{58}
-\textblockcolor{[* $s58{team} *]}
-\myseat{58}{[* $s58{id} *]}{[* $s58{team} *]}{[* $s58{name} *]}{[* $s58{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(19.5,9.8)
-\textblocklabel{57}
-\textblockcolor{[* $s57{team} *]}
-\myseat{57}{[* $s57{id} *]}{[* $s57{team} *]}{[* $s57{name} *]}{[* $s57{rating} *]}
-\end{textblock}
-
-
-\begin{textblock}{2.5}(2,11.2)
-\textblocklabel{72}
-\textblockcolor{[* $s72{team} *]}
-\myseat{72}{[* $s72{id} *]}{[* $s72{team} *]}{[* $s72{name} *]}{[* $s72{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(4.5,11.2)
-\textblocklabel{71}
-\textblockcolor{[* $s71{team} *]}
-\myseat{71}{[* $s71{id} *]}{[* $s71{team} *]}{[* $s71{name} *]}{[* $s71{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(7.0,11.2)
-\textblocklabel{70}
-\textblockcolor{[* $s70{team} *]}
-\myseat{70}{[* $s70{id} *]}{[* $s70{team} *]}{[* $s70{name} *]}{[* $s70{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(9.5,11.2)
-\textblocklabel{69}
-\textblockcolor{[* $s69{team} *]}
-\myseat{69}{[* $s69{id} *]}{[* $s69{team} *]}{[* $s69{name} *]}{[* $s69{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(12.0,11.2)
-\textblocklabel{68}
-\textblockcolor{[* $s68{team} *]}
-\myseat{68}{[* $s68{id} *]}{[* $s68{team} *]}{[* $s68{name} *]}{[* $s68{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(14.5,11.2)
-\textblocklabel{67}
-\textblockcolor{[* $s67{team} *]}
-\myseat{67}{[* $s67{id} *]}{[* $s67{team} *]}{[* $s67{name} *]}{[* $s67{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(17.0,11.2)
-\textblocklabel{66}
-\textblockcolor{[* $s66{team} *]}
-\myseat{66}{[* $s66{id} *]}{[* $s66{team} *]}{[* $s66{name} *]}{[* $s66{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(19.5,11.2)
-\textblocklabel{65}
-\textblockcolor{[* $s65{team} *]}
-\myseat{65}{[* $s65{id} *]}{[* $s65{team} *]}{[* $s65{name} *]}{[* $s65{rating} *]}
-\end{textblock}
-
-
-\begin{textblock}{2.5}(2.0,9.8)
+\begin{textblock}{2.0}(0.0,12.6)
 \textblocklabel{80}
 \textblockcolor{[* $s80{team} *]}
 \myseat{80}{[* $s80{id} *]}{[* $s80{team} 
 *]}{[* $s80{name} *]}{[* $s80{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(4.5,9.8)
+\begin{textblock}{2.0}(2.0,12.6)
 \textblocklabel{79}
 \textblockcolor{[* $s79{team} *]}
 \myseat{79}{[* $s79{id} *]}{[* $s79{team} 
 *]}{[* $s79{name} *]}{[* $s79{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(7.0,9.8)
+\begin{textblock}{2.0}(4.03,12.6)
 \textblocklabel{78}
 \textblockcolor{[* $s78{team} *]}
 \myseat{78}{[* $s78{id} *]}{[* $s78{team} 
 *]}{[* $s78{name} *]}{[* $s78{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,9.8)
+\begin{textblock}{2.0}(6.03,12.6)
 \textblocklabel{77}
 \textblockcolor{[* $s77{team} *]}
 \myseat{77}{[* $s77{id} *]}{[* $s77{team} 
 *]}{[* $s77{name} *]}{[* $s77{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,9.8)
+\begin{textblock}{2.0}(8.06,12.6)
 \textblocklabel{76}
 \textblockcolor{[* $s76{team} *]}
-\myseat{76}{[* $s76{id} *]}{[* $s76{team} *]}{[* $s60{name} *]}{[* $s76{rating} *]}
+\myseat{76}{[* $s76{id} *]}{[* $s76{team} *]}{[* $s76{name} *]}{[* $s76{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,9.8)
+\begin{textblock}{2.0}(10.06,12.6)
 \textblocklabel{75}
 \textblockcolor{[* $s75{team} *]}
 \myseat{75}{[* $s75{id} *]}{[* $s75{team} *]}{[* $s75{name} *]}{[* $s75{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,9.8)
+\begin{textblock}{2.0}(12.09,12.6)
 \textblocklabel{74}
 \textblockcolor{[* $s74{team} *]}
 \myseat{74}{[* $s74{id} *]}{[* $s74{team} *]}{[* $s74{name} *]}{[* $s74{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,9.8)
+\begin{textblock}{2.0}(14.09,12.6)
 \textblocklabel{73}
 \textblockcolor{[* $s73{team} *]}
 \myseat{73}{[* $s73{id} *]}{[* $s73{team} *]}{[* $s73{name} *]}{[* $s73{rating} *]}
 \end{textblock}
 
 
-\begin{textblock}{2.5}(2,11.2)
-\textblocklabel{88}
-\textblockcolor{[* $s88{team} *]}
-\myseat{88}{[* $s88{id} *]}{[* $s88{team} *]}{[* $s88{name} *]}{[* $s88{rating} *]}
-\end{textblock}
+% \begin{textblock}{2.0}(0.0,14.0)
+% \textblocklabel{88}
+% \textblockcolor{[* $s88{team} *]}
+% \myseat{88}{[* $s88{id} *]}{[* $s88{team} *]}{[* $s88{name} *]}{[* $s88{rating} *]}
+% \end{textblock}
+% 
+% \begin{textblock}{2.0}(2.0,14.0)
+% \textblocklabel{87}
+% \textblockcolor{[* $s87{team} *]}
+% \myseat{87}{[* $s87{id} *]}{[* $s87{team} *]}{[* $s87{name} *]}{[* $s87{rating} *]}
+% \end{textblock}
 
-\begin{textblock}{2.5}(4.5,11.2)
-\textblocklabel{87}
-\textblockcolor{[* $s87{team} *]}
-\myseat{87}{[* $s87{id} *]}{[* $s87{team} *]}{[* $s87{name} *]}{[* $s87{rating} *]}
-\end{textblock}
-
-\begin{textblock}{2.5}(7.0,11.2)
+\begin{textblock}{2.0}(4.03,14.0)
 \textblocklabel{86}
 \textblockcolor{[* $s86{team} *]}
 \myseat{86}{[* $s86{id} *]}{[* $s86{team} *]}{[* $s86{name} *]}{[* $s86{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(9.5,11.2)
+\begin{textblock}{2.0}(6.03,14.0)
 \textblocklabel{85}
 \textblockcolor{[* $s85{team} *]}
 \myseat{85}{[* $s85{id} *]}{[* $s85{team} *]}{[* $s85{name} *]}{[* $s85{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(12.0,11.2)
+\begin{textblock}{2.0}(8.06,14.0)
 \textblocklabel{84}
 \textblockcolor{[* $s84{team} *]}
 \myseat{84}{[* $s84{id} *]}{[* $s84{team} *]}{[* $s84{name} *]}{[* $s84{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(14.5,11.2)
+\begin{textblock}{2.0}(10.06,14.0)
 \textblocklabel{83}
 \textblockcolor{[* $s83{team} *]}
 \myseat{83}{[* $s83{id} *]}{[* $s83{team} *]}{[* $s83{name} *]}{[* $s83{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(17.0,11.2)
+\begin{textblock}{2.0}(12.09,14.0)
 \textblocklabel{82}
 \textblockcolor{[* $s82{team} *]}
 \myseat{82}{[* $s82{id} *]}{[* $s82{team} *]}{[* $s82{name} *]}{[* $s82{rating} *]}
 \end{textblock}
 
-\begin{textblock}{2.5}(19.5,11.2)
+\begin{textblock}{2.0}(14.09,14.0)
 \textblocklabel{81}
 \textblockcolor{[* $s81{team} *]}
 \myseat{81}{[* $s81{id} *]}{[* $s81{team} *]}{[* $s81{name} *]}{[* $s81{rating} *]}
 \end{textblock}
 
-\begin{textblock}{5}(2.0,4.2)
+
+\begin{textblock}{4}(0.0,4.2)
 \textblocklabel{title}
 \textblockcolor{}
-\parbox[t][6.6cm][t]{9.5cm}{%
-\large Room 705, [* $league *]: [* $session *] session, Week: 
+\parbox[t][7.3cm][t]{4.5cm}{%
+\large Room 705, [* $league *]: session [* $session *], Week: 
 \vspace{-0.3cm} \hspace{-0.5cm}
 }
 \end{textblock}
