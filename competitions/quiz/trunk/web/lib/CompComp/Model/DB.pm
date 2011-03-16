@@ -7,10 +7,9 @@ use Catalyst;
 use CompComp;
 
 my $name = CompComp->config->{database};
-my $db = CompComp->path_to( 'db', $name );
 
 my $connect_info;
-if ( $^O eq 'linux' ) { $connect_info = [ "dbi:SQLite:$db", '', '', ]; }
+if ( $^O eq 'linux' ) { $connect_info = [ "dbi:Pg:dbname=$name", '', '', ]; }
 
 __PACKAGE__->config(
     schema_class => 'CompComp::Schema',

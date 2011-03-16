@@ -6,11 +6,10 @@ use base 'Catalyst::Model::DBIC::Schema';
 use Catalyst;
 use CompComp;
 
-my $name = CompComp->config->{database};
-my $db = CompComp->path_to( '../../swiss/web/db', $name );
+my $name = CompComp->config->{swiss_database};
 
 my $connect_info;
-if ( $^O eq 'linux' ) { $connect_info = [ "dbi:SQLite:$db", '', '', ]; }
+if ( $^O eq 'linux' ) { $connect_info = [ "dbi:Pg:dbname=$name", '', '', ]; }
 
 __PACKAGE__->config(
     schema_class => 'CompComp::SwissSchema',
