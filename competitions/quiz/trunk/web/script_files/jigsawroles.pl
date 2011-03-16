@@ -36,10 +36,10 @@ my ($groupfile, $players, @allLeaguerolebearers);
 my @roleIds = ( 'A'..'D' );
 
 for my $id ( @leagueids ) {
-	my $league = LoadFile "/home/drbean/class/$id/league.yaml";
+	my $league = LoadFile "/home/drbean/992/$id/league.yaml";
 	my $members = $league->{member};
 	my $lastsession = $league->{series}->[-1];
-	my $groups = LoadFile "/home/drbean/class/$id/$lastsession/jigsaw.yaml";
+	my $groups = LoadFile "/home/drbean/992/$id/$lastsession/jigsaw.yaml";
 	my $players = $schema->resultset('Player');
 	my %rolebearers;
 	for my $group ( keys %$groups ) {
