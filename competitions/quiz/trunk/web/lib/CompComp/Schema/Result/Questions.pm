@@ -31,10 +31,10 @@ __PACKAGE__->add_columns(
   },
   "id",
   {
-    data_type => "VARCHAR",
+    data_type => "SMALLINT",
     default_value => undef,
     is_nullable => 0,
-    size => 15,
+    size => undef,
   },
   "description",
   {
