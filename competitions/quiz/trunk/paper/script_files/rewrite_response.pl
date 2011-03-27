@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  1月 15, 21時28分25秒
+# Last Edit: 2011  3月 27, 18時45分30秒
 # $Id$
 
 =head1 NAME
@@ -39,7 +39,7 @@ my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
 my $round = $script->round;
 my $qn = $script->exercise || 1;
-my $l = League->new( leagues => '/home/drbean/class', id => $id );
+my $l = League->new( leagues => '/home/drbean/992', id => $id );
 my $g = Grades->new({ league => $l });
 
 my $config = LoadFile "comp/$round/round.yaml";
@@ -49,8 +49,9 @@ for my $topic ( keys %$activity ) {
 	my $forms = $activity->{$topic};
 	for my $form ( keys %$forms ) {
 		my $tables = $activity->{$topic}->{$form};
-		for my $n ( keys %$tables ) {
-			my $table = $tables->{$n};
+		my $groups = $config->{group};
+		for my $n ( @$tables ) {
+			my $table = $groups->{$n};
 			@color{ values %$table } = keys %$table;
 		}
 	}
@@ -88,6 +89,7 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
+			Bless( $new->{$table} )->keys( [ qw/stress adventure/ ] );
 		}
 	}
 }
