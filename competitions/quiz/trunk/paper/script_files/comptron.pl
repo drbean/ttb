@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2010 12月 14, 14時12分28秒
+# Last Edit: 2011  3月 27, 18時38分55秒
 # $Id$
 
 =head1 NAME
@@ -86,9 +86,9 @@ for my $pair ( @pairs ) {
     my $black = $pair->black;
     my $table = $pair->pair;
     next if $black eq 'Bye';
-    my $form = $comp->compTopic( $round, $table ) .
-		    $comp->compForm( $round, $table );
-    push @{ $formorder{$form} }, $table;
+    #my $form = $comp->compTopic( $round, $table ) .
+    #    	    $comp->compForm( $round, $table );
+    #push @{ $formorder{$form} }, $table;
     $qn ||= $comp->compqn( $round, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $selection = $comp->compQuizSelection( $round );
@@ -107,7 +107,7 @@ for my $pair ( @pairs ) {
 	    Bless( $ans->{$topic}->{$form} )->keys( [ $white, $black ] );
 	}
     }
-    Bless( $ans )->keys( [ qw/macaulay douglas/ ] );
+    Bless( $ans )->keys( [ qw/swiss adventure/ ] );
     $response->{ $table } = $ans;
 }
 
