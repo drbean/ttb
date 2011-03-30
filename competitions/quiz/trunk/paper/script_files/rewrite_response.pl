@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  3月 27, 18時45分30秒
+# Last Edit: 2011  3月 30, 10時42分56秒
 # $Id$
 
 =head1 NAME
@@ -89,7 +89,7 @@ for my $table ( keys %$old ) {
 				$player[1] => { 1 => undef } };
 			Bless( $set )->keys( [ $white, $black ] );
 			$new->{$table}->{$topic}->{$form}->{ set } = $set;
-			Bless( $new->{$table} )->keys( [ qw/stress adventure/ ] );
+			Bless( $new->{$table} )->keys( [ qw/category 1-8 18-25/ ] );
 		}
 	}
 }
