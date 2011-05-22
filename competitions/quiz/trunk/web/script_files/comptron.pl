@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 22, 17時19分31秒
+# Last Edit: 2011  5月 22, 17時20分44秒
 # $Id$
 
 =head1 NAME
@@ -116,7 +116,7 @@ for my $pair ( @pairs ) {
 	    $ans->{$topic}->{$form}->{ set } = $set;
 	}
     }
-    Bless( $ans )->keys( [ qw/10 1 24/ ] );
+    # Bless( $ans )->keys( [ qw/10 1 24/ ] );
     $response->{ $table } = $ans;
 }
 
