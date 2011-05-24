@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 22, 17時20分44秒
+# Last Edit: 2011  5月 24, 17時17分25秒
 # $Id$
 
 =head1 NAME
@@ -23,7 +23,7 @@ comptron.pl -l BMA0077 -r 1 -x 3 > BMA0077/classwork/1/response.yaml
  Options:
    -x --exercise      number of questions from exam
    -r --round         the round
-   -o --one	      the old round in the whole league season
+   -o --one	      the old round (overall round) in the whole league season
    -l --league        league's id
  
 
@@ -58,7 +58,7 @@ my $leagues = CompComp->config->{leagues};
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
 my $round = $scantron->round;
-my $oldround = $scantron->one;
+my $overallround = $scantron->one || $round;
 my $qn = $scantron->exercise;
 
 ( my $leagueid = $id ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
@@ -78,7 +78,7 @@ my @pairs = $schema->resultset('Matches')->search({
 
 die "No pairing in round $round in $id tournament," unless @pairs;
 
-my $roundconfig = $comp->config( $oldround );
+my $roundconfig = $comp->config( $overallround );
 # my $tables = $comp->pairs( $round );
 # @pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
 
@@ -92,9 +92,9 @@ for my $pair ( @pairs ) {
     #my $form = $comp->compTopic( $round, $table ) .
     #    	    $comp->compForm( $round, $table );
     #push @{ $formorder{$form} }, $table;
-    $qn ||= $comp->compqn( $oldround, $table );
+    $qn ||= $comp->compqn( $overallround, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
-    my $selection = $comp->compQuizSelection( $oldround );
+    my $selection = $comp->compQuizSelection( $overallround );
     my $ans = $response->{ $table };
     for my $topic ( keys %$selection ) {
 	for my $form ( keys %{ $selection->{$topic} } ) {
