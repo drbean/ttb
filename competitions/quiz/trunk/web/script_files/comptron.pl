@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 29, 14時36分41秒
+# Last Edit: 2011  5月 29, 14時38分23秒
 # $Id$
 
 =head1 NAME
@@ -97,7 +97,7 @@ for my $pair ( @pairs ) {
     my $ans = $response->{ $table };
     my $free = {
 	    $white => { q => { 1 => undef} , a => { 1 => undef} },
-	    $black => {}
+	    $black => { q => { 1 => undef} , a => { 1 => undef} }
 	     };
     Bless( $free->{$white} )->keys( [ 'q', 'a'] );
     Bless( $free->{$black} )->keys( [ 'q', 'a'] );
