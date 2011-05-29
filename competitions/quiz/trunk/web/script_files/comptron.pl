@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 29, 14時27分42秒
+# Last Edit: 2011  5月 29, 14時36分41秒
 # $Id$
 
 =head1 NAME
@@ -95,19 +95,17 @@ for my $pair ( @pairs ) {
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $selection = $comp->activities( $overallround );
     my $ans = $response->{ $table };
-    my $set = {
-	    $white => { q => \%questions, a => \%questions},
-	    $black => { q => \%questions, a => \%questions }
+    my $free = {
+	    $white => { q => { 1 => undef} , a => { 1 => undef} },
+	    $black => {}
 	     };
-    Bless( $set->{$white}->{q} )->keys([ 1 .. $qn ]);
-    Bless( $set->{$white}->{a} )->keys([ 1 .. $qn ]);
-    Bless( $set->{$white} )->keys( [ 'q', 'a'] );
-    Bless( $set->{$black}->{q} )->keys([ 1 .. $qn ]);
-    Bless( $set->{$black}->{a} )->keys([ 1 .. $qn ]);
-    Bless( $set->{$black} )->keys( [ 'q', 'a'] );
-    Bless( $set )->keys( [ $white, $black ] );
-    my $free = { $white => { 1 => undef },
-		$black => { 1 => undef } };
+    Bless( $free->{$white} )->keys( [ 'q', 'a'] );
+    Bless( $free->{$black} )->keys( [ 'q', 'a'] );
+    Bless( $free )->keys( [ $white, $black ] );
+    my $set = { $white => \%questions,
+		$black => \%questions };
+    Bless( $set->{$white} )->keys([ 1 .. $qn ]);
+    Bless( $free->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
     $ans->{$topic}->{$form}->{ free } = $free;
     $ans->{$topic}->{$form}->{ set } = $set;
