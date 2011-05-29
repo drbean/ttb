@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 29, 13時42分42秒
+# Last Edit: 2011  5月 29, 13時50分51秒
 # $Id$
 
 =head1 NAME
@@ -89,33 +89,28 @@ for my $pair ( @pairs ) {
     my $black = $pair->black;
     my $table = $pair->pair;
     next if $black eq 'Bye';
-    my $form = $comp->compTopic( $overallround, $table ) .
-        	    $comp->compForm( $overallround, $table );
-    push @{ $formorder{$form} }, $table;
+    my $topic = $comp->compTopic( $overallround, $table );
+    my $form = $comp->compForm( $overallround, $table );
     $qn ||= $comp->compqn( $overallround, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $selection = $comp->activities( $overallround );
     my $ans = $response->{ $table };
-    for my $topic ( keys %$selection ) {
-	for my $form ( keys %{ $selection->{$topic} } ) {
-	    my $free = {
-		    $white => { q => \%questions, a => \%questions},
-		    $black => { q => \%questions, a => \%questions }
-		     };
-	    Bless( $free->{$white}->{q} )->keys([ 1 .. $qn ]);
-	    Bless( $free->{$white}->{a} )->keys([ 1 .. $qn ]);
-	    Bless( $free->{$white} )->keys( [ 'q', 'a'] );
-	    Bless( $free->{$black}->{q} )->keys([ 1 .. $qn ]);
-	    Bless( $free->{$black}->{a} )->keys([ 1 .. $qn ]);
-	    Bless( $free->{$black} )->keys( [ 'q', 'a'] );
-	    Bless( $free )->keys( [ $white, $black ] );
-	    my $set = { $white => { 1 => undef },
-			$black => { 1 => undef } };
-	    Bless( $set )->keys( [ $white, $black ] );
-	    $ans->{$topic}->{$form}->{ free } = $free;
-	    $ans->{$topic}->{$form}->{ set } = $set;
-	}
-    }
+    my $free = {
+	    $white => { q => \%questions, a => \%questions},
+	    $black => { q => \%questions, a => \%questions }
+	     };
+    Bless( $free->{$white}->{q} )->keys([ 1 .. $qn ]);
+    Bless( $free->{$white}->{a} )->keys([ 1 .. $qn ]);
+    Bless( $free->{$white} )->keys( [ 'q', 'a'] );
+    Bless( $free->{$black}->{q} )->keys([ 1 .. $qn ]);
+    Bless( $free->{$black}->{a} )->keys([ 1 .. $qn ]);
+    Bless( $free->{$black} )->keys( [ 'q', 'a'] );
+    Bless( $free )->keys( [ $white, $black ] );
+    my $set = { $white => { 1 => undef },
+		$black => { 1 => undef } };
+    Bless( $set )->keys( [ $white, $black ] );
+    $ans->{$topic}->{$form}->{ free } = $free;
+    $ans->{$topic}->{$form}->{ set } = $set;
     # Bless( $ans )->keys( [ qw/10 1 24/ ] );
     $response->{ $table } = $ans;
 }
