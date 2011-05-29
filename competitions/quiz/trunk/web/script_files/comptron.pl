@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 29, 14時38分23秒
+# Last Edit: 2011  5月 29, 14時41分36秒
 # $Id$
 
 =head1 NAME
@@ -105,7 +105,7 @@ for my $pair ( @pairs ) {
     my $set = { $white => \%questions,
 		$black => \%questions };
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
-    Bless( $free->{$black} )->keys([ 1 .. $qn ]);
+    Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
     $ans->{$topic}->{$form}->{ free } = $free;
     $ans->{$topic}->{$form}->{ set } = $set;
