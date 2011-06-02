@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2011  3月 16, 18時05分00秒
+# Last Edit: 2011  6月 02, 16時02分40秒
 # $Id$
 
 =head1 NAME
@@ -72,7 +72,7 @@ for my $table ( @tables ) {
 				unless ( looks_like_number $point ) {
 				    $point = '';
 				    warn
-"$player scored $point at table $table in $topic $form free question $r,";
+	"Table $table, $topic $form FREE quiz, $player, qn $r: $point,";
 				    next;
 				}
 				$score += $point;
@@ -109,8 +109,7 @@ for my $table ( @tables ) {
 				    '';
 				unless ($myanswer eq 'T' or $myanswer eq 'F') {
 				    warn
-		"${id}'s answer, $myanswer to set question $n" .
-			    " in $topic $form quiz at Table $table,";
+	    "Table $table, $topic $form set quiz, $id, qn $n: $myanswer,";
 				    next;
 				}
 				unless ($theanswer eq 'T' or $theanswer eq 'F')
