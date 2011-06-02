@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  5月 29, 14時41分36秒
+# Last Edit: 2011  6月 02, 19時48分01秒
 # $Id$
 
 =head1 NAME
@@ -94,7 +94,6 @@ for my $pair ( @pairs ) {
     $qn ||= $comp->compqn( $overallround, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $selection = $comp->activities( $overallround );
-    my $ans = $response->{ $table };
     my $free = {
 	    $white => { q => { 1 => undef} , a => { 1 => undef} },
 	    $black => { q => { 1 => undef} , a => { 1 => undef} }
@@ -107,10 +106,9 @@ for my $pair ( @pairs ) {
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
     Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
-    $ans->{$topic}->{$form}->{ free } = $free;
-    $ans->{$topic}->{$form}->{ set } = $set;
-    # Bless( $ans )->keys( [ qw/10 1 24/ ] );
-    $response->{ $table } = $ans;
+    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
+    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+    Bless($response->{$table})->keys([qw/undertaker oakland spirits wardead/]);
 }
 
 my @formorders = values %formorder;
