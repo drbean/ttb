@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 02, 19時48分01秒
+# Last Edit: 2011  6月 03, 10時50分30秒
 # $Id$
 
 =head1 NAME
@@ -82,12 +82,13 @@ my $roundconfig = $comp->config( $overallround );
 # my $tables = $comp->pairs( $round );
 # @pairs = sort { $a->ego->score <=> $b->ego->score } @pairs;
 
-my ($n, $response, %seen, %formorder);
+my ($n, $response, %seen, @tableN);
 
 for my $pair ( @pairs ) {
     my $white = $pair->white;
     my $black = $pair->black;
     my $table = $pair->pair;
+    push @tableN, $table;
     next if $black eq 'Bye';
     my $topic = $comp->compTopic( $overallround, $table );
     my $form = $comp->compForm( $overallround, $table );
@@ -108,11 +109,10 @@ for my $pair ( @pairs ) {
     Bless( $set )->keys( [ $white, $black ] );
     $response->{ $table }->{$topic}->{$form}->{ free } = $free;
     $response->{ $table }->{$topic}->{$form}->{ set } = $set;
-    Bless($response->{$table})->keys([qw/undertaker oakland spirits wardead/]);
 }
 
-my @formorders = values %formorder;
-# Bless( $response )->keys([ map { sort { $a <=> $b } @$_ } @formorders ]);
+Bless($response->{$_})->keys([qw/undertaker oakland spirits wardead/]) for
+	    @tableN;
 $YAML::UseAliases = 0;
 
 my @tables = sort {$a <=> $b} keys %$response;
