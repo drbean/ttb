@@ -1,0 +1,38 @@
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.10cm}{1.00cm}
+\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
+\usepackage{texdraw}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+
+\newcommand{\mycard}{%
+\begin{tabular}[t]{|p{2cm}|p{2cm}|p{4cm}||p{2cm}|p{4cm}|l|}
+Name & Id & Evaluation of my smile & Name & Id & Evaluation of my smile \\
+ & & Fake \_\_\_Genuine \_\_\_ & & & Fake \_\_\_Genuine \_\_\_ \\
+ \hline
+ & & Fake \_\_\_Genuine \_\_\_ & & & Fake \_\_\_Genuine \_\_\_ \\
+ \hline
+ & & Fake \_\_\_Genuine \_\_\_ & & & Fake \_\_\_Genuine \_\_\_ \\
+ \hline
+ & & Fake \_\_\_Genuine \_\_\_ & & & Fake \_\_\_Genuine \_\_\_ \\
+ \hline
+ & & Fake \_\_\_Genuine \_\_\_ & & & Fake \_\_\_Genuine \_\_\_ \\
+ \hline
+\end{tabular}
+}
+\begin{document}
+
+\begin{textblock}{8}(0,0)
+\textblocklabel{picture1}
+\end{textblock}
+\mycard
+\end{document}
+
+\begin{textblock}{8}(0,8)
+\textblocklabel{picture1}
+\end{textblock}
+\mycard
+\end{document}
