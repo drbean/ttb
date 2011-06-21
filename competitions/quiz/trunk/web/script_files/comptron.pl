@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 21, 21時06分29秒
+# Last Edit: 2011  6月 21, 21時08分22秒
 # $Id$
 
 =head1 NAME
@@ -102,9 +102,9 @@ for my $pair ( @pairs ) {
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
     Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
-    my $topics = $comp->compTopic( $overallround, $table );
+    my $topics = $comp->compTopics( $overallround, $table );
     for my $topic ( @$topics ) {
-	my $forms = $comp->compForm( $overallround, $table );
+	my $forms = $comp->compForms( $overallround, $table );
 	for my $form ( @$forms ) {
 	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
 	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
