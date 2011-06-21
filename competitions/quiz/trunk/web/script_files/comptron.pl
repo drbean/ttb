@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 21, 17時36分36秒
+# Last Edit: 2011  6月 21, 21時06分29秒
 # $Id$
 
 =head1 NAME
@@ -89,11 +89,7 @@ for my $pair ( @pairs ) {
     my $black = $pair->black;
     my $table = $pair->pair;
     next if $black eq 'Bye';
-    my $topic = $comp->compTopic( $overallround, $table );
-    my $form = $comp->compForm( $overallround, $table );
-    $qn ||= $comp->compqn( $overallround, $table );
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
-    my $selection = $comp->activities( $overallround );
     my $free = {
 	    $white => { q => { 1 => undef} , a => { 1 => undef} },
 	    $black => { q => { 1 => undef} , a => { 1 => undef} }
@@ -106,10 +102,16 @@ for my $pair ( @pairs ) {
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
     Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
-    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
-    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+    my $topics = $comp->compTopic( $overallround, $table );
+    for my $topic ( @$topics ) {
+	my $forms = $comp->compForm( $overallround, $table );
+	for my $form ( @$forms ) {
+	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
+	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+	}
+    }
     Bless($response->{$table})->keys([qw/ingredients market huang/ ]);
-    # Bless($response->{$table}->{huang})->keys([ 2, 1 ]);
+    Bless($response->{$table}->{huang})->keys([ 2, 1 ]);
 }
 
 my @formorders = values %formorder;
