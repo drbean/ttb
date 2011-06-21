@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 03, 16時04分07秒
+# Last Edit: 2011  6月 21, 17時31分40秒
 # $Id$
 
 =head1 NAME
@@ -108,7 +108,8 @@ for my $pair ( @pairs ) {
     Bless( $set )->keys( [ $white, $black ] );
     $response->{ $table }->{$topic}->{$form}->{ free } = $free;
     $response->{ $table }->{$topic}->{$form}->{ set } = $set;
-    # Bless($response->{$table})->keys([qw/undertaker oakland spirits wardead/ ]);
+    Bless($response->{$table})->keys([qw/ingredients market huang/ ]);
+    Bless($response->{$table}->{huang})->keys([ 2, 1 ]);
 }
 
 my @formorders = values %formorder;
@@ -116,7 +117,7 @@ my @formorders = values %formorder;
 $YAML::UseAliases = 0;
 
 my @tables = sort {$a <=> $b} keys %$response;
-Bless( $response )->keys([ @tables ]);
+Bless( $response )->keys([ reverse @tables ]);
 
 print Dump $response;
 
