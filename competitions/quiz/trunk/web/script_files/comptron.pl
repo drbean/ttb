@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 21, 21時10分18秒
+# Last Edit: 2011  6月 21, 21時13分12秒
 # $Id$
 
 =head1 NAME
@@ -111,7 +111,7 @@ for my $pair ( @pairs ) {
 	}
     }
     Bless($response->{$table})->keys([qw/ingredients market huang/ ]);
-    Bless($response->{$table}->{huang})->keys([ 2, 1 ]);
+    # Bless($response->{$table}->{huang})->keys([ 2, 1 ]);
 }
 
 my @formorders = values %formorder;
