@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 22, 13時52分03秒
+# Last Edit: 2011  6月 22, 16時51分25秒
 # $Id$
 
 =head1 NAME
@@ -107,9 +107,8 @@ for my $pair ( @pairs ) {
 	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
 	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
 	}
-	Bless($response->{$table}->{$topic})->keys([2, 1]) if $topic eq 'huang';
     }
-    Bless($response->{$table})->keys([qw/ingredients market huang/ ]);
+    Bless($response->{$table})->keys([qw/brock selassie tremonte/ ]);
 }
 
 my @formorders = values %formorder;
