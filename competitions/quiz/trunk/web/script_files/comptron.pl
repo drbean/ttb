@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 23, 07時50分34秒
+# Last Edit: 2011  6月 23, 07時55分25秒
 # $Id$
 
 =head1 NAME
@@ -91,9 +91,11 @@ for my $pair ( @pairs ) {
     next if $black eq 'Bye';
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $free = {
-	    $white => { q => { 1 => undef} , },
-	    $black => { q => { 1 => undef} , }
+	    $white => { q => { 1 => undef} , a -> { 1 => undef } },
+	    $black => { q => { 1 => undef} , a -> { 1 => undef } }
 	     };
+    Bless( $free->{$white} )->keys( [ 'q', 'a' ] );
+    Bless( $free->{$black} )->keys( [ 'q', 'a' ] );
     Bless( $free )->keys( [ $white, $black ] );
     my $set = { $white => \%questions,
 		$black => \%questions };
@@ -105,7 +107,7 @@ for my $pair ( @pairs ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
 	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
-	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+	    # $response->{ $table }->{$topic}->{$form}->{ set } = $set;
 	}
     }
     # Bless($response->{$table})->keys([qw/brock selassie tremonte/ ]);
