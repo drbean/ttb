@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2010  4月 30, 18時14分21秒
+# Last Edit: 2011 Sep 06, 04:22:00 PM
 # $Id$
 
 package Script;
@@ -37,11 +37,12 @@ sub run {
 	my $script = Script->new_with_options( league => basename(getcwd) );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
-	my $leagues = "/home/drbean/class";
+	my $leagues = "/home/drbean/001";
 	my $leagueId = $script->league;
-	my $leagueO = League->new( id => $leagueId );
-	my $leaguedirs = $leagueO->leagues; 
 	$leagueId = basename( getcwd ) if $leagueId eq '.';
+	my $leagueO = League->new( id => $leagueId );
+	# my $grades = Grades->new({ league => $leagueO })->grades;
+	my $leaguedirs = $leagueO->leagues; 
 	my $leaguePath = $leaguedirs . '/'. $leagueId;
 	my $league = LoadFile "$leaguePath/league.yaml";
 	my $session = $script->session;
@@ -77,10 +78,13 @@ sub run {
 		for my $number ( 0 .. $#seats ) {
 			my $name = $member->[$number];
 			my $id; $id = $names{$name}->{id} if $name;
+			#my $rating; $rating = $grades->{$id} ||
+			#	$names{$name}->{rating} if $name;
 			warn "$team team member " . ($number+1) .
 					" in $seats[$number]?" unless $id;
 			$teamchart->{$seats[$number]} = { id => $id,
 						name => $name,
+						# rating => $rating,
 						color => $colors->{$team} || $team,
 						team => $team };
 		}
@@ -108,7 +112,7 @@ sub run {
 		}
 	}
 	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "1514") or warn "login: greg?"; 
+	$web->login("greg", "1949") or warn "login: greg?"; 
 	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
