@@ -1,5 +1,5 @@
 ---
-id: A706
+id: A705
 pairs:
   1 : [02, 01]
   2 : [04, 03]
@@ -85,72 +85,41 @@ colors:
 
   25: #c5c5c5
   26: #f0f0f0
-  Black     : #c5c5c5
-  BlackBlack: #909090
-  Blue      : #1111ff
-  BlueBlue  : #0000ff
-  Brown     :
-  BrownBrown:
-  DarkGreen :
-  Gray      :
-  GrayGray  : #909090
-  Green     :
-  LightBlue :
-  LightGreen:
-  Orange    :
-  Pink      :
-  Purple    :
-  Red       :
-  White     :
-  WhiteWhite: #f2f2f2
-  Yellow    :
-  YellowYellow: #ffff00
 fours:
-  Green     : [25, 25a, 26, 26a]
-  Gray      : [23, 15, 24, 16]
+  Orange    : [25, 25a, 26, 26a]
+  Green     : [23, 15, 24, 16]
   Brown     : [21, 13, 22, 14]
   Blue      : [19, 11, 20, 12]
   Black     : [17, 09, 18, 10]
   BlackBlack: [01, 02, 03, 04]
-  BlueBlue  : [05, 06, 07, 08]
 
-  Orange    : [37, 27, 38, 28]
-  Pink      : [39, 29, 40, 30]
-  Purple    : [41, 31, 42, 32]
-  Red       : [43, 33, 44, 34]
-  White     : [45, 35, 46, 36]
-  WhiteWhite: [47, 48, 49, 50]
-  Yellow    : [51, 52, 53, 54]
-  YellowYellow: [55, 56, 56a, 46a]
-
-  BrownBrown: [ Xa, Xb, Xc, Xd ]
-  GrayGray  : [ Ya, Yb, Yc, Yd ]
+  Pink      : [37, 27, 38, 28]
+  Purple    : [39, 29, 40, 30]
+  Red       : [41, 31, 42, 32]
+  White     : [43, 33, 44, 34]
+  Yellow    : [45, 35, 46, 36]
+  Gray    : [47, 48, 49, 50]
+#  White     : [51, 52, 53]
 regions:
   One:
     - BlackBlack
     - Black
     - Blue
     - Brown
-    - Gray
     - Green
-    - BlueBlue
-    - BrownBrown
-
     - Orange
     - Pink
     - Purple
     - Red
     - White
     - Yellow
-    - WhiteWhite
-    - YellowYellow
-    - GrayGray
+    - Gray
 fourexperts:
   One:
-    A: [27, 37, 28, 38, 29, 39, 30, 40, 47, 48, 49, 50, 51, 52, 53]
-    B: [09, 17, 10, 18, 11, 19, 12, 20, 01, 02, 03, 04, 05, 06, 07]
-    C: [36, 46, 35, 45, 34, 44, 33, 43, 32, 42, 56, 55, 54, 31, 41]
-    D: [26a, 26, 25a, 25, 16, 24, 15, 23, 14, 22, 08, 13, 21, 46a, 56a]
+    A: [27, 37, 28, 38, 29, 39, 30, 40, 47, 48, 49, 50, 51, 52]
+    B: [09, 17, 10, 18, 11, 19, 12, 20, 01, 02, 03, 04, 05, 06]
+    C: [36, 46, 35, 45, 34, 44, 33, 43, 32, 42, 31, 41, 56, 55]
+    D: [26a, 26, 25a, 25, 16, 24, 15, 23, 14, 22, 13, 21, 08, 07]
 4regions:
   FrontRight:
     - BlackBlack
@@ -158,17 +127,15 @@ fourexperts:
     - Blue
   BackRight:
     - Brown
-    - Gray
     - Green
-  FrontLeft:
     - Orange
+  FrontLeft:
     - Pink
     - Purple
-  BackLeft:
     - Red
+  BackLeft:
     - White
     - Yellow
-    - YellowYellow
 4expertseats:
   FrontRight:
     A: [01, 02, 03]
@@ -186,7 +153,7 @@ fourexperts:
     C: [39, 29, 40]
     D: [41, 31, 42]
   BackLeft:
-    A: [43, 44, 33, 34]
-    B: [45, 46, 35, 36]
-    C: [47, 48, 49, 50 ]
-    D: [ 51, 52, 53, 54 ]
+    A: [43, 44]
+    B: [33, 34]
+    C: [45, 46]
+    D: [35, 36]
