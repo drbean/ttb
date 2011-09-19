@@ -1,11 +1,12 @@
 #!/usr/bin/perl
 
-# Last Edit: 2011 Sep 06, 04:22:00 PM
+# Last Edit: 2011 Sep 19, 09:06:46 AM
 # $Id$
 
 package Script;
 use strict;
 use warnings;
+use Encode;
 use Moose;
 with 'MooseX::Getopt';
 
@@ -30,6 +31,7 @@ use List::MoreUtils qw/any all/;
 use Cwd; use File::Basename;
 use Net::FTP;
 use Grades;
+use Encode;
 
 run() unless caller();
 
@@ -112,16 +114,18 @@ sub run {
 		}
 	}
 	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "1949") or warn "login: greg?"; 
+	$web->login("greg", "6y6tsy6") or warn "login: greg?"; 
 	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $teamtext = $t->fill_in( HASH => $teamchart );
-	io("$sessionpath/$session/teamseat.$filetype")->print($teamtext);
+
+	io("$sessionpath/$session/teamseat.$filetype")->print( Encode::encode('UTF-8', $teamtext) );
 	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
 			or die "put teamseat.html?" if $filetype eq "html"; 
-	my $experttext = $t->fill_in( HASH => $expertchart );
+	my $experttext = Encode::encode(
+		'UTF-8', $t->fill_in( HASH => $expertchart ) );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
 	$web->put( "$sessionpath/$session/expertseat.$filetype",
 			"${leagueId}fex.html" ) or die "put expertseat.html?" if $filetype eq "html"; 
