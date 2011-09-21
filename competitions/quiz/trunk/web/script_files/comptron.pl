@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011  6月 23, 07時56分25秒
+# Last Edit: 2011 Sep 21, 09:14:41 AM
 # $Id$
 
 =head1 NAME
@@ -118,7 +118,7 @@ my @formorders = values %formorder;
 $YAML::UseAliases = 0;
 
 my @tables = sort {$a <=> $b} keys %$response;
-Bless( $response )->keys([ reverse @tables ]);
+Bless( $response )->keys([ @tables ]);
 
 print Dump $response;
 
