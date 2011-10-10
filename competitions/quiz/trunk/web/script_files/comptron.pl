@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2011 Sep 21, 09:14:41 AM
+# Last Edit: 2011 Oct 10, 07:07:01 PM
 # $Id$
 
 =head1 NAME
@@ -54,6 +54,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
+$leagues = '/home/drbean/001';
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
@@ -107,7 +108,7 @@ for my $pair ( @pairs ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
 	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
-	    # $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
 	}
     }
     # Bless($response->{$table})->keys([qw/brock selassie tremonte/ ]);
