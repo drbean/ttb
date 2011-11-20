@@ -11,7 +11,7 @@ my $builder = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
     },
-	script_files => [ qw[ paper/script_files/comptron.pl
+	script_files => [ qw[ web/script_files/comptron.pl
 							paper/script_files/score_comp.pl
 							paper/script_files/lineup.pl
 							paper/script_files/rewrite_response.pl
