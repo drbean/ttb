@@ -48,7 +48,7 @@ __PACKAGE__->config({
 			},
 			store => {
 				class => 'DBIx::Class',
-				user_class => 'DB::Players',
+				user_class => 'SwissDB::Players',
 				role_relation => 'roles',
 				role_field => 'id'
 			}
