@@ -32,18 +32,9 @@ my $genres = [
 			[ 5, "upper" ],
 			[ 6, "friends" ],
 		];
-uptodatepopulate( 'Genre', $genres );
-
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "GL00005",	1 ],
-			[ "GL00022",	1 ],
-			[ "FLA0016",	1 ],
-			[ "FLA0021",	1 ],
-			[ "FLA0030",	6 ],
-			[ "FIA0038",	2 ],
-			[ "BMA0033",	2 ],
-			[ "MIA0012",	2 ],
+			[ "FLA0023",	1 ],
 		];
 
 my @leagueids =  map $_->[0], @$leaguegenres[1..$#$leaguegenres];
@@ -64,8 +55,8 @@ for my $league ( @leagueids ) {
 					@{$leaguefile->{member}};
 }
 
+uptodatepopulate( 'Genre', $genres );
 uptodatepopulate( 'Leagues', $leagues );
-
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
 push @{$players->{officials}}, [split] for <<OFFICIALS =~ m/^.*$/gm;
