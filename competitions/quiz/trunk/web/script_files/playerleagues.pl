@@ -23,26 +23,6 @@ BEGIN {
 }
 
 my $leaguedirs = $::config{leagues};
-my @leagueids = qw/GL00005 GL00022 FIA0038 MIA0012 BMA0033 FLA0016 FLA0021 FLA0022 FLA0030/;
-
-no strict qw/subs refs/;
-my $connect_info = "${::name}::Model::DB"->config->{connect_info};
-# my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
-my $schema = "${::name}::Schema"->connect( @$connect_info );
-use strict;
-
-my ($leaguefile, $players);
-my $leagues = [ [ qw/id name field/ ] ];
-for my $league ( @leagueids ) {
-	$leaguefile = LoadFile "/home/drbean/992/$league/league.yaml";
-	push @$leagues, [ $league, $leaguefile->{league}, $leaguefile->{field} ];
-	push @{$players->{$league}},
-		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
-					@{$leaguefile->{member}};
-}
-
-uptodatepopulate( 'Leagues', $leagues );
-
 my $genres = [
 			[ qw/id name/ ],
 			[ 1, "intermediate" ],
@@ -65,6 +45,26 @@ my $leaguegenres = [
 			[ "BMA0033",	2 ],
 			[ "MIA0012",	2 ],
 		];
+
+my @leagueids =  map $_->[0], @$leaguegenres[1..$#$leaguegenres];
+
+no strict qw/subs refs/;
+my $connect_info = "${::name}::Model::DB"->config->{connect_info};
+# my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
+my $schema = "${::name}::Schema"->connect( @$connect_info );
+use strict;
+
+my ($leaguefile, $players);
+my $leagues = [ [ qw/id name field/ ] ];
+for my $league ( @leagueids ) {
+	$leaguefile = LoadFile "/home/drbean/992/$league/league.yaml";
+	push @$leagues, [ $league, $leaguefile->{league}, $leaguefile->{field} ];
+	push @{$players->{$league}},
+		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
+					@{$leaguefile->{member}};
+}
+
+uptodatepopulate( 'Leagues', $leagues );
 
 uptodatepopulate( 'Leaguegenre', $leaguegenres );
 
