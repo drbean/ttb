@@ -3,7 +3,7 @@
 use Test::More tests => 1;
 
 BEGIN {
-	use_ok( 'Comp' );
+	use_ok( 'CompComp' );
 }
 
-diag( "Testing Comp $Comp::VERSION, Perl $], $^X" );
+diag( "Testing CompComp $CompComp::VERSION, Perl $], $^X" );
