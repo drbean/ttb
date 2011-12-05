@@ -7,9 +7,9 @@
 \usepackage{texdraw}
 \usepackage[absolute]{textpos}
 % \usepackage[absolute,showboxes]{textpos}
-% \textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
 % \textblockorigin{0.00cm}{0.50cm} %HPDeskJet5160
-\textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 
@@ -35,7 +35,8 @@
 	\rmove(-5.0 -0.5)
 	\myanswer
 }
-\newcommand{\myblock}{
+\newcommand{\myblock}[1]{
+	\parbox[t]{0.01cm}{\bfseries #1:}
 	\parbox[t][2cm][c]{1cm}{\vfill White\\\vfill Black \vfill}
 	\parbox[t][2cm][c]{1cm}{\small Form\\Answer\\Form\\Answer}
 	\parbox[t][2cm][c]{5cm}{
@@ -50,7 +51,11 @@
 
 	\begin{textblock}{4}(#1)
 	\raggedleft1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.\hspace*{0.23cm}\\[-0.3cm]
-	\raggedright\myblock\\[+0.1cm]
+	\raggedright\myblock{fernandez}\\[+0.1cm]
+	\raggedleft11.\hspace{0.06cm}12.\hspace{0.06cm}13.\hspace{0.06cm}14.\hspace{0.06cm}15.\hspace{0.06cm}16.\hspace{0.06cm}17.\hspace{0.06cm}18.\hspace{0.06cm}19.\hspace{0.06cm}20.\\[-0.3cm]
+	\raggedright\myblock{nguyen}\\[+0.1cm]
+	\raggedleft21.\hspace{0.06cm}22.\hspace{0.06cm}23.\hspace{0.06cm}24.\hspace{0.06cm}25.\hspace{0.06cm}26.\hspace{0.06cm}27.\hspace{0.06cm}28.\hspace{0.06cm}29.\hspace{0.06cm}30.\\[-0.3cm]
+	\raggedright\myblock{mestas}\
 	\end{textblock}
 }
 
