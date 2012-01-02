@@ -14,7 +14,7 @@
 \setlength{\unitlength}{1cm}
 
 \newcommand{\mybox}{
-	\rlvec(0 -0.5) \rlvec(0.5 0) \rlvec(0 0.5) \rlvec(-0.5 0) \rmove(0.5 0)
+	\rlvec(0 -0.4) \rlvec(0.5 0) \rlvec(0 0.4) \rlvec(-0.5 0) \rmove(0.5 0)
 }
 \newcommand{\myline}{
 	% \textref h:L v:C \mybox \mybox \mybox \mybox \mybox
@@ -32,17 +32,17 @@
 }
 \newcommand{\myrole}{
 	\myform
-	\rmove(-5.0 -0.5)
+	\rmove(-5.0 -0.4)
 	\myanswer
 }
 \newcommand{\myblock}[1]{
-	\parbox[t]{0.01cm}{\bfseries #1:}
+	\raisebox{-0.2cm}{\parbox[t]{0.01cm}{\bfseries #1:}}
 	\parbox[t][2cm][c]{1cm}{\vfill White\\\vfill Black \vfill}
 	\parbox[t][2cm][c]{1cm}{\small Form\\Answer\\Form\\Answer}
 	\parbox[t][2cm][c]{5cm}{
 		\begin{texdraw} \drawdim cm
 		\myrole
-		\rmove(-5.0 -0.55)
+		\rmove(-5.0 -0.45)
 		\myrole
 		\end{texdraw}
 	}
@@ -50,12 +50,14 @@
 \newcommand{\mycomp}[1]{
 
 	\begin{textblock}{4}(#1)
-	\raggedleft1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.\hspace*{0.23cm}\\[-0.3cm]
-	\raggedright\myblock{cars}\\[+0.1cm]
-	\raggedleft11.\hspace{0.06cm}12.\hspace{0.06cm}13.\hspace{0.06cm}14.\hspace{0.06cm}15.\hspace{0.06cm}16.\hspace{0.06cm}17.\hspace{0.06cm}18.\hspace{0.06cm}19.\hspace{0.06cm}20.\\[-0.3cm]
-	\raggedright\myblock{citrus1}\\[+0.1cm]
-	\raggedleft21.\hspace{0.06cm}22.\hspace{0.06cm}23.\hspace{0.06cm}24.\hspace{0.06cm}25.\hspace{0.06cm}26.\hspace{0.06cm}27.\hspace{0.06cm}28.\hspace{0.06cm}29.\hspace{0.06cm}30.\\[-0.3cm]
-	\raggedright\myblock{internet1}\
+	\small\raggedleft\raisebox{-0.1cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.31cm]
+	\raggedright\raisebox{+0.1cm}{\myblock{dickson}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.2cm}{\myblock{abreu}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.2cm}{\myblock{smallwood}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.25cm}{\myblock{jackson}}\
 	\end{textblock}
 }
 
