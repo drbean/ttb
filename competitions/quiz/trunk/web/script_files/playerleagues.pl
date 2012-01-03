@@ -12,17 +12,12 @@ use YAML qw/LoadFile/;
 use FindBin qw/$Bin/;
 use lib "$Bin/../lib/";
 
-BEGIN {
-	my @MyAppConf = glob( "$Bin/../*.conf" );
-	die "Which of @MyAppConf is the configuration file?"
-				unless @MyAppConf == 1;
-	%::config = Config::General->new($MyAppConf[0])->getall;
-	$::name = $::config{name};
-	require "$::name.pm"; $::name->import;
-	require "$::name/Schema.pm"; $::name->import;
-}
+use CompComp;
+use CompComp::Model::DB;
+use CompComp::Model::SwissDB;
+use CompComp::Schema;
 
-my $leaguedirs = $::config{leagues};
+my $leaguedirs = CompComp->config->{leagues};
 my $genres = [
 			[ qw/id name/ ],
 			[ 1, "intermediate" ],
@@ -40,15 +35,15 @@ my $leaguegenres = [
 my @leagueids =  map $_->[0], @$leaguegenres[1..$#$leaguegenres];
 
 no strict qw/subs refs/;
-my $connect_info = "${::name}::Model::DB"->config->{connect_info};
+my $connect_info = CompComp::Model::DB->config->{connect_info};
 # my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
-my $schema = "${::name}::Schema"->connect( @$connect_info );
+my $schema = CompComp::Schema->connect( @$connect_info );
 use strict;
 
 my ($leaguefile, $players);
 my $leagues = [ [ qw/id name field/ ] ];
 for my $league ( @leagueids ) {
-	$leaguefile = LoadFile "/home/drbean/992/$league/league.yaml";
+	$leaguefile = LoadFile "/home/drbean/$leaguedirs/$league/league.yaml";
 	push @$leagues, [ $league, $leaguefile->{league}, $leaguefile->{field} ];
 	push @{$players->{$league}},
 		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
