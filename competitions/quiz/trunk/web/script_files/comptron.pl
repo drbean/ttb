@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Jan 04, 05:30:25 PM
+# Last Edit: 2012 Jan 04, 05:34:29 PM
 # $Id$
 
 =head1 NAME
@@ -109,7 +109,7 @@ for my $pair ( @pairs ) {
 	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
 	}
     }
-    Bless($response->{$table})->keys([qw/rueda salazar vanbeke/ ]);
+    Bless($response->{$table})->keys([qw/cars citrus internet/ ]);
 }
 
 my @formorders = values %formorder;
