@@ -1,6 +1,6 @@
 package CompComp::Controller::Login;
 
-# Last Edit: 2011 Dec 01, 02:43:33 PM
+# Last Edit: 2011 Dec 01, 10:18:43 PM
 # $Id$
 
 use strict;
@@ -41,7 +41,7 @@ sub index :Path :Args(0)  {
                 $c->stash->{id}   = $id;
                 $c->stash->{officialname} = $name;
                 $c->stash->{leagues} =
-                  [ $c->model('SwissDB::Leagues')->search( {} ) ];
+                  [ $c->model('SwissDB::Tournaments')->search( {} ) ];
                 $c->stash->{template} = 'official.tt2';
                 return;
             }
