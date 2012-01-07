@@ -1,4 +1,4 @@
-package Bett::Model::dicDB;
+package CompComp::Model::dicDB;
 
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
@@ -6,11 +6,11 @@ use base 'Catalyst::Model::DBIC::Schema';
 # use Catalyst;
 # use Bett;
 
-my $name = Bett->config->{dic_database};
+my $name = CompComp->config->{dic_database};
 # my $name = "dic001";
 
 __PACKAGE__->config(
-    schema_class => 'Bett::dicSchema',
+    schema_class => 'CompComp::dicSchema',
     connect_info => {
         dsn => "dbi:Pg:dbname=$name",
         user => '',
