@@ -1,4 +1,4 @@
-package CompComp::Controller::Quiz;
+package CompComp::Controller::Game;
 
 use strict;
 use warnings;
