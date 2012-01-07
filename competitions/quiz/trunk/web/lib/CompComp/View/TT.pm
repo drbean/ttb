@@ -11,7 +11,9 @@ __PACKAGE__->config(TEMPLATE_EXTENSION => '.tt2',
                        CompComp->path_to( 'root', 'src' ),
                    ],
                 TIMER => 0,
-                WRAPPER => 'wrapper.tt2',
+				WRAPPER => 'wrapper.tt2',
+				# render_die => 0,
+				# default_view => 'login.tt2'
            );
 
 
