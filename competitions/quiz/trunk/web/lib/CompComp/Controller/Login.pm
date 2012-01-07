@@ -1,6 +1,6 @@
 package CompComp::Controller::Login;
 
-# Last Edit: 2011 Dec 01, 10:18:43 PM
+# Last Edit: 2012 Jan 07, 05:41:51 PM
 # $Id$
 
 use strict;
@@ -33,45 +33,45 @@ sub index :Path :Args(0)  {
     my $password = lc $c->request->params->{password} || "";
     if ( $id && $name && $password ) {
         my $username = $id;
-        if ( $c->authenticate( { id => $username, password => $password } ) ) {
+        if ( $c->authenticate( { id => $username, name => $password } ) ) {
             $c->session->{player_id} = $id;
             $c->session->{question} = undef;
             my $officialrole = 1;
             if ( $c->check_user_roles($officialrole) ) {
                 $c->stash->{id}   = $id;
                 $c->stash->{officialname} = $name;
-                $c->stash->{leagues} =
+                $c->stash->{tournaments} =
                   [ $c->model('SwissDB::Tournaments')->search( {} ) ];
                 $c->stash->{template} = 'official.tt2';
                 return;
             }
             my @memberships =
               $c->model("SwissDB::Members")->search( { player => $id } );
-            my @leagues;
+            my @tournaments;
             for my $membership (@memberships) {
-                push @leagues, $membership->league;
+                push @tournaments, $membership->tournament;
             }
-            unless ( @leagues == 1 ) {
+            unless ( @tournaments == 1 ) {
                 $c->stash->{id}         = $id;
                 $c->stash->{playername}       = $name;
-                $c->stash->{leagues}   = \@leagues;
+                $c->stash->{tournaments}   = \@tournaments;
                 $c->stash->{template}   = 'membership.tt2';
                 return;
             }
             else {
-                my $leagueId   = $leagues[0]->id;
-                $c->session->{league}   = $leagueId;
+                my $tournamentId   = $tournaments[0]->id;
+                $c->session->{tournament}   = $tournamentId;
 				if ( defined $c->session->{quiz}) {
 					my $quiz = $c->session->{quiz};
 					$c->response->redirect(
 						$c->uri_for( "/play/update/$quiz" ) );
 				}
 				else {
-					my $draw = $c->model( 'Drawlist', { league => $leagueId } );
+					my $draw = $c->model( 'Drawlist', { tournament => $tournamentId } );
 					$c->stash->{round} = $draw->[0];
 					$c->stash->{game} = $draw->[1];
 					$c->stash->{unpaired} = $draw->[2];
-					$c->stash->{league} = $leagueId;
+					$c->stash->{tournament} = $tournamentId;
 					$c->stash->{roles} = [ qw/White Black/ ];
 					$c->stash->{template} = 'draw.tt2';
 				}
@@ -90,20 +90,20 @@ sub index :Path :Args(0)  {
 
 =head2 official
 
-Set league official is organizing. Use session player_id to authenticate the participant.
+Set tournament official is organizing. Use session player_id to authenticate the participant.
 
 =cut
 
 sub official : Local {
 	my ($self, $c) = @_;
-	my $league = $c->request->params->{league} || "";
+	my $tournament = $c->request->params->{tournament} || "";
 	my $password = lc $c->request->params->{password} || "";
         my $username = $c->session->{player_id};
         if ( $c->authenticate( {id =>$username, password=>$password} ) ) {
 		# my $officialrole = "official";
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
-			$c->session->{league} = $league;
+			$c->session->{tournament} = $tournament;
 			$c->response->redirect($c->uri_for("/standings/index"));
 			return;
 		}
@@ -119,15 +119,15 @@ sub official : Local {
 
 =head2 membership
 
-Set league multi-membership player is participating in.
+Set tournament multi-membership player is participating in.
 
 =cut
 
 sub membership : Local {
 	my ($self, $c) = @_;
-	my $league = $c->request->params->{league} || "";
+	my $tournament = $c->request->params->{tournament} || "";
 	my $password = $c->request->params->{password} || "";
-	$c->session->{league} = $league;
+	$c->session->{tournament} = $tournament;
 	$c->session->{quiz} = undef;
 	$c->response->redirect( $c->uri_for("/standings/index") );
 	return;
