@@ -29,7 +29,7 @@ Display results up to the present round. TODO Tardy, forfeit points not being sh
 
 sub index : Local {
 	my ($self, $c) = @_;
-	my $tourid = $c->session->{league};
+	my $tourid = $c->session->{tournament};
 	my $tournament = $c->model('SwissDB::Tournaments')->find(
 		{ id => $tourid });
 	my $rounds = $tournament->round->value;
@@ -122,6 +122,35 @@ sub index : Local {
 	$c->stash->{players} = \@players;
 	$c->stash->{rounds} = $rounds;
 	$c->stash->{template} = "standings.tt2";
+	$c->detach('ftp');
+}
+
+=head2 ftp
+
+	$self->forward('ftp')
+
+Private method from Swiss app used by index action to put standings on http://web.nuu.edu.tw/~greg/$genre/standings/$tourid.html
+
+=cut
+
+sub ftp : Private {
+	my ($self, $c, $round) = @_;
+	my $ftp = Net::FTP->new('web.nuu.edu.tw');
+	$ftp->login('greg', '');
+	$ftp->binary;
+	my %genres;
+	my @genres = qw/intermediate business friends/;
+	$genres{$_} = $c->config->{ $_ } for @genres;
+	my %leaguegenre = map { my $genre = $_ ;  my $genres = $genres{$_};
+						map { $_ => $genre } @$genres } @genres;
+	my $tourid = $c->stash->{tournament};
+	my $genre = $leaguegenre{$tourid};
+	$ftp->cwd("/public_html/$genre/standings");
+	io("/tmp/$genre/draw/$tourid.html")->print
+		( $c->view('TT')->render($c, 'standings.tt2') );
+	$ftp->put("/tmp/$genre/standings/$tourid.html");
+	$c->response->redirect
+		("http://web.nuu.edu.tw/~greg/$genre/standings/$tourid.html");
 }
 
 
