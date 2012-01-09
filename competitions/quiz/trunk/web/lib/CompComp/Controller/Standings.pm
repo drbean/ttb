@@ -5,6 +5,7 @@ use warnings;
 use parent 'Catalyst::Controller';
 
 use List::Util qw/sum first/;
+use Net::FTP;
 
 =head1 NAME
 
