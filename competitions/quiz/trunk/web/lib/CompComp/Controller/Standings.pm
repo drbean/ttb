@@ -148,7 +148,7 @@ sub ftp : Private {
 	my $tourid = $c->stash->{tournament};
 	my $genre = $leaguegenre{$tourid};
 	$ftp->cwd("/public_html/$genre/standings");
-	io("/tmp/$genre/draw/$tourid.html")->print
+	io("/tmp/$genre/standings/$tourid.html")->print
 		( $c->view('TT')->render($c, 'standings.tt2') );
 	$ftp->put("/tmp/$genre/standings/$tourid.html");
 	$c->response->redirect
