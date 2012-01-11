@@ -25,7 +25,7 @@ Show a created quiz from the database.
  
 sub play : Global {
 	my ($self, $c, $topic, $story) = @_;
-	my $quiz = $c->model('DB::Quiz')->find({
+	my $quiz = $c->model('DB::Game')->find({
 		topic => $topic, story => $story });
 	$c->stash->{topic} = $topic;
 	$c->stash->{story} = $story;
@@ -54,7 +54,7 @@ Allow play action to show questions.
 
 sub go : Global {
 	my ($self, $c, $topic, $story) = @_;
-	my $quiz = $c->model('DB::Quiz')->find({
+	my $quiz = $c->model('DB::Game')->find({
 		topic => $topic, story => $story });
 	$quiz->update({ action => 'True' });
 	$c->stash->{topic} = $topic;
@@ -72,7 +72,7 @@ Prevent play action from showing questions.
 
 sub stop : Global {
 	my ($self, $c, $topic, $story) = @_;
-	my $quiz = $c->model('DB::Quiz')->find({
+	my $quiz = $c->model('DB::Game')->find({
 		topic => $topic, story => $story });
 	$quiz->update({ action => 'False' });
 	$c->stash->{topic} = $topic;
