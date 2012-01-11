@@ -33,7 +33,7 @@ sub form_create : Local {
 
 =head2 list
 
-Fetch all Quiz objects in the league's genre and pass to quiz/list.tt2 in stash to be displayed
+Fetch all Game objects in the league's genre and pass to quiz/list.tt2 in stash to be displayed
 
 =cut
  
@@ -45,7 +45,7 @@ sub list : Local {
     my $leagueid = $c->session->{league};
     my $league = $c->model('DB::Leagues')->find({id=>$leagueid});
     my $genre = $league->genre->data->id;
-    $c->stash->{quiz} = [$c->model('DB::Quiz')->search( { genre => $genre })];
+    $c->stash->{quiz} = [$c->model('DB::Game')->search( { genre => $genre })];
     # Retrieve all of the text records as text model objects and store in
     # stash where they can be accessed by the TT template
     # Set the TT template to use.  You will almost always want to do this
@@ -69,7 +69,7 @@ sub list : Local {
 
 http://server.school.edu/dic/quiz/create/topicId/storyId
 
-Create comprehension questions. The quizId is not the Quiz result source's primary key. It is not even in there.
+Create comprehension questions. The quizId is not the Game result source's primary key. It is not even in there.
 
 =cut
 
@@ -80,7 +80,7 @@ sub create :Global :Args(2)  {
 	my $genre = $question1->genre;
 	my $description = $question1->description;
 	my $quizId = "$topic$story";
-	my $quiz = $c->model('DB::Quiz')->update_or_create({
+	my $quiz = $c->model('DB::Game')->update_or_create({
 			genre => $genre,
 			topic => $topic,
 			story => $story,
@@ -88,7 +88,7 @@ sub create :Global :Args(2)  {
 			action => 'False',
 			});
 	$c->response->redirect($c->uri_for('list',
-		   {status_msg => "Quiz added"}));
+		   {status_msg => "Game added"}));
 }
 
 
@@ -306,11 +306,11 @@ Delete a quiz. Delete of Questions done here too.
 
 sub delete :Global :Args(2)  {
 	my ($self, $c, $topic, $story) = @_;
-	my $quiz = $c->model('DB::Quiz')->find({
+	my $quiz = $c->model('DB::Game')->find({
 			topic => $topic, story => $story });
 	$quiz->delete;
 	$c->response->redirect($c->uri_for('list',
-		   {status_msg => "Quiz deleted."}));
+		   {status_msg => "Game deleted."}));
 }
 
 
