@@ -22,84 +22,84 @@ __PACKAGE__->table("point");
 
 =head2 server
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'VARCHAR(13)'
+  is_nullable: 0
 
 =head2 receiver
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'VARCHAR(13)'
+  is_nullable: 0
 
 =head2 league
 
-  data_type: 'text'
+  data_type: 'VARCHAR(13)'
   is_nullable: 0
 
 =head2 exercise
 
-  data_type: 'text'
+  data_type: 'VARCHAR(13)'
   is_nullable: 0
 
 =head2 game
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'TINYINT'
+  is_nullable: 0
 
 =head2 id
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'TINYINT'
+  is_nullable: 0
 
 =head2 question
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'VARCHAR(100)'
+  is_nullable: 0
 
 =head2 grammatical
 
-  data_type: 'bool'
-  is_nullable: 1
+  data_type: 'BOOL'
+  is_nullable: 0
 
 =head2 answer
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'VARCHAR(30)'
+  is_nullable: 0
 
 =head2 correct
 
-  data_type: 'bool'
-  is_nullable: 1
+  data_type: 'BOOL'
+  is_nullable: 0
 
 =head2 winner
 
-  data_type: 'text'
-  is_nullable: 1
+  data_type: 'VARCHAR(13)'
+  is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
   "server",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
   "receiver",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
   "league",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
   "exercise",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
   "game",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "TINYINT", is_nullable => 0 },
   "id",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "TINYINT", is_nullable => 0 },
   "question",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(100)", is_nullable => 0 },
   "grammatical",
-  { data_type => "bool", is_nullable => 0 },
+  { data_type => "BOOL", is_nullable => 0 },
   "answer",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(30)", is_nullable => 0 },
   "correct",
-  { data_type => "bool", is_nullable => 0 },
+  { data_type => "BOOL", is_nullable => 0 },
   "winner",
-  { data_type => "text", is_nullable => 0 },
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("id", "game", "server", "receiver", "exercise", "league");
 
