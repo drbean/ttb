@@ -20,6 +20,16 @@ use Catalyst qw/
     -Debug
     ConfigLoader
     Static::Simple
+
+	StackTrace
+
+	Authentication
+	Authorization::Roles
+
+	Session
+	Session::Store::FastMmap
+	Session::State::Cookie
+
 /;
 
 extends 'Catalyst';
