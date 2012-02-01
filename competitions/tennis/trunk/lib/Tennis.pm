@@ -21,16 +21,16 @@ use Catalyst qw/
     ConfigLoader
     Static::Simple
 
+	StackTrace
+
+	Authentication
+	Authorization::Roles
+
+	Session
+	Session::Store::FastMmap
+	Session::State::Cookie
+
 /;
-
-	#StackTrace
-
-	#Authentication
-	#Authorization::Roles
-
-	#Session
-	#Session::Store::FastMmap
-	#Session::State::Cookie
 
 extends 'Catalyst';
 
