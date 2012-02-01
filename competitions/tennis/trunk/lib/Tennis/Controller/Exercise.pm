@@ -1,4 +1,4 @@
-package Tennis::Controller::Game;
+package Tennis::Controller::Exercise;
 use Moose;
 use namespace::autoclean;
 
@@ -6,7 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Tennis::Controller::Game - Catalyst Controller
+Tennis::Controller::Exercise - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -24,7 +24,7 @@ Catalyst Controller.
 sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 
-    $c->response->body('Matched Tennis::Controller::Game in Game.');
+    $c->response->body('Matched Tennis::Controller::Exercise in Exercise');
 }
 
 
