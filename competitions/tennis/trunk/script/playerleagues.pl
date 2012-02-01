@@ -14,7 +14,7 @@ use Tennis;
 use Tennis::Model::DB;
 use Tennis::Schema;
 
-my %config = Config::General->new( "bett.conf" )->getall;
+my %config = Config::General->new( "tennis.conf" )->getall;
 my $connect_info = Tennis::Model::DB->config->{connect_info};
 my $schema = Tennis::Schema->connect( $connect_info );
 
