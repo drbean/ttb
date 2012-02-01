@@ -1,4 +1,4 @@
-package Tennis::Schema::Result::Fault;
+package Tennis::Schema::Result::Let;
 
 use strict;
 use warnings;
@@ -12,11 +12,11 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Tennis::Schema::Result::Fault
+Tennis::Schema::Result::Let
 
 =cut
 
-__PACKAGE__->table("fault");
+__PACKAGE__->table("let");
 
 =head1 ACCESSORS
 
