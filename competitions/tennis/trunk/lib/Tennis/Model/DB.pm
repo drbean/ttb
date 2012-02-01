@@ -3,12 +3,12 @@ package Tennis::Model::DB;
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
-# use Catalyst;
-# use Tennis;
+use Catalyst;
+use Tennis;
 # use Tennis::Schema;
 
-# my $name = Tennis->config->{database};
-my $name = "tennis002";
+my $name = Tennis->config->{database};
+# my $name = "tennis002";
 
 __PACKAGE__->config(
     schema_class => 'Tennis::Schema',
