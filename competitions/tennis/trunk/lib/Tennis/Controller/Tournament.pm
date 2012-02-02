@@ -65,17 +65,21 @@ sub list : Local {
 
 =head2 create
 
-http://server.school.edu/dic/quiz/create/topicId/storyId
+http://server.school.edu/tennis/create/exerciseId/roundId
 
-Create comprehension questions. The quizId is not the Game result source's primary key. It is not even in there.
+Create next tennis tournament round using swiss roundId pairing and exerciseId Bett based content.
 
 =cut
 
 sub create :Global :Args(2)  {
-	my ($self, $c, $topic, $story) = @_;
-	my $question1 = $c->model('DB::Questions')->search( {
-			topic => $topic, story => $story } )->next;
-	my $genre = $question1->genre;
+	my ($self, $c, $exerciseId, $roundId) = @_;
+	my $leagueId = $c->session->{league};
+	my @pairings = $c->model('SwissDB::Matches')->search( {
+			round => $roundId, tournament => $leagueId } );
+	die "No pairings in round $roundId in $leagueId tournament" unless
+		@pairings;
+	my $genre = $c->model("dicDB::Leaguegenre")->find(
+			{ league => $leagueId } )->genre;
 	my $description = $question1->description;
 	my $quizId = "$topic$story";
 	my $quiz = $c->model('DB::Game')->update_or_create({
