@@ -1,10 +1,8 @@
-package CompComp::Controller::Game;
+package Tennis::Controller::Exercise;
+use Moose;
+use namespace::autoclean;
 
-use strict;
-use warnings;
-use parent 'Catalyst::Controller';
-
-use List::Util qw/sum/;
+BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
@@ -327,13 +325,15 @@ sub index : Private {
 
 =head1 AUTHOR
 
-Dr Bean,,,
+Dr Bean
 
 =head1 LICENSE
 
-This library is free software, you can redistribute it and/or modify
+This library is free software. You can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =cut
+
+__PACKAGE__->meta->make_immutable;
 
 1;
