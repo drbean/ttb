@@ -1,4 +1,4 @@
-package Tennis::Controller::Exercise;
+package Tennis::Controller::Tournament;
 use Moose;
 use namespace::autoclean;
 
@@ -6,7 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-CompComp::Controller::Exercises - Catalyst Controller
+CompComp::Controller::Tournament - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -37,8 +37,8 @@ Fetch all Round objects in the tournament and pass to quiz/list.tt2 in stash to 
  
 sub list : Local {
     my ($self, $c) = @_;
-    my $leagueid = $c->session->{league};
-    my $league = $c->model('dicDB::Leagues')->find({id=>$leagueid});
+    my $leagueId = $c->session->{league};
+    my $league = $c->model('dicDB::Leagues')->find({id=>$leagueId});
     my $genre = $league->genre->data->id;
     $c->stash->{quiz} = [$c->model('DB::Round')->search( { tournament => $leagueId })];
     my $player = $c->session->{player_id};
@@ -67,14 +67,14 @@ sub create :Global :Args(2)  {
 	my $quiz = $c->model('DB::Round')->update_or_create({
 			league => $leagueId,
 			topic => $exerciseId,
-			round => $roundId,
-			description => $description,
-			action => 'Stop',
+			id => $roundId,
+			swissround => $roundId,
+			start => time,
+			stop => time+3600*24*7,
 			});
 	$c->response->redirect($c->uri_for('list',
 		   {status_msg => "Game added"}));
 }
-
 
 =head2 record
 
@@ -307,7 +307,6 @@ sub index : Private {
 
     $c->response->body('Matched CompComp::Controller::Players in Players.');
 }
-
 
 =head1 AUTHOR
 
