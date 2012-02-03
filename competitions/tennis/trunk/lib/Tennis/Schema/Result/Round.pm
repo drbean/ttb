@@ -25,14 +25,9 @@ __PACKAGE__->table("round");
   data_type: 'VARCHAR(13)'
   is_nullable: 0
 
-=head2 description
+=head2 topic
 
   data_type: 'VARCHAR(13)'
-  is_nullable: 0
-
-=head2 exercise
-
-  data_type: ''VARCHAR(13)
   is_nullable: 0
 
 =head2 id
@@ -60,9 +55,7 @@ __PACKAGE__->table("round");
 __PACKAGE__->add_columns(
   "league",
   { data_type => "VARCHAR(13)", is_nullable => 0 },
-  "description",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
-  "exercise",
+  "topic",
   { data_type => "VARCHAR(13)", is_nullable => 0 },
   "id",
   { data_type => "TINYINT", is_nullable => 0 },
