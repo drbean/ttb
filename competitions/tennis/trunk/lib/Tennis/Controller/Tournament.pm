@@ -31,35 +31,19 @@ sub form_create : Local {
 
 =head2 list
 
-Fetch all Game objects in the league's genre and pass to quiz/list.tt2 in stash to be displayed
+Fetch all Round objects in the tournament and pass to quiz/list.tt2 in stash to be displayed
 
 =cut
  
 sub list : Local {
-    # Retrieve the usual perl OO '$self' for this object. $c is the Catalyst
-    # 'Context' that's used to 'glue together' the various components
-    # that make up the application
     my ($self, $c) = @_;
     my $leagueid = $c->session->{league};
-    my $league = $c->model('DB::Leagues')->find({id=>$leagueid});
+    my $league = $c->model('dicDB::Leagues')->find({id=>$leagueid});
     my $genre = $league->genre->data->id;
-    $c->stash->{quiz} = [$c->model('DB::Game')->search( { genre => $genre })];
-    # Retrieve all of the text records as text model objects and store in
-    # stash where they can be accessed by the TT template
-    # Set the TT template to use.  You will almost always want to do this
-    # in your action methods (actions methods respond to user input in
-    # your controllers).
+    $c->stash->{quiz} = [$c->model('DB::Round')->search( { tournament => $leagueId })];
     my $player = $c->session->{player_id};
-    #my @play = $c->model('DB::Play')->search(
-    #        { league => $leagueid, player => $player },
-    #    	{ select => [ 'topic', 'story', { sum => 'correct' } ],
-    #    	'group_by' => [qw/topic story/],
-    #    	as => [ qw/topic story questions/ ],
-    #    	});
-    #my %questionscores = map { $_->quiz => $_->get_column('questions') } @play;
-    #$c->stash->{questions} = \%questionscores;
     $c->stash->{league} = $league->name;
-    $c->stash->{template} = 'quiz/list.tt2';
+    $c->stash->{template} = 'tournament/list.tt2';
 }
 
 
@@ -80,14 +64,12 @@ sub create :Global :Args(2)  {
 		@pairings;
 	my $genre = $c->model("dicDB::Leaguegenre")->find(
 			{ league => $leagueId } )->genre;
-	my $description = $question1->description;
-	my $quizId = "$topic$story";
-	my $quiz = $c->model('DB::Game')->update_or_create({
-			genre => $genre,
-			topic => $topic,
-			story => $story,
+	my $quiz = $c->model('DB::Round')->update_or_create({
+			league => $leagueId,
+			topic => $exerciseId,
+			round => $roundId,
 			description => $description,
-			action => 'False',
+			action => 'Stop',
 			});
 	$c->response->redirect($c->uri_for('list',
 		   {status_msg => "Game added"}));
