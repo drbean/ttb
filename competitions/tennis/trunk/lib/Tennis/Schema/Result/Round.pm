@@ -12,7 +12,7 @@ __PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Tennis::Schema::Result::Match
+Tennis::Schema::Result::Round
 
 =cut
 
@@ -20,17 +20,12 @@ __PACKAGE__->table("round");
 
 =head1 ACCESSORS
 
-=head2 white
-
-  data_type: 'VARCHAR(13)'
-  is_nullable: 1
-
-=head2 black
-
-  data_type: 'VARCHAR(13)'
-  is_nullable: 1
-
 =head2 league
+
+  data_type: 'VARCHAR(13)'
+  is_nullable: 0
+
+=head2 description
 
   data_type: 'VARCHAR(13)'
   is_nullable: 0
@@ -40,49 +35,45 @@ __PACKAGE__->table("round");
   data_type: ''VARCHAR(13)
   is_nullable: 0
 
-=head2 table
+=head2 id
 
   data_type: 'TINYINT'
-  is_nullable: 1
+  is_nullable: 0
 
-=head2 games
+=head2 swissround
 
   data_type: 'TINYINT'
-  is_nullable: 1
+  is_nullable: 0
 
-=head2 winner
+=head2 start
 
-  data_type: 'BOOL'
-  is_nullable: 1
+  data_type: 'datetime'
+  is_nullable: 0
 
-=head2 forfeit
+=head2 stop
 
-  data_type: 'VARCHAR(13)'
-  is_nullable: 1
+  data_type: 'datetime'
+  is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
-  "white",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
-  "black",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
   "league",
+  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  "description",
   { data_type => "VARCHAR(13)", is_nullable => 0 },
   "exercise",
   { data_type => "VARCHAR(13)", is_nullable => 0 },
-  "table",
+  "id",
   { data_type => "TINYINT", is_nullable => 0 },
-  "games",
+  "swissround",
   { data_type => "TINYINT", is_nullable => 0 },
-  "receiverpoints",
-  { data_type => "TINYINT", is_nullable => 0 },
-  "winner",
-  { data_type => "BOOL", is_nullable => 0 },
-  "forfeit",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  "start",
+  { data_type => "datetime", is_nullable => 0 },
+  "stop",
+  { data_type => "datetime", is_nullable => 0 },
 );
-__PACKAGE__->set_primary_key("table", "white", "black", "exercise", "league");
+__PACKAGE__->set_primary_key("league", "id");
 
 #=head1 RELATIONS
 #
