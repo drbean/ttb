@@ -22,23 +22,27 @@ __PACKAGE__->table("rally");
 
 =head2 server
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 receiver
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 league
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 exercise
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 game
 
@@ -52,8 +56,9 @@ __PACKAGE__->table("rally");
 
 =head2 question
 
-  data_type: 'VARCHAR(100)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 100
 
 =head2 questiontime
 
@@ -62,8 +67,9 @@ __PACKAGE__->table("rally");
 
 =head2 answer
 
-  data_type: 'VARCHAR(30)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 30
 
 =head2 answertime
 
@@ -79,23 +85,23 @@ __PACKAGE__->table("rally");
 
 __PACKAGE__->add_columns(
   "server",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "receiver",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "league",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "exercise",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "game",
   { data_type => "TINYINT", is_nullable => 0 },
   "point",
   { data_type => "TINYINT", is_nullable => 0 },
   "question",
-  { data_type => "VARCHAR(100)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 100 },
   "questiontime",
   { data_type => "datetime", is_nullable => 0 },
   "answer",
-  { data_type => "VARCHAR(30)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 30 },
   "answertime",
   { data_type => "datetime", is_nullable => 0 },
   "correct",

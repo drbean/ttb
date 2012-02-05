@@ -22,13 +22,15 @@ __PACKAGE__->table("round");
 
 =head2 league
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
-=head2 topic
+=head2 story
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 id
 
@@ -43,28 +45,30 @@ __PACKAGE__->table("round");
 =head2 start
 
   data_type: 'datetime'
+  timezone: 'local'
   is_nullable: 0
 
 =head2 stop
 
   data_type: 'datetime'
+  timezone: 'local'
   is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
   "league",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
-  "topic",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
+  "story",
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "id",
   { data_type => "TINYINT", is_nullable => 0 },
   "swissround",
   { data_type => "TINYINT", is_nullable => 0 },
   "start",
-  { data_type => "datetime", is_nullable => 0 },
+  { data_type => "datetime", timezone => 'local', is_nullable => 0 },
   "stop",
-  { data_type => "datetime", is_nullable => 0 },
+  { data_type => "datetime", timezone => 'local', is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("league", "id");
 
