@@ -22,23 +22,27 @@ __PACKAGE__->table("fault");
 
 =head2 server
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 receiver
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 league
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 exercise
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 game
 
@@ -57,8 +61,9 @@ __PACKAGE__->table("fault");
 
 =head2 question
 
-  data_type: 'VARCHAR(100)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 100
 
 =head2 questiontime
 
@@ -67,15 +72,16 @@ __PACKAGE__->table("fault");
 
 =cut
 
+
 __PACKAGE__->add_columns(
   "server",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "receiver",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "league",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "exercise",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "game",
   { data_type => "TINYINT", is_nullable => 0 },
   "point",

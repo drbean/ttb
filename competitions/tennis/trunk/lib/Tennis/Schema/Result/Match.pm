@@ -22,23 +22,27 @@ __PACKAGE__->table("match");
 
 =head2 white
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 1
+  size: 13
 
 =head2 black
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 1
+  size: 13
 
 =head2 league
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 exercise
 
-  data_type: ''VARCHAR(13)
+  data_type: ''VARCHAR
   is_nullable: 0
+  size: 13
 
 =head2 table
 
@@ -57,20 +61,21 @@ __PACKAGE__->table("match");
 
 =head2 forfeit
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 1
+  size: 13
 
 =cut
 
 __PACKAGE__->add_columns(
   "white",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "black",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "league",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "exercise",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "table",
   { data_type => "TINYINT", is_nullable => 0 },
   "games",
@@ -80,7 +85,7 @@ __PACKAGE__->add_columns(
   "winner",
   { data_type => "BOOL", is_nullable => 0 },
   "forfeit",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
 );
 __PACKAGE__->set_primary_key("table", "white", "black", "exercise", "league");
 

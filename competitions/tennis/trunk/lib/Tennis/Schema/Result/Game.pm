@@ -22,23 +22,27 @@ __PACKAGE__->table("game");
 
 =head2 server
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 1
+  size: 13
 
 =head2 receiver
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 1
+  size: 13
 
 =head2 league
 
-  data_type: 'VARCHAR(13)'
+  data_type: 'VARCHAR'
   is_nullable: 0
+  size: 13
 
 =head2 exercise
 
-  data_type: ''VARCHAR(13)
+  data_type: ''VARCHAR
   is_nullable: 0
+  size: 13
 
 =head2 id
 
@@ -64,13 +68,13 @@ __PACKAGE__->table("game");
 
 __PACKAGE__->add_columns(
   "server",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "receiver",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "league",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "exercise",
-  { data_type => "VARCHAR(13)", is_nullable => 0 },
+  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
   "id",
   { data_type => "TINYINT", is_nullable => 0 },
   "serverpoints",
