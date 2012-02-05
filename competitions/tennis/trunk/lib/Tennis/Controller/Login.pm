@@ -104,7 +104,7 @@ sub official : Local {
 			$c->model('dicDB::Jigsawrole')->update_or_create(
 				{	league => $league, player => $username,
 					role => $jigsawrole } );
-			$c->response->redirect($c->uri_for("/game"), 303);
+			$c->response->redirect($c->uri_for("/tournament/list"), 303);
 			return;
 		}
 		else {
@@ -142,6 +142,24 @@ sub membership :Local {
 		$c->stash->{template} = 'login.tt2';
 		return;
 	}
+}
+
+
+=head2 get_exercise
+
+dicDB::Exercise code used by both membership, login actions
+
+=cut
+
+sub get_exercise :Private {
+	my ($self, $c, $league) = @_;
+	my $leaguegenre = $c->model("dicDB::Leaguegenre")->search({league => $league})->next;
+	my $genre = $leaguegenre->get_column('genre');
+	my $exercises = $c->model("dicDB::Exercise")->search({ genre =>
+			$genre });
+	my $exercise = $exercises->next;
+	if ( $exercise ) { return $exercise->id; }
+	else { return '' }
 }
 
 
