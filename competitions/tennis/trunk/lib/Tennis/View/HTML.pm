@@ -6,8 +6,13 @@ use warnings;
 use base 'Catalyst::View::TT';
 
 __PACKAGE__->config(
-    TEMPLATE_EXTENSION => '.tt',
+    TEMPLATE_EXTENSION => '.tt2',
     render_die => 1,
+    INCLUDE_PATH => [
+            Tennis->path_to( 'root', 'src' ),
+        ],
+    TIMER              => 0,
+    WRAPPER => 'wrapper.tt2',
 );
 
 =head1 NAME
