@@ -38,12 +38,12 @@ Fetch all Round objects in the tournament and pass to quiz/list.tt2 in stash to 
 sub list : Local {
     my ($self, $c) = @_;
     my $leagueId = $c->session->{league};
-    my $league = $c->model('dicDB::Leagues')->find({id=>$leagueId});
-    my $genre = $league->genre->data->id;
-    $c->stash->{quiz} = [$c->model('DB::Round')->search( { tournament => $leagueId })];
+    my $league = $c->model('dicDB::League')->find({id=>$leagueId});
+    my $genre = $league->genre;
+    $c->stash->{round} = [$c->model('DB::Round')->search( { league => $leagueId })];
     my $player = $c->session->{player_id};
     $c->stash->{league} = $league->name;
-    $c->stash->{template} = 'tournament/list.tt2';
+    $c->stash->{template} = 'tournament/rounds.tt2';
 }
 
 
@@ -56,25 +56,26 @@ Create next tennis tournament round using swiss roundId pairing and exerciseId B
 =cut
 
 sub create :Global :Args(2)  {
-	my ($self, $c, $exerciseId, $roundId) = @_;
+	my ($self, $c, $storyId, $roundId) = @_;
 	my $leagueId = $c->session->{league};
-	my @pairings = $c->model('SwissDB::Matches')->search( {
-			round => $roundId, tournament => $leagueId } );
-	die "No pairings in round $roundId in $leagueId tournament" unless
-		@pairings;
-	my $genre = $c->model("dicDB::Leaguegenre")->find(
-			{ league => $leagueId } )->genre;
+	#my @pairings = $c->model('SwissDB::Matches')->search( {
+	#		round => $roundId, tournament => $leagueId } );
+	#die "No pairings in round $roundId in $leagueId tournament" unless
+	#	@pairings;
 	my $quiz = $c->model('DB::Round')->update_or_create({
 			league => $leagueId,
-			topic => $exerciseId,
+			story => $storyId,
 			id => $roundId,
 			swissround => $roundId,
-			start => time,
-			stop => time+3600*24*7,
+			start => DateTime->now( time_zone => 'local' ),
+			stop => DateTime->now( time_zone => 'local' ),
+			# stop => time+3600*24*7,
 			});
 	$c->response->redirect($c->uri_for('list',
 		   {status_msg => "Game added"}));
 }
+
+use orz;
 
 =head2 record
 
@@ -307,6 +308,8 @@ sub index : Private {
 
     $c->response->body('Matched CompComp::Controller::Players in Players.');
 }
+
+no orz;
 
 =head1 AUTHOR
 
