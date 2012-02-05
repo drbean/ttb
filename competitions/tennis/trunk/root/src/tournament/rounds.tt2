@@ -1,17 +1,18 @@
-[% META title = 'Quiz List' -%]
+[% META title = 'Round List' -%]
 
 <p>[% league %] League</p>
 
 <table>
-<tr><th>Topic<th>Story<th>Name
-[% FOREACH q IN quiz -%]
-  [% topic = q.topic story = q.story %]
+<tr><th>Round<th>Story<th>Swiss round<th>Start<th>Stop
+[% FOREACH r IN round -%]
   <tr>
-    <td>[% q.topic %]</td>
-    <td>[% q.story %]</td>
-    <td>[% q.description %]</td>
+    <td>[% r.id %]</td>
+    <td>[% r.story %]</td>
+    <td>[% r.swissround %]</td>
+    <td>[% r.start %]</td>
+    <td>[% r.stop %]</td>
     <td>
-	<a href="[% c.uri_for('/play/') _ q.topic _ '/' _ q.story %]">Go!</a>
+	<a href="[% c.uri_for('/play/') _ r.round %]">Go!</a>
     </td>
   </tr>
 [% END -%]
