@@ -1,4 +1,4 @@
-package Tennis::Schema::Result::Round;
+package Tennis::Schema::Result::Rounds;
 
 use strict;
 use warnings;
@@ -16,7 +16,7 @@ Tennis::Schema::Result::Round
 
 =cut
 
-__PACKAGE__->table("round");
+__PACKAGE__->table("rounds");
 
 =head1 ACCESSORS
 
@@ -44,7 +44,7 @@ __PACKAGE__->table("round");
 
 =head2 start
 
-  data_type: 'datetime'
+  data_type: 'timestamp'
   timezone: 'local'
   is_nullable: 0
 
@@ -66,7 +66,7 @@ __PACKAGE__->add_columns(
   "swissround",
   { data_type => "TINYINT", is_nullable => 0 },
   "start",
-  { data_type => "datetime", timezone => 'local', is_nullable => 0 },
+  { data_type => "timestamp", timezone => 'local', is_nullable => 0 },
   "stop",
   { data_type => "datetime", timezone => 'local', is_nullable => 0 },
 );
