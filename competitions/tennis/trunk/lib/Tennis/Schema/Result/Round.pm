@@ -37,7 +37,8 @@ __PACKAGE__->belongs_to( profile => 'Tennis::Schema::Result::Rounds', {
 __PACKAGE__->has_one( league => 'dic::Schema::League', {
 		'foreign.id' => 'self.tournament' });
 __PACKAGE__->has_one( league => 'Swiss::Schema::Matches', {
-		'foreign.id' => 'self.tournament' });
+		'foreign.round' => 'self.value',
+		'foreign.tournament' =>'self.tournament' });
 
 __PACKAGE__->has_many( points => 'Tennis::Schema::Point', {
 	'foreign.id' => 'self.tournament', 'foreign.round' => 'self.value' });
