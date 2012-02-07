@@ -43,7 +43,7 @@ for my $league ( @leagueids ) {
 					@{$leaguefile->{member}};
 }
 
-uptodatepopulate( 'SwissDB::League', $leagues );
+uptodatepopulate( 'League', $leagues );
 
 uptodatepopulate( 'Genre', [
 			[ qw/id value/ ],
