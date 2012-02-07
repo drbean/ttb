@@ -1,6 +1,6 @@
 [% META title = 'Round List' -%]
 
-<p>[% league %] League</p>
+<p>[% league.id _ " " _ league.name %] League</p>
 
 <table>
 <tr><th>Round<th>Story<th>Swiss round<th>Start<th>Stop
@@ -9,8 +9,8 @@
     <td>[% r.id %]</td>
     <td>[% r.story %]</td>
     <td>[% r.swissround %]</td>
-    <td>[% r.start %]</td>
-    <td>[% r.stop %]</td>
+    <td>[% r.start.day_name _ ", " _ r.start %]</td>
+    <td>[% r.stop.day_name _ ", " _ r.stop %]</td>
     <td>
 	<a href="[% c.uri_for('/play/') _ r.round %]">Go!</a>
     </td>
