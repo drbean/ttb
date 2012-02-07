@@ -1,18 +1,17 @@
 package Tennis::Schema::Result::Rounds;
 
+# Created by DBIx::Class::Schema::Loader
+# DO NOT MODIFY THE FIRST PART OF THIS FILE
+
 use strict;
 use warnings;
 
-use Moose;
-use MooseX::NonMoose;
-use namespace::autoclean;
-extends 'DBIx::Class::Core';
+use base 'DBIx::Class::Core';
 
-__PACKAGE__->load_components("InflateColumn::DateTime", "TimeStamp");
 
 =head1 NAME
 
-Tennis::Schema::Result::Round
+Tennis::Schema::Result::Rounds
 
 =cut
 
@@ -22,102 +21,75 @@ __PACKAGE__->table("rounds");
 
 =head2 league
 
-  data_type: 'VARCHAR'
+  data_type: 'varchar'
   is_nullable: 0
   size: 13
 
 =head2 story
 
-  data_type: 'VARCHAR'
+  data_type: 'varchar'
   is_nullable: 0
   size: 13
 
 =head2 id
 
-  data_type: 'TINYINT'
+  data_type: 'smallint'
   is_nullable: 0
 
 =head2 swissround
 
-  data_type: 'TINYINT'
+  data_type: 'smallint'
   is_nullable: 0
 
 =head2 start
 
   data_type: 'timestamp'
-  timezone: 'local'
   is_nullable: 0
 
 =head2 stop
 
-  data_type: 'datetime'
-  timezone: 'local'
+  data_type: 'timestamp'
   is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
   "league",
-  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
+  { data_type => "varchar", is_nullable => 0, size => 13 },
   "story",
-  { data_type => "VARCHAR", is_nullable => 0, size => 13 },
+  { data_type => "varchar", is_nullable => 0, size => 13 },
   "id",
-  { data_type => "TINYINT", is_nullable => 0 },
+  { data_type => "smallint", is_nullable => 0 },
   "swissround",
-  { data_type => "TINYINT", is_nullable => 0 },
+  { data_type => "smallint", is_nullable => 0 },
   "start",
-  { data_type => "timestamp", timezone => 'local', is_nullable => 0 },
+  { data_type => "timestamp", is_nullable => 0 },
   "stop",
-  { data_type => "datetime", timezone => 'local', is_nullable => 0 },
+  { data_type => "timestamp", is_nullable => 0 },
 );
 __PACKAGE__->set_primary_key("league", "id");
 
-#=head1 RELATIONS
-#
-#=head2 played_by
-#
-#Type: belongs_to
-#
-#Related object: L<Bett::Schema::Result::Member>
-#
-#=cut
-#
-#__PACKAGE__->belongs_to(
-#  "played_by",
-#  "Bett::Schema::Result::Member",
-#  {	"foreign.player" => "self.player",
-#  	"foreign.league" => "self.league"
-#  },
-#  {
-#    is_deferrable => 0,
-#    join_type     => "LEFT",
-#    on_delete     => "CASCADE",
-#    on_update     => "CASCADE",
-#  },
-#);
-#
-#=head2 yn
-#
-#Type: belongs_to
-#
-#Related object: L<Bett::Schema::Result::Yn>
-#
-#=cut
-#
-#__PACKAGE__->belongs_to(
-#  "yns",
-#  "Bett::Schema::Result::Yn",
-#  {   "foreign.player" => "self.player",
-#      "foreign.league" => "self.league",
-#      "foreign.exercise" => "self.exercise"
-#  },
-#  {
-#    is_deferrable => 0,
-#    join_type     => "LEFT",
-#    on_delete     => "CASCADE",
-#    on_update     => "CASCADE",
-#  },
-#);
+=head1 RELATIONS
 
-__PACKAGE__->meta->make_immutable;
+=head2 rounds
+
+Type: has_many
+
+Related object: L<Tennis::Schema::Result::Round>
+
+=cut
+
+__PACKAGE__->has_many(
+  "rounds",
+  "Tennis::Schema::Result::Round",
+  { "foreign.tournament" => "self.league", "foreign.value" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5AUky7+TzBz+NGUWLWZClg
+
+
+# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
