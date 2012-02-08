@@ -73,26 +73,20 @@ __PACKAGE__->table("match");
 =cut
 
 __PACKAGE__->add_columns(
-  "white",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
-  "black",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
   "league",
   { data_type => "varchar", is_nullable => 0, size => 13 },
-  "exercise",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
-  "table",
-  { accessor => undef, data_type => "smallint", is_nullable => 0 },
+  "round",
+  { data_type => "smallint", is_nullable => 0 },
+  "pair",
+  { data_type => "smallint", is_nullable => 0 },
   "games",
   { data_type => "smallint", is_nullable => 0 },
-  "receiverpoints",
-  { data_type => "smallint", is_nullable => 0 },
   "winner",
-  { data_type => "boolean", is_nullable => 0 },
+  { data_type => "varchar", is_nullable => 0, size => 13 },
   "forfeit",
   { data_type => "varchar", is_nullable => 0, size => 13 },
 );
-__PACKAGE__->set_primary_key("table", "white", "black", "exercise", "league");
+__PACKAGE__->set_primary_key("pair", "round", "league");
 
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
