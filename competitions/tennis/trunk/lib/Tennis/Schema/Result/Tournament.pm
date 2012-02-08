@@ -41,7 +41,7 @@ __PACKAGE__->has_many(
 __PACKAGE__->has_many(
 	players => 'Tennis::Schema::Result::Player', 'tournament' );
 __PACKAGE__->has_many(
-	rounds => 'Tennis::Schema::Result::Rounds', 'tournament' );
+	rounds => 'Tennis::Schema::Result::Rounds', 'league' );
 __PACKAGE__->has_one(
 	round => 'Tennis::Schema::Result::Round', 'tournament' );
 

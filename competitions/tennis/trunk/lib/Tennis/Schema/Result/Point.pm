@@ -84,30 +84,20 @@ __PACKAGE__->table("point");
 =cut
 
 __PACKAGE__->add_columns(
-  "server",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
-  "receiver",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
   "league",
   { data_type => "varchar", is_nullable => 0, size => 13 },
-  "exercise",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
+  "round",
+  { data_type => "smallint", is_nullable => 0 },
+  "pair",
+  { data_type => "smallint", is_nullable => 0 },
   "game",
   { data_type => "smallint", is_nullable => 0 },
   "id",
   { data_type => "smallint", is_nullable => 0 },
-  "question",
-  { data_type => "varchar", is_nullable => 0, size => 100 },
-  "grammatical",
-  { data_type => "boolean", is_nullable => 0 },
-  "answer",
-  { data_type => "varchar", is_nullable => 0, size => 30 },
-  "correct",
-  { data_type => "boolean", is_nullable => 0 },
   "winner",
   { data_type => "varchar", is_nullable => 0, size => 13 },
 );
-__PACKAGE__->set_primary_key("id", "game", "server", "receiver", "exercise", "league");
+__PACKAGE__->set_primary_key("id", "game", "pair", "round", "league");
 
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
