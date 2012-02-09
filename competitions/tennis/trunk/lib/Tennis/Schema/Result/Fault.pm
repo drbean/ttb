@@ -72,14 +72,12 @@ __PACKAGE__->table("fault");
 =cut
 
 __PACKAGE__->add_columns(
-  "server",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
-  "receiver",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
   "league",
   { data_type => "varchar", is_nullable => 0, size => 13 },
-  "exercise",
-  { data_type => "varchar", is_nullable => 0, size => 13 },
+  "round",
+  { data_type => "smallint", is_nullable => 0 },
+  "pair",
+  { data_type => "smallint", is_nullable => 0 },
   "game",
   { data_type => "smallint", is_nullable => 0 },
   "point",
@@ -91,7 +89,7 @@ __PACKAGE__->add_columns(
   "questiontime",
   { data_type => "timestamp", is_nullable => 0 },
 );
-__PACKAGE__->set_primary_key("id", "point", "game", "server", "receiver", "exercise", "league");
+__PACKAGE__->set_primary_key("id", "point", "game", "pair", "round", "league");
 
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
