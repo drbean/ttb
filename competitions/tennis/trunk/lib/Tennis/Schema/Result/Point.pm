@@ -99,6 +99,18 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("id", "game", "pair", "round", "league");
 
+__PACKAGE__->has_many('faults', 'Tennis::Schema::Result::Fault', {
+	'foreign.point' => 'self.id', 'foreign.game' => 'self.game',
+	'foreign.pair' => 'self.pair', 'foreign.round' => 'self.pair',
+	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
+__PACKAGE__->has_many('lets', 'Tennis::Schema::Result::Let', {
+	'foreign.point' => 'self.id', 'foreign.game' => 'self.game',
+	'foreign.pair' => 'self.pair', 'foreign.round' => 'self.pair',
+	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
+__PACKAGE__->has_many('rally', 'Tennis::Schema::Result::Rally', {
+	'foreign.point' => 'self.id', 'foreign.game' => 'self.game',
+	'foreign.pair' => 'self.pair', 'foreign.round' => 'self.pair',
+	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rpg/SG2L2srxlUJzz4Dp3g
