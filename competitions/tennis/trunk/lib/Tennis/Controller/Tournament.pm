@@ -4,6 +4,8 @@ use namespace::autoclean;
 
 BEGIN {extends 'Catalyst::Controller'; }
 
+use DateTime;
+
 =head1 NAME
 
 CompComp::Controller::Tournament - Catalyst Controller
@@ -39,10 +41,12 @@ sub list : Local {
     my ($self, $c) = @_;
     my $leagueId = $c->session->{league};
     my $league = $c->model('dicDB::League')->find({id=>$leagueId});
-    my $genre = $league->genre;
-    $c->stash->{round} = [$c->model('DB::Round')->search( { league => $leagueId })];
+    my $field = $league->field;
+    $c->stash->{round} = [$c->model('DB::Rounds')->search({
+	    league => $leagueId })];
     my $player = $c->session->{player_id};
-    $c->stash->{league} = $league->name;
+    $c->stash->{league} = { name => $league->name, id => $leagueId,
+	    description => $field };
     $c->stash->{template} = 'tournament/rounds.tt2';
 }
 
@@ -56,24 +60,95 @@ Create next tennis tournament round using swiss roundId pairing and exerciseId B
 =cut
 
 sub create :Global :Args(2)  {
-	my ($self, $c, $storyId, $roundId) = @_;
-	my $leagueId = $c->session->{league};
-	#my @pairings = $c->model('SwissDB::Matches')->search( {
-	#		round => $roundId, tournament => $leagueId } );
-	#die "No pairings in round $roundId in $leagueId tournament" unless
-	#	@pairings;
-	my $quiz = $c->model('DB::Round')->update_or_create({
-			league => $leagueId,
+	my ($self, $c, $storyId, $round) = @_;
+	my $league = $c->session->{league};
+	my @swiss = $c->model("SwissDB::Matches")->search({
+		tournament => $league, round => $round });
+	die "No pairings in round $round in $league tournament" unless
+		@swiss;
+	my @draw = ( [ qw/tournament round player pair role opponent/ ] );
+	my @matches = ( [ qw/league round pair winner forfeit/ ] );
+	my @games = ( [qw/league round pair id serverpoints receiverpoints winner/] );
+	my @points = ( [qw/league round pair game id winner/] );
+	for my $match ( @swiss ) {
+		my $table = $match->pair;
+		my $w = $match->white;
+		my $b = $match->black;
+		push @draw,	[ $league, $round, $w, $table, 'White', $b ],
+				[ $league, $round, $b, $table, 'Black', $w ];
+		push @matches,
+			[ $league, $round, $table, 'Unknown', 'Unknown'];
+		push @games, [ $league, $round, $table, 1, 0, 0, 'Unknown' ];
+		push @points, [ $league, $round, $table, 1, 1, 'Unknown' ];
+	}
+	$c->model('DB::Point')->populate(\@points);
+	$c->model('DB::Game')->populate(\@games);
+	$c->model('DB::Match')->populate(\@matches);
+	$c->model("DB::Draw")->populate(\@draw);
+	my $now = DateTime->now( time_zone => 'local' );
+	$c->model('DB::Rounds')->update_or_create({
+			league => $league,
 			story => $storyId,
-			id => $roundId,
-			swissround => $roundId,
-			start => DateTime->now( time_zone => 'local' ),
-			stop => DateTime->now( time_zone => 'local' ),
+			id => $round,
+			swissround => $round,
+			start => $now,
+			stop => $now->clone->add( days => 5),
 			# stop => time+3600*24*7,
 			});
-	$c->response->redirect($c->uri_for('list',
-		   {status_msg => "Game added"}));
+	$c->stash( {status_msg =>
+		"Round $round in the $league league added.\n"});
+	$c->detach('list');
 }
+
+=head2 go
+
+http://server.school.edu/tennis/go/roundId
+
+Allow play action to take/show questions.
+
+=cut
+
+sub go : Global :Args(1) {
+	my ($self, $c, $roundId) = @_;
+	my $leagueId = $c->session->{league};
+	my $round = $c->model('DB::Rounds')->find({
+		league => $leagueId, id => $roundId });
+	$c->stash->{error_msg} =
+		"No Round $roundId yet created." unless $round;
+	if ( $round ) {
+		$c->model("DB::Round")->update_or_create({
+		tournament => $leagueId, value => $roundId }) ;
+		$c->stash( {status_msg =>
+			"Round $roundId in the $leagueId league has started.\n"});
+	}
+	$c->detach('list');
+}
+
+
+=head2 stop
+
+http://server.school.edu/tennis/stop/roundId
+
+Deny play action to take/show questions.
+
+=cut
+
+sub stop : Global :Args(1) {
+	my ($self, $c, $roundId) = @_;
+	my $leagueId = $c->session->{league};
+	my $round = $c->model('DB::Round')->find({ tournament => $leagueId});
+	$c->stash->{error_msg} =
+		"No Round $roundId yet created, or already 0."
+			unless $round and $round->value;
+	if ( $round ) {
+		$c->model("DB::Round")->update_or_create({
+		tournament => $leagueId, value => 0 }) ;
+		$c->stash( {status_msg =>
+			"Round $roundId in the $leagueId league now stopped.\n"});
+	}
+	$c->detach('list');
+}
+
 
 use orz;
 
