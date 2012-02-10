@@ -79,8 +79,6 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", is_nullable => 0 },
   "pair",
   { data_type => "smallint", is_nullable => 0 },
-  "games",
-  { data_type => "smallint", is_nullable => 0 },
   "winner",
   { data_type => "varchar", is_nullable => 0, size => 13 },
   "forfeit",
@@ -88,6 +86,10 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key("pair", "round", "league");
 
+
+__PACKAGE__->has_many('games', 'Tennis::Schema::Result::Game', {
+	'foreign.league' => 'self.league', 'foreign.round' => 'self.round',
+	'foreign.pair' => 'self.pair' });
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:JhstPVzXdkjMG4HJ0E+qDQ
