@@ -1,4 +1,4 @@
-package Tennis::Model::dicDB;
+package Tennis::Model::SwissDB;
 
 use strict;
 use base 'Catalyst::Model::DBIC::Schema';
@@ -6,11 +6,11 @@ use base 'Catalyst::Model::DBIC::Schema';
 # use Catalyst;
 # use Bett;
 
-my $name = Tennis->config->{dic_database};
+my $name = Tennis->config->{swiss_database};
 # my $name = "dic001";
 
 __PACKAGE__->config(
-    schema_class => 'Tennis::dicSchema',
+    schema_class => 'Tennis::SwissSchema',
     connect_info => {
         dsn => "dbi:Pg:dbname=$name",
         user => '',
@@ -20,7 +20,7 @@ __PACKAGE__->config(
 
 =head1 NAME
 
-Tennis::Model::dicDB - Catalyst DBIC Schema Model
+Tennis::Model::SwissDB - Catalyst DBIC Schema Model
 
 =head1 SYNOPSIS
 
