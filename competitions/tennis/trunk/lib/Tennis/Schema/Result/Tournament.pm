@@ -39,7 +39,7 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->has_many(
 	matches => 'Tennis::Schema::Result::Match', 'league' );
 __PACKAGE__->has_many(
-	players => 'Tennis::Schema::Result::Player', 'tournament' );
+	members => 'Tennis::Schema::Result::Member', 'tournament' );
 __PACKAGE__->has_many(
 	rounds => 'Tennis::Schema::Result::Rounds', 'league' );
 __PACKAGE__->has_one(
