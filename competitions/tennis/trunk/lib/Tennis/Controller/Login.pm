@@ -37,13 +37,6 @@ sub index :Path :Args(0) {
 				$c->stash->{name} = $name;
 				$c->stash->{leagues} =
 				  [ $c->model('dicDB::League')->search( {} ) ];
-				my $jigsawroles = $c->model('dicDB::Jigsawrole');
-				my $oldrole = $jigsawroles->search( { player => $id } )->next;
-				if ($oldrole) {
-					$c->stash->{oldrole} = $oldrole->role;
-				}
-				$c->stash->{jigsawroles} =
-				  [ $jigsawroles->get_column('role')->func('DISTINCT') ];
 				$c->stash->{template} = 'official.tt2';
 				return;
 			}
@@ -55,17 +48,16 @@ sub index :Path :Args(0) {
 				$c->stash->{id} = $id;
 				$c->stash->{username} = $name;
 				$c->stash->{leagues} = \@leagues;
-				$c->session->{exercise} = $exercise if $exercise;
-				$c->stash(exercise => $exercise);
 				$c->stash->{template} = 'membership.tt2';
 				return;
 			}
 			else {
 				my $league = $leagues[0]->id;
 				$c->session->{league} = $league;
-				$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
-				$c->session->{exercise} = $exercise if $exercise;
-				$c->response->redirect($c->uri_for( "/game"));
+				my $round = $c->model("DB::Round")->find({
+					tournament => $league})->value;
+				$c->session->{round} = $round if defined $round;
+				$c->response->redirect($c->uri_for( "/play"));
 			}
 		} else {
 			$c->stash(error_msg =>
@@ -75,7 +67,6 @@ sub index :Path :Args(0) {
 		$c->stash(error_msg =>
 			"Empty id or password.")
 		unless ($c->user_exists);
-		$c->stash(exercise => $exercise);
 	}
 	$c->stash(template => 'login.tt2');
 }
@@ -92,25 +83,23 @@ sub official : Local {
 	my $league = $c->request->params->{league} || "";
 	my $jigsawrole = $c->request->params->{jigsawrole} || "";
 	my $password = lc $c->request->params->{password} || "";
-	my $exercise = $c->request->params->{exercise};
+	my $round = $c->request->params->{round};
 	my $username = $c->session->{player_id};
 	if ( $c->authenticate( {id =>$username, password=>$password} ) ) {
 		# my $officialrole = "official";
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
-			$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
-			$c->session->{exercise} = $exercise if $exercise;
-			$c->model('dicDB::Jigsawrole')->update_or_create(
-				{	league => $league, player => $username,
-					role => $jigsawrole } );
+			my $round = $c->model("DB::Round")->search({
+				tournament => $league})->value;
+			$c->session->{round} = $round if defined $round;
 			$c->response->redirect($c->uri_for("/tournament/list"), 303);
 			return;
 		}
 		else {
 		# Set an error message
 		$c->stash->{error_msg} = "Bad username or password?";
-		$c->stash(exercise => $exercise);
+		$c->stash(round => $round);
 		$c->stash->{template} = 'login.tt2';
 		}
 	}
@@ -130,36 +119,15 @@ sub membership :Local {
 	my $league = $c->request->params->{league} || '';
 	my $password = $c->request->params->{password} || '';
 	my $exercise = $c->request->params->{exercise};
-	$c->session->{league} = $league;
-	$exercise = $c->forward( 'get_exercise', [ $league ] ) unless $exercise;
-	$c->session->{exercise} = $exercise if $exercise;
-	if ( $exercise ) {
+	if ( $league ) {
+		$c->session->{league} = $league;
 		$c->response->redirect(
 			$c->uri_for( "/game" ));
 	}
 	else {
-		$c->stash(exercise => $exercise);
 		$c->stash->{template} = 'login.tt2';
 		return;
 	}
-}
-
-
-=head2 get_exercise
-
-dicDB::Exercise code used by both membership, login actions
-
-=cut
-
-sub get_exercise :Private {
-	my ($self, $c, $league) = @_;
-	my $leaguegenre = $c->model("dicDB::Leaguegenre")->search({league => $league})->next;
-	my $genre = $leaguegenre->get_column('genre');
-	my $exercises = $c->model("dicDB::Exercise")->search({ genre =>
-			$genre });
-	my $exercise = $exercises->next;
-	if ( $exercise ) { return $exercise->id; }
-	else { return '' }
 }
 
 
