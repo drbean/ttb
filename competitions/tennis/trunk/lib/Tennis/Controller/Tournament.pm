@@ -79,6 +79,7 @@ sub create :Global :Args(2)  {
 		push @matches,
 			[ $league, $round, $table, 'Unknown', 'Unknown'];
 		push @games, [ $league, $round, $table, 1, 0, 0, 'Unknown' ];
+		push @games, [ $league, $round, $table, 2, 0, 0, 'Unknown' ];
 		push @points, [ $league, $round, $table, 1, 1, 'Unknown' ];
 	}
 	$c->model('DB::Point')->populate(\@points);
