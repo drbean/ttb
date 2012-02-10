@@ -34,27 +34,32 @@ my $leaguegenres = [
 my @leagueids = map $_->[0], @$leaguegenres[1..$#$leaguegenres];
 
 my ($leaguefile, $players);
-my $leagues = [ [ qw/id name field/ ] ];
+my $leagues = [ [ qw/id name description/ ] ];
+my $rounds = [ [ qw/league story id swissround start stop/ ] ];
+my $now = DateTime->now( time_zone => 'local' );
 for my $league ( @leagueids ) {
 	$leaguefile = LoadFile "$config{leagues}/$league/league.yaml";
 	push @$leagues, [ $league, $leaguefile->{league}, $leaguefile->{field} ];
+	push @$rounds, [$league, 'Nothing', 0, 0, $now, $now];
 	push @{$players->{$league}},
 		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
 					@{$leaguefile->{member}};
 }
 
-uptodatepopulate( 'League', $leagues );
+find_or_populate( 'Tournament', $leagues );
+find_or_populate( 'Rounds', $rounds );
 
-uptodatepopulate( 'Genre', [
+my $genres = [
 			[ qw/id value/ ],
 			[ 1, "intermediate" ],
 			[ 2, "business" ],
 			[ 3, "friends" ],
 			[ 4, "intercultural" ],
 			[ 5, "speaking" ],
-			] );
+			];
+#find_or_populate( 'Genre', $genres;
 
-uptodatepopulate( 'Leaguegenre', $leaguegenres );
+# find_or_populate( 'Leaguegenre', $leaguegenres );
 
 push @{$players->{officials}}, [split] for <<OFFICIALS =~ m/^.*$/gm;
 193001	DrBean	ok
@@ -71,36 +76,32 @@ foreach my $league ( 'officials', @leagueids )
 	}
 }
 my $playerpopulator = [ [ qw/id name password/ ], values %players ];
-uptodatepopulate( 'Player', $playerpopulator );
+find_or_populate( 'Login', $playerpopulator );
 
-my (@allLeaguerolebearers, @allLeaguePlayers);
+my (@allLeaguerolebearers, @allLeaguedraws, @allLeaguePlayers);
 foreach my $league ( @leagueids )
 {
-	my (%members, %rolebearers);
+	my (%members, %draw, %rolebearers);
 	next unless $players->{$league} and ref $players->{$league} eq "ARRAY";
 	my @players = @{$players->{$league}};
 	foreach my $player ( @players )
 	{
 		$members{$player->[0]} =  [ $league, $player->[0] ];
+		$draw{$player->[0]} = 
+			[ $league, 0, $player->[0], 0, 'Unknown', 'Unknown' ];
 		$rolebearers{$player->[0]} =  [ $player->[0], 2 ];
 	}
 	push @allLeaguePlayers, values %members;
+	push @allLeaguedraws, values %draw;
 	push @allLeaguerolebearers, values %rolebearers;
 	$members{193001} = [ $league, 193001 ];
 }
-uptodatepopulate( 'Member', [ [ qw/league player/ ], 
+find_or_populate( 'Member', [ [ qw/tournament player/ ], 
 				@allLeaguePlayers ] );
+find_or_populate( 'Draw', [ [ qw/tournament round player pair role opponent/ ], 
+				@allLeaguedraws ] );
 
-uptodatepopulate( 'Role', [ [ qw/id role/ ], 
-[ 1, "official" ],
-[ 2, "player" ],
-[ 3, "amateur" ], ] );
-
-uptodatepopulate( 'Rolebearer', [ [ qw/player role/ ], 
-				[ 193001, 1 ],
-				@allLeaguerolebearers ] );
-
-sub uptodatepopulate
+sub find_or_populate
 {
 	my $class = $schema->resultset(shift);
 	my $entries = shift;
@@ -109,7 +110,7 @@ sub uptodatepopulate
 	{
 		my %hash;
 		@hash{@$columns} = @$row;
-		$class->update_or_create(\%hash);
+		$class->find_or_create(\%hash);
 	}
 }
 
