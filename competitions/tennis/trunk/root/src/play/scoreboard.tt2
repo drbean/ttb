@@ -1,6 +1,38 @@
-[% META title = 'Round List' -%]
+[% META title = 'Scoreboard' -%]
 
-<p>[% league.id _ " " _ league.name %] League</p>
+[% game.server.0	=	"White" %]
+[% game.receiver.0	=	"Black" %]
+[% game.server.1	=	"Black" %]
+[% game.receiver.1	=	"White" %]
+[% game.server.2	=	"White" %]
+[% game.receiver.2	=	"Black" %]
+
+<h3>[% league.id _ " " _ league.name %] League</h3>
+<h2>Round [% round.id %], Exercise: [% round.story %]</h2>
+<h3>Pair [% match.pair %], [% games.1.id %] Games, Winner: [% match.winner %]</h3>
+
+<h2>Game </h2>
+
+<table>
+<tr><th>Id<th>Server<th>Points<th>Receiver<th>Points<th>Winner
+[% n = 0 %]
+[% FOREACH g IN games -%]
+  <tr>
+    <td>[% g.id %]</td>
+    <td>[% game.server.$n %]</td>
+    <td>[% g.serverpoints %]</td>
+    <td>[% game.receiver.$n %]</td>
+    <td>[% g.receiverpoints %]</td>
+    <td>[% g.winner %]</td>
+    <td>
+	<a href="[% c.uri_for('/play') %]">Go!</a>
+    </td>
+  </tr>
+  [% n = n+1 %]
+[% END -%]
+</table>
+
+<h3>All Rounds</h3>
 
 <table>
 <tr><th>Round<th>Story<th>Swiss round<th>Start<th>Stop
@@ -11,9 +43,6 @@
     <td>[% r.swissround %]</td>
     <td>[% r.start.day_name _ ", " _ r.start %]</td>
     <td>[% r.stop.day_name _ ", " _ r.stop %]</td>
-    <td>
-	<a href="[% c.uri_for('/play/') _ r.round %]">Go!</a>
-    </td>
   </tr>
 [% END -%]
 </table>
