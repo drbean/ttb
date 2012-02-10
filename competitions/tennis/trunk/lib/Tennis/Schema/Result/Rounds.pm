@@ -85,6 +85,12 @@ __PACKAGE__->has_many(
   { "foreign.tournament" => "self.league", "foreign.value" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
+__PACKAGE__->has_many(
+  "matches",
+  "Tennis::Schema::Result::Match",
+  { "foreign.league" => "self.league", "foreign.round" => "self.id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 
 # Created by DBIx::Class::Schema::Loader v0.07010 @ 2012-02-06 18:13:41
