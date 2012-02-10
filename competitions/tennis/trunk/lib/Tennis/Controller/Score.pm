@@ -1,4 +1,4 @@
-package Tennis::Controller::Play;
+package Tennis::Controller::Score;
 use Moose;
 use namespace::autoclean;
 
@@ -20,7 +20,7 @@ Catalyst Controller.
 
 =cut
 
-sub setup :Chained('/') :PathPart('play') :CaptureArgs(0) {
+sub setup :Chained('/') :PathPart('score') :CaptureArgs(0) {
 	my ( $self, $c ) = @_;
 	my $leagueId = $c->session->{league};
 	my $playerId = $c->session->{player_id};
