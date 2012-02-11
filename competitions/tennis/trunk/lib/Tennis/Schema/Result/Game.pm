@@ -72,8 +72,6 @@ __PACKAGE__->add_columns(
   { data_type => "smallint", is_nullable => 0 },
   "pair",
   { data_type => "smallint", is_nullable => 0 },
-  "match",
-  { data_type => "smallint", is_nullable => 0 },
   "id",
   { data_type => "smallint", is_nullable => 0 },
   "serverpoints",
@@ -93,8 +91,8 @@ __PACKAGE__->has_many( points => 'Tennis::Schema::Result::Point', {
 	'foreign.game' => 'self.id', 'foreign.pair' => 'self.pair',
 	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
 __PACKAGE__->belongs_to( match => 'Tennis::Schema::Result::Match', {
-	'foreign.pair' => 'self.pair',
-	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
+                                     'foreign.pair' => 'self.pair',
+       'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
