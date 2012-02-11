@@ -9,14 +9,16 @@
 
 <h3>[% league.id _ " " _ league.name %] League</h3>
 <h2>Round [% round.id %], Exercise: [% round.story %]</h2>
-<h3>Pair [% match.pair %], [% games.1.id %] Games, Winner: [% match.winner %]</h3>
+<h3>You are playing on Table [% match.pair %], as [% role %].
+<p>[% match.games.get_column('id').max %] games played.
+<p>Match winner: [% match.winner %]</h3>
 
 <h2>Game </h2>
 
 <table>
 <tr><th>Id<th>Server<th>Points<th>Receiver<th>Points<th>Winner
 [% n = 0 %]
-[% FOREACH g IN games -%]
+[% WHILE (g = games.next -%]
   <tr>
     <td>[% g.id %]</td>
     <td>[% game.server.$n %]</td>
@@ -27,6 +29,20 @@
     <td>
 	<a href="[% c.uri_for('/play') %]">Go!</a>
     </td>
+
+	<table>
+	<h2>Point </h2>
+	<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
+	[% m = 0 %]
+	[% WHILE (p = points.next -%]
+	  <tr>
+	    <td>[% p.id %]</td>
+	    <td>[% result %]</td>
+	    <td>[% p.serverpoints %]</td>
+	    <td>[% p.receiverpoints %]</td>
+	    <td>[% p.winner %]</td>
+	  [% m = m+1 %]
+	[% END -%]
   </tr>
   [% n = n+1 %]
 [% END -%]
