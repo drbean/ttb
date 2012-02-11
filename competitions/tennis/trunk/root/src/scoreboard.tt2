@@ -18,7 +18,7 @@
 <table>
 <tr><th>Id<th>Server<th>Points<th>Receiver<th>Points<th>Winner
 [% n = 0 %]
-[% WHILE (g = games.next -%]
+[% WHILE (g = games.next) -%]
   <tr>
     <td>[% g.id %]</td>
     <td>[% game.server.$n %]</td>
@@ -34,7 +34,7 @@
 	<h2>Point </h2>
 	<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
 	[% m = 0 %]
-	[% WHILE (p = points.next -%]
+	[% WHILE (p = points.next) -%]
 	  <tr>
 	    <td>[% p.id %]</td>
 	    <td>[% result %]</td>
