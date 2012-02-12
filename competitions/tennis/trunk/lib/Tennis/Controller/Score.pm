@@ -73,7 +73,8 @@ sub game :Chained('match') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 	my $match = $c->stash->{match};
 	my $table = $c->stash->{table};
-	my $games = $match->games->search({ pair => $table });
+	my $games = $match->games->search({ pair => $table }, {order_by =>
+		{ -asc => 'id'}});
 	$c->stash( games => $games );
 }
 
