@@ -57,7 +57,7 @@ sub index :Path :Args(0) {
 				my $round = $c->model("DB::Round")->find({
 					tournament => $league})->value;
 				$c->session->{round} = $round if defined $round;
-				$c->response->redirect($c->uri_for( "/play"));
+				$c->response->redirect($c->uri_for( "/score"));
 			}
 		} else {
 			$c->stash(error_msg =>
@@ -122,7 +122,7 @@ sub membership :Local {
 	if ( $league ) {
 		$c->session->{league} = $league;
 		$c->response->redirect(
-			$c->uri_for( "/game" ));
+			$c->uri_for( "/score" ));
 	}
 	else {
 		$c->stash->{template} = 'login.tt2';
