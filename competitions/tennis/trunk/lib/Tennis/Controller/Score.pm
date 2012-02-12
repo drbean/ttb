@@ -6,7 +6,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Tennis::Controller::Play - Catalyst Controller
+Tennis::Controller::Score - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -36,6 +36,7 @@ sub setup :Chained('/') :PathPart('score') :CaptureArgs(0) {
 	$c->stash( tournament => $tournament );
 	$c->stash( playerId => $playerId );
 	$c->stash( player => $player );
+	$c->stash( roundId => $roundId );
 	$c->stash( round => $round );
 	$c->stash( exercise => $exercise );
 	$c->stash( table => $table );
@@ -56,9 +57,9 @@ sub match :Chained('setup') :PathPart('') :CaptureArgs(0) {
 	my $roundId = $c->stash->{roundId};
 	my $table = $c->stash->{table};
 	my $match = $round->matches->find({pair => $table});
-die unless $match;
 	# my $opponent = $player->draws->find({round => $roundId})->opponent;
 	$c->stash( match => $match );
+	$c->stash( role => $player->draws->find({round => $roundId})->role );
 	# $c->stash( opponent => $opponent );
 }
 
@@ -68,28 +69,31 @@ Find game.
 
 =cut
 
-sub game :Chained('match') :PathPart('') :Args(0) {
+sub game :Chained('match') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 	my $match = $c->stash->{match};
 	my $table = $c->stash->{table};
-	my @games = $match->games->search({ pair => $table });
-	$c->stash( games => \@games );
-	$c->stash(template => 'play/scoreboard.tt2');
+	my $games = $match->games->search({ pair => $table });
+	$c->stash( games => $games );
 }
 
-#=head2 point
-#
-#Find point.
-#
-#=cut
-#
-#sub point :Chained('game') :PathPart('') :CaptureArgs(0) {
-#	my ($self, $c) = @_;
-#	my $game = $c->stash->{game};
-#	my $points = $game->points;
-#	my $point = $points->get_column('id')->max_rs();
-#}
-#
+=head2 point
+
+Find point.
+
+=cut
+
+sub point :Chained('game') :PathPart('') :Args(0) {
+	my ($self, $c) = @_;
+	my $games = $c->stash->{games};
+	my $table = $c->stash->{table};
+	my $game = $games->search({pair => $table}, { order_by => {
+		-desc => 'id'}, rows => 1 })->first;
+	my $points = $game->points;
+	$c->stash( points => $points );
+	$c->stash(template => 'scoreboard.tt2');
+}
+
 #=head2 play
 #
 #Rally, Let, or Fault?
