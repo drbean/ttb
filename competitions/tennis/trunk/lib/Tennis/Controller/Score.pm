@@ -87,10 +87,14 @@ sub point :Chained('game') :PathPart('') :Args(0) {
 	my ($self, $c) = @_;
 	my $games = $c->stash->{games};
 	my $table = $c->stash->{table};
-	my $game = $games->search({pair => $table}, { order_by => {
-		-desc => 'id'}, rows => 1 })->first;
-	my $points = $game->points;
-	$c->stash( points => $points );
+	my $gamepoints;
+	while (my $game = $games->next ) {
+		my $gameid = $game->id;	
+		$gamepoints->[$gameid] = $game->points;
+	}
+	$c->stash( points => $gamepoints );
+	$games->reset;
+	$c->stash( games => $games );
 	$c->stash(template => 'scoreboard.tt2');
 }
 
