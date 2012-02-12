@@ -15,17 +15,15 @@
 
 
 
-<table>
-<tr><th>Id<th>Server<th>Points<th>Receiver<th>Points<th>Winner
-<caption><h2>Game </h2></caption>
 [% n = 0 %]
+<table border="0">
+<caption><h2>Game </h2></caption>
+<tr><td colspan=6>[% game.server.$n %] serving.
+<tr><th>Id<th>ServerPoints<th>ReceiverPoints<th colspan=2>Winner
 [% WHILE (g = games.next) -%]
-<table>
   <tr>
     <td>[% g.id %]</td>
-    <td>[% game.server.$n %]</td>
     <td>[% g.serverpoints %]</td>
-    <td>[% game.receiver.$n %]</td>
     <td>[% g.receiverpoints %]</td>
     <td>[% g.winner %]</td>
     <td>
@@ -38,7 +36,7 @@
 	<h3>Points </h3>
 	<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
 	[% m = 0 %]
-	[% FOREACH p in points.$n -%]
+	[% WHILE (p = points.$n.next) -%]
 	  <tr>
 	    <td>[% p.id %]</td>
 	    <td>[% result %]</td>
@@ -51,7 +49,6 @@
 	</table>
   [% n = n+1 %]
 [% END -%]
-</table>
 
 <h3>All Rounds</h3>
 
