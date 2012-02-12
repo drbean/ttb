@@ -10,15 +10,17 @@
 <h3>[% league.id _ " " _ league.name %] League</h3>
 <h2>Round [% round.id %], Exercise: [% round.story %]</h2>
 <h3>You are playing on Table [% match.pair %], as [% role %].
-<p>[% match.games.get_column('id').max %] games played.
+<p>[% match.games.get_column('id').max %] games started. [% match.games.get_column('id').max %] finished.
 <p>Match winner: [% match.winner %]</h3>
 
-<h2>Game </h2>
+
 
 <table>
 <tr><th>Id<th>Server<th>Points<th>Receiver<th>Points<th>Winner
+<caption><h2>Game </h2></caption>
 [% n = 0 %]
 [% WHILE (g = games.next) -%]
+<table>
   <tr>
     <td>[% g.id %]</td>
     <td>[% game.server.$n %]</td>
@@ -29,21 +31,24 @@
     <td>
 	<a href="[% c.uri_for('/play') %]">Go!</a>
     </td>
+  </tr>
+</table>
 
 	<table>
-	<h2>Point </h2>
+	<h3>Points </h3>
 	<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
 	[% m = 0 %]
-	[% WHILE (p = points.next) -%]
+	[% FOREACH p in points.$n -%]
 	  <tr>
 	    <td>[% p.id %]</td>
 	    <td>[% result %]</td>
 	    <td>[% p.serverpoints %]</td>
 	    <td>[% p.receiverpoints %]</td>
 	    <td>[% p.winner %]</td>
+	  </tr>
 	  [% m = m+1 %]
 	[% END -%]
-  </tr>
+	</table>
   [% n = n+1 %]
 [% END -%]
 </table>
