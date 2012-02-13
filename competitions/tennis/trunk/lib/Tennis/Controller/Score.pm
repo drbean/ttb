@@ -57,10 +57,9 @@ sub match :Chained('setup') :PathPart('') :CaptureArgs(0) {
 	my $roundId = $c->stash->{roundId};
 	my $table = $c->stash->{table};
 	my $match = $round->matches->find({pair => $table});
-	# my $opponent = $player->draws->find({round => $roundId})->opponent;
+	my $draw = $player->draws->find({round => $roundId});
 	$c->stash( match => $match );
-	$c->stash( role => $player->draws->find({round => $roundId})->role );
-	# $c->stash( opponent => $opponent );
+	$c->stash( role => $draw->role );
 }
 
 =head2 game
@@ -73,9 +72,11 @@ sub game :Chained('match') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 	my $match = $c->stash->{match};
 	my $table = $c->stash->{table};
-	my $games = $match->games->search({ pair => $table }, {order_by =>
+	my $started = $match->games->get_column('id')->max;
+	my $games = $match->games->search( undef, {order_by =>
 		{ -asc => 'id'}});
 	$c->stash( games => $games );
+	$c->stash( started => $started );
 }
 
 =head2 point
