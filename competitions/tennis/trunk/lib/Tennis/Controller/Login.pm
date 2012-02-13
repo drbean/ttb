@@ -91,9 +91,10 @@ sub official : Local {
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
 			my $round = $c->model("DB::Round")->search({
-				tournament => $league})->value;
-			$c->session->{round} = $round if defined $round;
-			$c->response->redirect($c->uri_for("/tournament/list"), 303);
+				tournament => $league})->value || '';
+			$c->session->{round} = $round if $round;
+			$c->response->redirect(
+				$c->uri_for("/tournament/rounds/$round"), 303);
 			return;
 		}
 		else {
