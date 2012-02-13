@@ -6,53 +6,49 @@
 [% game.receiver.1	=	"White" %]
 [% game.server.2	=	"White" %]
 [% game.receiver.2	=	"Black" %]
+[% opponent.Black	=	"White" %]
+[% opponent.White	=	"Black" %]
 
 <h3>[% league.id _ " " _ league.name %] League</h3>
 <h2>Round [% round.id %], Exercise: [% round.story %]</h2>
-<h3>You are playing on Table [% match.pair %], as [% role %].
-<p>[% match.games.get_column('id').max %] games started. [% match.games.get_column('id').max %] finished.
+<h3>You are playing on Table [% match.pair %], as [% role %] against [% opponent.$role %].
+<p>[% started %] games started. [% started - 1 %] finished.
 <p>Match winner: [% match.winner %]</h3>
 
 
 
 [% n = 0 %]
 <table border="0">
-<caption><h2>Game </h2></caption>
-<tr><td colspan=6>[% game.server.$n %] serving.
-<tr><th>Id<th>ServerPoints<th>ReceiverPoints<th colspan=2>Winner
+<caption><h2>Games </h2></caption>
+<tr><th>Game<th>Server<th>ServerPoints<th>ReceiverPoints<th>Winner
 [% WHILE (g = games.next) -%]
   <tr>
-    <td>[% g.id %]</td>
-    <td>[% g.serverpoints %]</td>
-    <td>[% g.receiverpoints %]</td>
-    <td>[% g.winner %]</td>
-    <td>
-	<a href="[% c.uri_for('/play') %]">Go!</a>
-    </td>
-  </tr>
-</table>
+    <td>[% g.id %]
+    <td>[% game.server.$n %]
+    <td>[% g.serverpoints %]
+    <td>[% g.receiverpoints %]
+    <td>[% g.winner %]
+    <td> <a href="[% c.uri_for('/play') %]">Go!</a>
 
-	<table>
-	<h3>Points </h3>
-	<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
-	[% m = 0 %]
-	[% WHILE (p = points.$n.next) -%]
-	  <tr>
-	    <td>[% p.id %]</td>
-	    <td>[% result %]</td>
-	    <td>[% p.serverpoints %]</td>
-	    <td>[% p.receiverpoints %]</td>
-	    <td>[% p.winner %]</td>
-	  </tr>
-	  [% m = m+1 %]
-	[% END -%]
-	</table>
+<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
+	[% gamepoints = $points.$n %]
+        [% WHILE (p = gamepoints.next) -%]
+          <tr>
+            <td>[% p.id %]
+            <td>[% result %]
+            <td>[% p.serverpoints %]
+            <td>[% p.receiverpoints %]
+            <td>[% p.winner %]
+          [% m = m+1 %]
+        [% END -%]
+ 
+ 
   [% n = n+1 %]
 [% END -%]
 
-<h3>All Rounds</h3>
 
 <table>
+<caption><h3>All Rounds</h3></caption>
 <tr><th>Round<th>Story<th>Swiss round<th>Start<th>Stop
 [% FOREACH r IN round -%]
   <tr>
