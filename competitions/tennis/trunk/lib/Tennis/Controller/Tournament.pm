@@ -33,11 +33,13 @@ sub form_create : Local {
 
 =head2 list
 
+http://server.school.edu/tennis/tournament/rounds
+
 Fetch all Round objects in the tournament and pass to quiz/list.tt2 in stash to be displayed
 
 =cut
  
-sub list : Local {
+sub list : Path('rounds') {
     my ($self, $c) = @_;
     my $leagueId = $c->session->{league};
     my $league = $c->model('dicDB::League')->find({id=>$leagueId});
