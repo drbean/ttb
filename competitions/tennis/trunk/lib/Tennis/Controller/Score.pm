@@ -85,33 +85,35 @@ Find point.
 
 =cut
 
-sub point :Chained('game') :PathPart('') :Args(0) {
+sub point :Chained('game') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 	my $games = $c->stash->{games};
-	my $table = $c->stash->{table};
 	my $gamepoints;
 	while (my $game = $games->next ) {
 		my $gameid = $game->id;	
-		$gamepoints->[$gameid] = $game->points;
+		$gamepoints->[$gameid] = $game->points->search(undef, {order_by
+			=> { -asc => 'id' }});
 	}
 	$c->stash( points => $gamepoints );
 	$games->reset;
 	$c->stash( games => $games );
-	$c->stash(template => 'scoreboard.tt2');
 }
 
-#=head2 play
-#
-#Rally, Let, or Fault?
-#
-#=cut
-#
-#sub play :Chained('point') :PathPart('') :Args(0) {
-#	my ($self, $c) = @_;
-#	my $league = $c->stash->{league};
-#	my $exercise = $c->stash->{round}->story;
-#	$c->stash->{template => 'play/scoreboard.tt2'};
-#}
+=head2 play
+
+Rally, Let, or Fault?
+
+=cut
+
+sub play :Chained('point') :PathPart('') :Args(0) {
+	my ($self, $c) = @_;
+	my $points = $c->stash->{points};
+	#for my $point ( @$points ) {
+	#	my $faults = $point->
+	#my $faults = $
+	#}
+	$c->stash(template => 'scoreboard.tt2');
+}
 
 
 
