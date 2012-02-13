@@ -1,11 +1,11 @@
 [% META title = 'Scoreboard' -%]
 
-[% game.server.0	=	"White" %]
-[% game.receiver.0	=	"Black" %]
-[% game.server.1	=	"Black" %]
-[% game.receiver.1	=	"White" %]
-[% game.server.2	=	"White" %]
-[% game.receiver.2	=	"Black" %]
+[% game.server.1	=	"White" %]
+[% game.receiver.1	=	"Black" %]
+[% game.server.2	=	"Black" %]
+[% game.receiver.2	=	"White" %]
+[% game.server.3	=	"White" %]
+[% game.receiver.3	=	"Black" %]
 [% opponent.Black	=	"White" %]
 [% opponent.White	=	"Black" %]
 
@@ -17,7 +17,7 @@
 
 
 
-[% n = 0 %]
+[% n = 1 %]
 <table border="0">
 <caption><h2>Games </h2></caption>
 <tr><th>Game<th>Server<th>ServerPoints<th>ReceiverPoints<th>Winner
@@ -30,25 +30,17 @@
     <td>[% g.winner %]
     <td> <a href="[% c.uri_for('/play') %]">Go!</a>
 
-<tr><th>Id<th>Result<th>ServerPoints<th>ReceiverPoints<th>Winner
-	[% gamepoints = $points.$n %]
-        [% WHILE (p = gamepoints.next) -%]
+        [% WHILE (p = points.$n.next) -%]
           <tr>
-            <td>[% p.id %]
-            <td>[% result %]
-            <td>[% p.serverpoints %]
-            <td>[% p.receiverpoints %]
-            <td>[% p.winner %]
-          [% m = m+1 %]
+            <td colspan="6"> [% p.winner %] got point [% p.id %]. [% opponent.${p.winner} %] double-faulted.
         [% END -%]
  
  
   [% n = n+1 %]
 [% END -%]
 
-
 <table>
-<caption><h3>All Rounds</h3></caption>
+<caption><h3>All Rounds in [% league.id _ " " _ league.name %] League</h3></caption>
 <tr><th>Round<th>Story<th>Swiss round<th>Start<th>Stop
 [% FOREACH r IN round -%]
   <tr>
