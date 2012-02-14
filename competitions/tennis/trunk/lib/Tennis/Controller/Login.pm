@@ -57,7 +57,7 @@ sub index :Path :Args(0) {
 				my $round = $c->model("DB::Round")->find({
 					tournament => $league})->value;
 				$c->session->{round} = $round if defined $round;
-				$c->response->redirect($c->uri_for( "/score"));
+				$c->response->redirect($c->uri_for( "/score/$round"));
 			}
 		} else {
 			$c->stash(error_msg =>
