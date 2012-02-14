@@ -17,10 +17,11 @@
 
 
 
-[% n = 1 %]
 <table border="0">
 <caption><h2>Games </h2></caption>
 <tr><th>Game<th>Server<th>ServerPoints<th>ReceiverPoints<th>Winner
+
+[% n = 1 %]
 [% WHILE (g = games.next) -%]
   <tr>
     <td>[% g.id %]
@@ -30,12 +31,12 @@
     <td>[% g.winner %]
     <td> <a href="[% c.uri_for('/play') %]">Go!</a>
 
-        [% WHILE (p = points.$n.next) -%]
 	[% m = 1 %]
+        [% WHILE (p = points.$n.next) -%]
           <tr>
             <td colspan="6"> [% p.winner %] got point [% p.id %]. 
-	    [%- IF rally.$n.$m.id %][% p.winner %] answered [% opponent.${p.winner} %]'s question, "[% rally.$n.$m.question %]" correctly.
-	    [%- ELSIF faults.$n %][% opponent.${p.winner} %] faulted [% WHILE (f = faults.$n.$m.next ) %] [% f.id %], [% END %] time(s).[% END -%]
+	    [%- IF ((r = rally.$n.$m) && r.id) %][% p.winner %] answered [% opponent.${p.winner} %]'s question, "[% r.question %]" correctly.
+	    [%- ELSIF faults.$n.$m != 0 %][% opponent.${p.winner} %] faulted [% WHILE (f = faults.$n.$m.next ) %] [% f.id %], [% END %] time(s).[% END -%]
 	[% m = m + 1 %]
         [% END -%]
  
