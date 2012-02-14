@@ -35,7 +35,7 @@
         [% WHILE (p = points.$n.next) -%]
           <tr>
             <td colspan="6"> [% p.winner %] got point [% p.id %]. 
-	    [%- IF ((r = rally.$n.$m) && r.id) %][% p.winner %] answered [% opponent.${p.winner} %]'s question, "[% r.question %]" correctly.
+	    [%- IF ((r = rally.$n.$m) && r.id) %][% game.receiver.$n %] answered [% game.server.$n %]'s question [% IF r.correct == 0 %]in[% ELSE %][% END %]correctly.
 	    [%- ELSIF faults.$n.$m != 0 %][% opponent.${p.winner} %] faulted [% WHILE (f = faults.$n.$m.next ) %] [% f.id %], [% END %] time(s).[% END -%]
 	[% m = m + 1 %]
         [% END -%]
