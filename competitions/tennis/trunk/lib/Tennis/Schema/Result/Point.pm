@@ -107,7 +107,7 @@ __PACKAGE__->has_many('lets', 'Tennis::Schema::Result::Let', {
 	'foreign.point' => 'self.id', 'foreign.game' => 'self.game',
 	'foreign.pair' => 'self.pair', 'foreign.round' => 'self.pair',
 	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
-__PACKAGE__->has_many('rally', 'Tennis::Schema::Result::Rally', {
+__PACKAGE__->might_have('rally', 'Tennis::Schema::Result::Rally', {
 	'foreign.point' => 'self.id', 'foreign.game' => 'self.game',
 	'foreign.pair' => 'self.pair', 'foreign.round' => 'self.pair',
 	'foreign.round' => 'self.round', 'foreign.league' => 'self.league'});
