@@ -32,9 +32,12 @@ sub setup :Chained('/') :PathPart('score') :CaptureArgs(1) {
 	my $round = $tournament->rounds->find({id => $roundId});
 	my $exercise = $round->story;
 	die unless $player;
+	my $profile = $player->profile;
+	my $playerName = $profile->name;
 	$c->stash( league => $league );
 	$c->stash( tournament => $tournament );
 	$c->stash( playerId => $playerId );
+	$c->stash( playerName => $playerName );
 	$c->stash( player => $player );
 	$c->stash( roundId => $roundId );
 	$c->stash( round => $round );
@@ -51,7 +54,6 @@ Find match.
 sub match :Chained('setup') :PathPart('') :CaptureArgs(0) {
 	my ($self, $c) = @_;
 	my $player = $c->stash->{player};
-	my $playerId = $player->profile->id;
 	my $league = $c->stash->{league};
 	my $round = $c->stash->{round};
 	my $roundId = $c->stash->{roundId};
@@ -91,8 +93,8 @@ sub point :Chained('game') :PathPart('') :CaptureArgs(0) {
 	my $gamepoints;
 	while (my $game = $games->next ) {
 		my $gameid = $game->id;	
-		$gamepoints->[$gameid] = $game->points->search(undef, {order_by
-			=> { -asc => 'id' }});
+		$gamepoints->[$gameid] = $game->points->search(undef, {
+			order_by => { -asc => 'id' }});
 	}
 	$c->stash( points => $gamepoints );
 	$games->reset;
@@ -108,10 +110,23 @@ Rally, Let, or Fault?
 sub play :Chained('point') :PathPart('') :Args(0) {
 	my ($self, $c) = @_;
 	my $points = $c->stash->{points};
-	#for my $point ( @$points ) {
-	#	my $faults = $point->
-	#my $faults = $
-	#}
+	my ($faults, $lets, $rally);
+	for my $game ( 1 .. $#$points ) {
+		my @pointIds = $points->[$game]->get_column('id')->all;
+		for my $point ( @pointIds ) {
+			$faults->{$game}->{$point} = $points->[$game]->find({
+				id => $point})->faults->search(undef, {
+				order_by => { -asc => 'id' }});
+			$lets->{$game}->{$point} = $points->[$game]->find({
+				id => $point})->lets->search(undef, {
+				order_by => { -asc => 'id' }});
+			$rally->{$game}->{$point} = $points->[$game]->find({
+				id => $point})->rally;
+		}
+	}
+	$c->stash( faults => $faults );
+	$c->stash( lets => $lets );
+	$c->stash( rally => $rally );
 	$c->stash(template => 'scoreboard.tt2');
 }
 
