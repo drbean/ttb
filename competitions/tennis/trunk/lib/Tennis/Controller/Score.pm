@@ -24,7 +24,7 @@ sub setup :Chained('/') :PathPart('score') :CaptureArgs(1) {
 	my ( $self, $c, $roundId ) = @_;
 	my $leagueId = $c->session->{league};
 	my $playerId = $c->session->{player_id};
-	my $roundId ||= $c->session->{round};
+	$roundId ||= $c->session->{round};
 	my $tournament = $c->model('DB::Tournament')->find({id => $leagueId});
 	my $league = $c->model('dicDB::League')->find({id => $leagueId});
 	my $player = $tournament->members->find($leagueId, $playerId);
