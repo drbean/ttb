@@ -29,7 +29,8 @@ html1/DTD/xhtml1-strict.dtd">
 <div id="menu">
     Navigation:
     <ul>
-	    <li><a href="http://web.nuu.edu.tw/~greg/DictationExercises.html">DictationExercises</a></li>
+	<li><a href="http://web.nuu.edu.tw/~greg/DictationExercises.html">DictationExercises</a></li>
+        <li><a href="[% c.uri_for('/tournament/rounds') %]" title="All rounds">All Tournament Rounds</a></li>
         <li><a href="[% c.uri_for('/') %]" title="Catalyst Welcome Page">Catalyst Framework</a></li>
         <li><a href="mailto:drbean@freeshell.org" title="Contact Us">Contact Dr Bean</a></li>
     </ul>
