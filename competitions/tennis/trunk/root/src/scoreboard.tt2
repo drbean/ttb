@@ -11,9 +11,9 @@
 
 <h3>[% league.id _ " " _ league.name %] League</h3>
 <h2>Round [% round.id %], Exercise: [% round.story %]</h2>
-<h3>You are playing on Table [% match.pair %], as [% role %] against [% opponent.$role %].
+<p>[% playerName %], [% playerId %]. You are playing on Table [% match.pair %], as [% role %] against [% opponent.$role %].
 <p>[% started %] games started. [% started - 1 %] finished.
-<p>Match winner: [% match.winner %]</h3>
+<p>Match winner: [% match.winner %]
 
 
 
@@ -31,8 +31,12 @@
     <td> <a href="[% c.uri_for('/play') %]">Go!</a>
 
         [% WHILE (p = points.$n.next) -%]
+	[% m = 1 %]
           <tr>
-            <td colspan="6"> [% p.winner %] got point [% p.id %]. [% opponent.${p.winner} %] double-faulted.
+            <td colspan="6"> [% p.winner %] got point [% p.id %]. 
+	    [%- IF rally.$n.$m.id %][% p.winner %] answered [% opponent.${p.winner} %]'s question, "[% rally.$n.$m.question %]" correctly.
+	    [%- ELSIF faults.$n %][% opponent.${p.winner} %] faulted [% WHILE (f = faults.$n.$m.next ) %] [% f.id %], [% END %] time(s).[% END -%]
+	[% m = m + 1 %]
         [% END -%]
  
  
