@@ -90,11 +90,11 @@ sub official : Local {
 		my $officialrole = 1;
 		if ( $c->check_user_roles($officialrole) ) {
 			$c->session->{league} = $league;
-			my $round = $c->model("DB::Round")->search({
+			my $round = $c->model("DB::Round")->find({
 				tournament => $league})->value || '';
 			$c->session->{round} = $round if $round;
 			$c->response->redirect(
-				$c->uri_for("/tournament/rounds/$round"), 303);
+				$c->uri_for("/tournament/rounds"), 303);
 			return;
 		}
 		else {
