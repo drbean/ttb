@@ -1,4 +1,4 @@
-package Bett::Controller::Play;
+package Tennis::Controller::Play;
 use Moose;
 use namespace::autoclean;
 
@@ -8,7 +8,7 @@ BEGIN {extends 'Catalyst::Controller'; }
 
 =head1 NAME
 
-Bett::Controller::Play - Catalyst Controller
+Tennis::Controller::Play - Catalyst Controller
 
 =head1 DESCRIPTION
 
@@ -38,10 +38,16 @@ Session and WH, YN, S standing.
 =cut
 
 sub setup :Chained('/') :PathPart('play') :CaptureArgs(1) {
-	my ($self, $c, $mycourse) = @_;
+	my ($self, $c, $gameId) = @_;
         my $player = $c->session->{player_id};
 	my $league = $c->session->{league};
-	my $exercise = $c->session->{exercise};
+	my $round = $c->session->{round};
+	my $tournament = $c->model('DB::Tournament')->find({id => $leagueId});
+	my $league = $c->model('dicDB::League')->find({id => $leagueId});
+	my $player = $tournament->members->find($leagueId, $playerId);
+	my $table = $player->draws->find($leagueId, $roundId, $playerId)->pair;
+	my $round = $tournament->rounds->find({id => $roundId});
+	my $exercise = $round->story;
 	my $gameover;
 	for my $allcourse ( 'WH', 'YN', 'S' ) {
 		my $standing = $c->model("DB::$allcourse")
