@@ -1,12 +1,11 @@
 #!/usr/bin/perl
 
-# Last Edit: 2011 Sep 19, 09:06:46 AM
+# Last Edit: 2012 Feb 19, 01:11:13 PM
 # $Id$
 
 package Script;
 use strict;
 use warnings;
-use Encode;
 use Moose;
 with 'MooseX::Getopt';
 
@@ -18,6 +17,8 @@ has 'session' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 's',);
 has 'latex' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
 		cmd_aliases => 'h',);
+has 'beancan' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
+		cmd_aliases => 'n',);
 
 package main;
 
@@ -51,6 +52,7 @@ sub run {
 	my $latex = $script->latex;
 	my $filetype = $latex? "tex": "html";
 	my $fileprefix = $latex? "latex": "html";
+	my $n = $script->beancan || 4;
 	my $room = $league->{room};
 	my $rooms = "$leagues/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
@@ -63,10 +65,11 @@ sub run {
 	die "Not all members have names in $league->{id} league"
 		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
-	my $arrangement = $roomconfig->{fours};
+	my $beancansize = { 3=>'threes', 4=>'fours' }; 
+	my $arrangement = $roomconfig->{ $beancansize->{$n} };
 	my $colors = $roomconfig->{colors};
 	my $regions = $roomconfig->{regions};
-	my $expertseats = $roomconfig->{fourexperts};
+	my $expertseats = $roomconfig->{ $beancansize->{$n} . 'experts'};
 	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $teamchart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
@@ -114,17 +117,17 @@ sub run {
 		}
 	}
 	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "6y6tsy6") or warn "login: greg?"; 
+	$web->login("greg", "") or warn "login: greg?"; 
 	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $teamtext = $t->fill_in( HASH => $teamchart );
 
-	io("$sessionpath/$session/teamseat.$filetype")->print( Encode::encode('UTF-8', $teamtext) );
+	io("$sessionpath/$session/teamseat.$filetype")->print( encode('UTF-8', $teamtext) );
 	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
 			or die "put teamseat.html?" if $filetype eq "html"; 
-	my $experttext = Encode::encode(
+	my $experttext = encode(
 		'UTF-8', $t->fill_in( HASH => $expertchart ) );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
 	$web->put( "$sessionpath/$session/expertseat.$filetype",
