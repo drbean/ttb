@@ -86,17 +86,17 @@ colors:
   25: #c5c5c5
   26: #f0f0f0
   Black     :
-  BlackBlack:
+  BlackBlack: #ff5050
   Blue      :
-  BlueBlue  :
+  BlueBlue  : #ffcc00
   Brown     :
-  BrownBrown:
+  BrownBrown: ##ff9933
   DarkBlue  :
   DarkGreen :
   Gray      :
-  GrayGray  :
+  GrayGray  : #f0f0f0
   Green     :
-  GreenGreen:
+  GreenGreen: #0099ff
   LightBlue :
   LightGreen:
   Orange    :
