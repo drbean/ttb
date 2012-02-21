@@ -125,6 +125,21 @@ fours:
 
   BrownBrown: [ Xa, Xb, Xc, Xd ]
   GrayGray  : [ Ya, Yb, Yc, Yd ]
+threes:
+  BlueBlue  : [16, 25, 25a]
+  Green     : [23, 15, 24]
+  Gray      : [13, 22, 14]
+  Brown     : [20, 12, 21]
+  Blue      : [10, 19, 11]
+  Black     : [17, 09, 18]
+
+  Orange    : [37, 27, 38]
+  Pink      : [28, 39, 29]
+  Purple    : [40, 30, 41]
+  Red       : [31, 42, 32]
+  White     : [43, 33, 44]
+  Yellow    : [34, 45, 35]
+  BlackBlack: [46, 36, 26]
 regions:
   One:
     - BlackBlack
