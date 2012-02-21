@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2012 Feb 19, 01:11:13 PM
+# Last Edit: 2012 Feb 21, 05:51:02 PM
 # $Id$
 
 package Script;
@@ -17,7 +17,7 @@ has 'session' => (traits => ['Getopt'], is => 'ro', isa => 'Str',
 		cmd_aliases => 's',);
 has 'latex' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
 		cmd_aliases => 'h',);
-has 'beancan' => (traits => ['Getopt'], is => 'ro', isa => 'Bool',
+has 'beancan' => (traits => ['Getopt'], is => 'ro', isa => 'Int',
 		cmd_aliases => 'n',);
 
 package main;
@@ -40,7 +40,7 @@ sub run {
 	my $script = Script->new_with_options( league => basename(getcwd) );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
-	my $leagues = "/home/drbean/001";
+	my $leagues = "/home/drbean/002";
 	my $leagueId = $script->league;
 	$leagueId = basename( getcwd ) if $leagueId eq '.';
 	my $leagueO = League->new( id => $leagueId );
