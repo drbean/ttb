@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2012 Feb 21, 05:51:02 PM
+# Last Edit: 2012 Feb 21, 10:09:23 PM
 # $Id$
 
 package Script;
@@ -28,6 +28,7 @@ use Pod::Usage;
 use Text::Template;
 use IO::All;
 use YAML qw/LoadFile/;
+use List::Util qw/max/;
 use List::MoreUtils qw/any all/;
 use Cwd; use File::Basename;
 use Net::FTP;
@@ -52,7 +53,6 @@ sub run {
 	my $latex = $script->latex;
 	my $filetype = $latex? "tex": "html";
 	my $fileprefix = $latex? "latex": "html";
-	my $n = $script->beancan || 4;
 	my $room = $league->{room};
 	my $rooms = "$leagues/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
@@ -61,6 +61,9 @@ sub run {
 	my @subdirs = grep { -d } glob "$sessionpath/*";
 	my @series = sort { $a <=> $b } map m/^$sessionpath\/(\d+)$/, @subdirs;
 	die "No $session session\n" unless any { $_ eq $session } @series;
+	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
+	my $n = $script->beancan || max map { 
+				$#{$groups->{$_}} + 1 } keys %$groups;
 	my $member = $league->{member};
 	die "Not all members have names in $league->{id} league"
 		unless all { $_->{name} } @$member;
@@ -70,7 +73,6 @@ sub run {
 	my $colors = $roomconfig->{colors};
 	my $regions = $roomconfig->{regions};
 	my $expertseats = $roomconfig->{ $beancansize->{$n} . 'experts'};
-	my $groups = LoadFile "$sessionpath/$session/groups.yaml";
 	my $teamchart = { league => $league->{id}, session => $session };
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
