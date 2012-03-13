@@ -1,0 +1,112 @@
+\documentclass[a4paper]{article}
+\newcommand{\printlandscape}{\special{landscape}}
+\printlandscape
+\usepackage[landscape]{geometry}
+\usepackage{multicol}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{texdraw}
+\usepackage[absolute]{textpos}
+% \usepackage[absolute,showboxes]{textpos}
+\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.50cm} %HPDeskJet5160
+% \textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+
+\newcommand{\mybox}{
+	\rlvec(0 -0.4) \rlvec(0.5 0) \rlvec(0 0.4) \rlvec(-0.5 0) \rmove(0.5 0)
+}
+\newcommand{\myline}{
+	% \textref h:L v:C \mybox \mybox \mybox \mybox \mybox
+	\mybox \mybox \mybox \mybox \mybox
+	\mybox \mybox \mybox \mybox \mybox
+}
+\newcommand{\myform}{
+	% \htext(-5 0){Form} \myline
+	% \textref h:L v:C \myline \htext(-5 0){Form}
+	\myline
+}
+\newcommand{\myanswer}{
+	% \htext(-5 0){Answer} \myline
+	\myline
+}
+\newcommand{\myrole}{
+	\myform
+	\rmove(-5.0 -0.4)
+	\myanswer
+}
+\newcommand{\myblock}[1]{
+	\raisebox{-0.2cm}{\parbox[t]{0.01cm}{\bfseries #1:}}
+	\parbox[t][2cm][c]{1cm}{\vfill White\\\vfill Black \vfill}
+	\parbox[t][2cm][c]{1cm}{\small Form\\Answer\\Form\\Answer}
+	\parbox[t][2cm][c]{5cm}{
+		\begin{texdraw} \drawdim cm
+		\myrole
+		\rmove(-5.0 -0.45)
+		\myrole
+		\end{texdraw}
+	}
+}
+\newcommand{\mycomp}[1]{
+
+	\begin{textblock}{4}(#1)
+	\small\raggedleft\raisebox{-0.1cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.31cm]
+	\raggedright\raisebox{+0.1cm}{\myblock{dickson}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.2cm}{\myblock{abreu}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.2cm}{\myblock{smallwood}}\\[-0.35cm]
+	\small\raggedleft\raisebox{-0.35cm}{1.\hspace{0.23cm}2.\hspace{0.23cm}3.\hspace{0.23cm}4.\hspace{0.23cm}5.\hspace{0.23cm}6.\hspace{0.23cm}7.\hspace{0.23cm}8.\hspace{0.23cm}9.\hspace{0.23cm}10.}\\[-0.39cm]
+	\raggedright\raisebox{-0.25cm}{\myblock{jackson}}\
+	\end{textblock}
+}
+
+\newcommand{\mycard}[2]{%
+	\begin{textblock}{4}(#1)
+% \textblockrulecolor{red}
+	\textblocklabel{picture1}
+	\large Question competition\\
+	\vspace{0.25cm}
+	\normalsize Table: \rule{1.5cm}{0.3pt} Subject: \rule{2.9cm}{0.3pt}\\
+	\vspace{0.25cm}
+	\large White \normalsize Name \rule{1.9cm}{0.3pt} ID: \rule{2.1cm}{0.3pt}\\
+	\vspace{0.25cm}
+	\large Black \normalsize Name \rule{2.0cm}{0.3pt} ID: \rule{2.1cm}{0.3pt}\\
+	\vspace{0.25cm}
+	Scorers: Name: \rule{1.7cm}{0.3pt} Name: \rule{1.6cm}{0.3pt}\\
+	\end{textblock}
+	\mycomp{#2}
+}
+
+\begin{document}
+% \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
+
+\mycard{0,0}{0,2.1} \mycard{4,0}{4,2.1} \mycard{8,0}{8,2.1}	\mycard{12,0}{12,2.1}
+\mycard{0,8}{0,10.1} \mycard{4,8}{4,10.1} \mycard{8,8}{8,10.1} \mycard{12,8}{12,10.1}
+
+			% crosshairs cutting guide marks
+			\begin{textblock}{1}(3.64,8)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			\begin{textblock}{1}(7.64,8)\rule{3mm}{0.1mm}%
+			\end{textblock}
+			\begin{textblock}{1}(11.64,8)\rule{3mm}{0.1mm}%
+			\end{textblock}
+
+			\begin{textblock}{1}(3.70,4)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			\begin{textblock}{1}(3.70,12)\rule{0.1mm}{3mm}%
+			\end{textblock}
+
+			\begin{textblock}{1}(7.70,4)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			\begin{textblock}{1}(7.70,12)\rule{0.1mm}{3mm}%
+			\end{textblock}
+
+			\begin{textblock}{1}(11.70,4,92)\rule{0.1mm}{3mm}%
+			\end{textblock}
+			\begin{textblock}{1}(11.70,12)\rule{0.1mm}{3mm}%
+			\end{textblock}
+
+\null\newpage
+
+\end{document}
