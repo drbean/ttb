@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Mar 25, 06:21:27 PM
+# Last Edit: 2012 Mar 25, 07:03:06 PM
 # $Id$
 
 =head1 NAME
@@ -92,8 +92,8 @@ for my $pair ( @pairs ) {
     next if $black eq 'Bye';
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $free = {
-	    $white => { point => { 1 => undef} },
-	    $black => { point => { 1 => undef} }
+	    $white => { q => { 1 => undef} , a => { 1 => undef } },
+	    $black => { q => { 1 => undef} , a => { 1 => undef } }
 	     };
     Bless( $free )->keys( [ $white, $black ] );
     my $set = { $white => \%questions,
