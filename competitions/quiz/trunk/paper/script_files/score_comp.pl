@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2011 Sep 21, 09:24:56 AM
+# Last Edit: 2012 Mar 25, 05:48:59 PM
 # $Id$
 
 =head1 NAME
@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use IO::All;
 use YAML qw/LoadFile Dump Bless/;
-use List::Util qw/sum/;
+use List::Util qw/sum first/;
 use Scalar::Util qw/looks_like_number/;
 use Cwd; use File::Basename;
 use Grades;
@@ -33,7 +33,7 @@ score_comp.pl -l . -r 10 > comp/10/scores.yaml
 =cut
 
 
-my $leagues = "/home/drbean/001";
+my $leagues = "/home/drbean/002";
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
@@ -45,10 +45,14 @@ my $g = Compcomp->new( league => $league );
 my $dir = $g->compcompdirs;
 my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
+my $groups = $config->{group};
 
 my $scores;
 my @tables = sort {$a <=> $b} keys %$responses;
 for my $table ( @tables ) {
+    my $group = $groups->{$table};
+    my ($white, $black) = ( $group->{White}, $group->{Black} );
+    my %opponent; @opponent{$white, $black} = ($black, $white);
     my %tally;
     my $topics = $responses->{$table};
     for my $topic ( keys %$topics ) {
@@ -60,25 +64,54 @@ for my $table ( @tables ) {
 		die
 		"Table ${table}'s responses to $source $topic quiz, form $form,"
 						unless defined $pairwork;
-		my @players = keys %$pairwork;
 		if ( $source eq 'free' ) {
-		    for my $player ( @players ) {
+		    for my $player ( $white, $black ) {
 			my $score = 0;
 			my $play = $pairwork->{$player};
-			my ( $qs, $as ) = @$play{qw/q a/};
-			for my $rs ( $qs, $as ) {
-			    for my $r ( keys %$rs ) {
-				my $point = $rs->{$r};
-				unless ( looks_like_number $point ) {
-				    $point = '';
-				    warn
-	"Table $table, $topic $form FREE quiz, $player, qn $r: $point,";
-				    next;
+			if ( first { $_ eq 'point' } keys %$play ) {
+				my $points = $play->{point};
+				for my $n ( keys %$points ) {
+				    my $point = $points->{$n};
+				    unless ( $point ) {
+					warn
+	    "Table $table, $topic $form FREE quiz, $player, qn $n: ,";
+					next;
+				    }
+				    if ( $point and $point eq "Fault" ) {
+					$tally{$player} += 0;
+					$tally{$opponent{$player}}++;
+				    }
+				    elsif ( $point and $point eq "Unreturned" ) {
+					$tally{$player} += 2;
+				    }
+				    elsif ( $point and $point eq "Rally" ) {
+					$tally{$player} += 2;
+					$tally{$opponent{$player}}++;
+				    }
+				    elsif ( $point and $point eq "Nil" ) {
+					$tally{$player} += 0;
+				    }
+				    else {
+					warn
+	    "Table $table, $topic $form FREE quiz, $player, qn $n: $point,";
+				    }
 				}
-				$score += $point;
+			    }
+			else {
+			    my ( $qs, $as ) = @$play{qw/q a/};
+			    for my $rs ( $qs, $as ) {
+				for my $r ( keys %$rs ) {
+				    my $point = $rs->{$r};
+				    unless ( looks_like_number $point ) {
+					$point = '';
+					warn
+	    "Table $table, $topic $form FREE quiz, $player, qn $r: $point,";
+					next;
+				    }
+				    $tally{$player} += $point;
+				}
 			    }
 			}
-			$tally{$player} += $score;
 		    }
 		}
 		elsif ( $source eq 'set' ) {
@@ -97,7 +130,7 @@ for my $table ( @tables ) {
 			    $codedvalue->[++$n] =
 				{ True => 'T', False => 'F' }; }
 			}
-			for my $id ( @players ) {
+			for my $id ( $white, $black ) {
 			    my $score = 0;
 			    my $answers = $pairwork->{$id};
 			    for my $n ( sort keys %$answers ) {
@@ -107,7 +140,8 @@ for my $table ( @tables ) {
 				    $codedvalue->[$n]->{
 						    $quiz->[$n-1]->{answer} }:
 				    '';
-				unless ($myanswer eq 'T' or $myanswer eq 'F') {
+				unless ($myanswer eq 'T' or $myanswer eq 'F' 
+						    or $myanswer eq 'Nil' ) {
 				    warn
 	    "Table $table, $topic $form set quiz, $id, qn $n: $myanswer,";
 				    next;
