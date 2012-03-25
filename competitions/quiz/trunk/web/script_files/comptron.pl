@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Jan 04, 05:34:29 PM
+# Last Edit: 2012 Mar 25, 06:21:27 PM
 # $Id$
 
 =head1 NAME
@@ -54,7 +54,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/001';
+$leagues = '/home/drbean/002';
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
@@ -101,15 +101,15 @@ for my $pair ( @pairs ) {
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
     Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
+    $response->{ $table }->{ free } = $free;
     my $topics = $comp->compTopics( $overallround, $table );
     for my $topic ( @$topics ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
-	    $response->{ $table }->{$topic}->{$form}->{ free } = $free;
-	    $response->{ $table }->{$topic}->{$form}->{ set } = $set;
+	    $response->{ $table }->{ set }->{$topic}->{$form} = $set;
 	}
     }
-    Bless($response->{$table})->keys([qw/cars citrus internet/ ]);
+    Bless($response->{$table}->{ set })->keys([qw/stress adventure/ ]);
 }
 
 my @formorders = values %formorder;
