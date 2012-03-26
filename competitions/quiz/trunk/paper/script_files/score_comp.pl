@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2012 Mar 25, 05:48:59 PM
+# Last Edit: 2012 Mar 26, 02:34:36 PM
 # $Id$
 
 =head1 NAME
@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use IO::All;
 use YAML qw/LoadFile Dump Bless/;
-use List::Util qw/sum first/;
+use List::Util qw/sum/;
 use Scalar::Util qw/looks_like_number/;
 use Cwd; use File::Basename;
 use Grades;
@@ -45,94 +45,63 @@ my $g = Compcomp->new( league => $league );
 my $dir = $g->compcompdirs;
 my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
-my $groups = $config->{group};
 
 my $scores;
 my @tables = sort {$a <=> $b} keys %$responses;
 for my $table ( @tables ) {
-    my $group = $groups->{$table};
-    my ($white, $black) = ( $group->{White}, $group->{Black} );
-    my %opponent; @opponent{$white, $black} = ($black, $white);
     my %tally;
-    my $topics = $responses->{$table};
-    for my $topic ( keys %$topics ) {
-	my $forms = $topics->{$topic};
-	for my $form ( keys %$forms ) {
-	    my $sources = $forms->{$form};
-	    for my $source ( keys %$sources ) {
-		my $pairwork = $sources->{$source};
-		die
-		"Table ${table}'s responses to $source $topic quiz, form $form,"
-						unless defined $pairwork;
-		if ( $source eq 'free' ) {
-		    for my $player ( $white, $black ) {
-			my $score = 0;
-			my $play = $pairwork->{$player};
-			if ( first { $_ eq 'point' } keys %$play ) {
-				my $points = $play->{point};
-				for my $n ( keys %$points ) {
-				    my $point = $points->{$n};
-				    unless ( $point ) {
-					warn
-	    "Table $table, $topic $form FREE quiz, $player, qn $n: ,";
-					next;
-				    }
-				    if ( $point and $point eq "Fault" ) {
-					$tally{$player} += 0;
-					$tally{$opponent{$player}}++;
-				    }
-				    elsif ( $point and $point eq "Unreturned" ) {
-					$tally{$player} += 2;
-				    }
-				    elsif ( $point and $point eq "Rally" ) {
-					$tally{$player} += 2;
-					$tally{$opponent{$player}}++;
-				    }
-				    elsif ( $point and $point eq "Nil" ) {
-					$tally{$player} += 0;
-				    }
-				    else {
-					warn
-	    "Table $table, $topic $form FREE quiz, $player, qn $n: $point,";
-				    }
-				}
-			    }
-			else {
-			    my ( $qs, $as ) = @$play{qw/q a/};
-			    for my $rs ( $qs, $as ) {
-				for my $r ( keys %$rs ) {
-				    my $point = $rs->{$r};
-				    unless ( looks_like_number $point ) {
-					$point = '';
-					warn
-	    "Table $table, $topic $form FREE quiz, $player, qn $r: $point,";
-					next;
-				    }
-				    $tally{$player} += $point;
-				}
-			    }
+    my $divisions = $responses->{$table};
+    my @programs = keys %$divisions;
+    for my $program ( @programs ) {
+	if ( $program eq 'free' ) {
+	    my $pairwork = $divisions->{$program};
+	    my @players = keys %$pairwork;
+	    for my $player ( @players ) {
+		my $score = 0;
+		my $play = $pairwork->{$player};
+		my ( $qs, $as ) = @$play{qw/q a/};
+		for my $rs ( $qs, $as ) {
+		    for my $r ( keys %$rs ) {
+			my $point = $rs->{$r};
+			unless ( looks_like_number $point ) {
+			    $point = '';
+			    warn
+    "Table $table FREE quiz, $player, qn $r: $point,";
+			    next;
 			}
+			$score += $point;
 		    }
 		}
-		elsif ( $source eq 'set' ) {
-		    my $cardfile = $config->{text};
-		    my $cards = LoadFile $cardfile or die "$cardfile?";
-		    my $quiz =
-			     $cards->{$topic}->{compcomp}->{$form}->{quiz};
-		    my ($codedvalue, $n);
-		    for my $item ( @$quiz ) {
-			if ( $item->{option} ) {
-			    my $option = $item->{option};
-			    $codedvalue->[++$n] = { map {
-				    $option->[$_] => $_ } 0..$#$option };
-			}
-			else {
-			    $codedvalue->[++$n] =
-				{ True => 'T', False => 'F' }; }
-			}
-			for my $id ( $white, $black ) {
+		$tally{$player} += $score;
+	    }
+	}
+	elsif ( $program eq 'set' ) {
+	    my $cardfile = $config->{text};
+	    my $cards = LoadFile $cardfile or die "$cardfile?";
+	    my $topics = $divisions->{$program};
+	    for my $topic ( keys %$topics ) {
+		my $forms = $topics->{$topic};
+		for my $form ( keys %$forms ) {
+		    my $pairwork = $forms->{$form};
+		    for my $player ( keys %$pairwork ) {
+			die
+	    "Table ${table}'s $player $responses to $topic quiz, form $form,"
+							unless defined $pairwork;
+			my $quiz =
+				 $cards->{$topic}->{compcomp}->{$form}->{quiz};
+			my ($codedvalue, $n);
+			for my $item ( @$quiz ) {
+			    if ( $item->{option} ) {
+				my $option = $item->{option};
+				$codedvalue->[++$n] = { map {
+					$option->[$_] => $_ } 0..$#$option };
+			    }
+			    else {
+				$codedvalue->[++$n] =
+				    { True => 'T', False => 'F' }; }
+			    }
 			    my $score = 0;
-			    my $answers = $pairwork->{$id};
+			    my $answers = $pairwork->{$player};
 			    for my $n ( sort keys %$answers ) {
 				my $myanswer = $answers->{$n} // '';
 				my $theanswer =
@@ -140,10 +109,9 @@ for my $table ( @tables ) {
 				    $codedvalue->[$n]->{
 						    $quiz->[$n-1]->{answer} }:
 				    '';
-				unless ($myanswer eq 'T' or $myanswer eq 'F' 
-						    or $myanswer eq 'Nil' ) {
+				unless ($myanswer eq 'T' or $myanswer eq 'F') {
 				    warn
-	    "Table $table, $topic $form set quiz, $id, qn $n: $myanswer,";
+	    "Table $table, $topic $form set quiz, $player, qn $n: $myanswer,";
 				    next;
 				}
 				unless ($theanswer eq 'T' or $theanswer eq 'F')
@@ -154,9 +122,9 @@ for my $table ( @tables ) {
 				}
 				$score++ if $myanswer eq $theanswer;
 			    }
-			    $tally{$id} += $score;
-		        }
-		   }
+			    $tally{$player} += $score;
+		    }
+		}
 	    }
 	}
     }
