@@ -1,4 +1,4 @@
-package CompComp::Schema::Result::Game;
+package CompComp::Schema::Result::Quiz;
 
 use strict;
 use warnings;
