@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Apr 20, 11:04:58 AM
+# Last Edit: 2012 Apr 23, 10:40:26 AM
 # $Id$
 
 =head1 NAME
@@ -92,34 +92,34 @@ for my $pair ( @pairs ) {
     next if $black eq 'Bye';
     my %questions; @questions{1..$qn } = ( undef ) x $qn;
     my $free = {
-	    $white => { q => { 1 => undef} , a => { 1 => undef } },
-	    $black => { q => { 1 => undef} , a => { 1 => undef } }
+	    $white => { point => { 1 => undef} },
+	    $black => { point => { 1 => undef} }
 	     };
-    Bless ( $free->{$white} )->keys( [ 'q', 'a' ] );
-    Bless ( $free->{$black} )->keys( [ 'q', 'a' ] );
     Bless( $free )->keys( [ $white, $black ] );
     my $set = { $white => \%questions,
 		$black => \%questions };
     Bless( $set->{$white} )->keys([ 1 .. $qn ]);
     Bless( $set->{$black} )->keys([ 1 .. $qn ]);
     Bless( $set )->keys( [ $white, $black ] );
-    $response->{ $table }->{ free } = $free;
+    # $response->{ free}->{ $table } = $free;
     my $topics = $comp->compTopics( $overallround, $table );
     for my $topic ( @$topics ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
-	    $response->{ $table }->{ set }->{$topic}->{$form} = $set;
+	    $response->{ free }->{ $table }->{$topic}->{$form} = $free;
+	    # $response->{ $table }->{ set }->{$topic}->{$form} = $set;
 	}
+	Bless($response->{ free}->{ $table }->{$topic})->keys([qw/banana2 rice oil milk/ ]);
     }
-    Bless($response->{$table}->{ set })->keys([qw/stress adventure/ ]);
+    # Bless($response->{$table}->{ set })->keys([qw/stress adventure/ ]);
 }
 
 my @formorders = values %formorder;
 # Bless( $response )->keys([ map { sort { $a <=> $b } @$_ } @formorders ]);
 $YAML::UseAliases = 0;
 
-my @tables = sort {$a <=> $b} keys %$response;
-Bless( $response )->keys([ @tables ]);
+my @tables = sort {$a <=> $b} keys %{$response->{free}};
+Bless( $response->{ free } )->keys([ @tables ]);
 
 print Dump $response;
 
