@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Apr 23, 10:40:26 AM
+# Last Edit: 2012 Apr 24, 09:37:09 AM
 # $Id$
 
 =head1 NAME
@@ -107,11 +107,11 @@ for my $pair ( @pairs ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
 	    $response->{ free }->{ $table }->{$topic}->{$form} = $free;
-	    # $response->{ $table }->{ set }->{$topic}->{$form} = $set;
+	    $response->{ set }->{ $table }->{$topic}->{$form} = $set;
 	}
-	Bless($response->{ free}->{ $table }->{$topic})->keys([qw/banana2 rice oil milk/ ]);
+	Bless($response->{ free}->{ $table }->{ $topic })->keys([qw/banana2 rice oil milk/ ]);
+	Bless($response->{ set }->{ $table }->{ $topic })->keys([qw/banana2 rice oil milk/ ]);
     }
-    # Bless($response->{$table}->{ set })->keys([qw/stress adventure/ ]);
 }
 
 my @formorders = values %formorder;
@@ -120,6 +120,7 @@ $YAML::UseAliases = 0;
 
 my @tables = sort {$a <=> $b} keys %{$response->{free}};
 Bless( $response->{ free } )->keys([ @tables ]);
+Bless( $response->{ set } )->keys([ @tables ]);
 
 print Dump $response;
 
