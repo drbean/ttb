@@ -1,0 +1,4 @@
+# rename this file to Web.yml and put a : in front of "name" if
+setup_components:
+  only:
+    Model::SwissDB
