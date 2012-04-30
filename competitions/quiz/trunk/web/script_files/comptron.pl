@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Apr 24, 09:37:09 AM
+# Last Edit: 2012 Apr 28, 12:24:22 PM
 # $Id$
 
 =head1 NAME
@@ -48,7 +48,9 @@ use Grades;
 use Games::Tournament::Contestant::Swiss;
 use Games::Tournament::Swiss;
 
-use CompComp;
+# use CompComp;
+use CompComp::Model::SwissDB;
+use CompComp::SwissSchema;
 
 my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
@@ -109,8 +111,8 @@ for my $pair ( @pairs ) {
 	    $response->{ free }->{ $table }->{$topic}->{$form} = $free;
 	    $response->{ set }->{ $table }->{$topic}->{$form} = $set;
 	}
-	Bless($response->{ free}->{ $table }->{ $topic })->keys([qw/banana2 rice oil milk/ ]);
-	Bless($response->{ set }->{ $table }->{ $topic })->keys([qw/banana2 rice oil milk/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/foreman davist/ ]);
+	Bless($response->{ set }->{ $table })->keys([qw/foreman davist/ ]);
     }
 }
 
