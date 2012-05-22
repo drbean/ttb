@@ -15,9 +15,8 @@
 \newcommand{\myrole}[1]{
 \large #1: \large Name \rule{2.5cm}{0.02cm} Id \rule{2.3cm}{0.02cm}
 	\normalsize
-	Renee Foreman: Throat cancer
+	Craig Sams and Prince Charles
 	\begin{enumerate}
-	\item \myline
 	\item \myline
 	\item \myline
 	\item \myline
@@ -27,9 +26,8 @@
 	\item \myline
 	\item \myline
 	\end{enumerate}
-	Tom Davis: Quadriplegia and CPR
+	New Covent Garden and Green \& Black's
 	\begin{enumerate}
-	\item \myline
 	\item \myline
 	\item \myline
 	\item \myline
@@ -61,10 +59,23 @@
 	\end{textblock}
 }
 
+\newcommand{\myfoot}[1]{%
+	\begin{textblock}{16}(#1)
+	\textblocklabel{picture3}
+\begin{center}
+\normalsize 1 question each: 0,1 or 2 pts. 2 question each: 1,2 or 3 pts. 3 question each: 2,3 or 4 pts. 4 question each: 3,4 or 5 pts. 
+\normalsize F: Double fault, U: Unreturned, R: Returned
+\end{center}
+	\end{textblock}
+}
+
 \begin{document}
 
 \mycard{0,0}{0,0.6}{8,0.6}
 \mycard{0,8}{0,8.6}{8,8.6}
+
+\myfoot{0,7.4}
+\myfoot{0,15.4}
 
 
 \null\newpage
