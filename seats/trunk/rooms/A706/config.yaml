@@ -126,6 +126,7 @@ fours:
   BrownBrown: [ Xa, Xb, Xc, Xd ]
   GrayGray  : [ Ya, Yb, Yc, Yd ]
 threes:
+  GreenGreen: [01, 02, 03]
   BlueBlue  : [16, 25, 25a]
   Green     : [23, 15, 24]
   Gray      : [13, 22, 14]
