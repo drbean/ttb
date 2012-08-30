@@ -3,10 +3,10 @@ use warnings;
 use Module::Build;
 
 my $builder = Module::Build->new(
-    module_name         => 'Seats',
+	dist_name         => 'Seats',
     license             => 'perl',
     dist_author         => 'Dr Bean <drbean at ie(@) cpan dot ie (.) org>',
-    dist_version_from   => 'lib/Seats.pm',
+	dist_version   => 0.3,
     build_requires => {
         'Test::More' => 0,
     },
