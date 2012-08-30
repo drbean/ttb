@@ -1,4 +1,5 @@
 \documentclass[a4paper]{article}
+\usepackage[absolute,showboxes]{textpos}
 \usepackage{xeCJK}
 \setCJKmainfont{WenQuanYi Zen Hei}
 \usepackage[usenames]{color}
@@ -23,28 +24,29 @@
 \definecolor{GrayGray}{cmyk}      {0  ,0  ,0  ,0.1}
 \definecolor{GreenGreen}{cmyk}{0.3,0  ,0.3,0.1}
 \definecolor{OrangeOrange}{cmyk}    {0  ,0.3,0.8,0.0}
-\TPMargin{0.2cm}
+
 \textblockorigin{0.00cm}{+0.15cm} %HP DeskJet 5160
 % \textblockorigin{0.30cm}{0.35cm} % w5 LaserJet
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 \usepackage{array}
 \newcommand{\myseat}[4]{%
-\vspace{-0.1cm}
-% \vspace{0.1cm}
-\parbox[t][2.2cm][t]{3.5cm}{
-\small #1 % \normalsize
-\begin{description}
-\vspace{-0.1cm}
-\item [ID:] #2
-\vspace{-0.1cm}
-\item [Team:] #3 \normalsize
-\vspace{-0.1cm}
-\item \normalsize #4
-\vspace{-0.1cm}
-\end{description}
+	\vspace{-0.1cm}
+	% \vspace{0.1cm}
+	\parbox[t][2.2cm][t]{3.5cm}{
+	\small #1 % \normalsize
+	\begin{description}
+	\vspace{-0.1cm}
+	\item [ID:] #2
+	\vspace{-0.1cm}
+	\item [Team:] #3 \normalsize
+	\vspace{-0.1cm}
+	\item \normalsize #4
+	\vspace{-0.1cm}
+	\end{description}
+	}
 }
-}
+
 \begin{document}
 
 \begin{textblock}{2.5}(0,0)
