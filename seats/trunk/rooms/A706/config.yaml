@@ -127,9 +127,9 @@ fours:
   GrayGray  : [ Ya, Yb, Yc, Yd ]
 threes:
   GreenGreen  : [01, 02, 03]
-  BlackBlack  : [05, 06, 07]
+  BlueBlue    : [05, 06, 07]
 
-  BlueBlue    : [16, 25, 25a]
+  BlackBlack  : [16, 25, 25a]
   Green       : [23, 15, 24]
   Gray        : [13, 22, 14]
   Brown       : [20, 12, 21]
