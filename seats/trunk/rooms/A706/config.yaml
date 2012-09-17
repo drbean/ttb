@@ -144,7 +144,7 @@ threes:
   Red         : [31, 42, 32]
   White       : [43, 33, 44]
   Yellow      : [34, 45, 35]
-  OrangeOrange: [46, 36, 26]
+  OrangeOrange: [46, 36, 56]
 regions:
   One:
     - BlackBlack
