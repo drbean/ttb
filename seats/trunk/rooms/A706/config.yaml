@@ -137,14 +137,16 @@ threes:
   Black       : [17, 09, 18]
 
   YellowYellow: [47, 48, 49]
+  PurplePurple: [50, 51, 52]
+  PinkPink    : [53, 54, 55]
 
+  OrangeOrange: [46, 36, 56]
   Orange      : [37, 27, 38]
   Pink        : [28, 39, 29]
   Purple      : [40, 30, 41]
   Red         : [31, 42, 32]
   White       : [43, 33, 44]
   Yellow      : [34, 45, 35]
-  OrangeOrange: [46, 36, 56]
 regions:
   One:
     - BlackBlack
