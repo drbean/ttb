@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2012 Mar 26, 02:34:36 PM
+# Last Edit: 2012 Oct 14, 03:14:47 PM
 # $Id$
 
 =head1 NAME
@@ -20,7 +20,7 @@ use strict;
 use warnings;
 use IO::All;
 use YAML qw/LoadFile Dump Bless/;
-use List::Util qw/sum/;
+use List::Util qw/sum first/;
 use Scalar::Util qw/looks_like_number/;
 use Cwd; use File::Basename;
 use Grades;
@@ -33,7 +33,7 @@ score_comp.pl -l . -r 10 > comp/10/scores.yaml
 =cut
 
 
-my $leagues = "/home/drbean/002";
+my $leagues = "/home/drbean/011";
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
@@ -45,45 +45,89 @@ my $g = Compcomp->new( league => $league );
 my $dir = $g->compcompdirs;
 my $config = LoadFile "$dir/$round/round.yaml";
 my $responses = LoadFile "$dir/$round/response.yaml";
+my $groups = $config->{group};
+my @tables = sort {$a <=> $b} keys % { $responses->{ free } };
 
 my $scores;
-my @tables = sort {$a <=> $b} keys %$responses;
-for my $table ( @tables ) {
-    my %tally;
-    my $divisions = $responses->{$table};
-    my @programs = keys %$divisions;
-    for my $program ( @programs ) {
-	if ( $program eq 'free' ) {
-	    my $pairwork = $divisions->{$program};
-	    my @players = keys %$pairwork;
-	    for my $player ( @players ) {
-		my $score = 0;
-		my $play = $pairwork->{$player};
-		my ( $qs, $as ) = @$play{qw/q a/};
-		for my $rs ( $qs, $as ) {
-		    for my $r ( keys %$rs ) {
-			my $point = $rs->{$r};
-			unless ( looks_like_number $point ) {
-			    $point = '';
-			    warn
-    "Table $table FREE quiz, $player, qn $r: $point,";
-			    next;
-			}
-			$score += $point;
-		    }
-		}
-		$tally{$player} += $score;
-	    }
-	}
-	elsif ( $program eq 'set' ) {
-	    my $cardfile = $config->{text};
-	    my $cards = LoadFile $cardfile or die "$cardfile?";
-	    my $topics = $divisions->{$program};
+for my $division ( qw/free set/ ) {
+    if ( $division eq 'free' ) {
+	for my $table ( @tables ) {
+	    my %tally;
+	    my $group = $groups->{$table};
+	    my ($white, $black) = ( $group->{White}, $group->{Black} );
+	    my %opponent; @opponent{$white, $black} = ($black, $white);
+	    my $topics = $responses->{ $division }->{$table};
 	    for my $topic ( keys %$topics ) {
 		my $forms = $topics->{$topic};
 		for my $form ( keys %$forms ) {
 		    my $pairwork = $forms->{$form};
-		    for my $player ( keys %$pairwork ) {
+		    my @players = keys %$pairwork;
+		    for my $player ( @players ) {
+			my $score = 0;
+			my $play = $pairwork->{$player};
+			if ( first { $_ eq 'point' } keys %$play ) {
+			    my $points = $play->{point};
+			    for my $n ( keys %$points ) {
+				my $point = $points->{$n};
+				unless ( $point ) {
+				warn
+				    "Table $table, $topic $form FREE quiz, $player, qn $n: ,";
+				next;
+				}
+				if ( $point and $point eq "Fault" ) {
+				    $tally{$player} += 0;
+				    $tally{$opponent{$player}}++;
+				}
+				elsif ( $point and $point eq "Unreturned" ) {
+				    $tally{$player} += 1;
+				}
+				elsif ( $point and $point eq "Returned" ) {
+				    $tally{$player} += 0;
+				    $tally{$opponent{$player}}++;
+				}
+				elsif ( $point and $point eq "Nil" ) {
+				    $tally{$player} += 0;
+				}
+				else {
+				    warn
+					"Table $table, $topic $form FREE quiz, $player, qn $n: $point,";
+				}
+			    }
+			}
+			else {
+			    my ( $qs, $as ) = @$play{qw/q a/};
+			    for my $rs ( $qs, $as ) {
+				for my $r ( keys %$rs ) {
+				    my $point = $rs->{$r};
+				    unless ( looks_like_number $point ) {
+					$point = '';
+					warn
+		"Table $table FREE quiz, $player, qn $r: $point,";
+					next;
+				    }
+				    $score += $point;
+				}
+			    }
+			}
+			$tally{$player} += $score;
+		    }
+		    @{$scores->{$table}}{keys %tally} = @tally{keys %tally};
+		}
+	    }
+	}
+    }
+    elsif ( $division eq 'set' ) {
+	my $cardfile = $config->{text};
+	my $cards = LoadFile $cardfile or die "$cardfile?";
+	for my $table ( @tables ) {
+	    my $topics = $responses->{ $division }->{$table};
+	    for my $topic ( keys %$topics ) {
+		my $forms = $topics->{$topic};
+		for my $form ( keys %$forms ) {
+		    my %settally;
+		    my $pairwork = $forms->{$form};
+		    my @players = keys %$pairwork;
+		    for my $player ( @players ) {
 			die
 	    "Table ${table}'s $player $responses to $topic quiz, form $form,"
 							unless defined $pairwork;
@@ -122,13 +166,12 @@ for my $table ( @tables ) {
 				}
 				$score++ if $myanswer eq $theanswer;
 			    }
-			    $tally{$player} += $score;
+			    $scores->{$table}->{$player} += $score;
 		    }
 		}
 	    }
 	}
     }
-    @{$scores->{$table}}{keys %tally} = @tally{keys %tally};
 }
 
 Bless( $scores )->keys([ @tables ]);
