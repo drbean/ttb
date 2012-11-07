@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2012 Aug 30, 11:00:39 AM
+# Last Edit: 2012 Nov 07, 01:04:54 PM
 # $Id$
 
 package Script;
@@ -74,6 +74,7 @@ sub run {
 	my $regions = $roomconfig->{regions};
 	my $expertseats = $roomconfig->{ $beancansize->{$n} . 'experts'};
 	my $teamchart = { league => $league->{id}, session => $session };
+	my @letter = qw/A B C/;
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
 		my @seats = map { "s$_" } @$seats;
@@ -90,7 +91,7 @@ sub run {
 			warn "$team team member " . ($number+1) .
 					" in $seats[$number]?" unless $id;
 			$teamchart->{$seats[$number]} = { id => $id,
-						name => $name,
+						name => "$letter[$number]: $name",
 						# rating => $rating,
 						color => $colors->{$team} || $team,
 						team => $team };
