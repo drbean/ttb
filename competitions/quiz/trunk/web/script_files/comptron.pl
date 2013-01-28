@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2012 Apr 28, 12:24:22 PM
+# Last Edit: 2013 Jan 18, 01:00:09 PM
 # $Id$
 
 =head1 NAME
@@ -56,7 +56,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/002';
+$leagues = '/home/drbean/011';
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league;
@@ -98,22 +98,26 @@ for my $pair ( @pairs ) {
 	    $black => { point => { 1 => undef} }
 	     };
     Bless( $free )->keys( [ $white, $black ] );
-    my $set = { $white => \%questions,
-		$black => \%questions };
-    Bless( $set->{$white} )->keys([ 1 .. $qn ]);
-    Bless( $set->{$black} )->keys([ 1 .. $qn ]);
-    Bless( $set )->keys( [ $white, $black ] );
-    # $response->{ free}->{ $table } = $free;
+    #my $set = { $white => \%questions,
+    #    	$black => \%questions };
+    #Bless( $set->{$white} )->keys([ 1 .. $qn ]);
+    #Bless( $set->{$black} )->keys([ 1 .. $qn ]);
+    #Bless( $set )->keys( [ $white, $black ] );
     my $topics = $comp->compTopics( $overallround, $table );
     for my $topic ( @$topics ) {
 	my $forms = $comp->compForms( $overallround, $table, $topic );
 	for my $form ( @$forms ) {
 	    $response->{ free }->{ $table }->{$topic}->{$form} = $free;
-	    $response->{ set }->{ $table }->{$topic}->{$form} = $set;
+	    # $response->{ set }->{ $table }->{$topic}->{$form} = $set;
 	}
-	Bless($response->{ free}->{ $table })->keys([qw/foreman davist/ ]);
-	Bless($response->{ set }->{ $table })->keys([qw/foreman davist/ ]);
+	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
+	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/cohabitation weight refugees/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
+	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
     }
+    # Bless($response->{$table})->keys([qw/rueda salazar vanbeke/ ]);
 }
 
 my @formorders = values %formorder;
@@ -122,7 +126,7 @@ $YAML::UseAliases = 0;
 
 my @tables = sort {$a <=> $b} keys %{$response->{free}};
 Bless( $response->{ free } )->keys([ @tables ]);
-Bless( $response->{ set } )->keys([ @tables ]);
+# Bless( $response->{ set } )->keys([ @tables ]);
 
 print Dump $response;
 
