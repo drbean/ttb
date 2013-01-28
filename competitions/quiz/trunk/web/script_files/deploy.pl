@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use FindBin qw/$Bin/;
 use lib "$Bin/../../web/lib";
+use CompComp::Model::DB;
 use Config::General;
 
 BEGIN {
