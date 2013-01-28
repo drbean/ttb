@@ -50,7 +50,7 @@ use strict;
 my ($leaguefile, $players);
 my $leagues = [ [ qw/id name field/ ] ];
 for my $league ( @leagueids ) {
-	$leaguefile = LoadFile "/home/drbean/$leaguedirs/$league/league.yaml";
+	$leaguefile = LoadFile "$leaguedirs/$league/league.yaml";
 	push @$leagues, [ $league, $leaguefile->{league}, $leaguefile->{field} ];
 	push @{$players->{$league}},
 		map {[ $_->{id}, $_->{Chinese}, $_->{password} ]}
