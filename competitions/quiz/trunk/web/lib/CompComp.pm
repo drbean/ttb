@@ -48,7 +48,8 @@ __PACKAGE__->config({
 			},
 			store => {
 				class => 'DBIx::Class',
-				user_class => 'SwissDB::Players',
+				user_class => 'dicDB::Player',
+				id_field => 'id',
 				role_relation => 'roles',
 				role_field => 'id'
 			}
