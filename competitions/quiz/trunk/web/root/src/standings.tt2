@@ -24,4 +24,4 @@
   <TR><TH colspan="8">5: Win, 3: Loss, 4: Draw, 1: Late, 0: Forfeit
 </table>
 
-<a href="[% c.uri_for_action('/quiz/list') %]">Quiz</a>
+<a href="[% c.uri_for_action('/game/list') %]">Quiz</a>
