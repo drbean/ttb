@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2012 Oct 14, 03:14:47 PM
+# Last Edit: 2012 Oct 17, 01:23:40 PM
 # $Id$
 
 =head1 NAME
@@ -49,7 +49,9 @@ my $groups = $config->{group};
 my @tables = sort {$a <=> $b} keys % { $responses->{ free } };
 
 my $scores;
-for my $division ( qw/free set/ ) {
+my $divisions = $config->{divisions};
+$divisions = [qw/free set/] unless $divisions;
+for my $division ( @$divisions ) {
     if ( $division eq 'free' ) {
 	for my $table ( @tables ) {
 	    my %tally;
@@ -85,6 +87,9 @@ for my $division ( qw/free set/ ) {
 				    $tally{$player} += 0;
 				    $tally{$opponent{$player}}++;
 				}
+				elsif ( $point and $point eq "Old" ) {
+				    $tally{$player} += 0;
+				}
 				elsif ( $point and $point eq "Nil" ) {
 				    $tally{$player} += 0;
 				}
@@ -118,7 +123,7 @@ for my $division ( qw/free set/ ) {
     }
     elsif ( $division eq 'set' ) {
 	my $cardfile = $config->{text};
-	my $cards = LoadFile $cardfile or die "$cardfile?";
+	my $cards = LoadFile $cardfile or die "$cardfile card file?";
 	for my $table ( @tables ) {
 	    my $topics = $responses->{ $division }->{$table};
 	    for my $topic ( keys %$topics ) {
