@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2012 Jan 01, 12:28:24 PM
+# Last Edit: 2012 Mar 25, 05:50:06 PM
 # $Id$
 
 =head1 NAME
@@ -45,7 +45,7 @@ my $schema = CompComp::SwissSchema->connect( @$connect_info );
 my $bett_connect_info = Bett::Model::DB->config->{connect_info};
 my $bett_schema = Bett::Schema->connect( $bett_connect_info );
 
-my $leagues = "/home/drbean/001";
+my $leagues = "/home/drbean/002";
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
