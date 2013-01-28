@@ -1,16 +1,61 @@
-[% META title = "Quiz" -%]
+[% META title = 'Play' -%]
 
+<p>[% tournament %] Tournament</p>
+
+<H1>Welcome, [% player %], to the game for the [% exercise %] Exercise in the [% league %] league.</H1>
+
+<p>You listened to the soundfile. Now play another member of the [% league %] league in the TennisComp competition.
+
+You are [% role %]. Your (anonymous) partner is [% opponent %].
+
+<p>Make up 7 questions or sentences about the soundfile, using the words from the <a href="#words">list</a>. For example, ask or say:
+
+<ul>
+<li>how they were related to each other.
+<li>what they did.
+<li>how they felt.
+</ul>
+
+<ul>
+<li>For each question:
+<ul>
+<li>If your question is grammatically incorrect, or has some other problem, it is a Fault, You get one more chance with that question. So you have [% config.faults %] chances to write the question. If your last attempt is also a Fault, ie, if you have [% config.faults %] Fault(s), your partner gets [% config.point.fault %] point(s).
+
+
+<li>If you use a word that is not in the list in your question, it is a Let. Try again. You can try as many times as you need to to write a question using only the words from the list.
+
+</ul>
+
+<li>If your question is correct, you get [% config.point.question %] points. Your partner then has to guess the answer. If they guess the answer correctly, they get [% config.point.answer %] point(s).
+
+<li>If the answer is not correct, they don't get a point.
+
+</ul>
+
+<h2>Now write questions and answer your partner's questions.</h2>
+
+
+<a name="words"><h2>Words you can use</h2></a>
+
+Choose words only from this list.
+
+<pre>
+[% words %]
+</pre>
   Questions:
 
 <form method="post" action="[% c.uri_for('/record/') _ topic _ '/' _ story %]">
-<table border=2>
-<tr><th>Number<th>Question<th>Answer
-[% FOREACH q IN questions.nsort('id') -%]
-  <tr><td>[% q.id %]<td>[%- q.content -%]
-  
-  <td><INPUT type="radio" name="[% q.id %]" value="True"> True
-  <INPUT type="radio" name="[% q.id %]" value="False"> False
-  <INPUT type="radio" name="[% q.id %]" value="" checked> Don't know
+<table>
+<input type="submit" name="Submit" value="Sure?">
+<tr><th>Question<th>White<th>Black
+[% FOREACH n IN [1..7] -%]
+  <tr><td>[% x %]
+  <td>Question <TEXTAREA rows=2 cols=20 name="wq[% n %]"></TEXTAREA>
+  <td>Answer [% ban %]
+
+  <tr><td>[% x %]
+  <td>Answer <INPUT type="text" size=10 name="wa[% n %]">
+  <td>Question [% qan %]
 
 [% END %]
 
