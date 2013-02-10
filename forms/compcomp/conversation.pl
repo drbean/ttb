@@ -1,25 +1,3 @@
-\documentclass[a4paper]{article}
-\newcommand{\printlandscape}{\special{landscape}}
-\printlandscape
-\usepackage[landscape]{geometry}
-\usepackage{multicol}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage[absolute]{textpos}
-% \usepackage[absolute,showboxes]{textpos}
-% \textblockorigin{0.00cm}{+0.15cm} %HP DeskJet 5160
-\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
-% \textblockorigin{0.00cm}{0.50cm} %HPDeskJet5160
-% \textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
-\pagestyle{empty}
-\setlength{\unitlength}{1cm}
-
-\newcommand{\mycard}[2]{%
-\TPMargin{0.0cm}
-	\begin{textblock}{4}(#1)
-% \textblockrulecolor{red}
-	\textblocklabel{picture1}
-	\vspace{0.25cm}
-\begin{minipage}{7.0cm}%
 	\raggedleft \large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: \rule{1.0cm}{0.3pt}} \\
 	\vspace{-0.05cm}
 	\large I. \rule{2.0cm}{0.3pt} \& II. \rule{2.0cm}{0.3pt} Groups\\
@@ -97,10 +75,8 @@
 \null\newpage
 
 \end{document}
-#!/usr/bin/perl 
 
-eval 'exec /usr/bin/perl  -S $0 ${1+"$@"}'
-    if 0; # not running under some shell
+#!/usr/bin/perl 
 
 use strict;
 use warnings;
@@ -113,10 +89,11 @@ use Pod::Usage;
 
 my $man = 0;
 my $help = 0;
-my ($league, $series, $week);
+my ($league, $session, $week, $letter, $groups);
 
 GetOptions (
-	"league=s" => \$league, "series=s" => \$series, "week=s" => \$week,
+	"league=s" => \$league, "session=s" => \$session, "week=s" => \$week,
+	"letter=s" => \$letter, "groups=s" => \$groups,
 	'help|?' => \$help, man => \$man) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -149,40 +126,27 @@ my $threepages = 0;
 
 my $texString = 
 '\documentclass[a4paper]{article}
-% \usepackage[T1]{fontenc}
-% \usepackage[absolute,noshowtext,showboxes]{textpos}
-\usepackage[absolute,showboxes]{textpos}
-% \textblockorigin{0.00cm}{0.05cm}
-\textblockorigin{0.00cm}{1.05cm}
+\newcommand{\printlandscape}{\special{landscape}}
+\printlandscape
+\usepackage[landscape]{geometry}
+\usepackage{multicol}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[absolute]{textpos}
+% \usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.00cm}{+0.15cm} %HP DeskJet 5160
+\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.50cm} %HPDeskJet5160
+% \textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
-\newcommand{\myeval}[1]{%
-	\begin{description}
-		\item Writer: #1 \hfill Title: \rule{4.5cm}{0.3pt} 
-		% \vspace{-0.3cm}
-		\item #1\'s Pick: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hfill Group\'s Pick: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hspace{0.25cm}
-		% \vspace{-0.2cm}
-		\item Best Bet: \hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hfill Bean\'s Grade: \hspace{0.25cm}0\hspace{0.25cm}1\hspace{0.25cm}2\hspace{0.25cm}3\hspace{0.25cm}4\hspace{0.25cm}5\hspace{0.25cm}
-		% \vspace{+0.3cm}
-	\end{description}
-}
-\newcommand{\mycard}[6]{%
-	% \vspace{0.1cm}
-	\small #1
-	\vspace{-0.5cm}
-	\normalsize \begin{center} #2 Team Pick-A-Number Week #3\end{center}
-	\vspace{-1.75cm}
-	\parbox[t][8.05cm][c]{9.6cm}{%\vfill
-	\normalsize
-	#4
-	#5
-	#6
-	}
-}
 
-\begin{document}
-% \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
-
+\newcommand{\mycard}[2]{%
+\TPMargin{0.0cm}
+	\begin{textblock}{4}(#1)
+% \textblockrulecolor{red}
+	\textblocklabel{picture1}
+	\vspace{0.25cm}
+\begin{minipage}{7.0cm}%
 ';
 
 foreach my $team ( keys %$teams ) 
