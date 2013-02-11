@@ -1,6 +1,3 @@
-	\raggedleft \large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: \rule{1.0cm}{0.3pt}} \\
-	\vspace{-0.05cm}
-	\large I. \rule{2.0cm}{0.3pt} \& II. \rule{2.0cm}{0.3pt} Groups\\
 	\raggedright
 	\normalsize Story: \rule{1.4cm}{0.3pt} \hfill \\
 	\vspace{-0.05cm}
@@ -89,18 +86,18 @@ use Pod::Usage;
 
 my $man = 0;
 my $help = 0;
-my ($league, $session, $week, $letter, $groups);
+my ($league, $session, $week, $letter, $tables);
 
 GetOptions (
-	"league=s" => \$league, "session=s" => \$session, "week=s" => \$week,
-	"letter=s" => \$letter, "groups=s" => \$groups,
+	"league=s" => \$league, "session=s" => \$session, "round=s" => \$week,
+	"player=s" => \$letter, "tables=s" => \$tables,
 	'help|?' => \$help, man => \$man) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
-my $register = LoadFile "/home/greg/$league/register.yaml"
+my $league = LoadFile "/home/greg/$league/league.yaml"
 					or die "No register.yaml: $!";
-my $teams = LoadFile "/home/greg/$league/$series/teams.yaml";
+my $groups = LoadFile "/home/greg/$league/$series/teams.yaml";
 
 my @latex = (
                 { page => 1, xy => "0,0" },
@@ -148,6 +145,11 @@ my $texString =
 	\vspace{0.25cm}
 \begin{minipage}{7.0cm}%
 ';
+
+$texString .= 
+"\raggedleft \large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: $week} \\
+\vspace{-0.05cm}
+";
 
 foreach my $team ( keys %$teams ) 
 {
