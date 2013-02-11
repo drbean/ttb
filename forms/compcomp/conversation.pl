@@ -97,6 +97,7 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 my $league = LoadFile "/home/greg/$league/league.yaml"
 					or die "No register.yaml: $!";
+my @tables = split /,/, $tables;
 my $groups = LoadFile "/home/greg/$league/$series/teams.yaml";
 
 my @latex = (
@@ -190,43 +191,28 @@ __END__
 
 =head1 NAME
 
-evalform - Create Latex Team Self-Evaluation Forms
+conversation.pl - Create Conversation Competition forms for 2 groups' champions
 
 =head1 SYNOPSIS
 
-evalform [options] 
-
-Options:
-
---help            This help message
-
---man            A man page
-
-
---series first	The series
-
---league m/j	The league 
+conversation.pl -l FLA0016 -s 1 -r 3 -p A -g Black::Blue,Brown::Gray,Orange
 
 =head1 OPTIONS
 
 =over 8
 
-=item B<-week>
+--help            This help message
+--man            A man page
 
-The week. This helps when we have old cards floating around.
-
-=item B<-league>
-
-The league
-
-=item B<-series>
-
-The series, so we know who the members of the team actually are.
+--league FLA0016	The league 
+--round 3		The week
+--player A		The designated champion's letter
+--table  Black::Blue,Brown::Gray,Orange	The unpaired group being assistants/bye
 
 =back
 
 =head1 DESCRIPTION
 
-B<evalform> generates a latex form for up-to-3-member teams to evaluate their essays, and win beans if their evaluation coincides with the teacher's. Fields are: Writer's pick, Group's Pick, Best Bet and Grade.
+B<conversation.pl> generates a latex form for the 4 members of two up-to-3-member teams to choose a champion and give the reason that champion is the winner.
 
 =cut
