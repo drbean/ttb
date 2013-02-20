@@ -14,23 +14,26 @@ use Grades;
 
 my $script = Grades::Script->new_with_options;
 my $tourid = $script->league || basename( getcwd );
+my $leagues = "/home/drbean/012";
 ( my $leagueid = $tourid ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
-my $league = League->new( id => $leagueid );
-my $approach = $league->approach;
-my $g = Grades->new( league => $league );
-my $groupwork = $g->approach;
+my $league = League->new( leagues => $leagues, id => $leagueid );
+my $g = Grades->new({ league => $league });
+my $groupwork = $g->classwork;
 my $leaguemembers = $league->members;
 my %members = map { $_->{id} => $_ } @$leaguemembers;
 my $session = $script->session;
 my $week = $script->round;
+my $story = $script->exercise;
 my $letter = $script->player;
-my @tables = split /,/, $script->tables;
+my @tables = split /,/, $script->two;
 
 my $texString = 
 '\documentclass[a4paper]{article}
-\newcommand{\printlandscape}{\special{landscape}}
-\printlandscape
-\usepackage[landscape]{geometry}
+% \newcommand{\printlandscape}{\special{landscape}}
+% \printlandscape
+\usepackage[a4paper,landscape]{geometry}
+\usepackage{xeCJK}
+\setCJKmainfont{WenQuanYi Zen Hei}
 \usepackage{multicol}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[absolute]{textpos}
@@ -42,41 +45,41 @@ my $texString =
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 
-\newcommand{\mycard}[2]{%
+\newcommand{\mycard}[9]{%
 \TPMargin{0.0cm}
 	\begin{textblock}{4}(#1)
 % \textblockrulecolor{red}
 	\textblocklabel{picture1}
 	\vspace{0.25cm}
 \begin{minipage}{7.0cm}%
-	\raggedleft \large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: #3} \\
+	\large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: #3} \\\\
 	\vspace{-0.05cm}
 	\large I. #6 \\& II. #8 Groups\\\\
 	\raggedright
-	\normalsize Story: #4 \hfill \\
+	\normalsize Story: #4 \hfill \\\\
 	\vspace{-0.05cm}
-	\large Champions (Letter #5:\\
+	\large Champions (Letter #5):\\\\
 	\vspace{0.09cm}
-	\normalsize I. #6 Champion: #7\\
+	\normalsize I. #6 Champion: #7\\\\
 	\vspace{0.25cm}
-	\normalsize II. #8 Champion: #9\\
+	\normalsize II. #8 Champion: #9\\\\
+	\large Votes for:\\\\
+	\normalsize I. #7  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\large Winner: \rule{2.1cm}{0.3pt}\\
-	\large Votes:\\
-	\normalsize I. \rule{1.2cm}{0.3pt} Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\
+	\normalsize II. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\normalsize II. \rule{1.1cm}{0.3pt} Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\
-	\large Reasons:\\
-	\normalsize Winner's Supporters\\
-	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\
+	\large Winner: \rule{2.1cm}{0.3pt}\\\\
+	\large Reasons:\\\\
+	\normalsize Winner\'s Supporters\\\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\
-	\normalsize Loser's Supporters\\
-	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\
-	\Large Points:\\
-	\large 3 points: \rule{1.6cm}{0.3pt} 2 points: \rule{1.8cm}{0.3pt}\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\normalsize Loser\'s Supporters\\\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\Large Points:\\\\
+	\large #6: 3 \hspace{0.2cm} 2 \hfill #8: 3 \hspace{0.2cm} 2 \hfill\\\\
 \end{minipage}
 	\end{textblock}
 \TPMargin{0.0cm}
@@ -99,27 +102,27 @@ my $texString =
 ';
 
 my @textpos = (
-	[ [0,0], [2.8,1.0]
-	, [ [4,0], [6.8,1.0]
-	, [ [8,0], [10.8,1.0]
-	, [ [12,0], [14.8,1.0]
-	, [ [0,8], [2.8,9.0]
-	, [ [4,8], [6.8,9.0]
-	, [ [8,8], [10.8,9.0]
-	, [ [12,8], [14.8,9.0]
+	  [ "0,0",  "2.8,1.0" ]
+	, [ "4,0",  "6.8,1.0" ]
+	, [ "8,0",  "10.8,1.0" ]
+	, [ "12,0", "14.8,1.0" ]
+	, [ "0,8",  "2.8,9.0" ]
+	, [ "4,8",  "6.8,9.0" ]
+	, [ "8,8",  "10.8,9.0" ]
+	, [ "12,8", "14.8,9.0" ]
 	);
 my $paging = 0;
 
 my $groups = $groupwork->beancans($session);
 my %indexed = ( A => 0, B => 1, C => 2, D => 3 );
-my
+
 foreach my $table ( @tables ) {
 	my @two = split /::/, $table;
-	my @champion = map { $groups->{$_}->%indexed{$letter} } @two;
+	my @champion = map { $groups->{$_}->[$indexed{$letter}] } @two;
 	$texString .=
-"\\mycard{ $textpos[$paging][0] }{ $textpos[$paging][1] }{$week}{$story}{$letter}{$two[0]}{$champion[0]}{$two[1]}{$champion[1]}
+"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$week}{$story}{$letter}{$two[0]}{$champion[0]}{$two[1]}{$champion[1]}
 ";
-	paging;
+	&paging;
 }
 $texString .= '
 			% crosshairs cutting guide marks
@@ -170,7 +173,7 @@ conversation.pl - Create Conversation Competition forms for 2 groups and champio
 
 =head1 SYNOPSIS
 
-conversation.pl -l FLA0016 -s 1 -r 3 -p A -g Black::Blue,Brown::Gray,Orange
+conversation.pl -l FLA0016 -s 1 -r 3 -p A -t Black::Blue,Brown::Gray,Orange
 
 =head1 OPTIONS
 
