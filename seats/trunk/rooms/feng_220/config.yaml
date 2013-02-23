@@ -168,9 +168,9 @@ threes:
   Blue        : [12, 23, 22]
 
   OrangeOrange: [39, 38, 49]
-  Purple      : [39, 38, 47]
-  BlueBlue    : [37, 36, 45]
-  Brown       : [35, 34, 43]
+  Purple      : [37, 36, 47]
+  BlueBlue    : [35, 34, 45]
+  Brown       : [33, 32, 43]
 
   PinkPink    : [48, 59, 58]
   Red         : [46, 57, 56]
