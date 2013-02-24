@@ -153,7 +153,7 @@ $texString .= '
 \end{document}
 ';
 
-$texString > io "conversation.tex";
+$texString > io "$leagues/$leagueid/classwork/$session/conversation.tex";
 
 sub paging
 {       if ($paging == 7 )
