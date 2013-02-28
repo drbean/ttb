@@ -52,21 +52,21 @@ my $texString =
 	\textblocklabel{picture1}
 	\vspace{0.25cm}
 \begin{minipage}{7.0cm}%
-	\large Conversation competition \hfill \normalsize \raisebox{-0.2cm}{Week: #3} \\\\
+	\normalsize ' . $leagueid . ' Conversation competition \normalsize \raisebox{-0.2cm}{Week: ' . $week . '} \\\\
 	\vspace{-0.05cm}
-	\large I. #6 \\& II. #8 \normalsize Groups\\\\
+	\large #4. #5 \\& #7. #8 \normalsize Groups\\\\
 	\raggedright
-	\normalsize Story: #4 \hfill \\\\
+	\normalsize Story: ' . $story . '\hfill \\\\
 	\vspace{-0.05cm}
-	\large Champions (Letter #5):\\\\
+	\large Champions (Letter #3):\\\\
 	\vspace{0.09cm}
-	\normalsize I. #6 Champion: #7\\\\
+	\normalsize #4. #5 Champion: #6\\\\
 	\vspace{0.25cm}
-	\normalsize II. #8 Champion: #9\\\\
+	\normalsize #7. #8 Champion: #9\\\\
 	\large Votes for:\\\\
-	\normalsize I. #7  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
+	\normalsize #4. #6  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\normalsize II. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
+	\normalsize #7. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
 	\vspace{0.25cm}
 	\large Winner: \rule{2.1cm}{0.3pt}\\\\
 	\large Reasons:\\\\
@@ -79,7 +79,7 @@ my $texString =
 	\normalsize Loser\'s Supporters\\\\
 	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\Large Points:\\\\
-	\large #6: 3 \hspace{0.2cm} 2 \hspace{0.8cm} #8: 3 \hspace{0.2cm} 2\\\\
+	\large #5: 3 \hspace{0.2cm} 2 \hspace{0.5cm} #8: 3 \hspace{0.2cm} 2\\\\
 \end{minipage}
 	\end{textblock}
 \TPMargin{0.0cm}
@@ -99,6 +99,29 @@ my $texString =
 \begin{document}
 % \fontfamily{hlst}\fontseries{b}\fontshape{n}\selectfont
 
+% crosshairs cutting guide marks
+\begin{textblock}{1}(3.64,8)\rule{3mm}{0.1mm}%
+\end{textblock}
+\begin{textblock}{1}(7.64,8)\rule{3mm}{0.1mm}%
+\end{textblock}
+\begin{textblock}{1}(11.64,8)\rule{3mm}{0.1mm}%
+\end{textblock}
+
+\begin{textblock}{1}(3.70,4)\rule{0.1mm}{3mm}%
+\end{textblock}
+\begin{textblock}{1}(3.70,12)\rule{0.1mm}{3mm}%
+\end{textblock}
+
+\begin{textblock}{1}(7.70,4)\rule{0.1mm}{3mm}%
+\end{textblock}
+\begin{textblock}{1}(7.70,12)\rule{0.1mm}{3mm}%
+\end{textblock}
+
+\begin{textblock}{1}(11.70,4,92)\rule{0.1mm}{3mm}%
+\end{textblock}
+\begin{textblock}{1}(11.70,12)\rule{0.1mm}{3mm}%
+\end{textblock}
+
 ';
 
 my @textpos = (
@@ -115,41 +138,18 @@ my $paging = 0;
 
 my $groups = $groupwork->beancans($session);
 my %indexed = ( A => 0, B => 1, C => 2, D => 3 );
+my ($fst, $snd) = (1,2);
 
 foreach my $table ( @tables ) {
 	my @two = split /::/, $table;
 	my @champion = map { $groups->{$_}->[$indexed{$letter}] } @two;
 	$texString .=
-"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$week}{$story}{$letter}{$two[0]}{$champion[0]}{$two[1]}{$champion[1]}
+"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$letter}{$fst}{$two[0]}{$champion[0]}{$snd}{$two[1]}{$champion[1]}
 ";
+	$fst += 2; $snd += 2;
 	&paging;
 }
 $texString .= '
-			% crosshairs cutting guide marks
-			\begin{textblock}{1}(3.64,8)\rule{3mm}{0.1mm}%
-			\end{textblock}
-			\begin{textblock}{1}(7.64,8)\rule{3mm}{0.1mm}%
-			\end{textblock}
-			\begin{textblock}{1}(11.64,8)\rule{3mm}{0.1mm}%
-			\end{textblock}
-
-			\begin{textblock}{1}(3.70,4)\rule{0.1mm}{3mm}%
-			\end{textblock}
-			\begin{textblock}{1}(3.70,12)\rule{0.1mm}{3mm}%
-			\end{textblock}
-
-			\begin{textblock}{1}(7.70,4)\rule{0.1mm}{3mm}%
-			\end{textblock}
-			\begin{textblock}{1}(7.70,12)\rule{0.1mm}{3mm}%
-			\end{textblock}
-
-			\begin{textblock}{1}(11.70,4,92)\rule{0.1mm}{3mm}%
-			\end{textblock}
-			\begin{textblock}{1}(11.70,12)\rule{0.1mm}{3mm}%
-			\end{textblock}
-
-\null\newpage
-
 \end{document}
 ';
 
