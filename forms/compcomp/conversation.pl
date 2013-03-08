@@ -54,11 +54,11 @@ my $texString =
 \begin{minipage}{7.0cm}%
 	\normalsize ' . $leagueid . ' Conversation competition \normalsize \raisebox{-0.2cm}{Week: ' . $week . '} \\\\
 	\vspace{-0.05cm}
-	\large #4. #5 \\& #7. #8 \normalsize Groups\\\\
+	\normalsize Table \large #3. #5 \\& #8 \normalsize Groups\\\\
 	\raggedright
 	\normalsize Story: ' . $story . '\hfill \\\\
 	\vspace{-0.05cm}
-	\large Champions (Letter #3):\\\\
+	\large Champions (Letter ' . $letter . '):\\\\
 	\vspace{0.09cm}
 	\normalsize #4. #5 Champion: #6\\\\
 	\vspace{0.25cm}
@@ -138,13 +138,14 @@ my $paging = 0;
 
 my $groups = $groupwork->beancans($session);
 my %indexed = ( A => 0, B => 1, C => 2, D => 3 );
-my ($fst, $snd) = (1,2);
+my ($tablen, $fst, $snd) = (0,1,2);
 
 foreach my $table ( @tables ) {
+	$tablen++;
 	my @two = split /::/, $table;
 	my @champion = map { $groups->{$_}->[$indexed{$letter}] } @two;
 	$texString .=
-"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$letter}{$fst}{$two[0]}{$champion[0]}{$snd}{$two[1]}{$champion[1]}
+"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$tablen}{$fst}{$two[0]}{$champion[0]}{$snd}{$two[1]}{$champion[1]}
 ";
 	$fst += 2; $snd += 2;
 	&paging;
