@@ -54,7 +54,7 @@ my $texString =
 \begin{minipage}{7.0cm}%
 	\normalsize ' . $leagueid . ' Conversation competition \normalsize \raisebox{-0.2cm}{Week: ' . $week . '} \\\\
 	\vspace{-0.05cm}
-	\normalsize Table \large #3. #5 \\& #8 \normalsize Groups\\\\
+	\normalsize Table \large #3. #5 \\& #8 \\\\
 	\raggedright
 	\normalsize Story: ' . $story . '\hfill \\\\
 	\vspace{-0.05cm}
