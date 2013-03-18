@@ -1,0 +1,90 @@
+\documentclass[a4paper]{article}
+\usepackage{multicol}
+\usepackage[absolute]{textpos}
+% \usepackage[absolute,showboxes]{textpos}
+% \textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.50cm} %HPDeskJet5160
+% \textblockorigin{0.15cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.20cm}{0.40cm} %HPDeskJet5160
+\textblockorigin{0.0cm}{0.00cm} %kyocera
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+
+\newcommand{\myline}{
+	\vspace{-0.13cm}
+	\rule{9.5cm}{0.01cm}
+}
+\newcommand{\myrole}[1]{
+\large #1: \large Name \rule{2.5cm}{0.02cm} Id \rule{2.3cm}{0.02cm}\\
+	\normalsize
+	Steve Fossett and Ellen MacArthur
+	\begin{enumerate}
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\end{enumerate}
+	Lack of Control, Uncertainty, Lack of Support and Pressure
+	\begin{enumerate}
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\end{enumerate}
+	Student and Teacher Stress
+	\begin{enumerate}
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\item \myline
+	\end{enumerate}
+}
+
+
+\newcommand{\mycard}[3]{%
+	\begin{textblock}{16}(#1)
+	\textblocklabel{picture1}
+\begin{center}
+\Large Comprehension competition questions\hspace{2cm} Table: \rule{2cm}{0.01cm}
+\end{center}
+	\end{textblock}
+
+	\begin{textblock}{8}(#2)
+	\textblocklabel{picture1}
+	\myrole{White}
+	\end{textblock}
+
+	\begin{textblock}{8}(#3)
+	\textblocklabel{picture1}
+	\myrole{Black}
+	\end{textblock}
+}
+
+\newcommand{\myfoot}[1]{%
+	\begin{textblock}{16}(#1)
+	\textblocklabel{picture3}
+\begin{center}
+\normalsize 1 question each: 0,1 or 2 pts. 2 questions each: 1,2 or 3 pts. 3 questions each: 2,3 or 4 pts. 4 questions each: 3,4 or 5 pts.\\
+\normalsize F: Ungrammatical, U: Unanswered, R: Answered, O: Someone else's question
+\end{center}
+	\end{textblock}
+}
+
+\begin{document}
+
+\mycard{0,0}{0,0.6}{8,0.6}
+\mycard{0,8}{0,8.6}{8,8.6}
+
+\myfoot{0,7.1}
+\myfoot{0,15.1}
+
+
+\null\newpage
+
+\end{document}
