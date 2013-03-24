@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2013 Mar 23, 10:20:27 PM
+# Last Edit: 2013 Mar 24, 12:30:10 PM
 # $Id$
 
 =head1 NAME
@@ -40,7 +40,10 @@ use strict;
 use warnings;
 use FindBin qw/$Bin/;
 use lib "$Bin/../../web/lib";
+use lib "/var/www/cgi-bin/comp/web/lib";
+use lib "/home/drbean/comp/web/lib";
 use Config::General;
+use Cwd; use File::Basename;
 
 use YAML qw/Dump Bless/;
 use Grades;
@@ -59,7 +62,7 @@ my $leagues = CompComp->config->{leagues};
 $leagues = '/home/drbean/012' unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
-my $id = $scantron->league;
+my $id = $scantron->league || basename( getcwd );
 my $round = $scantron->round;
 my $overallround = $scantron->one || $round;
 my $qn = $scantron->exercise;
