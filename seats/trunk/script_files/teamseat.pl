@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2012 Nov 07, 01:04:54 PM
+# Last Edit: 2013 Mar 24, 05:14:24 PM
 # $Id$
 
 package Script;
@@ -41,7 +41,7 @@ sub run {
 	my $script = Script->new_with_options( league => basename(getcwd) );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
-	my $leagues = "/home/drbean/011";
+	my $leagues = "/home/drbean/012";
 	my $leagueId = $script->league;
 	$leagueId = basename( getcwd ) if $leagueId eq '.';
 	my $leagueO = League->new( id => $leagueId );
