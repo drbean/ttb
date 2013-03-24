@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2012 Oct 17, 01:23:40 PM
+# Last Edit: 2013 Mar 24, 12:13:56 PM
 # $Id$
 
 =head1 NAME
@@ -33,7 +33,7 @@ score_comp.pl -l . -r 10 > comp/10/scores.yaml
 =cut
 
 
-my $leagues = "/home/drbean/011";
+my $leagues = "/home/drbean/012";
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
