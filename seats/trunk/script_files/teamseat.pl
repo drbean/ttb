@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Mar 24, 05:14:24 PM
+# Last Edit: 2013 Mar 25, 04:46:28 PM
 # $Id$
 
 package Script;
@@ -68,7 +68,7 @@ sub run {
 	die "Not all members have names in $league->{id} league"
 		unless all { $_->{name} } @$member;
 	my %names = map { $_->{name} => $_ } @$member;
-	my $beancansize = { 3=>'threes', 4=>'fours' }; 
+	my $beancansize = { 2 => 'twos', 3=>'threes', 4=>'fours' }; 
 	my $arrangement = $roomconfig->{ $beancansize->{$n} };
 	my $colors = $roomconfig->{colors};
 	my $regions = $roomconfig->{regions};
