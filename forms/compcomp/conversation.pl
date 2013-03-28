@@ -64,9 +64,9 @@ my $texString =
 	\vspace{0.25cm}
 	\normalsize #7. #8 Champion: #9\\\\
 	\large Votes for:\\\\
-	\normalsize #4. #6  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
+	\normalsize #4. #6  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.0cm}{0.3pt}\\\\
 	\vspace{0.25cm}
-	\normalsize #7. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}\\\\
+	\normalsize #7. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.0cm}{0.3pt}\\\\
 	\vspace{0.25cm}
 	\large Winner: \rule{2.1cm}{0.3pt}\\\\
 	\large Reasons:\\\\
@@ -79,7 +79,7 @@ my $texString =
 	\normalsize Loser\'s Supporters\\\\
 	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\Large Points:\\\\
-	\large #5: 3 \hspace{0.2cm} 2 \hspace{0.5cm} #8: 3 \hspace{0.2cm} 2\\\\
+	\large #5: \hfill 3 \hspace{0.2cm} 2 \hfill #8: \hfill 3 \hspace{0.2cm} 2 \hspace*{0.1cm} \\\\
 \end{minipage}
 	\end{textblock}
 \TPMargin{0.0cm}
