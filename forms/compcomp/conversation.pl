@@ -79,7 +79,7 @@ my $texString =
 	\normalsize Loser\'s Supporters\\\\
 	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\Large Points:\\\\
-	\large #5: \hfill 3 \hspace{0.2cm} 2 \hfill #8: \hfill 3 \hspace{0.2cm} 2 \hspace*{0.1cm} \\\\
+	#5: \hfill \large 3 \hspace{0.2cm} 2 \hfill \Large #8: \hfill \large 3 \hspace{0.2cm} 2 \hspace*{0.1cm} \\\\
 \end{minipage}
 	\end{textblock}
 \TPMargin{0.0cm}
