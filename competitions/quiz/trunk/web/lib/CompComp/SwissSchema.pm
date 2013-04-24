@@ -5,8 +5,6 @@ use warnings;
 use FindBin qw/$Bin/;
 
 use lib "$Bin/../../../swiss/web/lib";
-use lib "/var/www/cgi-bin/swiss/lib";
-use lib "/home/drbean/swiss/web/lib";
 
 use base 'DBIx::Class::Schema';
 
