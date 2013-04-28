@@ -116,15 +116,15 @@ colors:
   14-1 : Yellow
   14-2 : Yellow
 
-  Black     : #c5c5c5
-  BlackBlack: #909090
-  Blue      : #1111ff
-  BlueBlue  : #0000ff
+  Black     : Gray
+  BlackBlack: Gray
+  Blue      : Blue
+  BlueBlue  : Blue
   Brown     :
   BrownBrown:
   DarkGreen :
   Gray      :
-  GrayGray  : #909090
+  GrayGray  : Gray
   Green     :
   LightBlue :
   LightGreen:
@@ -133,7 +133,7 @@ colors:
   Purple    :
   Red       :
   White     :
-  WhiteWhite: #f2f2f2
+  WhiteWhite: White
   Yellow    :
   YellowYellow: Yellow
 fours:
