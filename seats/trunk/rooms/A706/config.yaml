@@ -135,7 +135,7 @@ colors:
   White     :
   WhiteWhite: #f2f2f2
   Yellow    :
-  YellowYellow: #ffff00
+  YellowYellow: Yellow
 fours:
   Green     : [25, 25a, 26, 26a]
   Gray      : [23, 15, 24, 16]
