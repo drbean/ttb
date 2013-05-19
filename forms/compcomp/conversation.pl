@@ -52,7 +52,7 @@ my $texString =
 	\textblocklabel{picture1}
 	\vspace{0.25cm}
 \begin{minipage}{7.0cm}%
-	\normalsize ' . $leagueid . ' Conversation competition \normalsize \raisebox{-0.2cm}{\tiny Week: ' . $week . '} \\\\
+	\normalsize ' . $leagueid . ' Speaking competition \hfill \normalsize \raisebox{-0.2cm}{\normalsize Week: ' . $week . '} \hspace*{0.2cm} \\\\
 	\vspace{-0.05cm}
 	\normalsize Table \large #3. #5 \\& #8 \\\\
 	\raggedright
@@ -79,7 +79,7 @@ my $texString =
 	\normalsize Loser\'s Supporters\\\\
 	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
 	\Large Points:\\\\
-	#5: \hfill \large 3 \hspace{0.2cm} 2 \hfill \Large #8: \hfill \large 3 \hspace{0.2cm} 2 \hspace*{0.1cm} \\\\
+	#5: \hfill \large 3 \hspace{0.2cm} 2 \hfill \Large #8: \hfill \large 3 \hspace{0.2cm} 2 \hspace*{0.2cm} \\\\
 \end{minipage}
 	\end{textblock}
 \TPMargin{0.0cm}
