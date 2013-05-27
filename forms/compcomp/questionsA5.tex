@@ -17,7 +17,7 @@
 \newcommand{\myrole}[1]{
 \large #1: \large Name \rule{2.5cm}{0.02cm} Id \rule{2.3cm}{0.02cm}\\
 	\normalsize
-	William Kendall, Craig Sams, Jo Fairley, Prince Charles, Mark Palmer
+	% \vspace{1.0cm}
 	\begin{enumerate}
 	\item \myline
 	\item \myline
@@ -26,7 +26,7 @@
 	\item \myline
 	\item \myline
 	\end{enumerate}
-	New Covent Garden Soup Company, Green and Black's
+	\vspace{0.3cm}
 	\begin{enumerate}
 	\item \myline
 	\item \myline
@@ -35,7 +35,7 @@
 	\item \myline
 	\item \myline
 	\end{enumerate}
-	Ingredients for Success--Clear, simple idea, autonomy, ownership, innovation and the Compcomp activity
+	\vspace{0.3cm}
 	\begin{enumerate}
 	\item \myline
 	\item \myline
@@ -46,6 +46,26 @@
 	\end{enumerate}
 }
 
+\newcommand{\mytitlei}[1]{%
+	\begin{textblock}{16}(#1)
+	\centering
+\mbox{William Kendall, Craig Sams, Jo Fairley, Prince Charles, Mark Palmer}
+	\end{textblock}
+}
+
+\newcommand{\mytitleii}[1]{%
+	\begin{textblock}{16}(#1)
+	\centering
+\mbox{The New Covent Garden Soup Company and Green and Black's}
+	\end{textblock}
+}
+
+\newcommand{\mytitleiii}[1]{%
+	\begin{textblock}{16}(#1)
+	\centering
+\mbox{The Compcomp activity and Ingredients for Success--Clear, simple idea, autonomy, ownership, innovation}
+	\end{textblock}
+}
 
 \newcommand{\mycard}[3]{%
 	\begin{textblock}{16}(#1)
@@ -80,6 +100,14 @@
 
 \mycard{0,0}{0,0.6}{8,0.6}
 \mycard{0,8}{0,8.6}{8,8.6}
+
+\mytitlei  {0,0.8}
+\mytitleii {0,3.0}
+\mytitleiii{0,5.2}
+
+\mytitlei  {0,8.8}
+\mytitleii {0,11.0}
+\mytitleiii{0,13.2}
 
 \myfoot{0,7.1}
 \myfoot{0,15.1}
