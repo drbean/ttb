@@ -143,7 +143,8 @@ my ($tablen, $fst, $snd) = (0,1,2);
 foreach my $table ( @tables ) {
 	$tablen++;
 	my @two = split /::/, $table;
-	my @champion = map { $groups->{$_}->[$indexed{$letter}] } @two;
+	my @champion = map { $letter eq "X"? "\\hrulefill":
+										$groups->{$_}->[$indexed{$letter}] } @two;
 	$texString .=
 "\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$tablen}{$fst}{$two[0]}{$champion[0]}{$snd}{$two[1]}{$champion[1]}
 ";
