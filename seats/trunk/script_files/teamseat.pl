@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Sep 05, 10:30:11 PM
+# Last Edit: 2013 Sep 06, 03:18:53 PM
 # $Id$
 
 package Script;
@@ -120,7 +120,7 @@ sub run {
 		}
 	}
 	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "6y6t6y6t") or warn "login: greg?"; 
+	$web->login("greg", "") or warn "login: greg?"; 
 	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
