@@ -115,9 +115,11 @@ colors:
   14-1 : Yellow
   14-2 : Yellow
   Black     : #333333
-  BlackBlack: #555555
+  # BlackBlack: #555555
+  BlackBlack: Black
   Blue      :
-  BlueBlue  : #3399ff
+  # BlueBlue  : #3399ff
+  BlueBlue  : Blue
   Brown     :
   BrownBrown: #993333
   DarkBlue  :
