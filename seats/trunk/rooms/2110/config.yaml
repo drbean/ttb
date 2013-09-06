@@ -148,18 +148,18 @@ fours:
 
   # BlueBlue  : [53, 52, 63, 62]
 threes:
-  Red       : [07, 06, 15]
-  Green     : [05, 04, 13]
-  Black     : [03, 02, 11]
+  Red       : [16, 15, 24]
+  Gray      : [14, 13, 22]
+  Black     : [12, 11, 20]
 
-  White     : [14, 23, 22]
-  Orange    : [12, 21, 20]
-  Blue      : [10, 19, 18]
+  White     : [23, 32, 31]
+  Green     : [21, 30, 29]
+  Blue      : [19, 28, 27]
 
-  Yellow    : [31, 30, 39]
-  Pink      : [29, 28, 37]
-  Brown     : [27, 26, 35]
+  Yellow    : [40, 39, 48]
+  Orange    : [38, 37, 46]
+  Brown     : [36, 35, 44]
 
-  BlackBlack: [38, 47, 46]
-  Purple    : [36, 45, 44]
-  Gray      : [34, 43, 42]
+  BlackBlack: [47, 56, 55]
+  Pink      : [45, 54, 53]
+  Purple    : [43, 52, 51]
