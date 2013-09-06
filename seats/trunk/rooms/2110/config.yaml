@@ -149,15 +149,17 @@ fours:
   # BlueBlue  : [53, 52, 63, 62]
 threes:
   Red       : [07, 06, 15]
-  White     : [14, 23, 22]
   Green     : [05, 04, 13]
-  Orange    : [12, 21, 20]
   Black     : [03, 02, 11]
+
+  White     : [14, 23, 22]
+  Orange    : [12, 21, 20]
   Blue      : [10, 19, 18]
 
   Yellow    : [31, 30, 39]
-  BlackBlack: [38, 47, 46]
   Pink      : [29, 28, 37]
-  Purple    : [36, 45, 44]
   Brown     : [27, 26, 35]
+
+  BlackBlack: [38, 47, 46]
+  Purple    : [36, 45, 44]
   Gray      : [34, 43, 42]
