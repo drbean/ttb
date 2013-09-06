@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Mar 25, 04:46:28 PM
+# Last Edit: 2013 Sep 05, 10:28:23 PM
 # $Id$
 
 package Script;
@@ -54,7 +54,7 @@ sub run {
 	my $filetype = $latex? "tex": "html";
 	my $fileprefix = $latex? "latex": "html";
 	my $room = $league->{room};
-	my $rooms = "$leagues/rooms";
+	my $rooms = "$leagues/../class/seats/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
 	my $groupworkdirs = $league->{groupwork};
 	my $sessionpath = "$leaguePath/$groupworkdirs";
