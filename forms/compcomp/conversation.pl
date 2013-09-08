@@ -14,7 +14,7 @@ use Grades;
 
 my $script = Grades::Script->new_with_options;
 my $tourid = $script->league || basename( getcwd );
-my $leagues = "/home/drbean/012";
+my $leagues = "/home/drbean/021";
 ( my $leagueid = $tourid ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
 my $league = League->new( leagues => $leagues, id => $leagueid );
 my $g = Grades->new({ league => $league });
