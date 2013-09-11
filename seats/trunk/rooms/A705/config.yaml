@@ -114,7 +114,7 @@ colors:
   13-2 : Orange
   14-1 : Yellow
   14-2 : Yellow
-  Black     : #333333
+  # Black     : #333333
   # BlackBlack: #555555
   BlackBlack: Black
   Blue      :
