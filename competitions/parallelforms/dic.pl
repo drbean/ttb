@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 Jun 26, 01:13:10 PM
+# Last Edit: 2013 Sep 29, 02:09:08 PM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -8,6 +8,9 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
+
+use FindBin '$Bin';
+use lib "$Bin";
 
 my $man = 0;
 my $help = 0;
@@ -24,13 +27,15 @@ use Cloze qw/cloze/;
 use List::Util qw/shuffle/;
 our $RD_HINT = 1;
 
-my $round = LoadFile( "round.yaml" );
-my $league = LoadFile( "../league.yaml" );
-my @members = @{$league->{member}};
-my %ids = map { $_->{name} => $_->{id} } @members;
-my %names = map { $_->{id} => $_->{name} } @members;
+# my $round = LoadFile( "round.yaml" );
+# my $league = LoadFile( "../league.yaml" );
+# my @members = @{$league->{member}};
+# my %ids = map { $_->{name} => $_->{id} } @members;
+# my %names = map { $_->{id} => $_->{name} } @members;
 
-my $textSources = $round->{texts};
+# my $textSources = $round->{texts};
+
+my $textSources = [ qw/greetings/ ];
 
 my @dir = @$textSources;
 for my $dir ( @$textSources )
@@ -77,10 +82,10 @@ for my $files ( @parallelfiles )
 }
 $next = nextText(@texts);
 
-my $tmpl = io 'dic.tmpl';
+my $tmpl = io "$Bin/dic.tmpl";
 my $tmplString = $tmpl->all;
 
-my $groups = $round->{group};
+# my $groups = $round->{group};
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
@@ -99,9 +104,10 @@ my @latex = (
 my $paging = 0;
 my $threepages = 0;
 
-foreach my $group ( keys %$groups )
+# foreach my $group ( keys %$groups )
+foreach my $group ( qw/Black Blue Brown/ )
 {
-	my @group =  %{$groups->{$group}}; 
+	# my @group =  %{$groups->{$group}}; 
 	my $text = $next->();
 	$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
@@ -126,8 +132,8 @@ $tmplString .= '
 ';
 
 my $quiz;
-# $quiz->{cardIdentifier} = join ' ', map { s{.*/(\w+)$}{$1} } @$textSources;
-$quiz->{cardIdentifier} = join ' ', map { m{^/.*?/.*?/(.*)$};$1 } @$textSources;
+$quiz->{cardIdentifier} = join ' ', map { s{.*/(\w+)$}{$1} } @$textSources;
+# $quiz->{cardIdentifier} = join ' ', map { m{^/.*?/.*?/(.*)$};$1 } @$textSources;
 # ($quiz->{cardIdentifier} = $textSources ) =~ 
 				# s{.*/(\w+/\w+)/?$}{$1};
 				# s{.*/(\w+/(?:dic|cloze|book)\d?)\.txt$}{$1};
