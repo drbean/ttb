@@ -1,9 +1,24 @@
 #!/usr/bin/perl
 
-# Last Edit: 2007 Jun 24, 10:57:38 PM
+# Last Edit: 2013 Sep 29, 03:19:57 PM
+# $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
 use warnings;
+
+use Getopt::Long;
+use Pod::Usage;
+
+use FindBin '$Bin';
+use lib ("$Bin", "$Bin/../lib");
+
+my $man = 0;
+my $help = 0;
+
+GetOptions (
+	'help|?' => \$help, man => \$man) or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 use IO::All;
 use YAML qw/LoadFile DumpFile/;
@@ -14,13 +29,15 @@ use List::Util qw/shuffle/;
 
 our $RD_HINT = 1;
 
-my $round = LoadFile( "round.yaml" );
-my $league = LoadFile( "../league.yaml" );
-my @members = @{$league->{member}};
-my %ids = map { $_->{name} => $_->{id} } @members;
-my %names = map { $_->{id} => $_->{name} } @members;
+# my $round = LoadFile( "round.yaml" );
+# my $league = LoadFile( "../league.yaml" );
+# my @members = @{$league->{member}};
+# my %ids = map { $_->{name} => $_->{id} } @members;
+# my %names = map { $_->{id} => $_->{name} } @members;
 
-my $textSources = $round->{texts};
+# my $textSources = $round->{texts};
+
+my $textSources = [ qw/greetings/ ];
 
 my %texts;
 my %nextQ;
@@ -29,6 +46,22 @@ for my $file ( @$textSources ) {
 	my $i = 0;
 	$qas = LoadFile $file;
 	for my $q ( keys %$qas )
+	#
+	#my @dir = @$textSources;
+	#for my $dir ( @$textSources )
+	#{
+	#	die "$dir not found or not a directory" unless -d $dir;
+	#}
+	#my $next;
+	#my @blanks = (0)x2;
+	#	my @files;
+	#
+	#sub sequences
+	#{
+	#	my $dir = shift;
+	#	my @files = glob("$dir/*.txt");
+	#	my @parallelforms = map { [ $_ ] } @files;
+	#	while ( $dir = shift )
 	{
 		# my $qstring = $q . ": " . $qas->{$q};
 		my $qstring = $q;
@@ -39,10 +72,11 @@ for my $file ( @$textSources ) {
 	$nextQ{$file} = iterator($texts{$file});
 }
 
-my $tmpl = io 'dic.tmpl';
+my $tmpl = io "$Bin/dic.tmpl";
 my $tmplString = $tmpl->all;
 
-my $groups = $round->{group};
+# my $groups = $round->{group};
+my $groups = { Black => undef, Blue => undef, Brown => undef };
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
@@ -63,8 +97,10 @@ my $threepages = 0;
 
 foreach my $group ( keys %$groups )
 {
-	my %group =  %{$groups->{$group}}; 
+	# my %group =  %{$groups->{$group}}; 
 	my @texts = map { my $i=0; $nextQ{$textSources->[$i]}->() } 0..7;
+	# my @group =  %{$groups->{$group}}; 
+	# my $text = $next->();
 	$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
@@ -104,8 +140,8 @@ $tmplString .= '
 ';
 
 my $quiz;
-# $quiz->{cardIdentifier} = join ' ', map { s{.*/(\w+)$}{$1} } @$textSources;
-$quiz->{cardIdentifier} = join ' ', map { m{^/.*/.*/(.+)$};$1 } @$textSources;
+$quiz->{cardIdentifier} = join ' ', map { s{.*/(\w+)$}{$1} } @$textSources;
+# $quiz->{cardIdentifier} = join ' ', map { m{^/.*?/.*?/(.*)$};$1 } @$textSources;
 # ($quiz->{cardIdentifier} = $textSources ) =~ 
 				# s{.*/(\w+/\w+)/?$}{$1};
 				# s{.*/(\w+/(?:dic|cloze|book)\d?)\.txt$}{$1};
