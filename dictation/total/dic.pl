@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 02, 09:38:40 AM
+# Last Edit: 2013 Oct 02, 09:40:42 AM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -87,14 +87,14 @@ foreach my $group ( keys %$groups )
 	if ( $#group == 1 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{5.5}($latex[$paging]->{xy})
+\\begin{textblock}{5.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[0]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{5.5}($latex[$paging]->{xy})
+\\begin{textblock}{5.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[1]}
@@ -104,7 +104,7 @@ foreach my $group ( keys %$groups )
 	elsif ( $#group == 2 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{5.5}($latex[$paging]->{xy})
+\\begin{textblock}{5.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {}
@@ -113,7 +113,7 @@ foreach my $group ( keys %$groups )
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{5.5}($latex[$paging]->{xy})
+\\begin{textblock}{5.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {}
