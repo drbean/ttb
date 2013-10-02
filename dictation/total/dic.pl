@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 Jun 26, 03:39:29 PM
+# Last Edit: 2013 Oct 02, 09:02:24 AM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -25,13 +25,19 @@ use Cloze qw/cloze/;
 use Games::Tournament::RoundRobin;
 use Games::League::Member;
 
-my $round = LoadFile( "round.yaml" );
-my $league = LoadFile( "../league.yaml" );
-my @members = @{$league->{member}};
-my %ids = map { $_->{name} => $_->{id} } @members;
-my %names = map { $_->{id} => $_->{name} } @members;
+# my $round = LoadFile( "round.yaml" );
+# my $league = LoadFile( "../league.yaml" );
+# my @members = @{$league->{member}};
+# my %ids = map { $_->{name} => $_->{id} } @members;
+# my %names = map { $_->{id} => $_->{name} } @members;
+use Grades;
+use Grades::Groupwork;
+my $l = League->new( leagues => '/home/drbean/021', id => "yd40001280" );
+my $g = Grades->new({ league => $l });
+my $cl = $g->classwork;
 
-my $textSources = $round->{texts};
+# my $textSources = $round->{texts};
+my $textSources = [ "/home/drbean/class/college/greetings" ];
 
 my @io = map {io $_} @$textSources;
 my %texts;
@@ -51,7 +57,8 @@ for (@io)
 my $tmpl = io 'dic.tmpl';
 my $tmplString = $tmpl->all;
 
-my $groups = $round->{group};
+# my $groups = $round->{group};
+my $groups = $cl->beancans(1);
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
@@ -72,21 +79,22 @@ my $threepages = 0;
 
 foreach my $group ( keys %$groups )
 {
-	next unless $round->{group}->{$group};
-	my @group =  map { { name => $_, id => $ids{$_} } }
-						values %{$round->{group}->{$group}}; 
+	next unless $group;
+	#my @group =  map { { name => $_, id => $ids{$_} } }
+	#					values %{$round->{group}->{$group}}; 
+	my @group =  @{ $groups->{$group} };
 	my @text = map { $next{$textSources->[$_]}->() } 0..$#$textSources;
 	if ( $#group == 1 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
+\\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[0]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
+\\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[1]}
@@ -96,11 +104,11 @@ foreach my $group ( keys %$groups )
 	elsif ( $#group == 2 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
+\\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[0]->{name}}
-{$group[1]->{name} \\& $group[2]->{name}}
+{$group[0]}
+{$group[1] \\& $group[2]}
 {$text[0]}
 {$text[3]}
 {$text[5]}
@@ -110,11 +118,11 @@ foreach my $group ( keys %$groups )
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
+\\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[1]->{name}}
-{$group[2]->{name} \\& $group[0]->{name}}
+{$group[1]}
+{$group[2] \\& $group[0]}
 {$text[1]}
 {$text[2]}
 {$text[5]}
@@ -124,11 +132,11 @@ foreach my $group ( keys %$groups )
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
+\\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[2]->{name}}
-{$group[1]->{name} \\& $group[0]->{name}}
+{$group[2]}
+{$group[1] \\& $group[0]}
 {$text[1]}
 {$text[3]}
 {$text[4]}
@@ -138,25 +146,25 @@ foreach my $group ( keys %$groups )
 \\end{textblock}\n";
 		&paging;
 	}
-	elsif ($group eq 'Bye')
-	{	
-		my $byes = $round->{group}->{Bye};
-		foreach my $byer ( @$byes )
-		{
-			$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$byer $ids{$byer}}
-{$byer $ids{$byer}}
-{$byer! No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
-{No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
-{No homework needed. Take a break this week. You win 3 points.}
-\\end{textblock}\n";
-
-			&paging;
-		}
-	}
+#	elsif ($group eq 'Bye')
+#	{	
+#		my $byes = $round->{group}->{Bye};
+#		foreach my $byer ( @$byes )
+#		{
+#			$tmplString .= "
+#\\begin{textblock}{8}($latex[$paging]->{xy})
+#\\textblocklabel{picture$latex[$paging]->{xy}}
+#\\mycard
+#{$byer $ids{$byer}}
+#{$byer $ids{$byer}}
+#{$byer! No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
+#{No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
+#{No homework needed. Take a break this week. You win 3 points.}
+#\\end{textblock}\n";
+#
+#			&paging;
+#		}
+#	}
 }
 
 $tmplString .= '
