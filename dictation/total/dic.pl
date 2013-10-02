@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 02, 09:02:24 AM
+# Last Edit: 2013 Oct 02, 09:29:43 AM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -107,8 +107,8 @@ foreach my $group ( keys %$groups )
 \\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[0]}
-{$group[1] \\& $group[2]}
+{}
+{}
 {$text[0]}
 {$text[3]}
 {$text[5]}
@@ -121,8 +121,8 @@ foreach my $group ( keys %$groups )
 \\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[1]}
-{$group[2] \\& $group[0]}
+{}
+{}
 {$text[1]}
 {$text[2]}
 {$text[5]}
@@ -135,8 +135,8 @@ foreach my $group ( keys %$groups )
 \\begin{textblock}{5.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
-{$group[2]}
-{$group[1] \\& $group[0]}
+{}
+{}
 {$text[1]}
 {$text[3]}
 {$text[4]}
