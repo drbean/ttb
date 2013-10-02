@@ -7,6 +7,7 @@
 \usepackage{pifont}
 \usepackage{amsfonts}
 \usepackage{graphicx}
+\usepackage{newunicodechar}
 % \textblockorigin{0.30cm}{2.15cm}
 % \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
 % \textblockorigin{0.30cm}{3.35cm} % w5
@@ -17,10 +18,10 @@
 
 \newcommand{\mycard}[1]{%
 \tiny <TMPL>$cardIdentifier</TMPL>\\%
+% \begin{minipage}[t][3.9cm][t]{8.5cm}
 \begin{minipage}{8.5cm}
   \normalsize #1
 \end{minipage}
-% \begin{minipage}[t][3.9cm][t]{8.5cm}
 }
 
 \newcommand{\1}[1]{%
@@ -29,8 +30,10 @@
 \end{picture}%
 }
 
+\newunicodechar{▢}{\sq}
 \newcommand{\2}{%
-\includegraphics{/home/drbean/class/ttb/dictation/total/cards.p2}%
+*%
+% \includegraphics{/home/drbean/class/ttb/dictation/total/cards.p2}%
 }
 
 \begin{document}
