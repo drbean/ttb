@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 02, 09:36:46 AM
+# Last Edit: 2013 Oct 02, 09:38:40 AM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -110,15 +110,6 @@ foreach my $group ( keys %$groups )
 {}
 {}
 {$text[0]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{5.5}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{}
-{}
-{$text[1]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
