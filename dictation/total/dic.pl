@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 02, 09:29:43 AM
+# Last Edit: 2013 Oct 02, 09:36:46 AM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -110,11 +110,6 @@ foreach my $group ( keys %$groups )
 {}
 {}
 {$text[0]}
-{$text[3]}
-{$text[5]}
-{$text[6]}
-{$text[9]}
-{$text[11]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
@@ -124,11 +119,6 @@ foreach my $group ( keys %$groups )
 {}
 {}
 {$text[1]}
-{$text[2]}
-{$text[5]}
-{$text[7]}
-{$text[8]}
-{$text[11]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
@@ -138,11 +128,6 @@ foreach my $group ( keys %$groups )
 {}
 {}
 {$text[1]}
-{$text[3]}
-{$text[4]}
-{$text[7]}
-{$text[9]}
-{$text[10]}
 \\end{textblock}\n";
 		&paging;
 	}
