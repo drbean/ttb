@@ -186,27 +186,28 @@ fours:
   BlueBlue    : [52, 51, 62, 61]
   BlackBlack  : [50, 49, 60, 64]
 threes:
-  White       : [09, 08, 19]
-  Orange      : [07, 06, 17]
-  Green       : [05, 04, 15]
-  Black       : [03, 02, 13]
 
-  Yellow      : [18, 29, 28]
-  Pink        : [16, 27, 26]
-  BlackBlack  : [14, 25, 24]
-  Blue        : [12, 23, 22]
+  Black       : [05, 04, 03]
+  Blue        : [02, 12, 13]
+  Brown       : [14, 15, 25]
+  Gray        : [24, 23, 22]
 
-  OrangeOrange: [39, 38, 49]
-  Purple      : [37, 36, 47]
-  BlueBlue    : [35, 34, 45]
-  Brown       : [33, 32, 43]
+  Green       : [35, 34, 33]
+  BlackBlack  : [32, 42, 43]
+  BlueBlue    : [44, 45, 55]
+  BrownBrown  : [54, 53, 52]
 
-  PinkPink    : [48, 59, 58]
-  Red         : [46, 57, 56]
-  BrownBrown  : [44, 55, 54]
-  Gray        : [42, 53, 52]
+  Orange      : [09, 08, 07]
+  Pink        : [06, 16, 17]
+  Purple      : [18, 19, 29]
+  Red         : [28, 27, 26]
 
-  PurplePurple: [21,31,41]
+  PinkPink    : [39, 38, 37]
+  White       : [36, 46, 47]
+  Yellow      : [48, 49, 59]
+  OrangeOrange: [58, 57, 56]
+
+  PurplePurple: [68,67,65]
 
 twos:
   1/1     : [05, 04]
