@@ -15,7 +15,10 @@ use Grades;
 my $script = Grades::Script->new_with_options;
 my $tourid = $script->league || basename( getcwd );
 my $leagues = "/home/drbean/021";
-( my $leagueid = $tourid ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
+
+# ( my $leagueid = $tourid ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
+my $leagueid = $tourid;
+
 my $league = League->new( leagues => $leagues, id => $leagueid );
 my $g = Grades->new({ league => $league });
 my $groupwork = $g->classwork;
@@ -64,9 +67,9 @@ my $texString =
 	\vspace{0.25cm}
 	\normalsize #7. #8 Champion: #9\\\\
 	\large Votes for:\\\\
-	\normalsize #4. #6  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.0cm}{0.3pt}\\\\
+	\normalsize #4. #6  Names: \hrulefill, \hspace{0.15cm} \hrulefill, \hspace{0.15cm} \hrulefill\\\\
 	\vspace{0.25cm}
-	\normalsize #7. #9  Names: \rule{1.1cm}{0.3pt}, \rule{1.1cm}{0.3pt}, \rule{1.0cm}{0.3pt}\\\\
+	\normalsize #7. #9  Names: \hrulefill, \hspace{0.15cm} \hrulefill, \hspace{0.15cm} \hrulefill\\\\
 	\vspace{0.25cm}
 	\large Winner: \rule{2.1cm}{0.3pt}\\\\
 	\large Reasons:\\\\
