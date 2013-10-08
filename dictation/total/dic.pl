@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 04, 01:47:44 PM
+# Last Edit: 2013 Oct 08, 02:23:15 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -40,7 +40,7 @@ my $g = Grades->new({ league => $l });
 my $cl = $g->classwork;
 
 # my $textSources = $round->{texts};
-my $textSources = [ "/home/drbean/class/multimedia/dictation/" ];
+my $textSources = [ "/home/drbean/class/topics/phones/" ];
 
 my @io = map {io $_} @$textSources;
 my %texts;
@@ -66,65 +66,65 @@ my $groups = $cl->beancans(1);
 my @latex = (
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "8,8" },
-		{ page => 1, xy => "0,8" },
-		{ page => 2, xy => "8,0" },
-		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "8,8" },
-		{ page => 2, xy => "0,8" },
-		{ page => 3, xy => "8,0" },
-		{ page => 3, xy => "0,0" },
-		{ page => 3, xy => "8,8" },
-		{ page => 3, xy => "0,8" },
+		# { page => 1, xy => "8,8" },
+		# { page => 1, xy => "0,8" },
+		# { page => 2, xy => "8,0" },
+		# { page => 2, xy => "0,0" },
+		# { page => 2, xy => "8,8" },
+		# { page => 2, xy => "0,8" },
+		# { page => 3, xy => "8,0" },
+		# { page => 3, xy => "0,0" },
+		# { page => 3, xy => "8,8" },
+		# { page => 3, xy => "0,8" },
 	);
 my $paging = 0;
 my $threepages = 0;
 
-foreach my $group ( keys %$groups )
-{
-	next unless $group;
-	#my @group =  map { { name => $_, id => $ids{$_} } }
-	#					values %{$round->{group}->{$group}}; 
-	my @group =  @{ $groups->{$group} };
+#foreach my $group ( keys %$groups )
+#{
+#	next unless $group;
+#	#my @group =  map { { name => $_, id => $ids{$_} } }
+#	#					values %{$round->{group}->{$group}}; 
+#	my @group =  @{ $groups->{$group} };
 	my @text = map { $next{$textSources->[$_]}->() } 0..$#$textSources;
-	if ( $#group == 1 ) 
+#	if ( $#group == 1 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{5.9}($latex[$paging]->{xy})
+\\begin{textblock}{7.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[0]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{5.9}($latex[$paging]->{xy})
+\\begin{textblock}{7.9}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[1]}
 \\end{textblock}\n";
 		&paging;
 	}
-	elsif ( $#group == 2 ) 
-	{
-		$tmplString .= "
-\\begin{textblock}{5.9}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{}
-{}
-{$text[0]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{5.9}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{}
-{}
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-	}
+#	elsif ( $#group == 2 ) 
+#	{
+#		$tmplString .= "
+#\\begin{textblock}{5.9}($latex[$paging]->{xy})
+#\\textblocklabel{picture$latex[$paging]->{xy}}
+#\\mycard
+#{}
+#{}
+#{$text[0]}
+#\\end{textblock}\n";
+#		&paging;
+#		$tmplString .= "
+#\\begin{textblock}{5.9}($latex[$paging]->{xy})
+#\\textblocklabel{picture$latex[$paging]->{xy}}
+#\\mycard
+#{}
+#{}
+#{$text[1]}
+#\\end{textblock}\n";
+#		&paging;
+#	}
 #	elsif ($group eq 'Bye')
 #	{	
 #		my $byes = $round->{group}->{Bye};
@@ -144,7 +144,8 @@ foreach my $group ( keys %$groups )
 #			&paging;
 #		}
 #	}
-}
+
+# }
 
 $tmplString .= '
 \end{document}
@@ -182,7 +183,7 @@ sub nextText
 }
 
 sub paging
-{	if ($paging == 3 or $paging == 7 or $paging == 11 )
+{	if ($paging == 2 or $paging == 4 or $paging == 6 )
 	{
 		$tmplString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) . "\\end{tiny}\\newpage\n\n";
