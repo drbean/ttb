@@ -2,7 +2,7 @@
 \documentclass[a4paper]{article}
 \usepackage[T1]{fontenc}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
-\usepackage[absolute,showboxes]{textpos}
+\usepackage[absolute]{textpos}
 \TPMargin{0.2cm}
 \usepackage{pifont}
 \usepackage{amsfonts}
@@ -19,9 +19,9 @@
 \newcommand{\mycard}[1]{%
 \tiny <TMPL>$cardIdentifier</TMPL>\\%
 % \begin{minipage}[t][3.9cm][t]{8.5cm}
-\begin{minipage}{8.5cm}
+% \begin{minipage}{8.5cm}
   \normalsize #1
-\end{minipage}
+% \end{minipage}
 }
 
 \newcommand{\1}[1]{%
@@ -31,10 +31,16 @@
 }
 
 \newunicodechar{▢}{\sq}
-\newcommand{\2}{%
-*%
-% \includegraphics{/home/drbean/class/ttb/dictation/total/cards.p2}%
+% \newcommand{\2}{%
+% *%
+% % \includegraphics{/home/drbean/class/ttb/dictation/total/cards.p2}%
+% }
+\newcommand{\2}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\framebox(0.5,0.5)[br]{\tiny #1}}
+\end{picture}%
 }
+
 
 \begin{document}
 
