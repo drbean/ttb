@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 08, 02:23:15 PM
+# Last Edit: 2013 Oct 08, 04:44:30 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -33,35 +33,18 @@ use Games::League::Member;
 # my @members = @{$league->{member}};
 # my %ids = map { $_->{name} => $_->{id} } @members;
 # my %names = map { $_->{id} => $_->{name} } @members;
-use Grades;
-use Grades::Groupwork;
-my $l = League->new( leagues => '/home/drbean/021', id => "AFN3Y0" );
-my $g = Grades->new({ league => $l });
-my $cl = $g->classwork;
+# use Grades;
+# use Grades::Groupwork;
+# my $l = League->new( leagues => '/home/drbean/021', id => "AFN3Y0" );
+# my $g = Grades->new({ league => $l });
+# my $cl = $g->classwork;
 
 # my $textSources = $round->{texts};
-my $textSources = [ "/home/drbean/class/topics/phones/" ];
+my $textSources = [ "/home/drbean/class/topics/phones/dic.yaml" ];
 
-my @io = map {io $_} @$textSources;
-my %texts;
-my %next;
-for (@io) 
-{
-	my $i = 0;
-	while ( my $file = $_->next )
-	{
-		next unless $file =~ m/\.txt$/;
-		my @lines = $file->getlines;
-		$texts{$_}[$i++] = cloze(@lines);
-	}
-	$next{$_} = nextText($texts{$_});
-}
+my ($text, $question) = LoadFile ($textSources->[0]);
 
-my $tmpl = io "$Bin/dic.tmpl";
-my $tmplString = $tmpl->all;
-
-# my $groups = $round->{group};
-my $groups = $cl->beancans(1);
+my $fields = shift( $text );
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
@@ -80,24 +63,44 @@ my @latex = (
 my $paging = 0;
 my $threepages = 0;
 
+my $tmpl = io "$Bin/dic.tmpl";
+my $tmplString = $tmpl->all;
+
+my @ids = @ARGV;
+my %texts;
+my %next;
+for my $id ( @ids ) {
+	my $i = 0;
+	my $lines = $text->[0]->[4];
+	my @lines = split /\n/, $lines;
+	my $unclozeables = $text->[0]->[5];
+	my $text = cloze($unclozeables, @lines);
+	my $textA = join '', @{$text->{A}};
+	my $textB = join '', @{$text->{B}};
+	my @text;
+	@text[0,1] = ($textA, $textB);
+
+# my $groups = $round->{group};
+# my $groups = $cl->beancans(1);
+
 #foreach my $group ( keys %$groups )
 #{
 #	next unless $group;
 #	#my @group =  map { { name => $_, id => $ids{$_} } }
 #	#					values %{$round->{group}->{$group}}; 
 #	my @group =  @{ $groups->{$group} };
-	my @text = map { $next{$textSources->[$_]}->() } 0..$#$textSources;
+# my @text = map { $next{$textSources->[$_]}->() } 1..$#$textSources;
 #	if ( $#group == 1 ) 
 	{
 		$tmplString .= "
-\\begin{textblock}{7.9}($latex[$paging]->{xy})
+\\begin{textblock}{7.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[0]}
 \\end{textblock}\n";
 		&paging;
 		$tmplString .= "
-\\begin{textblock}{7.9}($latex[$paging]->{xy})
+\\begin{textblock}{7.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard
 {$text[1]}
@@ -147,6 +150,8 @@ my $threepages = 0;
 
 # }
 
+}
+
 $tmplString .= '
 \end{document}
 ';
@@ -166,16 +171,16 @@ print TEX $template->fill_in( HASH => $quiz );
 sub nextText
 {
 	my $texts = shift;
-	my $number = $#$texts;
+	# my $number = $#$texts;
 	my $index = 0;
 	my ($nextText, $nextFile);
 	return sub
 	{
-		$nextText = $texts->[$index];
+		$nextText = $texts->{messages};
 		# $index = 0 if ++$index == $number;
-		$index = 0 if $index++ == $number;
+		# $index = 0 if $index++ == $number;
 		# $index = int rand( $number );
-		$index = int rand( $number + 1);
+		# $index = int rand( $number + 1);
 		my $textA = join '', @{$nextText->{A}};
 		my $textB = join '', @{$nextText->{B}};
 		return ( $textA, $textB );
