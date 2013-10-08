@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2006 Nov 21, 05:32:54 PM
+# Last Edit: 2013 Oct 08, 02:34:04 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -29,7 +29,7 @@ sub cloze
 	our (%score, $score);
 	($score{A}, $score{B}, $score) = (0) x 3;
 
-	our $RD_HINT=1;
+	$::RD_HINT=1;
 
 	my $lineGrammar = q[
 		{ my $inA = 0; }
@@ -37,8 +37,8 @@ sub cloze
 		token: header | footer | a | b | sentenceA | sentenceB
 		header: m/Conversation \d/ { $Cloze::reader = 'AB'; }
 		footer: m/\\\\/ { $Cloze::reader = 'AB' }
-		a: m/(Clerk): .*$/ { $Cloze::reader = 'A'; }
-		b: m/(Guest): .*$/ { $Cloze::reader = 'B'; }
+		a: m/(W): .*$/ { $Cloze::reader = 'A'; }
+		b: m/(M): .*$/ { $Cloze::reader = 'B'; }
 		sentenceA: <reject: $inA> m/^A:.*$/ {$inA=1; $Cloze::reader='A';}
 		sentenceB:  m/^(B|C):.*$/ {$inA=0; $Cloze::reader='B';}
 		end: m/^\Z/
@@ -56,7 +56,7 @@ sub cloze
 		foreach our $player ( @players )
 		{
 			my $macro = ($reader =~ m/$player/)?
-				 '2': q[1{$Cloze::score{$Cloze::player}}];
+				 q[2{$Cloze::score{$Cloze::player}}] : q[1{$Cloze::score{$Cloze::player}}];
 
 	# our $writer = $player;
 	our @blankedText = ();
@@ -76,7 +76,7 @@ sub cloze
 			{ $inWord=1;
 			# push @Cloze::blankedText, $item[2];
 				$Cloze::score{$Cloze::player}++
-					unless $Cloze::reader eq $Cloze::player;
+					; # unless $Cloze::reader eq $Cloze::player;
 				push @Cloze::blankedText, "\\\\] . $macro  . 
 					q[";
 			}
@@ -84,7 +84,7 @@ sub cloze
 			{
 				$inLatex = 1;
 				$Cloze::score{$Cloze::player}++
-					unless $Cloze::reader eq $Cloze::player;
+					; # unless $Cloze::reader eq $Cloze::player;
 				push @Cloze::blankedText, "\\\\] . $macro  . 
 					q[";
 			}
@@ -101,15 +101,18 @@ sub cloze
 				$inWord=0;
 				$inLatex = 0;
 				$Cloze::score{$Cloze::player}++
-					unless $Cloze::reader eq $Cloze::player;
+					; # unless $Cloze::reader eq $Cloze::player;
 				push @Cloze::blankedText, "\\\\] . $macro  . 
 					q[";
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
-				push @Cloze::blankedText, $item[2];
+				push @Cloze::blankedText, $item[2] . "\\\\hspace*{\\\\fill} ";
 			}
 		end: m/^\Z/
+			{
+				push @Cloze::blankedText, '\\\\\\\\\\\\\\\\';
+			}
 	]; 
 
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
