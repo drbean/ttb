@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Oct 08, 02:34:04 PM
+# Last Edit: 2013 Oct 08, 05:02:09 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -22,6 +22,9 @@ use Parse::RecDescent;
 
 sub cloze
 {
+	my $unclozeables = shift;
+	chomp $unclozeables;
+	our $unclozeable = $unclozeables? qr/(?:$unclozeables)/: undef;
 	my @lines = @_;
 	my %text = ();
 # @text{'A', 'B' } = ('') x 2;
@@ -62,16 +65,13 @@ sub cloze
 	our @blankedText = ();
 	my $letterGrammar = q[
 		{
-			my $punctuation = qr/[^-A-Za-z0-9']+/;
-			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my $letter = qr/[-A-Za-z0-9']/;
+			my $punctuation = qr/[^\p{Word}\\n]+/u;
+			my $letter = qr/\p{Word}/u;
 			my $skip = '';
 			my ($inLatex, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
 		token: pass | firstletter | secondletter | otherletters | lastletter | punctuation
-		pass: <reject: $inWord> m/(Clerk|Guest|--|\w)$punctuation/
-			{ push @Cloze::blankedText, $item[2]}
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1;
 			# push @Cloze::blankedText, $item[2];
@@ -114,7 +114,18 @@ sub cloze
 				push @Cloze::blankedText, '\\\\\\\\\\\\\\\\';
 			}
 	]; 
-
+	if ( $unclozeables ) {
+		$letterGrammar .= q[
+		pass: <reject: $inWord> m/($Cloze::unclozeable|$letter|\d+:\d+)(?=$punctuation)/m
+			{ push @Cloze::blankedText, $item[2]}
+		];
+	}
+	else {
+		$letterGrammar .= q[
+		pass: <reject: $inWord> m/(letter|\d+:\d+)(?=$punctuation)/m
+			{ push @Cloze::blankedText, $item[2]}
+		];
+	}
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
 	defined $letterParser->string($line) or die "letterparse died: $?\n";
 	if ( $macro eq '2' )
