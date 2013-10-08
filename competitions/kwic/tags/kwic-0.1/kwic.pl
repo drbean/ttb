@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2007 May 29, 06:44:07 AM
+# Last Edit: 2013 Oct 01, 09:53:48 PM
 # $Id: /kwic/tags/kwic-0.1/kwic.pl 1227 2007-05-28T23:53:18.701708Z greg  $
 
 use warnings;
@@ -12,16 +12,22 @@ use YAML qw/LoadFile DumpFile/;
 use Parse::RecDescent;
 use Text::Template;
 # use Kwic qw/kwic/;
-use Clair::Cluster;
-use String::Similarity;
+# use Clair::Cluster;
+# use String::Similarity;
 
-my $round = LoadFile( "round.yaml" );
-my $league = LoadFile( "../league.yaml" );
-my @members = @{$league->{member}};
-my %ids = map { $_->{name} => $_->{id} } @members;
-my %names = map { $_->{id} => $_->{name} } @members;
+# my $round = LoadFile( "round.yaml" );
+# my $league = LoadFile( "../league.yaml" );
+# my @members = @{$league->{member}};
+# my %ids = map { $_->{name} => $_->{id} } @members;
+# my %names = map { $_->{id} => $_->{name} } @members;
+use Grades;
+use Grades::Groupwork;
+my $l = League->new( leagues => '/home/drbean/021', id => "yd40001280" );
+my $g = Grades->new({ league => $l });
+my $cl = $g->classwork;
 
-my $textSources = $round->{texts};
+# my $textSources = $round->{texts};
+my $textSources = [ "/home/drbean/class/college/greetings" ];
 my @dirs = map {io $_} @$textSources;
 my $concordances;
 my $next;
@@ -69,7 +75,7 @@ foreach my $dir ( @dirs )
 	}
     for my $key ( keys %{$concordance} )
      {
-	 delete $concordance->{$key} if grep { not defined $concordance->{$key}->{$_} } @files;
+	 # delete $concordance->{$key} if grep { not defined $concordance->{$key}->{$_} } @files;
 	 $shuffle->{$dir}->{$key} = nextExample($concordance->{$key});
      }
 	 my $name = $dir->name;
@@ -81,7 +87,7 @@ my $tmpl = io 'kwic.tmpl';
 
 my $tmplString = $tmpl->all;
 
-my $groups = $round->{group};
+my $groups = $cl->beancans(1);
 
 my @latex = (
 				{ page => 1, xy => "8,0" },
@@ -103,13 +109,13 @@ my %totalScore;
 
 foreach my $group ( keys %$groups )
 {
-	my @roles = keys %{$round->{group}->{$group}};
-	my @group =  values %{$round->{group}->{$group}};
-	next unless @group;
-	next if grep {$_ eq 'Bye'} @roles;
-	foreach my $player ( @group ) 
+    # my @roles = keys %{$groups->{$group}};
+	my $members =  $groups->{$group};
+	# next unless @group;
+	# next if grep {$_ eq 'Bye'} @roles;
+	foreach my $player ( @$members ) 
     {
-        my $partners = join ' \& ', grep { $_ ne $player } @group;
+        my $partners = join ' \& ', grep { $_ ne $player } @$members;
         my $score    = 1;
         my @pairs = map { $next->{$_}->() } @$textSources;
         my $n = 0;
@@ -125,7 +131,7 @@ foreach my $group ( keys %$groups )
                 join( '', ++$n . ".",
 		@{ $_->[0]->{pretext} }, $cloze1, @{ $_->[0]->{posttext} },
 		'\\\\',
-		@{ $_->[1]->{pretext} }, $cloze2, @{ $_->[1]->{posttext} }
+		# @{ $_->[1]->{pretext} }, $cloze2, @{ $_->[1]->{posttext} }
                 , '\\\\' )
         } @pairs;
 
