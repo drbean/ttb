@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 13, 03:45:07 PM
+# Last Edit: 2013 Oct 13, 08:08:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -23,14 +23,40 @@ use IO::All;
 use YAML qw/LoadFile DumpFile/;
 use List::Util qw/shuffle/;
 
-my $latexString;
+my $latexString = <<"START_LATEX";
+\\documentclass[a4paper]{article}
+\\usepackage[T1]{fontenc}
+% \\usepackage[absolute,noshowtext,showboxes]{textpos}
+\\usepackage[absolute,showboxes]{textpos}
+% \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
+% \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
+\\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
+\\usepackage{texdraw}
+\\usepackage{multicol}
+\\usepackage{soul}
+\\pagestyle{empty}
+\\setlength{\\unitlength}{1cm}
+
+\\newcommand{\\mycard}[5]{%
+	\\vspace{0.1cm}
+	\\small #1 #2
+	\\par
+	\\parbox[t][6.7cm][c]{9.5cm}{%
+	\\hspace{0.1cm} \\Large#3\\\\
+	\\normalsize#4 #5
+	}
+}
+
+START_LATEX
+
 my @latex = (
-		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "8,8" },
-		{ page => 1, xy => "0,8" },
-		{ page => 2, xy => "8,0" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "8,4" },
 		{ page => 2, xy => "0,0" },
+		{ page => 2, xy => "8,0" },
 		{ page => 2, xy => "8,8" },
 		{ page => 2, xy => "0,8" },
 		{ page => 3, xy => "8,0" },
@@ -49,85 +75,54 @@ for my $s ( keys %$cards ) {
 	next unless ref $story eq 'HASH';
 	my $identifier = $s;
 	$identifier =~ tr/_/ /;
+	$latexString .= "\\newcommand{\\myIdentifier}[0]{$identifier\n}";
 	my $bingo = $story->{bingo};
 	my $f = 0;
+	$latexString .= "\\begin{document}\n";
 	for my $words ( @$bingo ) {
 		my @words = split m/ /, $words;
 		my @clinchers = sample( set => \@words, sample_size => 2 );
-		my $winner = sample( set => \@clinchers );
+		my @winner = sample( set => \@clinchers );
 		my %words; @words{ @words } = (); delete $words{@clinchers};
-		my @call =	keys %words;
-		my $bio = io "$ARGV[0]/bingo_${s}_+$f.tex";
+		my @pruned = keys %words;
+		my @call =	(@pruned, @winner);
 
-		$latexString = <<"END_LATEX";
+		$latexString .=
+"\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard{}{\\myIdentifier}{}
+{\\parbox{9.0cm}{";
+		$latexString .= (tr/_/~/, "$_ \\hfill ") for @call;
+		$latexString .= "}}{} \n \\end{textblock}\n";
+		&paging;
 
-\\documentclass[a4paper]{article}
-\\usepackage[T1]{fontenc}
-% \\usepackage[absolute,noshowtext,showboxes]{textpos}
-\\usepackage[absolute,showboxes]{textpos}
-% \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
-% \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
-% \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
-\\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
-\\usepackage{texdraw}
-\\usepackage{multicol}
-\\usepackage{soul}
-\\pagestyle{empty}
-\\setlength{\\unitlength}{1cm}
-
-\\newcommand{\\myIdentifier}[0]{
-$identifier
-}
-
-\\newcommand{\\mycard}[5]{%
-	\\vspace{0.1cm}
-	\\small #1 #2
-	\\par
-	\\parbox[t][6.7cm][c]{9.5cm}{%
-	\\hspace{0.1cm} \\Large#3\\\\
-	\\normalsize#4 #5
-	}
-}
-
-\\begin{document}
-\\fontfamily{hlst}\\fontseries{b}\\fontshape{n}\\selectfont
-% \\begin{picture}(15,20)(+4.8,-22.05)
-% \\begin{tabular}[t]{*{2}{|p{10.05cm}}|}
-
-\\begin{textblock}{8}(0,0)
-\\textblocklabel{picture1}
-\\mycard{}{\\myIdentifier}{
-}
-{\\parbox{9.0cm}{
-
-END_LATEX
-
-		$latexString .= "$_ \\hfill " for @words;
-
-		$latexString .= 
-			"}}{} 
-		\end{textblock}\n";
 		for my $card ( 0 .. $n-1 ) {
-			my $candidate = sample( set => \@clinchers );
-			my @presented = shuffle (@words, $candidate);
+			my @candidate = sample( set => \@clinchers );
+			my @presented = sample( set => \@pruned, sample_size => @pruned/2);
+			my @shuffled = shuffle (@presented, @candidate);
 
 			$latexString .= 
-				"\\begin{textblock}{8}($latex[$paging]->{xy})
-				\\textblocklabel{picture$latex[$paging]->{xy}}
-				\\mycard{";
-			$latexString .= "$_ \\hfill " for @words;
-				"\\end{textblock}\n";
-
+"\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard{}{\\myIdentifier}{\\parbox{9.0cm}{";
+			for my $word ( @shuffled ) {
+				$word =~ tr/_/~/;
+				$latexString .= "$word \\hfill ";
+			}
+			$latexString .= "}}{}{} \n \\end{textblock}\n";
 			&paging;
-		$latexString .= "\\end{document}\n";
-		$bio->print( $latexString );
 		}
+		$latexString .= "\\end{document}\n";
+		# my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
+		# $bio->print( $latexString );
 
 
 
 	}
 
 }
+		my $bio = io "$ARGV[0]/bingo_cell_0.tex";
+		$bio->print( $latexString );
 
 sub paging
 {       if ($paging == 3 or $paging == 7 or $paging == 11 )
