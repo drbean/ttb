@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 13, 03:27:41 PM
+# Last Edit: 2013 Oct 13, 03:42:20 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -54,9 +54,8 @@ for my $s ( keys %$cards ) {
 		my @words = split m/ /, $words;
 		my @clinchers = sample( set => \@words, sample_size => 2 );
 		my $winner = sample( set => \@clinchers );
-		my @call =	grep
-						{ my $word = $_; grep { $_ eq $word } @clinchers }
-					@words;
+		my %words; @words{ @words } = (); delete $words{@clinchers};
+		my @call =	keys %words;
 		my $bio = io "$ARGV[0]/bingo_${s}_+$f.tex";
 
 		$latexString = <<"END_LATEX";
