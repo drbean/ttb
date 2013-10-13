@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2013 Oct 13, 09:25:50 PM
+# Last Edit: 2013 Oct 13, 09:48:55 PM
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/012' unless $leagues;
+$leagues = '/home/drbean/021' unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
