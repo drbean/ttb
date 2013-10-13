@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 13, 03:42:20 PM
+# Last Edit: 2013 Oct 13, 03:45:07 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -48,6 +48,7 @@ for my $s ( keys %$cards ) {
 	my $story = $cards->{$s};
 	next unless ref $story eq 'HASH';
 	my $identifier = $s;
+	$identifier =~ tr/_/ /;
 	my $bingo = $story->{bingo};
 	my $f = 0;
 	for my $words ( @$bingo ) {
