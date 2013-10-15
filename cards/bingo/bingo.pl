@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 15, 12:19:40 PM
+# Last Edit: 2013 Oct 15, 10:32:45 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -148,30 +148,14 @@ __END__
 
 =head1 NAME
 
-Ctest-clozed format for exam-type pair dictation
+bingo.pl - Create bingo cards from list in cards.yaml
 
 =head1 SYNOPSIS
 
-./dic.pl
-
-./form.pl
-
-./scoresheet.pl
-
-./grade
+perl ttb/cards/bingo/bingo.pl -n 15 -s cell_phones -f 0 topics/phones
 
 =head1 DESCRIPTION
 
-B<dic.pl> generates parallel forms for 2 or 3 conversations from a multiple number of files in directories corresponding to the conversations.
-
-This makes it suitable for a number of different short conversations making up one pair dictation exam sheet.
-
-B<Ctest> clozes only the second half of the word.
-
-B<form.pl> makes up the form for the other side of the piece of paper.
-
-B<scoresheet.pl> creates B<scores.yaml>, a YAML-style template file that can be filled in with the number of letters correct.
-
-B<grade> grades the scores and writes a report.
+Makes n cards from first bingo sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
 
 =cut
