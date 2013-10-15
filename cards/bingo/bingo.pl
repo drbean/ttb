@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 13, 08:08:09 PM
+# Last Edit: 2013 Oct 15, 12:19:40 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -13,9 +13,13 @@ use Algorithm::Numerical::Sample qw/sample/;
 my $man = 0;
 my $help = 0;
 my $n = 7;
+my $s = '';
+my $f = 0;
 
 GetOptions (
-	'help|?' => \$help, man => \$man, 'n=i' => \$n) or pod2usage(2);
+	'help|?' => \$help, man => \$man,
+	'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
+		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -55,14 +59,26 @@ my @latex = (
 		{ page => 1, xy => "0,4" },
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "8,4" },
+		{ page => 1, xy => "0,8" },
+		{ page => 1, xy => "0,12" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "8,12" },
 		{ page => 2, xy => "0,0" },
+		{ page => 2, xy => "0,4" },
 		{ page => 2, xy => "8,0" },
-		{ page => 2, xy => "8,8" },
+		{ page => 2, xy => "8,4" },
 		{ page => 2, xy => "0,8" },
-		{ page => 3, xy => "8,0" },
+		{ page => 2, xy => "0,12" },
+		{ page => 2, xy => "8,8" },
+		{ page => 2, xy => "8,12" },
 		{ page => 3, xy => "0,0" },
-		{ page => 3, xy => "8,8" },
+		{ page => 3, xy => "0,4" },
+		{ page => 3, xy => "8,0" },
+		{ page => 3, xy => "8,4" },
 		{ page => 3, xy => "0,8" },
+		{ page => 3, xy => "0,12" },
+		{ page => 3, xy => "8,8" },
+		{ page => 3, xy => "8,12" },
 	);
 my $paging = 0;
 my $threepages = 0;
@@ -70,67 +86,61 @@ my $threepages = 0;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
-for my $s ( keys %$cards ) {
-	my $story = $cards->{$s};
-	next unless ref $story eq 'HASH';
-	my $identifier = $s;
-	$identifier =~ tr/_/ /;
-	$latexString .= "\\newcommand{\\myIdentifier}[0]{$identifier\n}";
-	my $bingo = $story->{bingo};
-	my $f = 0;
-	$latexString .= "\\begin{document}\n";
-	for my $words ( @$bingo ) {
-		my @words = split m/ /, $words;
-		my @clinchers = sample( set => \@words, sample_size => 2 );
-		my @winner = sample( set => \@clinchers );
-		my %words; @words{ @words } = (); delete $words{@clinchers};
-		my @pruned = keys %words;
-		my @call =	(@pruned, @winner);
+my $story = $cards->{$s};
+die "No $s story bingo" unless ref $story eq 'HASH' and
+	exists $story->{bingo} and ref $story->{bingo} eq 'ARRAY';
+my $identifier = $s;
+$identifier =~ s/_/ /;
+$latexString .= "\\newcommand{\\myIdentifier}[0]{$identifier\n}";
+my $bingo = $story->{bingo}->[$f];
+$latexString .= "\\begin{document}\n";
 
-		$latexString .=
+my @words = split m/ /, $bingo;
+my @clinchers = sample( set => \@words, sample_size => 2 );
+my @winner = sample( set => \@clinchers );
+my @loser = grep { $_ ne $winner[0] } @clinchers;
+my %words; @words{ @words } = (); delete @words{@clinchers};
+my @pruned = keys %words;
+my @call =	(@pruned, @winner);
+
+$latexString .=
 "\\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard{}{\\myIdentifier}{}
 {\\parbox{9.0cm}{";
-		$latexString .= (tr/_/~/, "$_ \\hfill ") for @call;
-		$latexString .= "}}{} \n \\end{textblock}\n";
-		&paging;
+$latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
+$latexString .= "\\st{ $_ } \\hfill " for @loser;
+$latexString .= "}}{} \n \\end{textblock}\n";
+&paging;
 
-		for my $card ( 0 .. $n-1 ) {
-			my @candidate = sample( set => \@clinchers );
-			my @presented = sample( set => \@pruned, sample_size => @pruned/2);
-			my @shuffled = shuffle (@presented, @candidate);
+for my $card ( 0 .. $n-1 ) {
+	my @candidate = sample( set => \@clinchers );
+	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
+	my @shuffled = shuffle (@presented, @candidate);
 
-			$latexString .= 
+	$latexString .= 
 "\\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\mycard{}{\\myIdentifier}{\\parbox{9.0cm}{";
-			for my $word ( @shuffled ) {
-				$word =~ tr/_/~/;
-				$latexString .= "$word \\hfill ";
-			}
-			$latexString .= "}}{}{} \n \\end{textblock}\n";
-			&paging;
-		}
-		$latexString .= "\\end{document}\n";
-		# my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
-		# $bio->print( $latexString );
-
-
-
+	for my $word ( @shuffled ) {
+		$word =~ tr/_/~/;
+		$latexString .= "$word \\hfill ";
 	}
-
+	$latexString .= "}}{}{} \n \\end{textblock}\n";
+	&paging;
 }
-		my $bio = io "$ARGV[0]/bingo_cell_0.tex";
-		$bio->print( $latexString );
+$latexString .= "\\end{document}\n";
+
+my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
+$bio->print( $latexString );
 
 sub paging
-{       if ($paging == 3 or $paging == 7 or $paging == 11 )
+{       if ($paging == 7 or $paging == 15 or $paging == 23 )
         {
                 $latexString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .                      +"\\end{tiny}\\newpage\n\n";
         }
-        if ($paging == 11) { $threepages = $threepages+3; $paging = 0; }
+        if ($paging == 23) { $threepages = $threepages+3; $paging = 0; }
         else { $paging++; }
 }
 
