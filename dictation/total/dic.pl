@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 08, 04:44:30 PM
+# Last Edit: 2013 Oct 15, 08:49:40 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -40,7 +40,7 @@ use Games::League::Member;
 # my $cl = $g->classwork;
 
 # my $textSources = $round->{texts};
-my $textSources = [ "/home/drbean/class/topics/phones/dic.yaml" ];
+my $textSources = [ "/home/drbean/class/topics/zoos/dic.yaml" ];
 
 my ($text, $question) = LoadFile ($textSources->[0]);
 
