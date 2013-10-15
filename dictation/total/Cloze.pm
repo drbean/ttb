@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Oct 08, 05:02:09 PM
+# Last Edit: 2013 Oct 15, 08:52:45 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -40,8 +40,8 @@ sub cloze
 		token: header | footer | a | b | sentenceA | sentenceB
 		header: m/Conversation \d/ { $Cloze::reader = 'AB'; }
 		footer: m/\\\\/ { $Cloze::reader = 'AB' }
-		a: m/(W): .*$/ { $Cloze::reader = 'A'; }
-		b: m/(M): .*$/ { $Cloze::reader = 'B'; }
+		a: m/(G): .*$/ { $Cloze::reader = 'A'; }
+		b: m/(B): .*$/ { $Cloze::reader = 'B'; }
 		sentenceA: <reject: $inA> m/^A:.*$/ {$inA=1; $Cloze::reader='A';}
 		sentenceB:  m/^(B|C):.*$/ {$inA=0; $Cloze::reader='B';}
 		end: m/^\Z/
