@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 15, 10:32:45 PM
+# Last Edit: 2013 Oct 15, 10:33:42 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -109,7 +109,7 @@ $latexString .=
 \\mycard{}{\\myIdentifier}{}
 {\\parbox{9.0cm}{";
 $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-$latexString .= "\\st{ $_ } \\hfill " for @loser;
+$latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @loser;
 $latexString .= "}}{} \n \\end{textblock}\n";
 &paging;
 
