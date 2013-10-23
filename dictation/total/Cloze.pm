@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Oct 23, 09:37:59 AM
+# Last Edit: 2013 Oct 23, 11:29:43 AM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -39,12 +39,13 @@ sub cloze
 	my $lineGrammar = q[
 		{ my $inA = 0; }
 		string: token(s) end | <error>
-		token: header | footer | blankline | a | b | q | sentenceA | sentenceB
+		token: header | footer | blankline | number | a | b | q | sentenceA | sentenceB
 		header: m/Conversation \d/ { $Cloze::reader = 'AB'; }
 		footer: m/\\\\/ { $Cloze::reader = 'AB' }
 		blankline: m/^$/ { $Cloze::reader = 'AB' }
-		a: m/^(T|M).*$/ { $Cloze::reader = 'A'; }
-		b: m/^(S).*$/ { $Cloze::reader = 'B'; }
+		number: m/^(\d+)\..*$/ { $Cloze::reader = 'A'; }
+		a: m/^(M):.*$/ { $Cloze::reader = 'A'; }
+		b: m/^(F):.*$/ { $Cloze::reader = 'B'; }
 		q: m/^(Q): .*$/ { $Cloze::reader = 'AB'; }
 		sentenceA: <reject: $inA> m/^A:.*$/ {$inA=1; $Cloze::reader='A';}
 		sentenceB:  m/^(B|C):.*$/ {$inA=0; $Cloze::reader='B';}
