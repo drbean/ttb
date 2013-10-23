@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Oct 15, 08:52:45 PM
+# Last Edit: 2013 Oct 23, 09:37:59 AM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -20,6 +20,8 @@ our @EXPORT_OK;
 
 use Parse::RecDescent;
 
+	$::RD_HINT=1;
+
 sub cloze
 {
 	my $unclozeables = shift;
@@ -37,11 +39,13 @@ sub cloze
 	my $lineGrammar = q[
 		{ my $inA = 0; }
 		string: token(s) end | <error>
-		token: header | footer | a | b | sentenceA | sentenceB
+		token: header | footer | blankline | a | b | q | sentenceA | sentenceB
 		header: m/Conversation \d/ { $Cloze::reader = 'AB'; }
 		footer: m/\\\\/ { $Cloze::reader = 'AB' }
-		a: m/(G): .*$/ { $Cloze::reader = 'A'; }
-		b: m/(B): .*$/ { $Cloze::reader = 'B'; }
+		blankline: m/^$/ { $Cloze::reader = 'AB' }
+		a: m/^(T|M).*$/ { $Cloze::reader = 'A'; }
+		b: m/^(S).*$/ { $Cloze::reader = 'B'; }
+		q: m/^(Q): .*$/ { $Cloze::reader = 'AB'; }
 		sentenceA: <reject: $inA> m/^A:.*$/ {$inA=1; $Cloze::reader='A';}
 		sentenceB:  m/^(B|C):.*$/ {$inA=0; $Cloze::reader='B';}
 		end: m/^\Z/
@@ -71,7 +75,8 @@ sub cloze
 			my ($inLatex, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: pass | firstletter | secondletter | otherletters | lastletter | punctuation
+		token: pass | newline | firstletter | secondletter | otherletters | lastletter | punctuation
+		newline: <reject: $inWord> m/^$/ { push @Cloze::blankedText, "\\\\ "}
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1;
 			# push @Cloze::blankedText, $item[2];
