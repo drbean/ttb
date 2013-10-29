@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 29, 12:01:51 PM
+# Last Edit: 2013 Oct 29, 12:39:26 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -43,10 +43,8 @@ use Games::League::Member;
 # my $g = Grades->new({ league => $l });
 # my $cl = $g->classwork;
 
-# my $textSources = $round->{texts};
-my $textSources = \@ARGV;
-
-my ($text, $question) = LoadFile ($textSources->[0]);
+my $textSources = shift @ARGV;
+my ($text, $question) = LoadFile $textSources;
 
 my $fields = shift( $text );
 
