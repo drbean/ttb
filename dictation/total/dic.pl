@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 29, 12:01:51 PM
+# Last Edit: 2013 Oct 29, 12:30:05 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -19,7 +19,7 @@ my $f = 0;
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
-	'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
+	'n=i' => \$n, 's=s' => \@s, 'f=i' => \$f)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -47,6 +47,7 @@ use Games::League::Member;
 my $textSources = \@ARGV;
 
 my ($text, $question) = LoadFile ($textSources->[0]);
+my $stories = split(/,/,join(',',@s));
 
 my $fields = shift( $text );
 
