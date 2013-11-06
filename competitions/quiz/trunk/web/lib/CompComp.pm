@@ -20,10 +20,11 @@ use Catalyst qw/-Debug
 
 		Authentication
 		Authorization::Roles
-		Session
-		Session::Store::FastMmap
-		Session::State::Cookie
+
 		/;
+		# Session
+		# Session::Store::DBIC
+		# Session::State::Cookie
 
 our $VERSION = '0.01';
 
@@ -54,7 +55,11 @@ __PACKAGE__->config({
 				role_field => 'id'
 			}
 		}
-	}
+	},
+	'Plugin::Session' => {
+		dbic_class => 'DB::Sessions',
+		expires    => 3600,
+	},
 });
 
 # Start the application
