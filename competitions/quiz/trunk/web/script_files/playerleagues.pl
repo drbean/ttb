@@ -20,11 +20,11 @@ use CompComp::Schema;
 my $leaguedirs = CompComp->config->{leagues};
 my $genres = [
 			[ qw/id name/ ],
-			[ 1, "intermediate" ],
+			[ 1, "conversation" ],
 			[ 2, "business" ],
 			[ 3, "intercultural" ],
 			[ 4, "access" ],
-			[ 5, "upper" ],
+			[ 5, "multimedia" ],
 			[ 6, "friends" ],
 			[ 7, "speaking" ],
 			[ 8, "media" ],
@@ -32,14 +32,11 @@ my $genres = [
 		];
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "BMA0041",	2 ],
-			[ "BMA0035",	2 ],
-			[ "MIA0009",	2 ],
-			[ "FIA0046",	2 ],
-            [ "FLA0037",    8 ],
-            [ "00037155",   8 ],
-            [ "00037589",   3 ],
-            [ "AFN231",     9 ],
+			[ "AFN3Y0",	5 ],
+			[ "AFN300",	1 ],
+			[ "AFN2N0",	2 ],
+			[ "GL00006",	1 ],
+            [ "GL00030",    1 ],
 
 		];
 
