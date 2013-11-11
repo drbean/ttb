@@ -203,9 +203,9 @@ threes:
   Red         : [28, 27, 26]
 
   PinkPink    : [39, 38, 37]
-  White       : [36, 46, 47]
-  Yellow      : [48, 49, 59]
-  OrangeOrange: [58, 57, 56]
+  White       : [36, 37, 38]
+  Yellow      : [39, 49, 48]
+  OrangeOrange: [47, 46, 56]
 
   PurplePurple: [68,67,65]
 
