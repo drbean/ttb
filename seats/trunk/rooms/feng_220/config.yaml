@@ -86,7 +86,7 @@ colors:
   25: #c5c5c5
   26: #f0f0f0
   Black     : #333333
-  BlackBlack: #555555
+  Charcoal: #555555
   Blue      :
   BlueBlue  : #3399ff
   Brown     :
@@ -121,7 +121,7 @@ regions:
     - LightGreen
     - Purple
     - Yellow
-    - BlackBlack
+    - Charcoal
 fourexperts:
   Front:
     A : [08, 07, 16, 15]
@@ -155,7 +155,7 @@ fours:
   Brown       : [34, 33, 42, 41]
 
   BlueBlue    : [52, 51, 62, 61]
-  BlackBlack  : [50, 49, 60, 64]
+  Charcoal  : [50, 49, 60, 64]
 threes:
   White       : [09, 08, 19]
   Orange      : [07, 06, 17]
@@ -164,7 +164,7 @@ threes:
 
   Yellow      : [18, 29, 28]
   Pink        : [16, 27, 26]
-  BlackBlack  : [14, 25, 24]
+  Charcoal  : [14, 25, 24]
   Blue        : [12, 23, 22]
 
   Silver      : [39, 38, 49]
