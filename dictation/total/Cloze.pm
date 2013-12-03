@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Nov 27, 11:40:44 AM
+# Last Edit: 2013 Dec 03, 12:44:55 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -70,13 +70,18 @@ sub cloze
 	our @blankedText = ();
 	my $letterGrammar = q[
 		{
-			my $punctuation = qr/[^\p{Word}\\n]+/u;
+			my $punctuation = qr/[^'\p{Word}\\n]+/u;
 			my $letter = qr/\p{Word}/u;
+			my $apos = qr/'/u;
 			my $skip = '';
 			my ($inLatex, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: pass | newline | firstletter | secondletter | otherletters | lastletter | punctuation
+		token: key | timing | pass | newline | firstletter | secondletter | otherletters | apostrophe | lastletter | punctuation
+		key: <reject: $inWord> m/^($letter)(?=$punctuation)/m
+			{ push @Cloze::blankedText, $item[2] }
+		timing: <reject: $inWord> m/(\d+:\d+)(?=$punctuation)/m
+			{ push @Cloze::blankedText, $item[2] }
 		newline: <reject: $inWord> m/^$/ { push @Cloze::blankedText, "\\\\ "}
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1;
@@ -95,6 +100,13 @@ sub cloze
 					q[";
 			}
 		otherletters: <reject: not $inLatex> m/$letter(?!$punctuation)/
+			{
+				$Cloze::score{$Cloze::player}++
+					unless $Cloze::reader eq $Cloze::player;
+				push @Cloze::blankedText, "\\\\] . $macro .
+					q[";
+			}
+		apostrophe: <reject: not $inWord> m/$apos(?!$punctuation)/
 			{
 				$Cloze::score{$Cloze::player}++
 					unless $Cloze::reader eq $Cloze::player;
@@ -122,16 +134,20 @@ sub cloze
 	]; 
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/($Cloze::unclozeable|$letter|\d+:\d+)(?=$punctuation)/m
+		pass: <reject: $inWord> m/($Cloze::unclozeable)(?=$punctuation)/m
 			{
-				$Cloze::score{$Cloze::player} += length $item[2];
+				my @unclozeable = split //, $item[2];
+				for my $letter ( @unclozeable ) {
+					$Cloze::score{$Cloze::player}++ if $letter =~ m/[[:alpha:]]/
+						or $letter eq "'";
+				}
 				push @Cloze::blankedText, $item[2]
 			}
 		];
 	}
 	else {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/(letter|\d+:\d+)(?=$punctuation)/m
+		pass: <reject: $inWord> m/(unclozeables_non-existent)(?=$punctuation)/m
 			{
 				$Cloze::score{$Cloze::player} += length $item[2];
 				push @Cloze::blankedText, $item[2]
