@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Dec 03, 12:44:55 PM
+# Last Edit: 2013 Dec 03, 01:09:31 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -125,7 +125,7 @@ sub cloze
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
-				push @Cloze::blankedText, $item[2] . "\\\\hspace*{\\\\fill} ";
+				push @Cloze::blankedText, $item[2] . "\\\\LARGE{\\\\hspace*{\\\\fill}} ";
 			}
 		end: m/^\Z/
 			{
