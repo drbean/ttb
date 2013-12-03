@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Oct 23, 11:29:43 AM
+# Last Edit: 2013 Nov 27, 11:40:44 AM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -44,8 +44,8 @@ sub cloze
 		footer: m/\\\\/ { $Cloze::reader = 'AB' }
 		blankline: m/^$/ { $Cloze::reader = 'AB' }
 		number: m/^(\d+)\..*$/ { $Cloze::reader = 'A'; }
-		a: m/^(M):.*$/ { $Cloze::reader = 'A'; }
-		b: m/^(F):.*$/ { $Cloze::reader = 'B'; }
+		a: m/^([A-M]).*$/ { $Cloze::reader = 'A'; }
+		b: m/^([N-Z]).*$/ { $Cloze::reader = 'B'; }
 		q: m/^(Q): .*$/ { $Cloze::reader = 'AB'; }
 		sentenceA: <reject: $inA> m/^A:.*$/ {$inA=1; $Cloze::reader='A';}
 		sentenceB:  m/^(B|C):.*$/ {$inA=0; $Cloze::reader='B';}
@@ -123,13 +123,19 @@ sub cloze
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
 		pass: <reject: $inWord> m/($Cloze::unclozeable|$letter|\d+:\d+)(?=$punctuation)/m
-			{ push @Cloze::blankedText, $item[2]}
+			{
+				$Cloze::score{$Cloze::player} += length $item[2];
+				push @Cloze::blankedText, $item[2]
+			}
 		];
 	}
 	else {
 		$letterGrammar .= q[
 		pass: <reject: $inWord> m/(letter|\d+:\d+)(?=$punctuation)/m
-			{ push @Cloze::blankedText, $item[2]}
+			{
+				$Cloze::score{$Cloze::player} += length $item[2];
+				push @Cloze::blankedText, $item[2]
+			}
 		];
 	}
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
