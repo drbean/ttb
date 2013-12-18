@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Dec 03, 01:47:25 PM
+# Last Edit: 2013 Dec 18, 12:14:47 PM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -56,15 +56,15 @@ sub cloze
 
 	my $lineN = 0;
 
-	foreach my $line ( @lines )
+	foreach our $line ( 0 .. $lines[-1] )
 	{
 		my $lineParser = Parse::RecDescent->new($lineGrammar);
-		defined $lineParser->string($line) or die "lineparse died at $line: $?\n";
+		defined $lineParser->string($lines[$line]) or die "lineparse died at $lines[$line]: $?\n";
 
 		foreach our $player ( @players )
 		{
-			my $macro = ($reader =~ m/$player/)?
-				 q[2{$Cloze::score{$Cloze::player}}] : q[1{$Cloze::score{$Cloze::player}}];
+			my $macro = $line%2 ?
+				 q[2{$item[2]}{$Cloze::score{$Cloze::player}}] : q[1{$Cloze::score{$Cloze::player}}] ;
 
 	# our $writer = $player;
 	our @blankedText = ();
@@ -86,10 +86,14 @@ sub cloze
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1;
 			# push @Cloze::blankedText, $item[2];
-				$Cloze::score{$Cloze::player}++
+				$Cloze::score{$Cloze::player}++;
 					; # unless $Cloze::reader eq $Cloze::player;
-				push @Cloze::blankedText, "\\\\] . $macro  . 
-					q[";
+				if ( $line%2 ) {
+					push @Cloze::blankedText, "\\\\2{$item[2]}{$Cloze::score}";
+				}
+				else {
+					push @Cloze::blankedText, "\\\\1{$Cloze::score}";
+				}
 			}
 		secondletter: <reject: $inLatex> m/$letter(?!$punctuation)/
 			{
@@ -165,7 +169,7 @@ sub cloze
 		];
 	}
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
-	defined $letterParser->string($line) or die "letterparse died: $?\n";
+	defined $letterParser->string($lines[$line]) or die "letterparse died: $?\n";
 	if ( $macro eq '2' )
 	{push @{$text{$player}}, '\normalsize ' . (join '', @blankedText);}
 	else
