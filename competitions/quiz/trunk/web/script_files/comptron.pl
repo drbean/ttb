@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2013 Nov 05, 08:21:26 PM
+# Last Edit: 2013 Dec 15, 09:08:48 PM
 # $Id$
 
 =head1 NAME
@@ -40,8 +40,8 @@ use strict;
 use warnings;
 use FindBin qw/$Bin/;
 use lib "$Bin/../../web/lib";
-use lib "/var/www/cgi-bin/comp/web/lib";
-use lib "/home/drbean/comp/web/lib";
+use lib "/var/www/cgi-bin/comp/lib";
+# use lib "/home/drbean/comp/web/lib";
 use Config::General;
 use Cwd; use File::Basename;
 
@@ -49,7 +49,7 @@ use YAML qw/Dump Bless/;
 use Grades;
 
 use Games::Tournament::Contestant::Swiss;
-use Games::Tournament::Swiss;
+# use Games::Tournament::Swiss;
 
 # use CompComp;
 use CompComp::Model::SwissDB;
@@ -115,7 +115,8 @@ for my $pair ( @pairs ) {
 	}
 	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/connell warm foreman davist/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
 	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
