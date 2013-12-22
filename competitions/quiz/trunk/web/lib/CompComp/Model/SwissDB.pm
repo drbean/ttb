@@ -6,7 +6,8 @@ use base 'Catalyst::Model::DBIC::Schema';
 use Catalyst;
 use CompComp;
 
-my $name = CompComp->config->{swiss_database};
+# my $name = CompComp->config->{swiss_database};
+my $name = "swiss021";
 
 my $connect_info;
 if ( $^O eq 'linux' ) { $connect_info = [ "dbi:Pg:dbname=$name", '', '', ]; }
