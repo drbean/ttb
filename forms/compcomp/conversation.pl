@@ -139,7 +139,7 @@ my @textpos = (
 	);
 my $paging = 0;
 
-my $groups = $groupwork->beancans($session);
+my $groups = $groupwork->beancan_names($session);
 my %indexed = ( A => 0, B => 1, C => 2, D => 3 );
 my ($tablen, $fst, $snd) = (0,1,2);
 
