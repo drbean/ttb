@@ -213,9 +213,11 @@ threes:
   Chocolate   : [28, 27, 36]
   Brown       : [26, 25, 34]
 
-  PinkPink    : [39, 48, 47]
+  Violet      : [39, 48, 47]
   Red         : [37, 46, 45]
   Khaki       : [35, 44, 43]
   Gray        : [33, 42, 41]
 
-  PurplePurple: [56,55,54]
+  Golden      : [56,55,54]
+  Beige       : [52,51,50]
+  Turquoise   : [62,61,60]
