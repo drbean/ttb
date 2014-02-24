@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Sep 06, 03:18:53 PM
+# Last Edit: 2014 Feb 24, 09:25:53 AM
 # $Id$
 
 package Script;
@@ -41,7 +41,7 @@ sub run {
 	my $script = Script->new_with_options( league => basename(getcwd) );
 	pod2usage(1) if $script->help;
 	pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
-	my $leagues = "/home/drbean/012";
+	my $leagues = "/home/drbean/022";
 	my $leagueId = $script->league;
 	$leagueId = basename( getcwd ) if $leagueId eq '.';
 	my $leagueO = League->new( id => $leagueId );
@@ -73,7 +73,8 @@ sub run {
 	my $colors = $roomconfig->{colors};
 	my $regions = $roomconfig->{regions};
 	my $expertseats = $roomconfig->{ $beancansize->{$n} . 'experts'};
-	my $teamchart = { league => $league->{id}, session => $session };
+	my $teamchart = { league => $league->{id}, session => $session, 
+		room_id => $roomconfig->{id} };
 	my @letter = qw/A B C/;
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
@@ -119,21 +120,21 @@ sub run {
 			$order++;
 		}
 	}
-	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "") or warn "login: greg?"; 
-	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
+	#my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
+	#$web->login("greg", "") or warn "login: greg?"; 
+	#$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $teamtext = $t->fill_in( HASH => $teamchart );
 
 	io("$sessionpath/$session/teamseat.$filetype")->print( encode('UTF-8', $teamtext) );
-	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
-			or die "put teamseat.html?" if $filetype eq "html"; 
+	#$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
+	#		or die "put teamseat.html?" if $filetype eq "html"; 
 	my $experttext = encode(
 		'UTF-8', $t->fill_in( HASH => $expertchart ) );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
-	$web->put( "$sessionpath/$session/expertseat.$filetype",
-			"${leagueId}fex.html" ) or die "put expertseat.html?" if $filetype eq "html"; 
+	#$web->put( "$sessionpath/$session/expertseat.$filetype",
+	#		"${leagueId}fex.html" ) or die "put expertseat.html?" if $filetype eq "html"; 
 
 }

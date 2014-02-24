@@ -202,7 +202,7 @@ threes:
   White       : [07, 16, 15]
   # Yellow      : [15, 24, 23]
   Pink        : [13, 22, 21]
-  BlackBlack  : [11, 20, 19]
+  Charcoal    : [11, 20, 19]
   Blue        : [09, 18, 17]
 
   4-2         : [15, 24, 23]
@@ -213,13 +213,13 @@ threes:
   Yellow      : [24, 23, 32]
   # OrangeOrange: [32, 31, 40]
   Purple      : [30, 29, 38]
-  BlueBlue    : [28, 27, 36]
+  Chocolate   : [28, 27, 36]
   Brown       : [26, 25, 34]
 
-  OrangeOrange: [31, 40, 39]
+  Silver      : [31, 40, 39]
   # PinkPink    : [39, 48, 47]
   Red         : [37, 46, 45]
-  BrownBrown  : [35, 44, 43]
+  Khaki       : [35, 44, 43]
   Gray        : [33, 42, 41]
 
   PinkPink    : [56,55,54]
