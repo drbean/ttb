@@ -14,7 +14,7 @@ use Grades;
 
 my $script = Grades::Script->new_with_options;
 my $tourid = $script->league || basename( getcwd );
-my $leagues = "/home/drbean/021";
+my $leagues = "/home/drbean/022";
 
 # ( my $leagueid = $tourid ) =~ s/^([[:alpha:]]+[[:digit:]]+).*$/$1/;
 my $leagueid = $tourid;
@@ -28,7 +28,7 @@ my $session = $script->session;
 my $week = $script->round;
 my $story = $script->exercise;
 my $letter = $script->player;
-my @tables = split /,/, $script->two;
+my @tables = split /\s+|,/, $script->two;
 
 my $texString = 
 '\documentclass[a4paper]{article}
