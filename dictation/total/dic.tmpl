@@ -7,7 +7,9 @@
 \usepackage{pifont}
 \usepackage{amsfonts}
 \usepackage{graphicx}
-\usepackage{newunicodechar}
+% \usepackage{newunicodechar}
+\usepackage{fixltx2e}
+
 % \textblockorigin{0.30cm}{2.15cm}
 \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
 % \textblockorigin{0.30cm}{3.35cm} % w5
@@ -35,10 +37,11 @@
 % *%
 % % \includegraphics{/home/drbean/class/ttb/dictation/total/cards.p2}%
 % }
-\newcommand{\2}[1]{%
-\begin{picture}(0.5,0.5)
-\put (0,0){\framebox(0.5,0.5)[br]{\tiny #1}}
-\end{picture}%
+\newcommand{\2}[2]{%
+% \begin{picture}(0.5,0.5)
+% \put (0,0){\makebox(0,0){#2}\makebox(0,0)[br]{\tiny #1}}
+#1\textsubscript{\tiny #2}%
+% \end{picture}%
 }
 
 
