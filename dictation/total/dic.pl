@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Nov 29, 01:36:37 PM
+# Last Edit: 2014 Mar 27, 12:33:19 PM
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -51,8 +51,8 @@ my $fields = shift( @$text );
 my @latex = (
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,0" },
-		# { page => 1, xy => "8,8" },
-		# { page => 1, xy => "0,8" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "0,8" },
 		# { page => 2, xy => "8,0" },
 		# { page => 2, xy => "0,0" },
 		# { page => 2, xy => "8,8" },
@@ -97,6 +97,20 @@ for my $id ( @ids ) {
 # my @text = map { $next{$textSources->[$_]}->() } 1..$#$textSources;
 #	if ( $#group == 1 ) 
 	{
+		$tmplString .= "
+\\begin{textblock}{7.5}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[0]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{7.5}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
 		$tmplString .= "
 \\begin{textblock}{7.5}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
@@ -194,7 +208,7 @@ sub nextText
 }
 
 sub paging
-{	if ($paging == 2 or $paging == 4 or $paging == 6 )
+{	if ($paging == 3 or $paging == 4 or $paging == 6 )
 	{
 		$tmplString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) . "\\end{tiny}\\newpage\n\n";
