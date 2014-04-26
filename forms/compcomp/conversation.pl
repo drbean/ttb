@@ -6,6 +6,7 @@ use warnings;
 use Cwd; use File::Basename;
 use YAML qw/LoadFile DumpFile/;
 use IO::All;
+use List::Util qw/max/;
 
 use Getopt::Long;
 use Pod::Usage;
@@ -62,7 +63,9 @@ my $texString =
 	\normalsize Story: ' . $story . '\hfill \\\\
 	\vspace{-0.05cm}
 	\large Champions (Letter ' . $letter . '):\\\\
-	\vspace{0.09cm}
+	\vspace{-0.09cm}
+	\small Spokespersons: #5 B, #8 B\\\\
+	\vspace{-0.09cm}
 	\normalsize #4. #5 Champion: #6\\\\
 	\vspace{0.25cm}
 	\normalsize #7. #8 Champion: #9\\\\
@@ -140,17 +143,74 @@ my @textpos = (
 my $paging = 0;
 
 my $groups = $groupwork->beancan_names($session);
+my $n = $script->beancan || max map { 
+			$#{$groups->{$_}} + 1 } keys %$groups;
 my %indexed = ( A => 0, B => 1, C => 2, D => 3 );
+my $champion = $indexed{$letter};
+my $spokesperson = ($champion + 1) % $n;
 my ($tablen, $fst, $snd) = (0,1,2);
 
 foreach my $table ( @tables ) {
 	$tablen++;
 	my @two = split /::/, $table;
 	my @champion = map { $letter eq "X"? "\\hrulefill":
-										$groups->{$_}->[$indexed{$letter}] } @two;
+										$groups->{$_}->[$champion] } @two;
+	my @spokesperson = map { $letter eq "X"? "\\null":
+										$groups->{$_}->[$spokesperson] } @two;
 	$texString .=
-"\\mycard{$textpos[$paging][0]}{$textpos[$paging][1]}{$tablen}{$fst}{$two[0]}{$champion[0]}{$snd}{$two[1]}{$champion[1]}
-";
+'\TPMargin{0.0cm}
+	\begin{textblock}{4}(' . $textpos[$paging][0] . ')
+% \textblockrulecolor{red}
+	\textblocklabel{picture1}
+	\vspace{0.25cm}
+\begin{minipage}{7.0cm}%
+	\normalsize ' . $leagueid . ' Speaking competition \hfill \normalsize \raisebox{-0.2cm}{\normalsize Week: ' . $week . '} \hspace*{0.2cm} \\\\
+	\vspace{-0.05cm}
+	\normalsize Table \large ' . $tablen . '. ' .
+				$two[0] . ' \\& ' . $two[1] . '\\\\
+	\raggedright
+	\normalsize Story: ' . $story . '\hfill \\\\
+	\vspace{-0.05cm}
+	\large Champions (Letter ' . $letter . '):\\\\
+	\vspace{-0.09cm}
+	\small Spokespersons: ' . $spokesperson[0] . ', ' . $spokesperson[1] . '\\\\
+	\vspace{-0.09cm}
+	\normalsize ' . $fst . '. ' . $two[0] . ' Champion: ' . $champion[0] . '\\\\
+	\vspace{0.25cm}
+	\normalsize ' . $snd . '. ' . $two[1] . ' Champion: ' . $champion[1] . '\\\\
+	\large Votes for:\\\\
+	\normalsize ' . $fst . '. ' . $champion[0] . '  Names: \hrulefill, \hspace{0.15cm} \hrulefill, \hspace{0.15cm} \hrulefill\\\\
+	\vspace{0.25cm}
+	\normalsize ' . $snd . '. ' . $champion[1] . '  Names: \hrulefill, \hspace{0.15cm} \hrulefill, \hspace{0.15cm} \hrulefill\\\\
+	\vspace{0.25cm}
+	\large Winner: \rule{2.1cm}{0.3pt}\\\\
+	\large Reasons:\\\\
+	\normalsize Winner\'s Supporters\\\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\vspace{0.25cm}
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\vspace{0.25cm}
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\normalsize Loser\'s Supporters\\\\
+	\tiny Name: \rule{1.0cm}{0.3pt} \normalsize Reason: \rule{3.7cm}{0.3pt}\\\\
+	\Large Points:\\\\
+	' . $two[0] . ' \hfill \large 3 \hspace{0.2cm} 2 \hfill \Large ' . $two[1] . ': \hfill \large 3 \hspace{0.2cm} 2 \hspace*{0.2cm} \\\\
+\end{minipage}
+	\end{textblock}
+\TPMargin{0.0cm}
+	
+	\TPshowboxestrue
+	\begin{textblock}{1.2}(' . $textpos[$paging][1] . ')
+	\normalsize In \& Out
+	\vspace{-0.2cm}
+	\begin{description}
+	\item [Absent] \hfill \\
+	\item [Joining] \hfill \\
+	\end{description}
+	\vspace{0.2cm}
+	\end{textblock}
+	\TPshowboxesfalse
+';
 	$fst += 2; $snd += 2;
 	&paging;
 }
