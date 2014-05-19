@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2014 Mar 24, 04:43:09 PM
+# Last Edit: 2014  5月 18, 22時33分13秒
 # $Id$
 
 =head1 NAME
@@ -115,8 +115,8 @@ for my $pair ( @pairs ) {
 	}
 	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/salazar rueda vanbeke/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/dickson abreu jackson/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/theory-x-y nicholson drbean/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
 	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
