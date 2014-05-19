@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年10月31日 19時06分22秒
-# Last Edit: 2014  5月 19, 11時13分40秒
+# Last Edit: 2014  5月 19, 11時29分31秒
 # $Id$
 
 =head1 NAME
@@ -76,14 +76,14 @@ for my $division ( @$divisions ) {
 				    "Table $table, $topic $form FREE quiz, $player, qn $n: ,";
 				next;
 				}
-				if ( $point and $point =~ m/Fault/ ) {
+				if ( $point and $point =~ m/Offtopic/ ) {
 				    $tally{$player} += 0;
 				    $tally{$opponent{$player}}++;
 				}
-				elsif ( $point and $point =~ m/Unreturned/ ) {
+				elsif ( $point and $point =~ m/Understood/ ) {
 				    $tally{$player} += 1;
 				}
-				elsif ( $point and $point =~ m/Returned/ ) {
+				elsif ( $point and $point =~ m/Wrong/ ) {
 				    $tally{$player} += 0;
 				    $tally{$opponent{$player}}++;
 				}
