@@ -87,12 +87,14 @@ colors:
   26: #f0f0f0
   Black     : #333333
   Charcoal  : #555555
+  Beige     :
   Blue      :
   Chocolate : #3399ff
   Brown     :
   Khaki     : #993333
   DarkBlue  :
   DarkGreen :
+  Golden    :
   Gray      :
   GrayGray  : #f0f0f0
   Green     :
@@ -103,6 +105,8 @@ colors:
   Pink      :
   Purple    :
   Red       :
+  Turquoise :
+  Violet    :
   White     :
   Yellow    :
 regions:
