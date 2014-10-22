@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2014 Sep 16, 02:19:50 PM
+# Last Edit: 2014 Oct 22, 04:03:25 PM
 # $Id$
 
 package Script;
@@ -56,8 +56,8 @@ sub run {
 	my $room = $league->{room};
 	my $rooms = "$leagues/../class/seats/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
-	my $groupworkdirs = $league->{groupwork};
-	my $sessionpath = "$leaguePath/$groupworkdirs";
+	my $beancandirs = $league->{group};
+	my $sessionpath = "$leaguePath/$beancandirs";
 	my @subdirs = grep { -d } glob "$sessionpath/*";
 	my @series = sort { $a <=> $b } map m/^$sessionpath\/(\d+)$/, @subdirs;
 	die "No $session session\n" unless any { $_ eq $session } @series;
