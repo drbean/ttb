@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2014  5月 18, 22時33分13秒
+# Last Edit: 2014 Oct 27, 10:58:59 AM
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/022' unless $leagues;
+$leagues = '/home/drbean/031' unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
@@ -115,8 +115,8 @@ for my $pair ( @pairs ) {
 	}
 	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/dickson abreu jackson/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/theory-x-y nicholson drbean/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/dickson abreu jackson/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
 	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
