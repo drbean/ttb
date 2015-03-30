@@ -7,7 +7,7 @@ use Catalyst;
 use CompComp;
 
 # my $name = CompComp->config->{swiss_database};
-my $name = "swiss031";
+my $name = "swiss032";
 
 my $connect_info;
 if ( $^O eq 'linux' ) { $connect_info = [ "dbi:Pg:dbname=$name", '', '', ]; }
