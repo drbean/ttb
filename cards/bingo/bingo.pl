@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Oct 28, 09:19:10 AM
+# Last Edit: 2014 Jan 08, 09:25:07 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -9,6 +9,7 @@ use warnings;
 use Getopt::Long;
 use Pod::Usage;
 use Algorithm::Numerical::Sample qw/sample/;
+use List::Util qw/sum/;
 
 my $man = 0;
 my $help = 0;
@@ -96,6 +97,13 @@ my $bingo = $story->{bingo}->[$f];
 $latexString .= "\\begin{document}\n";
 
 my @words = split m/ /, $bingo;
+my %word_count;
+$word_count{$_}++ for @words;
+for my $word ( @words ) {
+	die "'$word' present $word_count{$word} times"
+		unless $word_count{$word} == 1;
+}
+warn "There are " . (sum values %word_count ) . " words\n";
 my @clinchers = sample( set => \@words, sample_size => 2 );
 my @winner = sample( set => \@clinchers );
 my @loser = grep { $_ ne $winner[0] } @clinchers;
