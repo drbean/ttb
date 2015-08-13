@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2013 Dec 18, 12:19:04 PM
+# Last Edit: 2015 Aug 13, 12:05:05
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -65,6 +65,8 @@ sub cloze
 		{
 			my $macro = ($reader !~ m/$player/)?
 				 q[2{$Cloze::score{$Cloze::player}}] : q[1{$Cloze::score{$Cloze::player}}];
+				 my $empty_box_macro = ($reader !~ m/$player/)?
+				 q[2{}] : q[1{}];
 
 	# our $writer = $player;
 	our @blankedText = ();
@@ -77,12 +79,21 @@ sub cloze
 			my ($inLatex, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: key | timing | pass | newline | firstletter | secondletter | otherletters | apostrophe | lastletter | punctuation
-		key: <reject: $inWord> m/^($letter)(?=$punctuation)/m
+		token: key | timing | pass | newline | singleletter | firstletter | secondletter | otherletters | apostrophe | lastletter | punctuation
+		key: <reject: $inWord> m/^($letter:)(?=$punctuation)/m
 			{ push @Cloze::blankedText, $item[2] }
 		timing: <reject: $inWord> m/(\d+:\d+)(?=$punctuation)/m
 			{ push @Cloze::blankedText, $item[2] }
 		newline: <reject: $inWord> m/^$/ { push @Cloze::blankedText, "\\\\ "}
+		singleletter: <reject: $inWord> m/[IAa](?=$punctuation)/ 
+			{
+				$inWord=0;
+				$inLatex = 0;
+				$Cloze::score{$Cloze::player}++
+					; # unless $Cloze::reader eq $Cloze::player;
+				push @Cloze::blankedText, "\\\\] . $macro  . 
+					q[";
+			}
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1;
 			# push @Cloze::blankedText, $item[2];
@@ -94,23 +105,17 @@ sub cloze
 		secondletter: <reject: $inLatex> m/$letter(?!$punctuation)/
 			{
 				$inLatex = 1;
-				$Cloze::score{$Cloze::player}++
-					; # unless $Cloze::reader eq $Cloze::player;
-				push @Cloze::blankedText, "\\\\] . $macro  . 
+				push @Cloze::blankedText, "\\\\] . $empty_box_macro  . 
 					q[";
 			}
 		otherletters: <reject: not $inLatex> m/$letter(?!$punctuation)/
 			{
-				$Cloze::score{$Cloze::player}++
-					unless $Cloze::reader eq $Cloze::player;
-				push @Cloze::blankedText, "\\\\] . $macro .
+				push @Cloze::blankedText, "\\\\] . $empty_box_macro .
 					q[";
 			}
 		apostrophe: <reject: not $inWord> m/$apos(?!$punctuation)/
 			{
-				$Cloze::score{$Cloze::player}++
-					unless $Cloze::reader eq $Cloze::player;
-				push @Cloze::blankedText, "\\\\] . $macro .
+				push @Cloze::blankedText, "\\\\] . $empty_box_macro .
 					q[";
 			}
 		#lastletterplus: <reject: not $inWord> m/$letter[^-A-Za-z0-9']+/
@@ -118,9 +123,7 @@ sub cloze
 			{
 				$inWord=0;
 				$inLatex = 0;
-				$Cloze::score{$Cloze::player}++
-					; # unless $Cloze::reader eq $Cloze::player;
-				push @Cloze::blankedText, "\\\\] . $macro  . 
+				push @Cloze::blankedText, "\\\\] . $empty_box_macro  . 
 					q[";
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
@@ -146,11 +149,7 @@ sub cloze
 		$letterGrammar .= q[
 		pass: <reject: $inWord> m/($Cloze::unclozeable)(?=$punctuation)/m
 			{
-				my @unclozeable = split //, $item[2];
-				for my $letter ( @unclozeable ) {
-					$Cloze::score{$Cloze::player}++ if $letter =~ m/[[:alpha:]]/
-						or $letter eq "'";
-				}
+				$Cloze::score{$Cloze::player}++ if $item[2] =~ m/[[:alpha:]]/;
 				push @Cloze::blankedText, $item[2]
 			}
 		];
