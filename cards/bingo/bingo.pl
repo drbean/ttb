@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2014 Jan 08, 09:25:07 AM
+# Last Edit: 2015 Aug 13, 10:57:01
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -90,7 +90,7 @@ my $cards = LoadFile "$ARGV[0]/cards.yaml";
 my $story = $cards->{$s};
 die "No $s story bingo" unless ref $story eq 'HASH' and
 	exists $story->{bingo} and ref $story->{bingo} eq 'ARRAY';
-my $identifier = $s;
+my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\myIdentifier}[0]{$identifier\n}";
 my $bingo = $story->{bingo}->[$f];
