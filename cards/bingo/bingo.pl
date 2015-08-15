@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Aug 13, 10:57:01
+# Last Edit: 2015 Aug 14, 12:44:41
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -28,6 +28,12 @@ use IO::All;
 use YAML qw/LoadFile DumpFile/;
 use List::Util qw/shuffle/;
 
+my %romanize = (
+	0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
+	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
+	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
+);
+
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage[T1]{fontenc}
@@ -43,7 +49,7 @@ my $latexString = <<"START_LATEX";
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 
-\\newcommand{\\mycard}[5]{%
+\\newcommand{\\bingoX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.1cm}
 	\\small #1 #2
 	\\par
@@ -92,7 +98,7 @@ die "No $s story bingo" unless ref $story eq 'HASH' and
 	exists $story->{bingo} and ref $story->{bingo} eq 'ARRAY';
 my $identifier = "$s $f";
 $identifier =~ s/_/ /;
-$latexString .= "\\newcommand{\\myIdentifier}[0]{$identifier\n}";
+$latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}";
 my $bingo = $story->{bingo}->[$f];
 $latexString .= "\\begin{document}\n";
 
@@ -114,7 +120,7 @@ my @call =	(@pruned, @winner);
 $latexString .=
 "\\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard{}{\\myIdentifier}{}
+\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.0cm}{";
 $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
 $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @loser;
@@ -129,7 +135,7 @@ for my $card ( 0 .. $n-1 ) {
 	$latexString .= 
 "\\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard{}{\\myIdentifier}{\\parbox{9.0cm}{";
+\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
 	for my $word ( @shuffled ) {
 		$word =~ tr/_/~/;
 		$latexString .= "$word \\hfill ";
