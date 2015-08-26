@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Aug 14, 12:44:41
+# Last Edit: 2015 Aug 26, 11:16:06
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -98,7 +98,7 @@ die "No $s story bingo" unless ref $story eq 'HASH' and
 	exists $story->{bingo} and ref $story->{bingo} eq 'ARRAY';
 my $identifier = "$s $f";
 $identifier =~ s/_/ /;
-$latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}";
+$latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $bingo = $story->{bingo}->[$f];
 $latexString .= "\\begin{document}\n";
 
