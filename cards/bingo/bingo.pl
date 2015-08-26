@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Aug 26, 11:16:06
+# Last Edit: 2015 Aug 26, 11:20:11
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -100,7 +100,7 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $bingo = $story->{bingo}->[$f];
-$latexString .= "\\begin{document}\n";
+$latexString .= "\\begin{document}\n\n";
 
 my @words = split m/ /, $bingo;
 my %word_count;
