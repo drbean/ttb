@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015  4月 02, 11時27分37秒
+# Last Edit: 2015 Sep 02, 10:34:19
 # $Id: /cloze/branches/total/dic.pl 2602 2008-06-26T07:40:30.403259Z greg  $
 
 use strict;
@@ -73,8 +73,8 @@ my %texts;
 my %next;
 my $identifier;
 for my $id ( @ids ) {
-	$identifier .= $id;
-	for my $text ( grep { $_->[0] eq $id } @$text ) {
+	$identifier = "$s-$f";
+	for my $text ( grep { $_->[0] eq $identifier } @$text ) {
 	my $i = 0;
 	my $lines = $text->[4];
 	my @lines = split /\n/, $lines;
