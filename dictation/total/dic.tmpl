@@ -1,6 +1,8 @@
 <TMPL>$autogen</TMPL>
 \documentclass[a4paper]{article}
 \usepackage[T1]{fontenc}
+\usepackage{xeCJK}
+\setCJKmainfont{WenQuanYi Zen Hei}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute]{textpos}
 \TPMargin{0.2cm}
@@ -28,7 +30,7 @@
 
 \newcommand{\1}[1]{%
 \begin{picture}(0.5,0.5)
-\put (0,0){\framebox(0.5,0.5)[br]{\tiny #1}}
+\put (0,0){\framebox(0.46,0.46)[br]{\tiny #1}}
 \end{picture}%
 }
 
