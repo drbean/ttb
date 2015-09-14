@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Aug 26, 11:20:11
+# Last Edit: 2015 Sep 08, 11:37:45
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -37,6 +37,8 @@ my %romanize = (
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage[T1]{fontenc}
+\\usepackage{xeCJK}
+\\setCJKmainfont{WenQuanYi Zen Hei}
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
 \\usepackage[absolute,showboxes]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
