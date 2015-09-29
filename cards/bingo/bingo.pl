@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Sep 08, 11:37:45
+# Last Edit: 2015 Sep 29, 16:31:01
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -104,20 +104,39 @@ $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identif
 my $bingo = $story->{bingo}->[$f];
 $latexString .= "\\begin{document}\n\n";
 
-my @words = split m/ /, $bingo;
+my (@words, %prompts);
+if ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call} ) {
+	@words = split m/ /, $bingo->{word};
+	my @prompts = @{ $bingo->{call} };
+	@prompts{@words} = @prompts;
+	die "Unequal word, call numbers. Also check order"
+		unless ( @words == @prompts );
+}
+else {
+	@words = split m/ /, $bingo;
+	@prompts{@words} = @words;
+}
+
 my %word_count;
 $word_count{$_}++ for @words;
 for my $word ( @words ) {
 	die "'$word' present $word_count{$word} times"
 		unless $word_count{$word} == 1;
 }
+	
 warn "There are " . (sum values %word_count ) . " words\n";
 my @clinchers = sample( set => \@words, sample_size => 2 );
 my @winner = sample( set => \@clinchers );
 my @loser = grep { $_ ne $winner[0] } @clinchers;
 my %words; @words{ @words } = (); delete @words{@clinchers};
 my @pruned = keys %words;
-my @call =	(@pruned, @winner);
+my @call;
+if ( ref $bingo eq 'HASH' and exists $bingo->{call} ) {
+	push @call, "$_: $prompts{$_}" for (@pruned, @winner);
+}
+else {
+	@call = @prompts{ @pruned, @winner };
+}
 
 $latexString .=
 "\\begin{textblock}{8}($latex[$paging]->{xy})
@@ -172,6 +191,8 @@ perl ttb/cards/bingo/bingo.pl -n 15 -s cell_phones -f 0 topics/phones
 
 =head1 DESCRIPTION
 
-Makes n cards from first bingo sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
+Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
+
+If word, call fields (mappings) exist in fth sequence in cards.yaml, a prompt is presented, instead of (in addition to) the word.
 
 =cut
