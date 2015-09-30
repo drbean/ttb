@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Sep 29, 16:31:01
+# Last Edit: 2015 Sep 30, 11:59:57
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -130,12 +130,15 @@ my @winner = sample( set => \@clinchers );
 my @loser = grep { $_ ne $winner[0] } @clinchers;
 my %words; @words{ @words } = (); delete @words{@clinchers};
 my @pruned = keys %words;
-my @call;
+my (@call, @lost_call);
 if ( ref $bingo eq 'HASH' and exists $bingo->{call} ) {
 	push @call, "$_: $prompts{$_}" for (@pruned, @winner);
+	push @lost_call, "$_: $prompts{$_}" for (@loser);
+
 }
 else {
 	@call = @prompts{ @pruned, @winner };
+	@lost_call = @prompts{@loser};
 }
 
 $latexString .=
@@ -144,7 +147,7 @@ $latexString .=
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.0cm}{";
 $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-$latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @loser;
+$latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
 $latexString .= "}}{} \n \\end{textblock}\n";
 &paging;
 
