@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2015  4月 02, 11時20分05秒
+# Last Edit: 2015 Oct 10, 15:05:05
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( @$connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/032' unless $leagues;
+$leagues = '/home/drbean/041' unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
@@ -115,14 +115,20 @@ for my $pair ( @pairs ) {
 	}
 	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/fast-track tips/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/fast-track tips/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/dickson abreu jackson/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/clay goetz allen ward/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/goetz allen ward clay/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/alien education crime/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/experience website seller/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/million minutes life/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/treatment chores expectations/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/native aid violence/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/blackh abath carlos-rocha/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/economics publishing/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/taiwan ideology happyperson wellbeing/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/theory-x_y me_mypartner drbean/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/students-teachers women-men experience/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
