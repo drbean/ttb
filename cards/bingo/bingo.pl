@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Oct 13, 10:55:32
+# Last Edit: 2015 Oct 17, 11:27:38
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -207,6 +207,6 @@ perl ttb/cards/bingo/bingo.pl -n 15 -s cell_phones -f 0 topics/phones
 
 Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
 
-If word, call fields (mappings) exist in fth sequence in cards.yaml, a prompt is presented, instead of (in addition to) the word.
+If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
 
 =cut
