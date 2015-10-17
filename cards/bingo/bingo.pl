@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Sep 30, 11:59:57
+# Last Edit: 2015 Oct 13, 10:55:32
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -106,11 +106,20 @@ $latexString .= "\\begin{document}\n\n";
 
 my (@words, %prompts);
 if ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call} ) {
-	@words = split m/ /, $bingo->{word};
-	my @prompts = @{ $bingo->{call} };
-	@prompts{@words} = @prompts;
-	die "Unequal word, call numbers. Also check order"
-		unless ( @words == @prompts );
+       @words = split m/ /, $bingo->{word};
+       my @prompts = @{ $bingo->{call} };
+       @prompts{@words} = @prompts;
+       die "Unequal word, call numbers. Also check order"
+               unless ( @words == @prompts );
+}
+elsif ( ref $bingo eq 'ARRAY' ) {
+	for my $prompt ( @$bingo ) {
+		(my $word = $prompt ) =~ s/^.*_(.*)_.*$/$1/;
+		push @words, $word;
+		die "No $word word in $prompt prompt"
+			unless $word;
+		$prompts{$word} = $prompt;
+	}
 }
 else {
 	@words = split m/ /, $bingo;
@@ -123,6 +132,8 @@ for my $word ( @words ) {
 	die "'$word' present $word_count{$word} times"
 		unless $word_count{$word} == 1;
 }
+die "No word for some prompts" unless
+	values %prompts == scalar @words;
 	
 warn "There are " . (sum values %word_count ) . " words\n";
 my @clinchers = sample( set => \@words, sample_size => 2 );
