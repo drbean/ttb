@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Oct 17, 11:27:38
+# Last Edit: 2015 Oct 18, 12:28:03
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -114,7 +114,7 @@ if ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call} ) 
 }
 elsif ( ref $bingo eq 'ARRAY' ) {
 	for my $prompt ( @$bingo ) {
-		(my $word = $prompt ) =~ s/^.*_(.*)_.*$/$1/;
+		(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
 		push @words, $word;
 		die "No $word word in $prompt prompt"
 			unless $word;
@@ -126,11 +126,29 @@ else {
 	@prompts{@words} = @words;
 }
 
-my %word_count;
+my (%word_count, %part_count);
 $word_count{$_}++ for @words;
+for my $word ( keys %prompts ) {
+	for my $other ( keys %prompts ) {
+		next if $word eq $other;
+		my $prompt = $prompts{$other};
+		my @noise = split /[-,._\s]/, $prompt;
+		my @parts = split m/[_\s]/, $word;
+		for my $part ( @parts ) {
+			for my $dupe ( @noise ) {
+				$part_count{$part}++ if 
+					$dupe eq $part;
+			}
+		}
+	}
+}
 for my $word ( @words ) {
-	die "'$word' present $word_count{$word} times"
+	die "calling '$word' word $word_count{$word} times"
 		unless $word_count{$word} == 1;
+}
+for my $part ( keys %part_count ) {
+	die "'$part' dupe present $part_count{$part} times"
+		unless $part_count{$part} == 0;
 }
 die "No word for some prompts" unless
 	values %prompts == scalar @words;
