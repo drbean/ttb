@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Oct 18, 12:28:03
+# Last Edit: 2015 Oct 28, 11:09:57
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -173,11 +173,12 @@ else {
 $latexString .=
 "\\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
+\\TPshowboxestrue
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.0cm}{";
 $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
 $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
-$latexString .= "}}{} \n \\end{textblock}\n";
+$latexString .= "}}{} \n \\TPshowboxesfalse \n \\end{textblock}\n";
 &paging;
 
 for my $card ( 0 .. $n-1 ) {
