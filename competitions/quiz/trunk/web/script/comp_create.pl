@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Catalyst::ScriptRunner;
-Catalyst::ScriptRunner->run('comp', 'Create');
+Catalyst::ScriptRunner->run('CompComp', 'Create');
 
 1;
 
