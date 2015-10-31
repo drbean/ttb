@@ -73,7 +73,7 @@ it under the same terms as Perl itself.
 
 =cut
 
-_PACKAGE->meta->make_immutable;
+__PACKAGE__->meta->make_immutable;
 
 1;
 # vim: set ts=8 sts=4 sw=4 noet:
