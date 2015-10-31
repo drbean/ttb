@@ -29,14 +29,16 @@ my $genres = [
 			[ 7, "speaking" ],
 			[ 8, "media" ],
 			[ 9, "literature" ],
+			[ 10, "tourism" ],
 		];
 my $leaguegenres = [
 			[ qw/league genre/ ],
-			[ "AFN3Y0",	5 ],
-			[ "AFN300",	1 ],
-			[ "AFN2N0",	2 ],
-			[ "GL00006",	1 ],
-            [ "GL00030",    1 ],
+			[ "2L1",	7 ],
+			[ "MB1",	7 ],
+			[ "FLA0003",	10 ],
+			[ "FLA0008",	1 ],
+			[ "FLA0011",	1 ],
+            [ "FLA0024",    8 ],
 
 		];
 
