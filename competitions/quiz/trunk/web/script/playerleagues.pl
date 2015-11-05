@@ -93,9 +93,9 @@ foreach my $league ( @leagueids )
 		$members{$player->[0]} =  [ $league, $player->[0] ];
 		$rolebearers{$player->[0]} =  [ $player->[0], 2 ];
 	}
+	$members{193001} = [ $league, 193001 ];
 	push @allLeaguePlayers, values %members;
 	push @allLeaguerolebearers, values %rolebearers;
-	$members{193001} = [ $league, 193001 ];
 }
 uptodatepopulate( 'Members', [ [ qw/league player/ ], 
 				@allLeaguePlayers ] );
