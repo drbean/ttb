@@ -1,12 +1,12 @@
 [% META title = 'Official' %]
 
-[% officialname %], [% id %]! You are an official. Which league are you organizing here?
+[% officialname %], [% id %]! You are an official. Which tournament are you organizing here?
 
 <!-- Official's form -->
 <form method="post" action=" [% c.uri_for('/login/official') %] ">
-  <select name="league" size="[% leagues.size %]">
-      [% FOR league IN leagues -%]
-      <option value="[% league.id %]">[% league.name %] [% league.field %]</option>
+  <select name="tournament" size="[% tournaments.size %]">
+      [% FOR tournament IN tournaments -%]
+      <option value="[% tournament.id %]">[% tournament.id %] [% tournament.name %] [% tournament.field %]</option>
       [% END -%]
   </select>
 
