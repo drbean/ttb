@@ -2,28 +2,16 @@
 
 use strict;
 use warnings;
-use FindBin qw/$Bin/;
-use lib "$Bin/../../web/lib";
-use CompComp::Model::DB;
+use lib "lib";
+
 use Config::General;
 
-BEGIN {
-	my @MyAppConf = glob( "$Bin/../../web/*.conf" );
-	die "Which of @MyAppConf is the configuration file?"
-				unless @MyAppConf == 1;
-	my %config = Config::General->new($MyAppConf[0])->getall;
-	$::name = $config{name};
-	require "$::name.pm"; $::name->import;
-	require "$::name/Schema.pm"; $::name->import;
-}
+use CompComp::Model::DB;
+use CompComp::Schema;
 
-no strict qw/subs refs/;
-my $connect_info = "${::name}::Model::DB"->config->{connect_info};
-# my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
-my $schema = "${::name}::Schema"->connect( @$connect_info );
-use strict;
+my $connect_info = CompComp::Model::DB->config->{connect_info};
+my $schema = CompComp::Schema->connect( $connect_info );
 
-# $schema->deploy({ add_drop_table => 1});
 $schema->deploy;
 
 =head1 NAME
