@@ -21,10 +21,10 @@ use Catalyst qw/-Debug
 		Authentication
 		Authorization::Roles
 
+		Session
+		Session::Store::DBIC
+		Session::State::Cookie
 		/;
-		# Session
-		# Session::Store::DBIC
-		# Session::State::Cookie
 
 our $VERSION = '0.01';
 
@@ -37,11 +37,12 @@ our $VERSION = '0.01';
 # with an external configuration file acting as an override for
 # local deployment.
 
+__PACKAGE__->config( disable_component_resolution_regex_fallback => 1 );
 __PACKAGE__->config({
 	name => 'CompComp',
 	'Plugin::Authentication' => {
-		default_realm => 'users',
-		users => {
+		default_realm => 'dbic',
+		dbic => {
 			credential => {
 				class => 'Password',
 				password_field => 'password',
@@ -50,9 +51,9 @@ __PACKAGE__->config({
 			store => {
 				class => 'DBIx::Class',
 				user_class => 'dicDB::Player',
-				id_field => 'id',
-				role_relation => 'roles',
-				role_field => 'id'
+				role_relation => 'getrole',
+				role_field => 'id',
+				id_field => 'id'
 			}
 		}
 	},
