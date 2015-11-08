@@ -1,6 +1,6 @@
 package CompComp::Controller::Login;
 
-# Last Edit: 2012 Jan 07, 05:41:51 PM
+# Last Edit: 2015 Nov 08, 14:37:21
 # $Id$
 
 use strict;
@@ -33,7 +33,7 @@ sub index :Path :Args(0)  {
     my $password = lc $c->request->params->{password} || "";
     if ( $id && $name && $password ) {
         my $username = $id;
-        if ( $c->authenticate( { id => $username, name => $password } ) ) {
+        if ( $c->authenticate( { id => $username, password => $password } ) ) {
             $c->session->{player_id} = $id;
             $c->session->{question} = undef;
             my $officialrole = 1;
