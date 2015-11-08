@@ -4,18 +4,18 @@ use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
 use Catalyst;
-use CompComp;
+# use CompComp;
 
 # my $name = CompComp->config->{database};
 my $name = "comp041";
 
-my $connect_info;
-if ( $^O eq 'linux' ) { $connect_info = [ "dbi:Pg:dbname=$name", '', '', ]; }
-
 __PACKAGE__->config(
     schema_class => 'CompComp::Schema',
-    connect_info =>  $connect_info,
-		        # connect_info => ['dbi:SQLite:db/demo','','']
+    connect_info =>  {
+        dsn => "dbi:Pg:dbname=$name",
+        user => '',
+        password => '',
+    }
 );
 
 =head1 NAME
