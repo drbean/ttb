@@ -37,11 +37,10 @@ __PACKAGE__->set_primary_key("id");
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d57/qeBCjmLw5JdoWCEnNw
 
 __PACKAGE__->has_many( members => 'CompComp::Schema::Result::Members', 'player' );
-__PACKAGE__->many_to_many( leagues => 'rolebearers', 'league');
+__PACKAGE__->many_to_many( getleagues => 'members', 'league');
 
-__PACKAGE__->has_many( rolebearers => 'CompComp::Schema::Result::Rolebearers',
-	'player' );
-__PACKAGE__->many_to_many( roles => 'rolebearers', 'role');
+__PACKAGE__->has_many( roles => 'CompComp::Schema::Result::Rolebearers', 'player' );
+__PACKAGE__->many_to_many( getrole => 'roles', 'role');
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;
