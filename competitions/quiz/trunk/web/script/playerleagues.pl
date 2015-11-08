@@ -47,7 +47,7 @@ my @leagueids =  map $_->[0], @$leaguegenres[1..$#$leaguegenres];
 no strict qw/subs refs/;
 my $connect_info = CompComp::Model::DB->config->{connect_info};
 # my $connect_info = [ 'dbi:SQLite:db/demo','','' ];
-my $schema = CompComp::Schema->connect( @$connect_info );
+my $schema = CompComp::Schema->connect( $connect_info );
 use strict;
 
 my ($leaguefile, $players);
