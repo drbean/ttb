@@ -131,28 +131,93 @@ sub index : Local {
 
 	$self->forward('ftp')
 
-Private method from Swiss app used by index action to put standings on http://web.nuu.edu.tw/~greg/$genre/standings/$tourid.html
+Private method used by standing, history actions to put standings on http://web.nuu.edu.tw/~greg/$tourid/standing.html
 
 =cut
 
 sub ftp : Private {
 	my ($self, $c, $round) = @_;
 	my $ftp = Net::FTP->new('web.nuu.edu.tw');
-	$ftp->login('greg', '');
+	$ftp->login('greg', '6y6t6y6t');
 	$ftp->binary;
-	my %genres;
-	my @genres = qw/intermediate business friends/;
-	$genres{$_} = $c->config->{ $_ } for @genres;
-	my %leaguegenre = map { my $genre = $_ ;  my $genres = $genres{$_};
-						map { $_ => $genre } @$genres } @genres;
+	my $config = $c->config;
+	my $leaguedirs = $config->{leagues};
+	my %leaguesByGenre;
+	my @genres = qw/conversation business speaking friends customs media multimedia college literature intercultural/;
+	$leaguesByGenre{$_} = $config->{ $_ } for @genres;
+	my %leaguegenre = map { my $genre = $_ ;  my $leagues = $leaguesByGenre{$genre};
+						map { $_ => $genre } @$leagues } @genres;
 	my $tourid = $c->stash->{tournament};
 	my $genre = $leaguegenre{$tourid};
-	$ftp->cwd("/public_html/$genre/standings");
-	io("/tmp/$genre/standings/$tourid.html")->print
+	$ftp->cwd("/public_html/$tourid/");
+	my $standingfile = "$leaguedirs/$tourid/comp/standing.html";
+	io($standingfile)->print
 		( $c->view('TT')->render($c, 'standings.tt2') );
-	$ftp->put("/tmp/$genre/standings/$tourid.html");
+	$ftp->put($standingfile, "standing.html");
 	$c->response->redirect
-		("http://web.nuu.edu.tw/~greg/$genre/standings/$tourid.html");
+		("http://web.nuu.edu.tw/~greg/$tourid/standing.html");
+}
+
+=head2 history
+
+	http://sac.nuu.edu.tw/comp/standing/17
+
+Need to be able to go back and look at standings without writing database or doing another pairing. Adds 'win', 'forfeit' info unless 'Unknown'.
+
+=cut
+
+sub history : Local {
+	my ($self, $c, $round) = @_;
+	my $tourid = $c->session->{tournament};
+	$round ||= $c->model('DB::Round')->find( { tournament => $tourid } )
+			->value;
+	my $tournament = $c->model('DB::Tournaments')->find(
+		{ id => $tourid });
+	my $members = $tournament->members;
+	my @columns = Swiss::Schema::Result::Players->columns;
+	my (%playerlist, @absentees);
+	while ( my $member = $members->next ) {
+		my $player = { map { $_ => $member->profile->$_ } @columns };
+		$player->{firstround} = $member->firstround;
+		my $rating = $member->profile->rating->find({
+				tournament => $tourid, round => $round-1 });
+		my $value;
+		try { $value = $rating->value; }
+			catch { warn "No rating for $player->{id}: $_"; };
+		$player->{rating} = $value || 0;
+		my $score;
+		try { $score = $member->score->value; }
+			catch { warn "No score for $player->{id}: $_"; };
+		$player->{score} = $score || 0;
+		$playerlist{ $player->{id} } = $player;
+		push @absentees, $player if $member->absent eq 'True';
+	}
+	my $Roles = $c->model('GTS')->roles;
+	my @roles = map { lcfirst $_ } @$Roles;
+	my $matches = $tournament->matches->search({ round => $round });
+	my %games;
+	while ( my $match = $matches->next ) {
+		my %contestants;
+		if ( $match->black eq 'Bye' ) {
+			my $byer = $match->white;
+			$contestants{Bye} = $playerlist{ $byer };
+		}
+		else {
+			%contestants = map { ucfirst($_) =>
+				$playerlist{ $match->$_ } } @roles;
+		}
+		my $table = $match->pair;
+		$games{$table} = {contestants => \%contestants,
+				win => $match->win,
+				forfeit => $match->forfeit };
+	}
+	my @games = map $games{$_}, sort {$a<=>$b} keys %games;
+	$c->stash->{tournament} = $tourid;
+	$c->stash->{round} = $round;
+	$c->stash->{roles} = $Roles;
+	$c->stash->{games} = \@games;
+	$c->stash->{template} = "standings.tt2";
+	$c->detach('ftp');
 }
 
 
