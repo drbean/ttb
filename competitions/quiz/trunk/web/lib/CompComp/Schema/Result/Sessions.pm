@@ -14,11 +14,11 @@ __PACKAGE__->add_columns(
   {
     data_type => "VARCHAR",
     default_value => undef,
-    is_nullable => 0,
+    is_nullable => 1,
     size => 7500,
   },
   "expires",
-  { data_type => "INT", default_value => undef, is_nullable => 0, size => undef },
+  { data_type => "INT", default_value => undef, is_nullable => 1, size => undef },
 );
 __PACKAGE__->set_primary_key("id");
 
