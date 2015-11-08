@@ -3,11 +3,11 @@
 
 <h2>[% tournament %] League</h2>
 
-<table cellspacing="0">
+<table>
 <caption><h1>[% tournament %] Tournament Standings</h1></caption>
   <TR><TH colspan="3"><H2>Player</H2>
       <TH colspan="[% rounds %]"><H2>Rounds</H2>
-  <TR><TH>Number<TH>Name<TH>Rating[% FOREACH round IN [ 1 .. rounds ] %]<TH colspan="3">[% round %][% END %]<TH>Score
+  <TR><TH>Number<TH>Name<TH>Rating[% FOREACH round IN [ 1 .. rounds ] %]<TH>[% round %][% END %]<TH>Score
 [% n = 0 %]
 [% FOREACH player IN players %]
 [% n = n + 1 %]
@@ -17,12 +17,10 @@
     <td>[% player.rating %]
     [% id = player.id %]
 [% FOREACH round IN [ 1 .. rounds ] %]
-    <td>[% play.$round.$id.role.substr(0,1) %],<td>[% play.$round.$id.opponent %],<td>[% play.$round.$id.point.substr(0,1) %]
+    <td>[% play.$round.$id.role.substr(0,1) %],[% play.$round.$id.opponent %],[% play.$round.$id.point.substr(0,1) %]
 [% END %]
     <td>[% player.score %]
 [% END %]
-</table>
-<table>
   <TR><TH colspan="8">5: Win, 3: Loss, 4: Draw, 1: Late, 0: Forfeit
 </table>
 
