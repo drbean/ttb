@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Nov 03, 13:08:14
+# Last Edit: 2015 Nov 10, 11:48:54
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -113,11 +113,13 @@ if ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call} ) 
                unless ( @words == @prompts );
 }
 elsif ( ref $bingo eq 'ARRAY' ) {
+	my $n;
 	for my $prompt ( @$bingo ) {
 		(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
 		push @words, $word;
-		die "No $word word in $prompt prompt"
+		die "No $word word in ${n}th, \"$prompt\" prompt"
 			unless $word;
+		$n++;
 		$prompts{$word} = $prompt;
 	}
 }
