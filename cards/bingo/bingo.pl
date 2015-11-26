@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Nov 10, 11:48:54
+# Last Edit: 2015 Nov 26, 09:03:27
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -26,7 +26,6 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 use IO::All;
 use YAML qw/LoadFile DumpFile/;
-use List::Util qw/shuffle/;
 
 my %romanize = (
 	0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
@@ -186,14 +185,20 @@ $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 for my $card ( 0 .. $n-1 ) {
 	my @candidate = sample( set => \@clinchers );
 	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
-	my @shuffled = shuffle (@presented, @candidate);
+	my @ordered;
+	if  ( $card % 2 == 0 ) {
+		@ordered = sort {$a cmp $b} (@presented, @candidate);
+	}
+	else {
+		@ordered = sort {$b cmp $a} (@presented, @candidate);
+	}
 
 	$latexString .= 
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
-	for my $word ( @shuffled ) {
+	for my $word ( @ordered ) {
 		$word =~ tr/_/~/;
 		$latexString .= "$word \\hfill ";
 	}
