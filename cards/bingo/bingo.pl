@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Nov 26, 09:03:27
+# Last Edit: 2015 Nov 26, 10:21:43
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -134,9 +134,11 @@ for my $word ( keys %prompts ) {
 		next if $word eq $other;
 		my $prompt = $prompts{$other};
 		my @noise = split /[-,._\s]/, $prompt;
+		my @lc_noise = map (lc, @noise);
 		my @parts = split m/[_\s]/, $word;
-		for my $part ( @parts ) {
-			for my $dupe ( @noise ) {
+		my @lc_parts = map (lc, @parts);
+		for my $part ( @lc_parts ) {
+			for my $dupe ( @lc_noise ) {
 				$part_count{$part}++ if 
 					$dupe eq $part;
 			}
