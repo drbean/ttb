@@ -21,7 +21,7 @@
 [% END %]
     <td>[% player.score %]
 [% END %]
-  <TR><TH colspan="8">5: Win, 3: Loss, 4: Draw, 1: Late, 0: Forfeit
+  <TR><TH colspan="8">Depending on number of questions asked, Win: 5, Loss: 4, Draw: 4, Late: 1, Forfeit: 0
 </table>
 
 <a href="[% c.uri_for_action('/game/list') %]">Quiz</a>
