@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2015 Oct 17, 12:33:59
+# Last Edit: 2015 Dec 06, 15:19:34
 # $Id$
 
 =head1 NAME
@@ -40,8 +40,8 @@ use strict;
 use warnings;
 use FindBin qw/$Bin/;
 use lib "$Bin/../../web/lib";
-use lib "/var/www/cgi-bin/comp/lib";
-# use lib "/home/drbean/comp/web/lib";
+# use lib "/var/www/cgi-bin/comp/lib";
+use lib "/home/drbean/comp/web/lib";
 use Config::General;
 use Cwd; use File::Basename;
 
@@ -51,12 +51,12 @@ use Grades;
 use Games::Tournament::Contestant::Swiss;
 # use Games::Tournament::Swiss;
 
-# use CompComp;
+use CompComp;
 use CompComp::Model::SwissDB;
 use CompComp::SwissSchema;
 
 my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
-my $schema = CompComp::SwissSchema->connect( @$connect_info );
+my $schema = CompComp::SwissSchema->connect( $connect_info );
 
 my $leagues = CompComp->config->{leagues};
 $leagues = '/home/drbean/041' unless $leagues;
@@ -126,12 +126,14 @@ for my $pair ( @pairs ) {
 	# Bless($response->{ free}->{ $table })->keys([qw/native aid violence/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/blackh abath carlos-rocha/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/economics publishing/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/interracial self/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/interracial self/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/partner society/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/lerman seixas spano diaz/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/taiwan ideology happyperson wellbeing/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/theory-x_y me_mypartner drbean/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/students-teachers women-men experience/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno kroenke/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/personal_health health_systems/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
 	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
