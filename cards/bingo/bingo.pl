@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jan 21, 14:41:31
+# Last Edit: 2016 Jan 21, 14:42:39
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -95,12 +95,20 @@ my $threepages = 0;
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
 my $story = $cards->{$s};
-die "No $s story bingo" unless ref $story eq 'HASH' and
-	exists $story->{bingo} and ref $story->{bingo} eq 'ARRAY';
+die "No $s story" unless ref $story eq 'HASH';
 my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
-my $bingo = $story->{bingo}->[$f];
+my $bingo;
+if (exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
+	$bingo = $story->{bingo}->[$f];
+}
+elsif (exists $story->{$f} and exists $story->{$f}->{bingo} ) {
+	$bingo = $story->{$f}->{bingo};
+
+}
+else { die "No bingo for $s story, form $f" }
+
 $latexString .= "\\begin{document}\n\n";
 
 my (@words, %prompts);
