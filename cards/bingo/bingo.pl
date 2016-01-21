@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2015 Nov 26, 10:21:43
+# Last Edit: 2016 Jan 21, 14:41:31
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -140,7 +140,10 @@ for my $word ( keys %prompts ) {
 		for my $part ( @lc_parts ) {
 			for my $dupe ( @lc_noise ) {
 				$part_count{$part}++ if 
-					$dupe eq $part;
+					(($dupe eq $part)
+						# or ($dupe =~ m/$part/)
+						# or ($part =~ m/$dupe/)
+			);
 			}
 		}
 	}
