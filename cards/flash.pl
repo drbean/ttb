@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jan 21, 15:18:46
+# Last Edit: 2016 Jan 21, 16:08:02
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -9,7 +9,7 @@ use warnings;
 use Getopt::Long;
 use Pod::Usage;
 use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum/;
+use List::Util qw/sum all/;
 
 my $man = 0;
 my $help = 0;
@@ -55,7 +55,7 @@ my $latexString = <<"START_LATEX";
 	\\small #1 #2
 	\\par
 	\\parbox[t][6.7cm][c]{9.5cm}{%
-	\\hspace{0.1cm} \\Large#3\\\\
+	\\hspace{0.1cm} \\Huge#3\\\\
 	\\normalsize#4 #5
 	}
 }
@@ -108,11 +108,11 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $flashcard;
-if (exists $story->{flashcard} && exists $story->{flashcard}->[$f] ) {
-	$flashcard = $story->{flashcard}->[$f];
+if (exists $story->{flashcard} && exists $story->{flash}->[$f] ) {
+	$flashcard = $story->{flash}->[$f];
 }
-elsif (exists $story->{$f} and exists $story->{$f}->{flashcard} ) {
-	$flashcard = $story->{$f}->{flashcard};
+elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
+	$flashcard = $story->{$f}->{flash};
 
 }
 else { die "No flashcard for $s story, form $f" }
@@ -126,6 +126,12 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcar
        @prompts{@words} = @prompts;
        die "Unequal word, call numbers. Also check order"
                unless ( @words == @prompts );
+}
+if ( ref $flashcard eq 'HASH' ) {
+		@words = keys %$flashcard;
+       $prompts{$_} = $flashcard->{$_} for @words;
+       die "Undefined prompts"
+               unless all { defined $prompts{$_} } keys %prompts;
 }
 elsif ( ref $flashcard eq 'ARRAY' ) {
 	my $n;
@@ -187,23 +193,27 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
 	push @lost_call, "$_: $prompts{$_}" for (@loser);
 
 }
+elsif ( ref $flashcard eq 'HASH' ) {
+	push @call, keys %prompts;
+	push @call, values %prompts;
+}
 else {
 	@call = @prompts{ @pruned, @winner };
 	@lost_call = @prompts{@loser};
 }
 
-$latexString .=
-"\\TPshowboxestrue
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{}
-{\\parbox{9.0cm}{";
-$latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-$latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
-$latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-&paging;
+# $latexString .=
+# "\\TPshowboxestrue
+# \\begin{textblock}{8}($latex[$paging]->{xy})
+# \\textblocklabel{picture$latex[$paging]->{xy}}
+# \\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{}
+# {\\parbox{9.0cm}{";
+# $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
+# $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
+# $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+# &paging;
 
-for my $card ( 0 .. $n-1 ) {
+for my $card ( 0 .. 2*$n-1 ) {
 	my @candidate = sample( set => \@clinchers );
 	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
 	my @ordered;
@@ -219,16 +229,13 @@ for my $card ( 0 .. $n-1 ) {
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
-	for my $word ( @ordered ) {
-		$word =~ tr/_/~/;
-		$latexString .= "$word \\hfill ";
-	}
+	$latexString .= "$call[$card] \\hfill ";
 	$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
 }
 $latexString .= "\\end{document}\n";
 
-my $bio = io "$ARGV[0]/flashcard_${s}_$f.tex";
+my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
 $bio->print( $latexString );
 
 sub paging
