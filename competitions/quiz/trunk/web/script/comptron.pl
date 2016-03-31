@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2016 Mar 30, 07:55:29 PM
+# Last Edit: 2016 Mar 31, 06:05:17 PM
 # $Id$
 
 =head1 NAME
@@ -58,8 +58,10 @@ use CompComp::SwissSchema;
 my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( $connect_info );
 
+my $season = '042';
+
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/042' unless $leagues;
+$leagues = "/home/drbean/$season" unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
@@ -82,7 +84,7 @@ my $lineup = map { Games::Tournament::Contestant::Swiss->new(
 my @pairs = $schema->resultset('Matches')->search({
 	tournament => $id, round => $round });
 
-die "No pairing in round $round in $id tournament," unless @pairs;
+die "No pairing in round $round in $id tournament in $season season," unless @pairs;
 
 my $roundconfig = $comp->config( $overallround );
 # my $tables = $comp->pairs( $round );
