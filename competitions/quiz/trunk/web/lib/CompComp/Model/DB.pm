@@ -7,7 +7,7 @@ use Catalyst;
 # use CompComp;
 
 # my $name = CompComp->config->{database};
-my $name = "comp041";
+my $name = "comp042";
 
 __PACKAGE__->config(
     schema_class => 'CompComp::Schema',
