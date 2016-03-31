@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2015 Dec 06, 15:19:34
+# Last Edit: 2016 Mar 30, 07:55:29 PM
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( $connect_info );
 
 my $leagues = CompComp->config->{leagues};
-$leagues = '/home/drbean/041' unless $leagues;
+$leagues = '/home/drbean/042' unless $leagues;
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
@@ -116,7 +116,7 @@ for my $pair ( @pairs ) {
 	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/fast-track tips/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/dickson abreu jackson/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/dickson abreu smallwood jackson/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/goetz allen ward clay/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/alien education crime/ ]);
@@ -133,7 +133,10 @@ for my $pair ( @pairs ) {
 	# Bless($response->{ free}->{ $table })->keys([qw/theory-x_y me_mypartner drbean/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/students-teachers women-men experience/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno kroenke/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/personal_health health_systems/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/franklin fernandez nguyen/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/education school English/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/kerpen neal collins wang/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/personal_health health_systems/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/cars citrus internet/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/1st_impressions traffic language marriage/ ]);
 	# Bless($response->{ set}->{ $table })->keys([qw/old connell warm/ ]);
