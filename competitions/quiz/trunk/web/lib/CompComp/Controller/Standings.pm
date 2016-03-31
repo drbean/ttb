@@ -8,6 +8,9 @@ use List::Util qw/sum first/;
 use IO::All;
 use Net::FTP;
 
+use Grades;
+use Grades::Groupwork;
+
 =head1 NAME
 
 CompComp::Controller::Standings - Catalyst Controller
