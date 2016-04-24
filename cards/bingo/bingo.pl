@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Apr 24, 02:20:20 PM
+# Last Edit: 2016 Apr 24, 02:26:24 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -10,6 +10,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Algorithm::Numerical::Sample qw/sample/;
 use List::Util qw/sum/;
+use List::MoreUtils qw/natatime/;
 use Lingua::Han::PinYin;
 
 my $man = 0;
@@ -210,22 +211,24 @@ $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 for my $card ( 0 .. $n-1 ) {
 	my @candidate = sample( set => \@clinchers );
 	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
-	my @ordered;
+	my ( @ordered, $it );
 	if  ( $card % 2 == 0 ) {
 		@ordered = sort {$a cmp $b} (@presented, @candidate);
+
 	}
 	else {
 		@ordered = sort {$b cmp $a} (@presented, @candidate);
 	}
+	$it = natatime 2, @ordered;
 
 	$latexString .= 
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
-	for my $word ( @ordered ) {
-		$word =~ tr/_/~/;
-		$latexString .= "$word \\hspace{0pt}\\\\";
+	while ( my @word = $it->() ) {
+		tr/_/~/ for @word;
+		$latexString .= "$word[0] \\hfill $word[1] \\hspace{0pt}\\\\";
 	}
 	$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
