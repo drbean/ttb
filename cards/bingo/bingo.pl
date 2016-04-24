@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Apr 24, 02:26:24 PM
+# Last Edit: 2016 Apr 24, 03:06:40 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -49,8 +49,11 @@ my $latexString = <<"START_LATEX";
 \\usepackage{texdraw}
 \\usepackage{multicol}
 \\usepackage{soul}
+\\usepackage{tabto}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
+
+\\NumTabs{4}
 
 \\newcommand{\\bingoX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.1cm}
@@ -219,7 +222,7 @@ for my $card ( 0 .. $n-1 ) {
 	else {
 		@ordered = sort {$b cmp $a} (@presented, @candidate);
 	}
-	$it = natatime 2, @ordered;
+	$it = natatime 3, @ordered;
 
 	$latexString .= 
 "\\TPshowboxestrue
@@ -228,7 +231,7 @@ for my $card ( 0 .. $n-1 ) {
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
 	while ( my @word = $it->() ) {
 		tr/_/~/ for @word;
-		$latexString .= "$word[0] \\hfill $word[1] \\hspace{0pt}\\\\";
+		$latexString .= "$word[0] \\tab $word[1] \\tab $word[2] \\hspace{0pt}\\\\";
 	}
 	$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
