@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Apr 24, 01:13:43 PM
+# Last Edit: 2016 Apr 24, 01:47:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -203,7 +203,7 @@ $latexString .=
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.0cm}{";
 $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-$latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
+$latexString .= (s/_/\\_/g, "\\char\"2702 $_  \\char\"2701 \\hfill ") for @lost_call;
 $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 &paging;
 
