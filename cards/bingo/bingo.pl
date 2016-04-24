@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jan 21, 14:42:39
+# Last Edit: 2016 Apr 24, 01:13:43 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -10,6 +10,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Algorithm::Numerical::Sample qw/sample/;
 use List::Util qw/sum/;
+use Lingua::Han::PinYin;
 
 my $man = 0;
 my $help = 0;
@@ -183,6 +184,17 @@ else {
 	@call = @prompts{ @pruned, @winner };
 	@lost_call = @prompts{@loser};
 }
+
+my $h2p = Lingua::Han::PinYin->new( tone => 1 );
+
+sub translit {
+	my $chinese = shift ;
+	return $chinese . "[" . $h2p->han2pinyin( $chinese ) . "]";
+}
+
+my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
+s/$regex/translit($1)/ge for @call;
+s/$regex/translit($1)/ge for @lost_call;
 
 $latexString .=
 "\\TPshowboxestrue
