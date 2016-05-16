@@ -50,7 +50,7 @@ __PACKAGE__->config({
 			},
 			store => {
 				class => 'DBIx::Class',
-				user_class => 'dicDB::Player',
+				user_class => 'DB::Players',
 				role_relation => 'getrole',
 				role_field => 'id',
 				id_field => 'id'
