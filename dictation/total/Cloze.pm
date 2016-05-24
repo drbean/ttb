@@ -1,6 +1,6 @@
 package Cloze;  # assumes Some/Module.pm
 
-# Last Edit: 2015 Aug 13, 12:05:05
+# Last Edit: 2016 May 24, 10:55:14 AM
 # $Id: /cloze/branches/total/Cloze.pm 1019 2006-11-28T03:02:09.709323Z greg  $
 
 use strict;
@@ -85,7 +85,7 @@ sub cloze
 		timing: <reject: $inWord> m/(\d+:\d+)(?=$punctuation)/m
 			{ push @Cloze::blankedText, $item[2] }
 		newline: <reject: $inWord> m/^$/ { push @Cloze::blankedText, "\\\\ "}
-		singleletter: <reject: $inWord> m/[IAa](?=$punctuation)/ 
+		singleletter: <reject: $inWord> m/[IABCa](?=$punctuation)/ 
 			{
 				$inWord=0;
 				$inLatex = 0;
