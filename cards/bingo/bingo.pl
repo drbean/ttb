@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 May 17, 12:51:09 PM
+# Last Edit: 2016 Jun 02, 02:46:59 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -205,7 +205,7 @@ $latexString .=
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
-{\\parbox{9.0cm}{";
+{\\parbox{9.6cm}{";
 $latexString .= (s/_/\\_/g, "$_ ") for @call;
 $latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
 $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
