@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2013 Sep 29, 02:09:08 PM
+# Last Edit: 2016 Jun 07, 09:44:31 AM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -14,9 +14,13 @@ use lib "$Bin";
 
 my $man = 0;
 my $help = 0;
+my $s = '';
+my $f = 0;
 
 GetOptions (
-	'help|?' => \$help, man => \$man) or pod2usage(2);
+	'help|?' => \$help, man => \$man,
+	's=s' => \$s, 'f=i' => \$f)
+		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
