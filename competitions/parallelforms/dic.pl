@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 07, 09:44:31 AM
+# Last Edit: 2016 Jun 07, 11:34:45 AM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -39,13 +39,12 @@ our $RD_HINT = 1;
 
 # my $textSources = $round->{texts};
 
-my $textSources = [ qw/greetings/ ];
+my $textSources = shift @ARGV;
+my ($text, $question) = LoadFile "$textSources/dic.yaml";
 
-my @dir = @$textSources;
-for my $dir ( @$textSources )
-{
-	die "$dir not found or not a directory" unless -d $dir;
-}
+my $io = io->dir($textSources);
+my @superdir = $io->all;
+@superdir = map $_->name ( grep $io->is_dir, @superdir );
 my $next;
 my @blanks = (0)x2;
 	my @files;
@@ -71,7 +70,7 @@ sub sequences
 	return @parallelforms;
 }
 
-my @parallelfiles = sequences(@dir);
+my @parallelfiles = sequences(@superdir);
 my @texts;
 for my $files ( @parallelfiles )
 {
@@ -116,7 +115,7 @@ foreach my $group ( qw/Black Blue Brown/ )
 	$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard" . (join "\n", map { "{$text->[$_]->{A}}" } 0..$#$textSources) . "
+\\mycard" . (join "\n", map { "{$text->[$_]->{A}}" } 0..$#superdir) . "
 \\end{textblock}\n";
 
 		&paging;
@@ -124,7 +123,7 @@ foreach my $group ( qw/Black Blue Brown/ )
 		$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard" . (join "\n", map { "{$text->[$_]->{B}}" } 0..$#$textSources) . "
+\\mycard" . (join "\n", map { "{$text->[$_]->{B}}" } 0..$#superdir) . "
 \\end{textblock}\n";
 
 		&paging;
