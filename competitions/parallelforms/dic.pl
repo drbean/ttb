@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 07, 11:34:45 AM
+# Last Edit: 2016 Jun 07, 11:53:10 AM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -44,7 +44,7 @@ my ($text, $question) = LoadFile "$textSources/dic.yaml";
 
 my $io = io->dir($textSources);
 my @superdir = $io->all;
-@superdir = map $_->name ( grep $io->is_dir, @superdir );
+@superdir = map $_->name, ( grep $_->is_dir, @superdir );
 my $next;
 my @blanks = (0)x2;
 	my @files;
