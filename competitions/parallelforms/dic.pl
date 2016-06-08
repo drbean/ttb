@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 07, 11:53:10 AM
+# Last Edit: 2016 Jun 07, 12:09:49 PM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -108,7 +108,7 @@ my $paging = 0;
 my $threepages = 0;
 
 # foreach my $group ( keys %$groups )
-foreach my $group ( qw/Black Blue Brown/ )
+foreach my $group ( 1 .. 8 )
 {
 	# my @group =  %{$groups->{$group}}; 
 	my $text = $next->();
