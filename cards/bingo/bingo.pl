@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 02, 02:46:59 PM
+# Last Edit: 2016 Jun 15, 12:24:28 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -193,7 +193,8 @@ my $h2p = Lingua::Han::PinYin->new( tone => 1 );
 
 sub translit {
 	my $chinese = shift ;
-	return $chinese . "[" . $h2p->han2pinyin( $chinese ) . "]";
+	# return $chinese . "[" . $h2p->han2pinyin( $chinese ) . "]";
+	return $chinese;
 }
 
 my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
@@ -231,7 +232,7 @@ for my $card ( 0 .. $n-1 ) {
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
 	while ( my @word = $it->() ) {
 		tr/_/~/ for @word;
-		$latexString .= "$word[0] \\tab $word[1] \\tab $word[2] \\hspace{0pt}\\\\";
+		$latexString .= "- $word[0] \\\\ - $word[1] \\\\ - $word[2] \\hspace{0pt}\\\\";
 	}
 	$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
