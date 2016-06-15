@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2008 Jun 26, 05:45:49 PM
+# Last Edit: 2016 Jun 15, 07:48:22 AM
 # $Id: /cloze/branches/lookup/dic.pl 1542 2007-10-28T07:32:25.305379Z greg  $
 
 use strict;
@@ -8,6 +8,9 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
+
+use FindBin qw($Bin);
+use lib "$Bin";
 
 my $man = 0;
 my $help = 0;
