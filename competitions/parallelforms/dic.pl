@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 15, 11:14:12 AM
+# Last Edit: 2016 Jun 15, 11:16:06 AM
 # $Id: /dic/branches/comp/dic.pl 2601 2008-06-26T04:34:08.435934Z greg  $
 
 use strict;
@@ -149,7 +149,7 @@ $quiz->{sectionsLatex} = join "\n", map {
 
 my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-open TEX, ">cards.tex";
+open TEX, ">$textSources/dic_${s}_$f.tex";
 print TEX $template->fill_in( HASH => $quiz );
 
 sub nextText
