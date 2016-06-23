@@ -1,10 +1,28 @@
 #!/usr/bin/perl
 
-# Last Edit: 2007 Mar 17, 06:55:50 PM
+# Last Edit: 2016 Jun 23, 08:44:03 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
+
+use FindBin '$Bin';
+use lib "$Bin";
+
+use Getopt::Long;
+use Pod::Usage;
+
+my $man = 0;
+my $help = 0;
+my $s = '';
+my $f = 0;
+
+GetOptions (
+	'help|?' => \$help, man => \$man,
+	's=s' => \$s, 'f=i' => \$f)
+		or pod2usage(2);
+pod2usage(1) if $help;
+pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
 use IO::All;
 use YAML qw/LoadFile/;
@@ -15,137 +33,89 @@ use List::Util qw/shuffle/;
 
 our $RD_HINT = 1;
 
-my $round = LoadFile( "round.yaml" );
-my $league = LoadFile( "../league.yaml" );
-my @members = @{$league->{member}};
-my %ids = map { $_->{name} => $_->{id} } @members;
-my %names = map { $_->{id} => $_->{name} } @members;
+# my $round = LoadFile( "round.yaml" );
+# my $league = LoadFile( "../league.yaml" );
+# my @members = @{$league->{member}};
+# my %ids = map { $_->{name} => $_->{id} } @members;
+# my %names = map { $_->{id} => $_->{name} } @members;
 
-my $textSources = $round->{texts};
+my $textSources = shift @ARGV;
+my ($text, $question) = LoadFile "$textSources/dic.yaml";
 
-my @io = map {io $_} @$textSources;
-my %texts;
-my %next;
-for my $directory (@io) 
-{
-	my $i = 0;
-	while ( my $file = $directory->next )
-	{
-		next unless $file =~ m/\.txt$/;
-		my @lines = $file->getlines;
-		$texts{$directory}[$i++] = cloze(@lines);
-	}
-	$next{$directory} = nextText($texts{$directory});
-}
+my $fields = shift( @$text );
 
-my $tmpl = io 'dic.tmpl';
-my $tmplString = $tmpl->all;
-
-my $groups = $round->{group};
 
 my @latex = (
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,0" },
 		{ page => 1, xy => "8,8" },
 		{ page => 1, xy => "0,8" },
-		{ page => 2, xy => "8,0" },
-		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "8,8" },
-		{ page => 2, xy => "0,8" },
-		{ page => 3, xy => "8,0" },
-		{ page => 3, xy => "0,0" },
-		{ page => 3, xy => "8,8" },
-		{ page => 3, xy => "0,8" },
+		# { page => 2, xy => "8,0" },
+		# { page => 2, xy => "0,0" },
+		# { page => 2, xy => "8,8" },
+		# { page => 2, xy => "0,8" },
+		# { page => 3, xy => "8,0" },
+		# { page => 3, xy => "0,0" },
+		# { page => 3, xy => "8,8" },
+		# { page => 3, xy => "0,8" },
 	);
 my $paging = 0;
 my $threepages = 0;
 
-foreach my $group ( keys %$groups )
-{
-	next unless $round->{group}->{$group};
-	my @group =  map { { name => $_, id => $ids{$_} } }
-				values %{$round->{group}->{$group}}; 
-	my @text = map { $next{$textSources->[$_]}->() } 0..$#$textSources;
-	if ( $#group == 1 ) 
-	{
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[0]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-	}
-	elsif ( $#group == 2 ) 
-	{
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$group[0]->{name}}
-{$group[1]->{name} \\& $group[2]->{name}}
-{$text[0]}
-{$text[3]}
-{$text[5]}
-{$text[6]}
-{$text[9]}
-{$text[11]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$group[1]->{name}}
-{$group[2]->{name} \\& $group[0]->{name}}
-{$text[1]}
-{$text[2]}
-{$text[5]}
-{$text[7]}
-{$text[8]}
-{$text[11]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$group[2]->{name}}
-{$group[1]->{name} \\& $group[0]->{name}}
-{$text[1]}
-{$text[3]}
-{$text[4]}
-{$text[7]}
-{$text[9]}
-{$text[10]}
-\\end{textblock}\n";
-		&paging;
-	}
-	elsif ($group eq 'Bye')
-	{	
-		my $byes = $round->{group}->{Bye};
-		foreach my $byer ( @$byes )
-		{
-			$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$byer $ids{$byer}}
-{$byer $ids{$byer}}
-{$byer! No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
-{No homework needed. Take a break this week. You win 3 points. \\rule{8.5cm}{1pt}}
-{No homework needed. Take a break this week. You win 3 points.}
-\\end{textblock}\n";
+my $tmpl = io "$Bin/dic.tmpl";
+my $tmplString = $tmpl->all;
 
-			&paging;
-		}
+my @ids = @ARGV;
+my %texts;
+my %next;
+my $identifier;
+my %romanize = (
+	0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
+	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
+	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
+);
+
+for my $id ( @ids ) {
+	$identifier = "$s-$f";
+	for my $text ( grep { $_->[0] eq $identifier } @$text ) {
+		my $i = 0;
+		my $lines = $text->[4];
+		my @lines = split /\n/, $lines;
+		my $unclozeables = $text->[5];
+		my $text = cloze($unclozeables, @lines);
+		my $textA = $text->{A};
+		my $textB = $text->{B};
+		my @text;
+		@text[0,1] = ($textA, $textB);
+
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[0]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
 	}
 }
 
@@ -155,12 +125,14 @@ $tmplString .= '
 
 my $quiz;
 # $quiz->{cardIdentifier} = join ' ', map { m{^/.*/.*/(.*)$};$1 } @$textSources;
-$quiz->{cardIdentifier} = join ' ', map { m/([^\/]*)$/ } (glob $$textSources[0] . "/*.txt");
+$quiz->{cardIdentifier} = "$identifier";
+$quiz->{story} = $s;
+$quiz->{form} = $romanize{ $f };
 $quiz->{autogen} = "% This file, cards.tex was autogenerated on " . localtime() . "by dic.pl out of cards.tmpl";
 
 my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-open TEX, ">cards.tex";
+open TEX, ">$textSources/dic_${s}_$f.tex";
 print TEX $template->fill_in( HASH => $quiz );
 
 sub nextText
