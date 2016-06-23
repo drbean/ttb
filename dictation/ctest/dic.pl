@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 23, 08:44:03 AM
+# Last Edit: 2016 Jun 23, 08:48:08 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -46,10 +46,22 @@ my $fields = shift( @$text );
 
 
 my @latex = (
-		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "8,4" },
 		{ page => 1, xy => "0,8" },
+		{ page => 1, xy => "0,12" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "8,12" },
+		{ page => 2, xy => "0,0" },
+		{ page => 2, xy => "0,4" },
+		{ page => 2, xy => "8,0" },
+		{ page => 2, xy => "8,4" },
+		{ page => 2, xy => "0,8" },
+		{ page => 2, xy => "0,12" },
+		{ page => 2, xy => "8,8" },
+		{ page => 2, xy => "8,12" },
 		# { page => 2, xy => "8,0" },
 		# { page => 2, xy => "0,0" },
 		# { page => 2, xy => "8,8" },
@@ -88,6 +100,34 @@ for my $id ( @ids ) {
 		my @text;
 		@text[0,1] = ($textA, $textB);
 
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[0]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
+		$tmplString .= "
+\\begin{textblock}{8}($latex[$paging]->{xy})
+\\textblocklabel{picture$latex[$paging]->{xy}}
+\\mycard
+{$text[1]}
+\\end{textblock}\n";
+		&paging;
 		$tmplString .= "
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
@@ -155,11 +195,11 @@ sub nextText
 }
 
 sub paging
-{	if ($paging == 3 or $paging == 7 or $paging == 11 )
+{	if ($paging == 7 or $paging == 15 or $paging == 23 )
 	{
 		$tmplString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) . "\\end{tiny}\\newpage\n\n";
 	}
-	if ($paging == 11) { $threepages = $threepages+3; $paging = 0; }
+	if ($paging == 23) { $threepages = $threepages+3; $paging = 0; }
 	else { $paging++; }
 }
