@@ -1,5 +1,5 @@
 <TMPL>$autogen</TMPL>
-\documentclass[b5paper]{article}
+\documentclass[a4paper]{article}
 \usepackage[T1]{fontenc}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute,showboxes]{textpos}
@@ -8,8 +8,8 @@
 \usepackage{amsfonts}
 \usepackage{graphicx}
 % \textblockorigin{0.30cm}{2.15cm}
-% \textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
-\textblockorigin{0.30cm}{3.35cm} % w5
+\textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % w5
 % \textblockorigin{0.30cm}{4.15cm} % w5
 % \textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
 \pagestyle{empty}
@@ -18,8 +18,8 @@
 
 \newcommand{\mycard}[1]{%
 \tiny <TMPL>$cardIdentifier</TMPL>\\%
-\parbox[t][12.1cm][t]{7.5cm}{
-\hspace{0.2cm}\begin{minipage}{7.7cm}
+\parbox[t][][t]{8.5cm}{
+\hspace{0.2cm}\begin{minipage}{8.7cm}
   \normalsize #1
 \end{minipage}
 }
