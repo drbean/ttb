@@ -1,13 +1,10 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 23, 08:48:08 AM
+# Last Edit: 2016 Jun 26, 03:53:46 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
-
-use FindBin '$Bin';
-use lib "$Bin";
 
 use Getopt::Long;
 use Pod::Usage;
@@ -28,7 +25,7 @@ use IO::All;
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
-use Cloze qw/cloze/;
+use Dic::Cloze::Ctest qw/cloze/;
 use List::Util qw/shuffle/;
 
 our $RD_HINT = 1;
