@@ -1,6 +1,6 @@
-package Cloze;  # assumes Some/Module.pm
+package Dic::Cloze::Ctest;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jun 23, 08:24:41 AM
+# Last Edit: 2016 Jun 27, 10:25:21 AM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
