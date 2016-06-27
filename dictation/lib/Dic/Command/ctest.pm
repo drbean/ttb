@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 10:48:35 AM
+# Last Edit: 2016 Jun 27, 12:45:55 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -87,10 +87,9 @@ sub execute {
 	my $lines = $text[0][4];
 	my @lines = split /\n/, $lines;
 	my $unclozeables = $text[0][5];
-	my %text = cloze($unclozeables, @lines);
-	my $textA = $text{A};
-	my $textB = $text{B};
-	my $i=0;
+	my $text = cloze($unclozeables, @lines);
+	my $textA = $text->{A};
+	my $textB = $text->{B};
 	for my $j ( 1 .. 2) {
 		for my $i ( 0 .. 3) {
 			$tmplString .= "
