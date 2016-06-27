@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 03:03:09 PM
+# Last Edit: 2016 Jun 27, 03:54:37 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -90,7 +90,7 @@ sub execute {
 	my $text = cloze($unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
-	for my $j ( 0, 8) {
+	for my $j ( 0) {
 		for my $i ( 0 .. 3) {
 			$tmplString .= "
 \\begin{textblock}{8}($latex[$j+2*$i]->{xy})
