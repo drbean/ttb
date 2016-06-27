@@ -1,25 +1,21 @@
-#!/usr/bin/perl
+package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 26, 03:53:46 PM
+# Last Edit: 2016 Jun 27, 10:37:30 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
-use Getopt::Long;
-use Pod::Usage;
+use Dic -command;
+sub usage_desc { "dic ctest -t TOPIC -s STORY -f FORM" }
 
-my $man = 0;
-my $help = 0;
-my $s = '';
-my $f = 0;
-
-GetOptions (
-	'help|?' => \$help, man => \$man,
-	's=s' => \$s, 'f=i' => \$f)
-		or pod2usage(2);
-pod2usage(1) if $help;
-pod2usage(-exitstatus => 0, -verbose => 2) if $man;
+sub opt_spec  {
+	return (
+		["t=s", "topic"]
+		, ["s=s", "story"]
+		, ["f=i", "form"]
+	);
+}
 
 use IO::All;
 use YAML qw/LoadFile/;
@@ -36,167 +32,101 @@ our $RD_HINT = 1;
 # my %ids = map { $_->{name} => $_->{id} } @members;
 # my %names = map { $_->{id} => $_->{name} } @members;
 
-my $textSources = shift @ARGV;
-my ($text, $question) = LoadFile "$textSources/dic.yaml";
+sub execute {
+	my ($self, $opt, $args) = @_;
 
-my $fields = shift( @$text );
+	my ($text_list, $question) = LoadFile
+		"/home/drbean/class/topics/daily_life/dic.yaml";
+
+	my $fields = shift( @$text_list );
 
 
-my @latex = (
-		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "0,4" },
-		{ page => 1, xy => "8,0" },
-		{ page => 1, xy => "8,4" },
-		{ page => 1, xy => "0,8" },
-		{ page => 1, xy => "0,12" },
-		{ page => 1, xy => "8,8" },
-		{ page => 1, xy => "8,12" },
-		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "0,4" },
-		{ page => 2, xy => "8,0" },
-		{ page => 2, xy => "8,4" },
-		{ page => 2, xy => "0,8" },
-		{ page => 2, xy => "0,12" },
-		{ page => 2, xy => "8,8" },
-		{ page => 2, xy => "8,12" },
-		# { page => 2, xy => "8,0" },
-		# { page => 2, xy => "0,0" },
-		# { page => 2, xy => "8,8" },
-		# { page => 2, xy => "0,8" },
-		# { page => 3, xy => "8,0" },
-		# { page => 3, xy => "0,0" },
-		# { page => 3, xy => "8,8" },
-		# { page => 3, xy => "0,8" },
+	my @latex = (
+			{ page => 1, xy => "0,0" },
+			{ page => 1, xy => "0,4" },
+			{ page => 1, xy => "8,0" },
+			{ page => 1, xy => "8,4" },
+			{ page => 1, xy => "0,8" },
+			{ page => 1, xy => "0,12" },
+			{ page => 1, xy => "8,8" },
+			{ page => 1, xy => "8,12" },
+			{ page => 2, xy => "0,0" },
+			{ page => 2, xy => "0,4" },
+			{ page => 2, xy => "8,0" },
+			{ page => 2, xy => "8,4" },
+			{ page => 2, xy => "0,8" },
+			{ page => 2, xy => "0,12" },
+			{ page => 2, xy => "8,8" },
+			{ page => 2, xy => "8,12" },
+			# { page => 2, xy => "8,0" },
+			# { page => 2, xy => "0,0" },
+			# { page => 2, xy => "8,8" },
+			# { page => 2, xy => "0,8" },
+			# { page => 3, xy => "8,0" },
+			# { page => 3, xy => "0,0" },
+			# { page => 3, xy => "8,8" },
+			# { page => 3, xy => "0,8" },
+		);
+	my $paging = 0;
+	my $threepages = 0;
+
+	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/ctest.tmpl";
+	my $tmplString = $tmpl->all;
+
+	my $identifier;
+	my %romanize = (
+		0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
+		, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
+		, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 	);
-my $paging = 0;
-my $threepages = 0;
 
-my $tmpl = io "$Bin/dic.tmpl";
-my $tmplString = $tmpl->all;
+	$identifier = "$opt->{s}-$opt->{f}";
+	my @text = grep { $_->[0] eq $identifier } @$text_list;
+	die "No texts or more than 1 text called $identifier\n" if @text != 1;
 
-my @ids = @ARGV;
-my %texts;
-my %next;
-my $identifier;
-my %romanize = (
-	0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
-	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
-	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
-);
+	my $lines = $text[0][4];
+	my @lines = split /\n/, $lines;
+	my $unclozeables = $text[0][5];
+	my %text = cloze($unclozeables, @lines);
+	my $textA = $text{A};
+	my $textB = $text{B};
+	my $i=0;
+	for my $j ( 1 .. 2) {
+		for my $i ( 0 .. 3) {
+			$tmplString .= "
+\\begin{textblock}{8}($latex[2*$j*$i]->{xy})
+\\textblocklabel{picture$latex[2*$j*$i]->{xy}}
+\\mycard
+{$textA}
+\\end{textblock}\n";
+			$tmplString .= "
+\\begin{textblock}{8}($latex[2*$j*$i+1]->{xy})
+\\textblocklabel{picture$latex[2*$j*$i+1]->{xy}}
+\\mycard
+{$textB}
+\\end{textblock}\n";
+		}
+		$tmplString .= "
+\\begin{tiny}" . ( $j+1 ) . "\\end{tiny}\\newpage\n\n";
 
-for my $id ( @ids ) {
-	$identifier = "$s-$f";
-	for my $text ( grep { $_->[0] eq $identifier } @$text ) {
-		my $i = 0;
-		my $lines = $text->[4];
-		my @lines = split /\n/, $lines;
-		my $unclozeables = $text->[5];
-		my $text = cloze($unclozeables, @lines);
-		my $textA = $text->{A};
-		my $textB = $text->{B};
-		my @text;
-		@text[0,1] = ($textA, $textB);
 
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[0]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[0]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
-		$tmplString .= "
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\mycard
-{$text[1]}
-\\end{textblock}\n";
-		&paging;
 	}
-}
-
-$tmplString .= '
+	$tmplString .= '
 \end{document}
 ';
 
-my $quiz;
-# $quiz->{cardIdentifier} = join ' ', map { m{^/.*/.*/(.*)$};$1 } @$textSources;
-$quiz->{cardIdentifier} = "$identifier";
-$quiz->{story} = $s;
-$quiz->{form} = $romanize{ $f };
-$quiz->{autogen} = "% This file, cards.tex was autogenerated on " . localtime() . "by dic.pl out of cards.tmpl";
+	my $quiz;
+	# $quiz->{cardIdentifier} = join ' ', map { m{^/.*/.*/(.*)$};$1 } @$textSources;
+	$quiz->{cardIdentifier} = "$identifier";
+	$quiz->{story} = $opt->{s};
+	$quiz->{form} = $romanize{ $opt->{f} };
+	$quiz->{autogen} = "% This file, cards.tex was autogenerated on " . localtime() . "by dic.pl out of cards.tmpl";
 
-my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
-				, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-open TEX, ">$textSources/dic_${s}_$f.tex";
-print TEX $template->fill_in( HASH => $quiz );
+	my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
+					, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
+	open TEX, ">$opt->{t}/dic_$opt->{s}_$opt->{f}.tex";
+	print TEX $template->fill_in( HASH => $quiz );
 
-sub nextText
-{
-	my $texts = shift;
-	my $number = @$texts;
-	my $index = 0;
-	my ($nextText, $nextFile);
-	return sub
-	{
-		$nextText = $texts->[$index];
-                if (++$index == $number)
-                {
-                        $index = 0;
-                        $texts->[0..$number-1] = $texts->[shuffle(0..$number-1)];
-                }
-		# $index = int rand( $number );
-		return ( $nextText->{A}, $nextText->{B} );
-	};
 }
 
-sub paging
-{	if ($paging == 7 or $paging == 15 or $paging == 23 )
-	{
-		$tmplString .= "
-\\begin{tiny}" . ($threepages + $latex[$paging]->{page}) . "\\end{tiny}\\newpage\n\n";
-	}
-	if ($paging == 23) { $threepages = $threepages+3; $paging = 0; }
-	else { $paging++; }
-}
+1;
