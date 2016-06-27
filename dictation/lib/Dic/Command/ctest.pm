@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 12:58:10 PM
+# Last Edit: 2016 Jun 27, 01:59:02 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -123,7 +123,7 @@ sub execute {
 
 	my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 					, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-	open TEX, ">$opt->{t}/dic_$opt->{s}_$opt->{f}.tex";
+	open TEX, ">/home/drbean/class/topics/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
 	print TEX $template->fill_in( HASH => $quiz );
 
 }
