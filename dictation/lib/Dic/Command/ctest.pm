@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 01:59:02 PM
+# Last Edit: 2016 Jun 27, 03:03:09 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -36,7 +36,7 @@ sub execute {
 	my ($self, $opt, $args) = @_;
 
 	my ($text_list, $question) = LoadFile
-		"/home/drbean/class/topics/daily_life/dic.yaml";
+		"/home/drbean/class/topics/" . $opt->{t} . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
@@ -95,13 +95,13 @@ sub execute {
 			$tmplString .= "
 \\begin{textblock}{8}($latex[$j+2*$i]->{xy})
 \\textblocklabel{picture$latex[$j+2*$i]->{xy}}
-\\mycard
+\\dicX$opt->{s}X$romanize{$opt->{f}}Xcard
 {$textA}
 \\end{textblock}\n";
 			$tmplString .= "
 \\begin{textblock}{8}($latex[$j+2*$i+1]->{xy})
 \\textblocklabel{picture$latex[$j+2*$i+1]->{xy}}
-\\mycard
+\\dicX$opt->{s}X$romanize{$opt->{f}}Xcard
 {$textB}
 \\end{textblock}\n";
 		}
