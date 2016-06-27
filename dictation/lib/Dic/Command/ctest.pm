@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 12:52:48 PM
+# Last Edit: 2016 Jun 27, 12:58:10 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -90,17 +90,17 @@ sub execute {
 	my $text = cloze($unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
-	for my $j ( 1 .. 2) {
+	for my $j ( 0, 8) {
 		for my $i ( 0 .. 3) {
 			$tmplString .= "
-\\begin{textblock}{8}($latex[2*$j*$i]->{xy})
-\\textblocklabel{picture$latex[2*$j*$i]->{xy}}
+\\begin{textblock}{8}($latex[$j+2*$i]->{xy})
+\\textblocklabel{picture$latex[$j+2*$i]->{xy}}
 \\mycard
 {$textA}
 \\end{textblock}\n";
 			$tmplString .= "
-\\begin{textblock}{8}($latex[2*$j*$i+1]->{xy})
-\\textblocklabel{picture$latex[2*$j*$i+1]->{xy}}
+\\begin{textblock}{8}($latex[$j+2*$i+1]->{xy})
+\\textblocklabel{picture$latex[$j+2*$i+1]->{xy}}
 \\mycard
 {$textB}
 \\end{textblock}\n";
