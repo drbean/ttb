@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 27, 12:45:55 PM
+# Last Edit: 2016 Jun 27, 12:52:48 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -43,20 +43,20 @@ sub execute {
 
 	my @latex = (
 			{ page => 1, xy => "0,0" },
-			{ page => 1, xy => "0,4" },
 			{ page => 1, xy => "8,0" },
+			{ page => 1, xy => "0,4" },
 			{ page => 1, xy => "8,4" },
 			{ page => 1, xy => "0,8" },
-			{ page => 1, xy => "0,12" },
 			{ page => 1, xy => "8,8" },
+			{ page => 1, xy => "0,12" },
 			{ page => 1, xy => "8,12" },
 			{ page => 2, xy => "0,0" },
-			{ page => 2, xy => "0,4" },
 			{ page => 2, xy => "8,0" },
+			{ page => 2, xy => "0,4" },
 			{ page => 2, xy => "8,4" },
 			{ page => 2, xy => "0,8" },
-			{ page => 2, xy => "0,12" },
 			{ page => 2, xy => "8,8" },
+			{ page => 2, xy => "0,12" },
 			{ page => 2, xy => "8,12" },
 			# { page => 2, xy => "8,0" },
 			# { page => 2, xy => "0,0" },
