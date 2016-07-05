@@ -1,6 +1,6 @@
 package Dic::Cloze::Ctest;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jun 27, 02:15:22 PM
+# Last Edit: 2016 Jun 28, 12:09:50 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -42,8 +42,8 @@ sub cloze
 @clozeline{'A', 'B' } = ('') x 2;
 	my $letterGrammar = q[
 		{
-	my $reader = '';
-	my $writer = '';
+	my $reader = 'A';
+	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
 			my ($a, $b) = (qr/^A: /, qr/^B: /);
@@ -53,15 +53,15 @@ sub cloze
 			my ($index, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: a | b | pass | firstletter | middleletter | lastletter | punctuation
-		a: m/$a/ {
-			($reader, $writer) = ('A','B');
-			$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
-		b: m/$b/ {
-			($reader, $writer) = ('B','A');
-			$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
+		token: pass | firstletter | middleletter | lastletter | blankline | punctuation
+		#a: m/$a/ {
+		#	($reader, $writer) = ('A','B');
+		#	$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
+		#	$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
+		#b: m/$b/ {
+		#	($reader, $writer) = ('B','A');
+		#	$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
+		#	$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1; $index = 0; @cword = ();
 				$Dic::Cloze::Ctest::word_score++;
@@ -84,8 +84,14 @@ sub cloze
 				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
 				$Dic::Cloze::Ctest::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
-				$Dic::Cloze::Ctest::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Ctest::word_score}";
+				$Dic::Cloze::Ctest::clozeline{$reader} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
 			}
+		blankline: <reject: $inWord> m/^$/
+			{
+				$Dic::Cloze::Ctest::clozeline{$writer} .= "~\\\\\\\\";
+				$Dic::Cloze::Ctest::clozeline{$reader} .= "~\\\\\\\\";
+			}
+		end: m/^\Z/
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
 				$Dic::Cloze::Ctest::clozeline{$writer} .= $item[2];
