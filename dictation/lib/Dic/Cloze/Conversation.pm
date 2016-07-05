@@ -1,6 +1,6 @@
-package Dic::Cloze::Ctest;  # assumes Some/Module.pm
+package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jun 27, 02:15:22 PM
+# Last Edit: 2016 Jul 05, 12:44:00 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -42,11 +42,11 @@ sub cloze
 @clozeline{'A', 'B' } = ('') x 2;
 	my $letterGrammar = q[
 		{
-	my $reader = '';
-	my $writer = '';
+	my $reader = 'A';
+	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^A: /, qr/^B: /);
+			my ($a, $b) = (qr/^W: /, qr/^M: /);
 			my $letter = qr/[A-Za-z0-9']/;
 			my $skip = '';
 			my @cword;
@@ -56,23 +56,23 @@ sub cloze
 		token: a | b | pass | firstletter | middleletter | lastletter | punctuation
 		a: m/$a/ {
 			($reader, $writer) = ('A','B');
-			$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $item[1]; }
 		b: m/$b/ {
 			($reader, $writer) = ('B','A');
-			$Dic::Cloze::Ctest::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Ctest::clozeline{$reader} .= $item[1]; }
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $item[1]; }
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1; $index = 0; @cword = ();
-				$Dic::Cloze::Ctest::word_score++;
-				$Dic::Cloze::Ctest::letter_score++;
+				$Dic::Cloze::Conversation::word_score++;
+				$Dic::Cloze::Conversation::letter_score++;
 				# $Cloze::clozeline{$writer} .= "\\\\1{$Cloze::word_score}";
 				push @cword, $item[2];
 			}
 		middleletter: <reject: not $inWord> m/$letter(?!$punctuation)/
 			{
 				$index++;
-				$Dic::Cloze::Ctest::letter_score++;
+				$Dic::Cloze::Conversation::letter_score++;
 				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
 			}
@@ -80,26 +80,33 @@ sub cloze
 			{
 				$inWord=0;
 				$index++;
-				$Dic::Cloze::Ctest::letter_score++;
+				$Dic::Cloze::Conversation::letter_score++;
 				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
-				$Dic::Cloze::Ctest::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
-				$Dic::Cloze::Ctest::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Ctest::word_score}";
+				if ( $#cword > 2 ) {
+					$Dic::Cloze::Conversation::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}"
+						, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
+						, $cword[-1];
+				}
+				else {
+					$Dic::Cloze::Conversation::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+				}
+				$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
-				$Dic::Cloze::Ctest::clozeline{$writer} .= $item[2];
-				$Dic::Cloze::Ctest::clozeline{$reader} .= $item[2];
+				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
+				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
 			}
 		end: m/^\Z/
 	]; 
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/($Dic::Cloze::Ctest::unclozeable|\w)(?=$punctuation)/m
+		pass: <reject: $inWord> m/($Dic::Cloze::Conversation::unclozeable|\w)(?=$punctuation)/m
 			{
-				$Dic::Cloze::Ctest::word_score++;
-				$Dic::Cloze::Ctest::clozeline{$writer} .= $item[2];
-				$Dic::Cloze::Ctest::clozeline{$reader} .= $item[2];
+				$Dic::Cloze::Conversation::word_score++;
+				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
+				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
 			}
 		];
 	}
@@ -107,9 +114,9 @@ sub cloze
 		$letterGrammar .= q[
 		pass: <reject: $inWord> m/(\w)(?=$punctuation)/m
 			{
-				$Dic::Cloze::Ctest::word_score++;
-				$Dic::Cloze::Ctest::clozeline{$writer} .= $item[2];
-				$Dic::Cloze::Ctest::clozeline{$reader} .= $item[2];
+				$Dic::Cloze::Conversation::word_score++;
+				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
+				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
 			}
 		];
 	}
