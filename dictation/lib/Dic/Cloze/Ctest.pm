@@ -1,6 +1,6 @@
 package Dic::Cloze::Ctest;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jun 28, 12:09:50 PM
+# Last Edit: 2016 Jul 05, 01:30:08 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -83,8 +83,22 @@ sub cloze
 				$Dic::Cloze::Ctest::letter_score++;
 				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
-				$Dic::Cloze::Ctest::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
-				$Dic::Cloze::Ctest::clozeline{$reader} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+				if ( $#cword > 2 ) {
+					$Dic::Cloze::Ctest::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}"
+						, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
+						, $cword[-1];
+				}
+				else {
+					$Dic::Cloze::Ctest::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+				}
+				if ( $#cword > 2 ) {
+					$Dic::Cloze::Ctest::clozeline{$reader} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}"
+						, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
+						, $cword[-1];
+				}
+				else {
+					$Dic::Cloze::Ctest::clozeline{$reader} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Ctest::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+				}
 			}
 		blankline: <reject: $inWord> m/^$/
 			{
