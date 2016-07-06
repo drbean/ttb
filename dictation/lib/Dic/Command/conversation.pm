@@ -1,6 +1,6 @@
-package Dic::Command::ctest;
+package Dic::Command::conversation;
 
-# Last Edit: 2016 Jun 27, 03:54:37 PM
+# Last Edit: 2016 Jul 05, 12:47:39 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -21,7 +21,7 @@ use IO::All;
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
-use Dic::Cloze::Ctest qw/cloze/;
+use Dic::Cloze::Conversation qw/cloze/;
 use List::Util qw/shuffle/;
 
 our $RD_HINT = 1;
@@ -50,18 +50,18 @@ sub execute {
 			{ page => 1, xy => "8,8" },
 			{ page => 1, xy => "0,12" },
 			{ page => 1, xy => "8,12" },
-			{ page => 2, xy => "0,0" },
-			{ page => 2, xy => "8,0" },
-			{ page => 2, xy => "0,4" },
-			{ page => 2, xy => "8,4" },
-			{ page => 2, xy => "0,8" },
-			{ page => 2, xy => "8,8" },
-			{ page => 2, xy => "0,12" },
-			{ page => 2, xy => "8,12" },
-			# { page => 2, xy => "8,0" },
 			# { page => 2, xy => "0,0" },
-			# { page => 2, xy => "8,8" },
+			# { page => 2, xy => "8,0" },
+			# { page => 2, xy => "0,4" },
+			# { page => 2, xy => "8,4" },
 			# { page => 2, xy => "0,8" },
+			# { page => 2, xy => "8,8" },
+			# { page => 2, xy => "0,12" },
+			# { page => 2, xy => "8,12" },
+			# { page => 1, xy => "8,0" },
+			# { page => 1, xy => "0,0" },
+			# { page => 1, xy => "8,8" },
+			# { page => 1, xy => "0,8" },
 			# { page => 3, xy => "8,0" },
 			# { page => 3, xy => "0,0" },
 			# { page => 3, xy => "8,8" },
@@ -70,7 +70,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/ctest.tmpl";
+	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/conversation.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;
