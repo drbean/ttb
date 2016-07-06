@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jun 28, 12:46:30 PM
+# Last Edit: 2016 Jul 05, 01:18:49 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -42,14 +42,14 @@ sub execute {
 
 
 	my @latex = (
-			# { page => 1, xy => "0,0" },
-			# { page => 1, xy => "8,0" },
-			# { page => 1, xy => "0,4" },
-			# { page => 1, xy => "8,4" },
-			# { page => 1, xy => "0,8" },
-			# { page => 1, xy => "8,8" },
-			# { page => 1, xy => "0,12" },
-			# { page => 1, xy => "8,12" },
+			{ page => 1, xy => "0,0" },
+			{ page => 1, xy => "8,0" },
+			{ page => 1, xy => "0,4" },
+			{ page => 1, xy => "8,4" },
+			{ page => 1, xy => "0,8" },
+			{ page => 1, xy => "8,8" },
+			{ page => 1, xy => "0,12" },
+			{ page => 1, xy => "8,12" },
 			# { page => 2, xy => "0,0" },
 			# { page => 2, xy => "8,0" },
 			# { page => 2, xy => "0,4" },
@@ -58,10 +58,10 @@ sub execute {
 			# { page => 2, xy => "8,8" },
 			# { page => 2, xy => "0,12" },
 			# { page => 2, xy => "8,12" },
-			{ page => 1, xy => "8,0" },
-			{ page => 1, xy => "0,0" },
-			{ page => 1, xy => "8,8" },
-			{ page => 1, xy => "0,8" },
+			# { page => 1, xy => "8,0" },
+			# { page => 1, xy => "0,0" },
+			# { page => 1, xy => "8,8" },
+			# { page => 1, xy => "0,8" },
 			# { page => 3, xy => "8,0" },
 			# { page => 3, xy => "0,0" },
 			# { page => 3, xy => "8,8" },
@@ -91,7 +91,7 @@ sub execute {
 	my $textA = $text->{A};
 	my $textB = $text->{B};
 	for my $j ( 0) {
-		for my $i ( 0 .. 1) {
+		for my $i ( 0 .. 3) {
 			$tmplString .= "
 \\begin{textblock}{8}($latex[$j+2*$i]->{xy})
 \\textblocklabel{picture$latex[$j+2*$i]->{xy}}
