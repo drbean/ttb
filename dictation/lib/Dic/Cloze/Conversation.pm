@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jul 05, 12:44:00 PM
+# Last Edit: 2016 Jul 19, 11:24:10 AM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -46,7 +46,7 @@ sub cloze
 	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^W: /, qr/^M: /);
+			my ($a, $b) = (qr/^G: /, qr/^B: /);
 			my $letter = qr/[A-Za-z0-9']/;
 			my $skip = '';
 			my @cword;
