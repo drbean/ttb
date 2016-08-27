@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jun 15, 12:24:28 PM
+# Last Edit: 2016 Aug 26, 12:32:54 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -165,10 +165,10 @@ for my $word ( @words ) {
 	die "calling '$word' word $word_count{$word} times"
 		unless $word_count{$word} == 1;
 }
-for my $part ( keys %part_count ) {
-	die "'$part' dupe present $part_count{$part} times"
-		unless $part_count{$part} == 0;
-}
+#for my $part ( keys %part_count ) {
+#	die "'$part' dupe present $part_count{$part} times"
+#		unless $part_count{$part} == 0;
+#}
 die "No word for some prompts" unless
 	values %prompts == scalar @words;
 	
