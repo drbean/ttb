@@ -1,0 +1,44 @@
+<TMPL>$autogen</TMPL>
+\documentclass[a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{xeCJK}
+\setCJKmainfont{WenQuanYi Zen Hei}
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute]{textpos}
+\TPMargin{0.2cm}
+\usepackage{xltxtra}
+\usepackage{pifont}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+% \textblockorigin{0.30cm}{2.15cm}
+\textblockorigin{0.30cm}{0.35cm} % HPDeskJet810C
+% \textblockorigin{0.30cm}{3.35cm} % w5
+% \textblockorigin{0.30cm}{4.15cm} % w5
+% \textblockorigin{0.25cm}{2.45cm} % HPLaserJ5000LE
+\usepackage{soul}
+\usepackage{tabto}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+\renewcommand{\baselinestretch}{0.5}
+
+\newcommand{\dicX<TMPL>$story</TMPL>X<TMPL>$form</TMPL>Xcard}[1]{%
+\tiny <TMPL>$cardIdentifier</TMPL>\\%
+\parbox[t][][t]{9.5cm}{
+\hspace{0.2cm}\begin{minipage}{9.7cm}
+  \Large #1
+\end{minipage}
+}
+}
+
+\newcommand{\1}[1]{%
+\begin{picture}(0.5,0.5)
+\put (0,0){\framebox(0.5,0.5)[br]{\footnotesize #1}}
+\end{picture}%
+}
+
+\newcommand{\2}{%
+\includegraphics{cards.p2}%
+}
+
+\begin{document}
+
