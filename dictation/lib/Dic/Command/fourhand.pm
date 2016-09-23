@@ -1,17 +1,18 @@
 package Dic::Command::fourhand;
 
-# Last Edit: 2016 Sep 19, 08:09:13 PM
+# Last Edit: 2016 Sep 23, 11:04:48 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
 use Dic -command;
-sub usage_desc { "dic ctest -t TOPIC -s STORY -f FORM" }
+sub usage_desc { "dic fourhand -c CTEST -t TOPIC -s STORY -f FORM" }
 
 sub opt_spec  {
 	return (
-		["t=s", "topic"]
+		["c=s", "cloze_style"]
+		, ["t=s", "topic"]
 		, ["s=s", "story"]
 		, ["f=i", "form"]
 	);
@@ -35,8 +36,9 @@ our $RD_HINT = 1;
 sub execute {
 	my ($self, $opt, $args) = @_;
 
+	my ($cloze_style, $topic, $story, $form) = @$opt{qw/c t s f/};
 	my ($text_list, $question) = LoadFile
-		"/home/drbean/class/topics/" . $opt->{t} . "/dic.yaml";
+		"/home/drbean/curriculum/topics/" . $topic . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
@@ -82,12 +84,12 @@ sub execute {
 
 	$identifier = "$opt->{s}-$opt->{f}";
 	my @text = grep { $_->[0] eq $identifier } @$text_list;
+$DB::single=1;
 	die "No texts or more than 1 text called $identifier\n" if @text != 1;
 
 	my $lines = $text[0][4];
 	my @lines = split /\n/, $lines;
 	my $unclozeables = $text[0][5];
-$DB::single=1;
 	my $text = cloze($unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
@@ -142,7 +144,7 @@ $DB::single=1;
 
 	my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 					, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-	open TEX, ">/home/drbean/class/topics/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
+	open TEX, ">/home/drbean/curriculum/topics/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
 	print TEX $template->fill_in( HASH => $quiz );
 
 }
