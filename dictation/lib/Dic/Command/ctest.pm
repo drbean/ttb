@@ -1,6 +1,6 @@
 package Dic::Command::ctest;
 
-# Last Edit: 2016 Jul 05, 01:18:49 PM
+# Last Edit: 2016 Oct 05, 01:42:47 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -36,7 +36,7 @@ sub execute {
 	my ($self, $opt, $args) = @_;
 
 	my ($text_list, $question) = LoadFile
-		"/home/drbean/class/topics/" . $opt->{t} . "/dic.yaml";
+		"/home/drbean/curriculum/topics/" . $opt->{t} . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
