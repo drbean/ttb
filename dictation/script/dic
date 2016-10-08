@@ -1,0 +1,61 @@
+#!/usr/bin/perl 
+
+# Created: 06/25/2016 10:25:21 AM
+# Last Edit: 2016 Oct 08, 09:34:19 AM
+# $Id$
+
+=head1 NAME
+
+dic.pl - base dictation clozing app script
+
+=cut
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
+
+use strict;
+use warnings;
+
+use FindBin '$Bin';
+use lib "$Bin/../lib";
+
+=head1 SYNOPSIS
+
+dic text/conversation/fourhand -c CTEST -t TOPIC -s STORY -f FORM
+
+=cut
+
+use Dic;
+Dic->run;
+
+=head1 DESCRIPTION
+
+Cloze a text for dictation purposes using App::Cmd
+
+=cut
+
+
+
+=head1 AUTHOR
+
+Dr Bean C<< <drbean at cpan, then a dot, (.), and org> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2016 Dr Bean, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+# End of dic.pl
+
+# vim: set ts=8 sts=4 sw=4 noet:
+
+
