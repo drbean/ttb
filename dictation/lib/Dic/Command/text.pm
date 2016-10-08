@@ -1,6 +1,6 @@
-package Dic::Command::ctest;
+package Dic::Command::text;
 
-# Last Edit: 2016 Oct 05, 01:42:47 PM
+# Last Edit: 2016 Oct 08, 10:09:32 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -21,7 +21,7 @@ use IO::All;
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
-use Dic::Cloze::Ctest qw/cloze/;
+use Dic::Cloze::Text qw/cloze/;
 use List::Util qw/shuffle/;
 
 our $RD_HINT = 1;
@@ -87,6 +87,7 @@ sub execute {
 	my $lines = $text[0][4];
 	my @lines = split /\n/, $lines;
 	my $unclozeables = $text[0][5];
+$DB::single=1;
 	my $text = cloze($unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
