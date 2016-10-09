@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Oct 09, 07:59:18 PM
+# Last Edit: 2016 Oct 09, 09:07:40 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -23,6 +23,14 @@ use Parse::RecDescent;
 our %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+	];
+$onlastletter{firstlast} = q [
+	if ( $#cword >= 2 ) {
+		$Dic::Cloze::Text::clozeline .= join '', @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1];
+	}
+	if ( $#cword == 1 ) {
+		$Dic::Cloze::Text::clozeline .= join '', @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}";
+	}
 	];
 $onlastletter{ctestpluslast} = q [
 	if ( $#cword > 2 ) {
