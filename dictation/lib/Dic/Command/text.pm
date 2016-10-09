@@ -1,6 +1,6 @@
 package Dic::Command::text;
 
-# Last Edit: 2016 Oct 09, 01:57:37 PM
+# Last Edit: 2016 Oct 09, 04:13:31 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -89,7 +89,7 @@ sub execute {
 	my $lines = $text[0][4];
 	my @lines = split /\n/, $lines;
 	my $unclozeables = $text[0][5];
-	my $text = cloze($unclozeables, @lines);
+	my $text = cloze($cloze_style, $unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
 	for my $j ( 0) {
