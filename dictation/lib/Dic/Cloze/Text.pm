@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Oct 09, 04:12:19 PM
+# Last Edit: 2016 Oct 09, 07:25:28 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -22,6 +22,16 @@ use Parse::RecDescent;
 
 our %lastletter;
 $lastletter{ctest} = q [
+		lastletter: <reject: not $inWord> m/$letter(?=$punctuation)/
+		{
+			$inWord=0;
+			$index++;
+			$Dic::Cloze::Text::letter_score++;
+			push @cword, $item[2];
+			$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+		}
+	];
+$lastletter{ctestpluslast} = q [
 		lastletter: <reject: not $inWord> m/$letter(?=$punctuation)/
 		{
 			$inWord=0;
