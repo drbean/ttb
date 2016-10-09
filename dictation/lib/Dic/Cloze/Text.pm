@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Oct 09, 07:33:06 PM
+# Last Edit: 2016 Oct 09, 07:59:18 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -22,21 +22,21 @@ use Parse::RecDescent;
 
 our %onlastletter;
 $onlastletter{ctest} = q [
-			$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+	$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
 	];
 $onlastletter{ctestpluslast} = q [
-			if ( $#cword > 2 ) {
-				$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
-					, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
-				, $cword[-1];
-			}
-			else {
-				$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
-			}
+	if ( $#cword > 2 ) {
+		$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
+			, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
+		, $cword[-1];
+	}
+	else {
+		$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+	}
 	];
 $onlastletter{total} = q [
-			$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
-					, map {"\\\\1{}"} 1 .. $#cword);
+	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
+			, map {"\\\\1{}"} 1 .. $#cword);
 	];
 
 sub cloze
@@ -80,14 +80,14 @@ sub cloze
 				push @cword, $item[2];
 			}
 		lastletter: <reject: not $inWord> m/$letter(?=$punctuation)/
-		{
-			$inWord=0;
-			$index++;
-			$Dic::Cloze::Text::letter_score++;
-			push @cword, $item[2];
+			{
+				$inWord=0;
+				$index++;
+				$Dic::Cloze::Text::letter_score++;
+				push @cword, $item[2];
 		];
-	$letterGrammar .= $onlastletter{$cloze_style};
-	$letterGrammar .= q [
+		$letterGrammar .= $onlastletter{$cloze_style};
+		$letterGrammar .= q [
 		}
 		blankline: <reject: $inWord> m/^$/
 			{
