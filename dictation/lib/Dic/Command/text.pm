@@ -1,6 +1,6 @@
 package Dic::Command::text;
 
-# Last Edit: 2016 Oct 09, 04:13:31 PM
+# Last Edit: 2016 Oct 13, 09:33:52 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -72,7 +72,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/ctest.tmpl";
+	my $tmpl = io "/home/drbean/ttb/dictation/tmpl/ctest.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;
