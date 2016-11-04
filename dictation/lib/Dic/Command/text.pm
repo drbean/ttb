@@ -1,13 +1,13 @@
 package Dic::Command::text;
 
-# Last Edit: 2016 Oct 13, 09:33:52 AM
+# Last Edit: 2016 Nov 04, 07:43:56 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
 use Dic -command;
-sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM" }
+sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM -p PAPER" }
 
 sub opt_spec  {
 	return (
@@ -15,6 +15,7 @@ sub opt_spec  {
 		, ["t=s", "topic"]
 		, ["s=s", "story"]
 		, ["f=i", "form"]
+		, ["p=s", "paper"]
 	);
 }
 
@@ -36,14 +37,13 @@ our $RD_HINT = 1;
 sub execute {
 	my ($self, $opt, $args) = @_;
 
-	my ($cloze_style, $topic, $story, $form) = @$opt{qw/c t s f/};
+	my ($cloze_style, $topic, $story, $form, $size) = @$opt{qw/c t s f p/};
 	my ($text_list, $question) = LoadFile
 		"/home/drbean/curriculum/topics/" . $topic . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
-
-	my @latex = (
+	my $paper = { a7 => { latex => [
 			{ page => 1, xy => "0,0" },
 			{ page => 1, xy => "8,0" },
 			{ page => 1, xy => "0,4" },
@@ -52,6 +52,27 @@ sub execute {
 			{ page => 1, xy => "8,8" },
 			{ page => 1, xy => "0,12" },
 			{ page => 1, xy => "8,12" },
+			],
+			i => 3},
+		a6 => { latex => [
+			{ page => 1, xy => "8,0" },
+			{ page => 1, xy => "0,0" },
+			{ page => 1, xy => "8,8" },
+			{ page => 1, xy => "0,8" },
+			],
+			i => 1}
+	};
+
+	my $latex = $paper->{$size}->{latex};
+
+			# { page => 1, xy => "0,0" },
+			# { page => 1, xy => "8,0" },
+			# { page => 1, xy => "0,4" },
+			# { page => 1, xy => "8,4" },
+			# { page => 1, xy => "0,8" },
+			# { page => 1, xy => "8,8" },
+			# { page => 1, xy => "0,12" },
+			# { page => 1, xy => "8,12" },
 			# { page => 2, xy => "0,0" },
 			# { page => 2, xy => "8,0" },
 			# { page => 2, xy => "0,4" },
@@ -68,7 +89,7 @@ sub execute {
 			# { page => 3, xy => "0,0" },
 			# { page => 3, xy => "8,8" },
 			# { page => 3, xy => "0,8" },
-		);
+
 	my $paging = 0;
 	my $threepages = 0;
 
@@ -93,16 +114,16 @@ sub execute {
 	my $textA = $text->{A};
 	my $textB = $text->{B};
 	for my $j ( 0) {
-		for my $i ( 0 .. 3) {
+		for my $i ( 0 .. $paper->{$size}->{i}) {
 			$tmplString .= "
-\\begin{textblock}{8}($latex[$j+2*$i]->{xy})
-\\textblocklabel{picture$latex[$j+2*$i]->{xy}}
+\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
+\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 \\dicX$opt->{s}X$romanize{$opt->{f}}Xcard
 {$textA}
 \\end{textblock}\n";
 			$tmplString .= "
-\\begin{textblock}{8}($latex[$j+2*$i+1]->{xy})
-\\textblocklabel{picture$latex[$j+2*$i+1]->{xy}}
+\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
+\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 \\dicX$opt->{s}X$romanize{$opt->{f}}Xcard
 {$textB}
 \\end{textblock}\n";
