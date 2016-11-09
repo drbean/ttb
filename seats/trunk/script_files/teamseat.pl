@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Sep 10, 07:38:14 PM
+# Last Edit: 2016 Nov 08, 07:32:32 AM
 # $Id$
 
 package Script;
@@ -54,7 +54,7 @@ sub run {
 	my $filetype = $latex? "tex": "html";
 	my $fileprefix = $latex? "latex": "html";
 	my $room = $league->{room};
-	my $rooms = "$leagues/../class/seats/rooms";
+	my $rooms = "$leagues/../ttb/seats/trunk/rooms";
 	my $roomconfig = LoadFile "$rooms/$room/config.yaml";
 	my $beancandirs = $league->{group};
 	my $sessionpath = "$leaguePath/$beancandirs";
