@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Oct 09, 09:32:50 PM
+# Last Edit: 2016 Nov 14, 02:38:19 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -53,7 +53,9 @@ sub cloze
 	my $cloze_style = shift;
 	my $unclozeables = shift;
 	chomp $unclozeables;
-	our $unclozeable = $unclozeables? qr/(?:$unclozeables)/: undef;
+	our @unclozeable = split '\|', $unclozeables;
+	our $first = shift @unclozeable;
+	our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
@@ -74,7 +76,7 @@ sub cloze
 			my ($index, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: pass | firstletter | middleletter | lastletter | blankline | punctuation
+		token: unclozeable | singularletter | firstletter | middleletter | lastletter | blankline | punctuation 
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1; $index = 0; @cword = ();
 				$Dic::Cloze::Text::word_score++;
@@ -102,6 +104,11 @@ sub cloze
 				$Dic::Cloze::Text::clozeline .= "~\\\\\\\\";
 			}
 		end: m/^\Z/
+		singularletter: <reject: $inWord> m/(\w)(?=$punctuation)/m
+			{
+				$Dic::Cloze::Text::word_score++;
+				$Dic::Cloze::Text::clozeline .= $item[2];
+			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
 				$Dic::Cloze::Text::clozeline .= $item[2];
@@ -110,20 +117,16 @@ sub cloze
 	]; 
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable|\w)(?=$punctuation)/m
+		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
 				$Dic::Cloze::Text::word_score++;
 				$Dic::Cloze::Text::clozeline .= $item[2];
+				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
 			}
 		];
 	}
 	else {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/(\w)(?=$punctuation)/m
-			{
-				$Dic::Cloze::Text::word_score++;
-				$Dic::Cloze::Text::clozeline .= $item[2];
-			}
 		];
 	}
 
