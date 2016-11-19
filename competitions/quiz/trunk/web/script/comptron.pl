@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2016 Mar 31, 06:05:17 PM
+# Last Edit: 2016 Jun 27, 08:31:41 PM
 # $Id$
 
 =head1 NAME
@@ -115,13 +115,14 @@ for my $pair ( @pairs ) {
 	    $response->{ free }->{ $table }->{$topic}->{$form} = $free;
 	    # $response->{ set }->{ $table }->{$topic}->{$form} = $set;
 	}
-	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
+	# Bless($response->{ free}->{ $table }->{$topic})->keys([qw/1 2 3 4 5 6 7 8 9 10/ ]);
 	# Bless($response->{ set}->{ $table }->{$topic})->keys([qw/influences coventgreen/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/fast-track tips/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/dickson abreu smallwood jackson/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/dickson abreu smallwood jackson/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/biomom biodad emersonj/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/goetz allen ward clay/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/alien education crime/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/aliens space_travel naive_alien_questions/ ]);
+	# Bless($response->{ free}->{ $table })->keys([qw/mercer tipton raveling jones jackson smith/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/experience website seller/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/million minutes life/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/treatment chores expectations/ ]);
@@ -131,7 +132,7 @@ for my $pair ( @pairs ) {
 	# Bless($response->{ free}->{ $table })->keys([qw/interracial self/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/partner society/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/lerman seixas spano diaz/ ]);
-	# Bless($response->{ free}->{ $table })->keys([qw/taiwan ideology happyperson wellbeing/ ]);
+	Bless($response->{ free}->{ $table })->keys([qw/tal perma/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/theory-x_y me_mypartner drbean/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/students-teachers women-men experience/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/trinka bruno kroenke/ ]);
