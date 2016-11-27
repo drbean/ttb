@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2016 Nov 19, 05:37:06 PM
+# Last Edit: 2016 Nov 27, 08:39:32 PM
 # $Id$
 
 =head1 NAME
@@ -58,7 +58,7 @@ use CompComp::SwissSchema;
 my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( $connect_info );
 
-my $season = '042';
+my $season = '051';
 
 my $leagues = CompComp->config->{leagues};
 $leagues = "/home/drbean/$season" unless $leagues;
