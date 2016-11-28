@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2016 Sep 10, 07:47:37 PM
+# Last Edit: 2016 Nov 28, 10:14:32 AM
 # $Id$
 
 =head1 NAME
@@ -52,12 +52,14 @@ A gradesheet, with grades curved from low, through median to high if exercise (-
 my $hw = $g->homeworkPercent;
 my %hw = map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
 my $classwork = $approach->new( league => $l )->totalPercent;
-my %classwork = map { $_ => $g->sprintround( $classwork->{$_} ) } keys %$classwork;
+my %classwork =  map {$_ => ($c->grades4session(1)->{$m{$_}->{name}} + $c->grades4session(2)->{$m{$_}->{name}} ) / 2 } keys %m;
 
 my $ex = $g->examPercent;
 my %ex = map { $_ => $g->sprintround( $ex->{$_} ) } keys %$ex;
 
 my $grade = $g->grades;;
+my %grade = map { $_ => ( $hw->{$_} * 40 + $classwork{$_} * 20 + $ex->{$_} * 40 ) / 100 } keys %m;
+$grade = \%grade;
 my @grade = values %$grade;
 my $top = max @grade;
 my $bottom = min @grade;
