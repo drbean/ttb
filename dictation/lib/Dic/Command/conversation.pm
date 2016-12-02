@@ -1,17 +1,18 @@
 package Dic::Command::conversation;
 
-# Last Edit: 2016 Jul 05, 12:47:39 PM
+# Last Edit: 2016 Dec 02, 12:58:20 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
 use Dic -command;
-sub usage_desc { "dic ctest -t TOPIC -s STORY -f FORM" }
+sub usage_desc { "dic conversation -c CTEST -t TOPIC -s STORY -f FORM -p PAPER" }
 
 sub opt_spec  {
 	return (
-		["t=s", "topic"]
+		["c=s", "cloze_style"]
+		, ["t=s", "topic"]
 		, ["s=s", "story"]
 		, ["f=i", "form"]
 	);
@@ -35,8 +36,9 @@ our $RD_HINT = 1;
 sub execute {
 	my ($self, $opt, $args) = @_;
 
+	my ($cloze_style, $topic, $story, $form, $size) = @$opt{qw/c t s f p/};
 	my ($text_list, $question) = LoadFile
-		"/home/drbean/class/topics/" . $opt->{t} . "/dic.yaml";
+		"/home/drbean/curriculum/topics/" . $opt->{t} . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
@@ -70,7 +72,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/conversation.tmpl";
+	my $tmpl = io "/home/drbean/ttb/dictation/tmpl/conversation.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;
@@ -87,7 +89,7 @@ sub execute {
 	my $lines = $text[0][4];
 	my @lines = split /\n/, $lines;
 	my $unclozeables = $text[0][5];
-	my $text = cloze($unclozeables, @lines);
+	my $text = cloze($cloze_style, $unclozeables, @lines);
 	my $textA = $text->{A};
 	my $textB = $text->{B};
 	for my $j ( 0) {
@@ -123,7 +125,7 @@ sub execute {
 
 	my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 					, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-	open TEX, ">/home/drbean/class/topics/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
+	open TEX, ">/home/drbean/curriculum/topics/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
 	print TEX $template->fill_in( HASH => $quiz );
 
 }
