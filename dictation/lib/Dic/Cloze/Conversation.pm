@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Jul 19, 11:24:10 AM
+# Last Edit: 2016 Dec 02, 12:40:23 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -20,11 +20,44 @@ our @EXPORT_OK;
 
 use Parse::RecDescent;
 
+our %onlastletter;
+$onlastletter{ctest} = q [
+	$Dic::Cloze::Conversation::clozeline .= join '', @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 );
+	];
+$onlastletter{firstlast} = q [
+	if ( $#cword >= 2 ) {
+		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1];
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	}
+	if ( $#cword == 1 ) {
+		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}";
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	}
+	];
+$onlastletter{ctestpluslast} = q [
+	if ( $#cword > 2 ) {
+		$Dic::Cloze::Conversation::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}"
+			, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
+		, $cword[-1];
+	}
+	else {
+		$Dic::Cloze::Conversation::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+	}
+	];
+$onlastletter{total} = q [
+	$Dic::Cloze::Conversation::clozeline .= join '', ("\\\\1{$Dic::Cloze::Conversation::word_score}"
+			, map {"\\\\1{}"} 1 .. $#cword);
+	];
+
 sub cloze
 {
+	$::RD_HINT=1;
+	my $cloze_style = shift;
 	my $unclozeables = shift;
 	chomp $unclozeables;
-	our $unclozeable = $unclozeables? qr/(?:$unclozeables)/: undef;
+	our @unclozeable = split '\|', $unclozeables;
+	our $first = shift @unclozeable;
+	our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
@@ -46,14 +79,14 @@ sub cloze
 	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^G: /, qr/^B: /);
+			my ($a, $b) = (qr/^B: /, qr/^G: /);
 			my $letter = qr/[A-Za-z0-9']/;
 			my $skip = '';
 			my @cword;
 			my ($index, $inWord) = (0) x 2;
 		}
 		string: token(s) end | <error>
-		token: a | b | pass | firstletter | middleletter | lastletter | punctuation
+		token: a | b | unclozeable | singularletter | firstletter | middleletter | lastletter | blankline | punctuation 
 		a: m/$a/ {
 			($reader, $writer) = ('A','B');
 			$Dic::Cloze::Conversation::clozeline{$writer} .= $item[1];
@@ -66,14 +99,12 @@ sub cloze
 			{ $inWord=1; $index = 0; @cword = ();
 				$Dic::Cloze::Conversation::word_score++;
 				$Dic::Cloze::Conversation::letter_score++;
-				# $Cloze::clozeline{$writer} .= "\\\\1{$Cloze::word_score}";
 				push @cword, $item[2];
 			}
 		middleletter: <reject: not $inWord> m/$letter(?!$punctuation)/
 			{
 				$index++;
 				$Dic::Cloze::Conversation::letter_score++;
-				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
 			}
 		lastletter: <reject: not $inWord> m/$letter(?=$punctuation)/
@@ -81,17 +112,21 @@ sub cloze
 				$inWord=0;
 				$index++;
 				$Dic::Cloze::Conversation::letter_score++;
-				# $Cloze::clozeline{$writer} .= "\\\\1{}";
 				push @cword, $item[2];
-				if ( $#cword > 2 ) {
-					$Dic::Cloze::Conversation::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}"
-						, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
-						, $cword[-1];
-				}
-				else {
-					$Dic::Cloze::Conversation::clozeline{$writer} .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
-				}
-				$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+		];
+		$letterGrammar .= $onlastletter{$cloze_style};
+		$letterGrammar .= q [
+		}
+		blankline: <reject: $inWord> m/^$/
+			{
+				$Dic::Cloze::Conversation::clozeline .= "~\\\\\\\\";
+			}
+		end: m/^\Z/
+		singularletter: <reject: $inWord> m/(\w)(?=$punctuation)/m
+			{
+				$Dic::Cloze::Conversation::word_score++;
+				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
+				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
@@ -102,7 +137,7 @@ sub cloze
 	]; 
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/($Dic::Cloze::Conversation::unclozeable|\w)(?=$punctuation)/m
+		unclozeable: <reject: $inWord> m/($Dic::Cloze::Conversation::unclozeable)(?=$punctuation)/m
 			{
 				$Dic::Cloze::Conversation::word_score++;
 				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
@@ -112,12 +147,6 @@ sub cloze
 	}
 	else {
 		$letterGrammar .= q[
-		pass: <reject: $inWord> m/(\w)(?=$punctuation)/m
-			{
-				$Dic::Cloze::Conversation::word_score++;
-				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
-				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
-			}
 		];
 	}
 
