@@ -1,6 +1,6 @@
 package Dic::Command::conversation;
 
-# Last Edit: 2016 Dec 07, 01:33:25 PM
+# Last Edit: 2016 Dec 09, 01:08:57 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -15,6 +15,7 @@ sub opt_spec  {
 		, ["t=s", "topic"]
 		, ["s=s", "story"]
 		, ["f=i", "form"]
+		, ["p=s", "paper"]
 	);
 }
 
