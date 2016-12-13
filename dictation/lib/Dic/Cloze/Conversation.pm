@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Dec 02, 12:40:23 PM
+# Last Edit: 2016 Dec 13, 01:15:14 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -142,6 +142,7 @@ sub cloze
 				$Dic::Cloze::Conversation::word_score++;
 				$Dic::Cloze::Conversation::clozeline{$writer} .= $item[2];
 				$Dic::Cloze::Conversation::clozeline{$reader} .= $item[2];
+				$Dic::Cloze::Conversation::unclozeable = shift @Dic::Cloze::Conversation::unclozeable;
 			}
 		];
 	}
