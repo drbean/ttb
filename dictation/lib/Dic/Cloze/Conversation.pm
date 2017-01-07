@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Dec 21, 01:41:11 PM
+# Last Edit: 2017 Jan 07, 12:16:08 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -67,7 +67,7 @@ sub cloze
 
 	my @players = ( 'A' .. 'B' );
 
-	my $lineN = 0;
+	our $lineN = 1;
 
 	foreach my $line ( @lines )
 	{
@@ -79,7 +79,7 @@ sub cloze
 	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^M: /, qr/^W: /);
+			my ($a, $b) = (qr/^W: /, qr/^M: /);
 			my $letter = qr/[A-Za-z0-9']/;
 			my $skip = '';
 			my @cword;
@@ -89,12 +89,12 @@ sub cloze
 		token: a | b | unclozeable | singularletter | firstletter | middleletter | lastletter | blankline | punctuation 
 		a: m/$a/ {
 			($reader, $writer) = ('A','B');
-			$Dic::Cloze::Conversation::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Conversation::clozeline{$reader} .= $item[1]; }
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1]; }
 		b: m/$b/ {
 			($reader, $writer) = ('B','A');
-			$Dic::Cloze::Conversation::clozeline{$writer} .= $item[1];
-			$Dic::Cloze::Conversation::clozeline{$reader} .= $item[1]; }
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1]; }
 		firstletter: <reject: $inWord> m/[A-Za-z0-9]/ 
 			{ $inWord=1; $index = 0; @cword = ();
 				$Dic::Cloze::Conversation::word_score++;
