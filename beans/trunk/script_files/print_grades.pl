@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2016 Nov 28, 10:20:01 AM
+# Last Edit: 2017 Jan 19, 11:41:59 AM
 # $Id$
 
 =head1 NAME
@@ -52,19 +52,21 @@ A gradesheet, with grades curved from low, through median to high if exercise (-
 my $hw = $g->homeworkPercent;
 my %hw = map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
 my $classwork = $g->inspect( "$dirs/$dir/classwork/total.yaml");
-my %classwork =  %$classwork;
+my %classwork =  map { $_ => $g->sprintround( $classwork->{$_} ) } %$classwork;
 
 my $ex = $g->examPercent;
 my %ex = map { $_ => $g->sprintround( $ex->{$_} ) } keys %$ex;
 
-my $grade = $g->grades;;
-my %grade = map { $_ => ( $hw->{$_} * 40 + $classwork{$_} * 40 + $ex->{$_} * 20 ) / 100 } keys %m;
-$grade = \%grade;
+# my $grade = $g->grades;;
+my %rawgrade = map { $_ => ( $hw->{$_} * 40 + $classwork{$_} * 40 + $ex->{$_} * 20 ) / 100 } keys %m;
+my %grade = map { $_ => $g->sprintround( $rawgrade{$_} ) } %rawgrade;
+my $grade = \%grade;
 my @grade = values %$grade;
+my @nonzeros = grep {$_ != 0} @grade;
 my $top = max @grade;
-my $bottom = min @grade;
-my $middle = $g->median( \@grade );
-my $mean = $g->mean( \@grade );
+my $bottom = min @nonzeros;
+my $middle = $g->median( \@nonzeros );
+my $mean = $g->mean( \@nonzeros );
 
 if ( defined $curving and $curving and $curving eq "curve" ) {
     $grade = $g->curve( $low, $median, $high );
