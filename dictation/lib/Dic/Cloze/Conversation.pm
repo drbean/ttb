@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2017 Jan 07, 12:16:08 PM
+# Last Edit: 2017 Feb 07, 01:55:15 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -24,6 +24,10 @@ our %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Conversation::clozeline .= join '', @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 );
 	];
+$onlastletter{total} = q [
+	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	];
 $onlastletter{firstlast} = q [
 	if ( $#cword >= 2 ) {
 		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1];
@@ -43,10 +47,6 @@ $onlastletter{ctestpluslast} = q [
 	else {
 		$Dic::Cloze::Conversation::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
 	}
-	];
-$onlastletter{total} = q [
-	$Dic::Cloze::Conversation::clozeline .= join '', ("\\\\1{$Dic::Cloze::Conversation::word_score}"
-			, map {"\\\\1{}"} 1 .. $#cword);
 	];
 
 sub cloze
