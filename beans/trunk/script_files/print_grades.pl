@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2017 Jan 19, 11:41:59 AM
+# Last Edit: 2017 Jan 23, 12:45:57 PM
 # $Id$
 
 =head1 NAME
@@ -51,6 +51,8 @@ A gradesheet, with grades curved from low, through median to high if exercise (-
 
 my $hw = $g->homeworkPercent;
 my %hw = map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
+# my $hw = $g->inspect( "$dirs/$dir/homework/total.yaml");
+# my %hw =  map { $_ => $g->sprintround( $hw->{$_} ) } %$hw;
 my $classwork = $g->inspect( "$dirs/$dir/classwork/total.yaml");
 my %classwork =  map { $_ => $g->sprintround( $classwork->{$_} ) } %$classwork;
 
@@ -58,7 +60,11 @@ my $ex = $g->examPercent;
 my %ex = map { $_ => $g->sprintround( $ex->{$_} ) } keys %$ex;
 
 # my $grade = $g->grades;;
-my %rawgrade = map { $_ => ( $hw->{$_} * 40 + $classwork{$_} * 40 + $ex->{$_} * 20 ) / 100 } keys %m;
+my $weights = $g->weights;
+my %rawgrade = map { $_ => (
+    $hw->{$_} * $weights->{homework} +
+    $classwork{$_} * $weights->{classwork} +
+    $ex->{$_} * $weights->{exams} ) / 100 } keys %m;
 my %grade = map { $_ => $g->sprintround( $rawgrade{$_} ) } %rawgrade;
 my $grade = \%grade;
 my @grade = values %$grade;
@@ -71,13 +77,16 @@ my $mean = $g->mean( \@nonzeros );
 if ( defined $curving and $curving and $curving eq "curve" ) {
     $grade = $g->curve( $low, $median, $high );
 }
+my $fails = grep {$grade->{$_} != 0 and $grade->{$_} < 60} %$grade;
 
 my $adjusted_mean = $g->mean( [values %$grade] );
-my $weights = $g->weights;
 my @grades = $l->id . " " . $l->name . " " . $l->field . " Grades\n" .
 "Classwork: " . $weights->{classwork} . "\n" .
 "Homework: " . $weights->{homework} . "\n" .
 "Exams: " . $weights->{exams} . "\n";
+
+push @grades,
+"Failing: $fails / " . scalar @nonzeros . " = " . $g->sprintround(100 * $fails / @nonzeros) . "%\n";
 
 push @grades, 
 "Raw\n" .
@@ -97,7 +106,7 @@ push @grades,
 my @ids = sort keys %m;
 for my $id ( @ids ) {
 	push @grades,
-"$m{$id}->{Chinese}\t$id\t\t$classwork{$id}\t$hw{$id}\t$ex{$id}\t$grade->{$id}\n";
+"$m{$id}->{name}\t$id\t\t$classwork{$id}\t$hw{$id}\t$ex{$id}\t$grade->{$id}\n";
 }
 push @grades, "\n";
 my $out =  $l->yaml->{out};
