@@ -1,6 +1,6 @@
 package Dic::Command::conversation;
 
-# Last Edit: 2016 Dec 09, 01:08:57 PM
+# Last Edit: 2017 Mar 12, 03:41:47 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -93,7 +93,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/ttb/dictation/tmpl/conversation.tmpl";
+	my $tmpl = io "/home/drbean/ttb/dictation/tmpl/preamble.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;

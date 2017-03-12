@@ -1,6 +1,6 @@
 package Dic::Command::fourhand;
 
-# Last Edit: 2016 Sep 23, 11:16:01 AM
+# Last Edit: 2017 Mar 12, 03:42:43 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -72,7 +72,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/fourhand.tmpl";
+	my $tmpl = io "/home/drbean/class/ttb/dictation/tmpl/preamble.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;
