@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2017 Feb 07, 01:55:15 PM
+# Last Edit: 2017 Mar 12, 03:48:08 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -22,7 +22,8 @@ use Parse::RecDescent;
 
 our %onlastletter;
 $onlastletter{ctest} = q [
-	$Dic::Cloze::Conversation::clozeline .= join '', @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 );
+	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 );
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
 	];
 $onlastletter{total} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
