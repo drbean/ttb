@@ -1,12 +1,13 @@
 <TMPL>$autogen</TMPL>
 \documentclass[a4paper]{article}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
+\usepackage{xltxtra}
+\setmonofont{Inconsolata}[Scale=MatchLowercase]
 \usepackage{xeCJK}
 \setCJKmainfont{WenQuanYi Zen Hei}
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute]{textpos}
 \TPMargin{0.2cm}
-\usepackage{xltxtra}
 \usepackage{pifont}
 \usepackage{amsfonts}
 \usepackage{graphicx}
@@ -41,4 +42,5 @@
 }
 
 \begin{document}
+\fontspec{Inconsolata}
 
