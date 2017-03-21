@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2016 Nov 14, 02:38:19 PM
+# Last Edit: 2017 Mar 21, 12:11:31 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -22,24 +22,25 @@ use Parse::RecDescent;
 
 our %onlastletter;
 $onlastletter{ctest} = q [
-	$Dic::Cloze::Text::clozeline .= join '', @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 );
+	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
 	];
 $onlastletter{firstlast} = q [
 	if ( $#cword >= 2 ) {
-		$Dic::Cloze::Text::clozeline .= join '', @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1];
+		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1], " \\\\rmfamily\\\\large ";
 	}
 	if ( $#cword == 1 ) {
-		$Dic::Cloze::Text::clozeline .= join '', @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}";
+		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}", " \\\\rmfamily\\\\large ";
 	}
 	];
 $onlastletter{ctestpluslast} = q [
 	if ( $#cword > 2 ) {
-		$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
+		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
-		, $cword[-1];
+		, $cword[-1], " \\\\rmfamily\\\\large ";
 	}
 	else {
-		$Dic::Cloze::Text::clozeline .= join '', (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}" , map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1);
+		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
+		, map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1), " \\\\rmfamily\\\\large ";
 	}
 	];
 $onlastletter{total} = q [
