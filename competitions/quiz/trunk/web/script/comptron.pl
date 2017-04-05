@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 西元2010年02月23日 22時33分13秒
-# Last Edit: 2016 Nov 27, 08:39:32 PM
+# Last Edit: 2017 Apr 05, 11:02:59 AM
 # $Id$
 
 =head1 NAME
@@ -51,17 +51,14 @@ use Grades;
 use Games::Tournament::Contestant::Swiss;
 # use Games::Tournament::Swiss;
 
-use CompComp;
 use CompComp::Model::SwissDB;
 use CompComp::SwissSchema;
 
 my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
 my $schema = CompComp::SwissSchema->connect( $connect_info );
 
-my $season = '051';
-
-my $leagues = CompComp->config->{leagues};
-$leagues = "/home/drbean/$season" unless $leagues;
+my $season = $ENV{SEMESTER};
+my $leagues = "/home/drbean/$season";
 
 my $scantron = Grades::Script->new_with_options;
 my $id = $scantron->league || basename( getcwd );
@@ -132,7 +129,7 @@ for my $pair ( @pairs ) {
 	# Bless($response->{ free}->{ $table })->keys([qw/interracial self/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/partner society/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/lerman seixas spano diaz/ ]);
-	Bless($response->{ free}->{ $table })->keys([qw/bezos sivers novogratz/ ]);
+	#Bless($response->{ free}->{ $table })->keys([qw/bezos sivers novogratz/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/tal perma/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/theory-x_y me_mypartner drbean/ ]);
 	# Bless($response->{ free}->{ $table })->keys([qw/students-teachers women-men experience/ ]);
