@@ -7,7 +7,7 @@ use base 'Catalyst::Model::DBIC::Schema';
 # use Bett;
 
 # my $name = CompComp->config->{dic_database};
-my $name = "dic051";
+my $name = "dic$ENV{SEMESTER}";
 
 __PACKAGE__->config(
     schema_class => 'CompComp::dicSchema',
