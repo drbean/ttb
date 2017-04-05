@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2014 Oct 22, 02:59:08 PM
+# Last Edit: 2017 Apr 05, 11:52:42 AM
 # $Id$
 
 =head1 NAME
@@ -46,11 +46,11 @@ If exercise (-x) is "comp", calculate points and write to g2.yaml.
 =cut
 
 my $leagues = $league->leagues;
-my $g1 = LoadFile "$leagues/$id/exam/$exam/g1.yaml" or die "g1.yaml?";
 if ( defined $exercise and $exercise and $exercise eq "comp" ) {
     my $g2 = $co->points($exam);
     DumpFile "$leagues/$id/exam/$exam/g2.yaml", $g2 or die "g2.yaml?";
 }
+my $g1 = LoadFile "$leagues/$id/exam/$exam/g1.yaml" or die "g1.yaml?";
 my $g2_again = $league->inspect("$leagues/$id/exam/$exam/g2.yaml");
 my %g = map {
 		die "Player $_ missing from g1.yaml" if not defined $g1->{$_};
