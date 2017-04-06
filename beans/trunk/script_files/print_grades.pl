@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2017 Jan 23, 12:45:57 PM
+# Last Edit: 2017 Apr 06, 01:30:14 PM
 # $Id$
 
 =head1 NAME
@@ -54,7 +54,7 @@ my %hw = map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
 # my $hw = $g->inspect( "$dirs/$dir/homework/total.yaml");
 # my %hw =  map { $_ => $g->sprintround( $hw->{$_} ) } %$hw;
 my $classwork = $g->inspect( "$dirs/$dir/classwork/total.yaml");
-my %classwork =  map { $_ => $g->sprintround( $classwork->{$_} ) } %$classwork;
+my %classwork =  map { $_ => $g->sprintround( $classwork->{$_} ) } keys %$classwork;
 
 my $ex = $g->examPercent;
 my %ex = map { $_ => $g->sprintround( $ex->{$_} ) } keys %$ex;
