@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2017 May 04, 01:36:49 PM
+# Last Edit: 2017 May 18, 02:14:09 PM
 # $Id$
 
 =head1 NAME
@@ -56,6 +56,7 @@ my $file3 = "$leagues/$id/exam/$exam/g3.yaml";
 my %g;
 if ( -e $file3 ) {
     my $g3 = $league->inspect( $file3 );
+    warn "averaging with $file3";
     %g = map {
 		die "Player $_ missing from g1.yaml" if not defined $g1->{$_};
 		die "Player $_ missing from g2.yaml" if not defined $g2_again->{$_};
@@ -64,6 +65,7 @@ if ( -e $file3 ) {
 	    } keys %m;
 }
 else {
+    warn "averaging withOUT $file3";
     %g = map {
 		die "Player $_ missing from g1.yaml" if not defined $g1->{$_};
 		die "Player $_ missing from g2.yaml" if not defined $g2_again->{$_};
