@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Nov 08, 07:32:32 AM
+# Last Edit: 2017 May 18, 03:01:46 PM
 # $Id$
 
 package Script;
@@ -120,20 +120,20 @@ sub run {
 			$order++;
 		}
 	}
-	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "") or warn "login: greg?"; 
-	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
 	my $teamtext = $t->fill_in( HASH => $teamchart );
 
 	io("$sessionpath/$session/teamseat.$filetype")->print( encode('UTF-8', $teamtext) );
-	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}f.html" )
-			or die "put teamseat.html?" if $filetype eq "html"; 
 	my $experttext = encode(
 		'UTF-8', $t->fill_in( HASH => $expertchart ) );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
+	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
+	$web->login("greg", "") or warn "login: greg?"; 
+	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
+	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}_$n.html" )
+			or die "put teamseat_$n.html?" if $filetype eq "html"; 
 	$web->put( "$sessionpath/$session/expertseat.$filetype",
 			"${leagueId}fex.html" ) or die "put expertseat.html?" if $filetype eq "html"; 
 
