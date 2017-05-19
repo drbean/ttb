@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2017 Mar 21, 12:43:25 PM
+# Last Edit: 2017 May 19, 09:56:25 AM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -28,6 +28,11 @@ $onlastletter{ctest} = q [
 $onlastletter{total} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
 	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	];
+$onlastletter{first} = q [
+	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword-1 ), " \\\\rmfamily\\\\large ";
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+
 	];
 $onlastletter{firstlast} = q [
 	if ( $#cword >= 2 ) {
@@ -83,7 +88,7 @@ sub cloze
 	my $writer = 'B';
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
-			my ($a, $b) = (qr/^W: /, qr/^M: /);
+			my ($a, $b) = (qr/^[WG]: /, qr/^[MB]: /);
 			my $letter = qr/[A-Za-z0-9']/;
 			my $skip = '';
 			my @cword;
