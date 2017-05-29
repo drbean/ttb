@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 May 29, 01:35:00 PM
+# Last Edit: 2017 May 29, 01:39:04 PM
 # $Id$
 
 =head1 NAME
@@ -125,8 +125,8 @@ for my $m ( 0 .. $n ) {
     }
 }
 
-$g[$n+2]->{evaluators} = $evaluators;
-$g[$n+2]->{evaluees} = $evaluees;
+$g[$n+1]->{evaluators} = $evaluators;
+$g[$n+1]->{evaluees} = $evaluees;
 
 
 =head1 AUTHOR
