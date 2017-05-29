@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 May 29, 12:43:28 PM
+# Last Edit: 2017 May 29, 01:35:00 PM
 # $Id$
 
 =head1 NAME
@@ -87,11 +87,18 @@ evaluees:
 
 =cut
 
-my @exercises = split /,/, $exercise;
-
-my @g;
-my $n = $#exercises;
-$g[$_] = LoadFile "$exam/g" . ($_+1) . ".yaml" for (0 ..$n+1 );
+my ( @exercises, $n, @g );
+if ( $exercise ) {
+    @exercises = split /,/, $exercise;
+    $n = $#exercises;
+    $g[$_] = LoadFile "$exam/g" . ($_+1) . ".yaml" for (0 ..$n+1 );
+}
+else {
+    my @files = glob "$exam/g*.yaml";
+    push @g, LoadFile $_ for @files;
+    push @exercises, $g[$_]->{exercise} for (0 .. $#g-1);
+    $n = $#exercises;
+}
 
 my ( $evaluators, $evaluees);
 
