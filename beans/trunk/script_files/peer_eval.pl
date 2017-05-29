@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 May 28, 09:55:24 PM
+# Last Edit: 2017 May 29, 12:43:28 PM
 # $Id$
 
 =head1 NAME
@@ -91,23 +91,23 @@ my @exercises = split /,/, $exercise;
 
 my @g;
 my $n = $#exercises;
-$g[$_] = LoadFile "$exam/g$_.yaml" for (1 ..$n+2 );
+$g[$_] = LoadFile "$exam/g" . ($_+1) . ".yaml" for (0 ..$n+1 );
 
 my ( $evaluators, $evaluees);
 
 for my $m ( 0 .. $n ) {
     my $reference_evaluation = $g[$m];
     my $exercise = $exercises[$m];
-    my $peer_evaluation = $g[$n+2]->{$exercise}->{evaluations};
+    my $peer_evaluation = $g[$n+1]->{$exercise}->{evaluations};
 
     for my $evaluator ( keys %members ) {
 	if ( exists $peer_evaluation->{$evaluator} ) {
 	    my $evaluation = $peer_evaluation->{$evaluator};
 	    for my $evaluee ( keys %$evaluation ) {
-		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $g[$m+1]->{grade}->{$evaluee};
+		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $g[$m]->{grade}->{$evaluee};
 		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{peer} =
 		    $peer_evaluation->{$evaluator}->{$evaluee};
-		$evaluees->{$evaluee}->{$exercise}->{drbean} = $g[$m+1]->{grade}->{$evaluee};
+		$evaluees->{$evaluee}->{$exercise}->{drbean} = $g[$m]->{grade}->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = 
 		    $peer_evaluation->{$evaluator}->{$evaluee};
 	    }
