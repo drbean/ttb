@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 May 29, 01:39:04 PM
+# Last Edit: 2017 May 29, 01:50:23 PM
 # $Id$
 
 =head1 NAME
@@ -37,6 +37,7 @@ my $exercise = $script->exercise;
 
 my $league = League->new( id => $id );
 my %members = map { $_->{id} => $_ } @{ $league->members };
+my $examMax = $league->yaml->{examMax};
 
 =head1 DESCRIPTION
 
