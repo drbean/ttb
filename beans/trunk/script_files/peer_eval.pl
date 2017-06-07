@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 07, 12:53:46 PM
+# Last Edit: 2017 Jun 07, 01:01:09 PM
 # $Id$
 
 =head1 NAME
@@ -21,7 +21,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-peer_eval.pl -l GL00036 -r 3 -x house,fishing -w 40,40,20
+peer_eval.pl -l GL00036 -r 3 -x house,fishing
 
 =cut
 
@@ -29,13 +29,11 @@ use Cwd;
 use File::Basename;
 use YAML qw/LoadFile DumpFile Dump/;
 use Grades;
-use List::MoreUtils qw/any/;
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
 my $exam = $script->round;
 my $exercise = $script->exercise;
-my $weight = $script->weights;
 
 my $league = League->new( id => $id );
 my %members = map { $_->{id} => $_ } @{ $league->members };
@@ -103,10 +101,6 @@ else {
     $n = $#exercises;
 }
 
-my %weight;
-@weight{0..$n+1}  = split /,/, $weight;
-die "no weight for all exercises" if any { not defined } @weight{0..$n};
-
 my ( $evaluators, $evaluees);
 
 for my $m ( 0 .. $n ) {
@@ -135,7 +129,6 @@ for my $m ( 0 .. $n ) {
 $g[$n+1]->{evaluators} = $evaluators;
 $g[$n+1]->{evaluees} = $evaluees;
 
-print Dump $g[$n+1];
 
 =head1 AUTHOR
 
