@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2017 Jun 08, 12:14:38 PM
+# Last Edit: 2017 Jun 08, 01:15:27 PM
 # $Id$
 
 =head1 NAME
@@ -29,7 +29,7 @@ my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
 my $exam = $script->round;
 my $exercise = $script->exercise;
-my $weight = $script->weights;
+my $weights = $script->weights;
 
 my $league = League->new( id => $id );
 my $grades = Grades->new({ league => $league });
@@ -68,7 +68,7 @@ if ( -e $file3 ) {
 		die "Player $_ missing from g3.yaml" if not defined $g3->{$_};
 		$_ => ( $g1->{$_} * $weight[0]/100 +
 		    $g2_again->{$_} * $weight[1]/100 +
-		    $g3->{$_} * $weight[2]/100 ) / 3
+		    $g3->{$_} * $weight[2]/100 )
 	    } keys %m;
 }
 else {
