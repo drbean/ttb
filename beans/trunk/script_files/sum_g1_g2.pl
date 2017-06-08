@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2017 May 18, 02:14:09 PM
+# Last Edit: 2017 Jun 08, 12:14:38 PM
 # $Id$
 
 =head1 NAME
@@ -15,7 +15,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-sum_g1_g2.pl -r 3 -x comp > exam/3/g.yaml
+sum_g1_g2.pl -r 3 -x comp -w 40,40,20 > exam/3/g.yaml
 
 =cut
 
@@ -29,6 +29,7 @@ my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
 my $exam = $script->round;
 my $exercise = $script->exercise;
+my $weight = $script->weights;
 
 my $league = League->new( id => $id );
 my $grades = Grades->new({ league => $league });
@@ -42,6 +43,8 @@ Jigsaw scores are already in g1.yaml. We could use inspect, instead of LoadFile.
 Averages jigsaw and auxiliary scores. Be careful with absent players
 
 If exercise (-x) is "comp", calculate points and write to g2.yaml.
+
+If weights (-w), weight the corresponding g$n.yaml scores.
 
 =cut
 
@@ -57,11 +60,15 @@ my %g;
 if ( -e $file3 ) {
     my $g3 = $league->inspect( $file3 );
     warn "averaging with $file3";
+    die "weights?" unless defined $weights and $weights;
+    my @weight = split /,/, $weights; 
     %g = map {
 		die "Player $_ missing from g1.yaml" if not defined $g1->{$_};
 		die "Player $_ missing from g2.yaml" if not defined $g2_again->{$_};
 		die "Player $_ missing from g3.yaml" if not defined $g3->{$_};
-		$_ => ( $g1->{$_} + $g2_again->{$_} + $g3->{$_} ) / 3
+		$_ => ( $g1->{$_} * $weight[0]/100 +
+		    $g2_again->{$_} * $weight[1]/100 +
+		    $g3->{$_} * $weight[2]/100 ) / 3
 	    } keys %m;
 }
 else {
