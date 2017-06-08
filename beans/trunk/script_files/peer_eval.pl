@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 08, 11:48:35 AM
+# Last Edit: 2017 Jun 08, 12:37:49 PM
 # $Id$
 
 =head1 NAME
@@ -21,7 +21,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-peer_eval.pl -l GL00036 -r 3 -x house,fishing -s 100 -o 70 -t 30
+peer_eval.pl -l GL00036 -r 3 -x house,fishing -s 100 -o 70 -t 30 > 3/g3.yaml
 
 =cut
 
@@ -155,7 +155,7 @@ for my $evaluator ( keys %members ) {
     $g[$n+1]->{fitness}->{$evaluator} = $fitness;
 }
 
-print Dump $g[$n+1];
+print Dump $g[$n+1], $g[$n+1]->{fitness};
 
 =head1 AUTHOR
 
