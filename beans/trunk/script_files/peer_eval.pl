@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 08, 10:08:19 AM
+# Last Edit: 2017 Jun 08, 11:48:35 AM
 # $Id$
 
 =head1 NAME
@@ -29,11 +29,15 @@ use Cwd;
 use File::Basename;
 use YAML qw/LoadFile DumpFile Dump/;
 use Grades;
+use List::Util qw/sum/;
 
 my $script = Grades::Script->new_with_options;
 my $id = $script->league || basename( getcwd );
 my $exam = $script->round;
 my $exercise = $script->exercise;
+my $same = $script->session;
+my $one = $script->one;
+my $two = $script->two;
 
 my $league = League->new( id => $id );
 my %members = map { $_->{id} => $_ } @{ $league->members };
@@ -101,7 +105,7 @@ else {
     $n = $#exercises;
 }
 
-my ( $evaluators, $evaluees, $fitness );
+my ( $evaluators, $evaluees );
 
 for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
@@ -109,19 +113,31 @@ for my $m ( 0 .. $n ) {
     my $peers = $g[$n+1]->{$exercise}->{evaluations};
 
     my $allocatedMax = $examMax / ( $n+1 );
-    my @evaluator_fitness;
     for my $evaluator ( keys %members ) {
 	if ( exists $peers->{$evaluator} ) {
 	    my $peer_evaluation = $peers->{$evaluator};
-	    for my $evaluee ( keys %$evaluation ) {
+	    my @evaluator_fit;
+	    for my $evaluee ( keys %$peer_evaluation ) {
+		my $evaluation_difference =  abs ( $teacher_evaluation->{$evaluee} - $peer_evaluation->{$evaluee} );
+		if ( $evaluation_difference == 0 ) {
+		    push @evaluator_fit, $same * $allocatedMax / 100;
+		}
+		elsif ( $evaluation_difference == 1 ) {
+		    push @evaluator_fit, $one * $allocatedMax / 100;
+		}
+		elsif ( $evaluation_difference == 2 ) {
+		    push @evaluator_fit, $two * $allocatedMax / 100;
+		}
+		else { push @evaluator_fit, 5; }
 		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{peer} = $peer_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
 	    }
+	    $evaluators->{$evaluator}->{$exercise}->{fit} = sum(@evaluator_fit)/@evaluator_fit;
 	}
 	else {
-	    $evaluators->{$evaluator}->{$exercise} = undef;
+	    $evaluators->{$evaluator}->{$exercise}->{fit} = 0;
 	}
     }
 }
@@ -129,6 +145,17 @@ for my $m ( 0 .. $n ) {
 $g[$n+1]->{evaluators} = $evaluators;
 $g[$n+1]->{evaluees} = $evaluees;
 
+for my $evaluator ( keys %members ) {
+    my @fitness;
+    for my $m ( 0 .. $n ) {
+	my $exercise = $exercises[$m];
+	push @fitness, $evaluators->{$evaluator}->{$exercise}->{fit};
+    }
+    my $fitness = sum @fitness;
+    $g[$n+1]->{fitness}->{$evaluator} = $fitness;
+}
+
+print Dump $g[$n+1];
 
 =head1 AUTHOR
 
