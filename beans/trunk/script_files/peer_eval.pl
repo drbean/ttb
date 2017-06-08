@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 07, 01:01:09 PM
+# Last Edit: 2017 Jun 08, 10:04:42 AM
 # $Id$
 
 =head1 NAME
@@ -104,20 +104,18 @@ else {
 my ( $evaluators, $evaluees);
 
 for my $m ( 0 .. $n ) {
-    my $reference_evaluation = $g[$m];
+    my $teacher_evaluation = $g[$m]->{grade};
     my $exercise = $exercises[$m];
-    my $peer_evaluation = $g[$n+1]->{$exercise}->{evaluations};
+    my $peers = $g[$n+1]->{$exercise}->{evaluations};
 
     for my $evaluator ( keys %members ) {
-	if ( exists $peer_evaluation->{$evaluator} ) {
-	    my $evaluation = $peer_evaluation->{$evaluator};
+	if ( exists $peers->{$evaluator} ) {
+	    my $peer_evaluation = $peers->{$evaluator};
 	    for my $evaluee ( keys %$evaluation ) {
-		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $g[$m]->{grade}->{$evaluee};
-		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{peer} =
-		    $peer_evaluation->{$evaluator}->{$evaluee};
-		$evaluees->{$evaluee}->{$exercise}->{drbean} = $g[$m]->{grade}->{$evaluee};
-		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = 
-		    $peer_evaluation->{$evaluator}->{$evaluee};
+		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $teacher_evaluation->{$evaluee};
+		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{peer} = $peer_evaluation->{$evaluee};
+		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
+		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
 	    }
 	}
 	else {
