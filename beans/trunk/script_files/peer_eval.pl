@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 08, 10:04:42 AM
+# Last Edit: 2017 Jun 08, 10:08:19 AM
 # $Id$
 
 =head1 NAME
@@ -21,7 +21,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-peer_eval.pl -l GL00036 -r 3 -x house,fishing
+peer_eval.pl -l GL00036 -r 3 -x house,fishing -s 100 -o 70 -t 30
 
 =cut
 
@@ -101,13 +101,15 @@ else {
     $n = $#exercises;
 }
 
-my ( $evaluators, $evaluees);
+my ( $evaluators, $evaluees, $fitness );
 
 for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
     my $exercise = $exercises[$m];
     my $peers = $g[$n+1]->{$exercise}->{evaluations};
 
+    my $allocatedMax = $examMax / ( $n+1 );
+    my @evaluator_fitness;
     for my $evaluator ( keys %members ) {
 	if ( exists $peers->{$evaluator} ) {
 	    my $peer_evaluation = $peers->{$evaluator};
