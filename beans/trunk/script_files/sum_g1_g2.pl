@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2017 Jun 08, 01:15:27 PM
+# Last Edit: 2017 Jun 27, 09:53:27 PM
 # $Id$
 
 =head1 NAME
@@ -21,7 +21,8 @@ sum_g1_g2.pl -r 3 -x comp -w 40,40,20 > exam/3/g.yaml
 
 use Cwd;
 use File::Basename;
-use List::MoreUtils qw/any/;
+use Scalar::Util qw/looks_like_number/;
+use List::MoreUtils qw/all any/;
 use YAML qw/LoadFile DumpFile Dump/;
 use Grades;
 
@@ -60,8 +61,9 @@ my %g;
 if ( -e $file3 ) {
     my $g3 = $league->inspect( $file3 );
     warn "averaging with $file3";
-    die "weights?" unless defined $weights and $weights;
+    $weights = "33.33,33.33,33.33" unless defined $weights and $weights;
     my @weight = split /,/, $weights; 
+    die "weights?" unless all { looks_like_number $_ } @weight;
     %g = map {
 		die "Player $_ missing from g1.yaml" if not defined $g1->{$_};
 		die "Player $_ missing from g2.yaml" if not defined $g2_again->{$_};
