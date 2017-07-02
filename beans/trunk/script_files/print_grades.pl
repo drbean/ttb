@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2017 Apr 06, 01:30:14 PM
+# Last Edit: 2017 Jul 02, 03:47:33 PM
 # $Id$
 
 =head1 NAME
@@ -19,7 +19,7 @@ use Cwd;
 
 =head1 SYNOPSIS
 
-print_grades.pl -x curve -o 60 -w 80 -t 100 > grades.txt
+print_grades.pl -x curve -o 60 -w 80 -t 100 -e Slacker,Out > grades.txt
 
 =cut
 
@@ -41,10 +41,11 @@ my $low = $script->one || 60;
 my $high = $script->two || 100;
 my $median = $script->weights || 80;
 my $curving = $script->exercise;
+my $excluded = $script->exam;
 
 =head1 DESCRIPTION
 
-A gradesheet, with grades curved from low, through median to high if exercise (-x) is "curve".
+A gradesheet, with grades curved from low, through median to high if exercise (-x) is "curve". Slacker and Out's grades are excluded from the curving.
 
 
 =cut
@@ -65,7 +66,7 @@ my %rawgrade = map { $_ => (
     $hw->{$_} * $weights->{homework} +
     $classwork{$_} * $weights->{classwork} +
     $ex->{$_} * $weights->{exams} ) / 100 } keys %m;
-my %grade = map { $_ => $g->sprintround( $rawgrade{$_} ) } %rawgrade;
+my %grade = map { $_ => $g->sprintround( $rawgrade{$_} ) } keys %rawgrade;
 my $grade = \%grade;
 my @grade = values %$grade;
 my @nonzeros = grep {$_ != 0} @grade;
@@ -75,9 +76,9 @@ my $middle = $g->median( \@nonzeros );
 my $mean = $g->mean( \@nonzeros );
 
 if ( defined $curving and $curving and $curving eq "curve" ) {
-    $grade = $g->curve( $low, $median, $high );
+    $grade = $g->curve_hashref( $grade, $low, $median, $high, $excluded );
 }
-my $fails = grep {$grade->{$_} != 0 and $grade->{$_} < 60} %$grade;
+my $fails = grep {$grade->{$_} != 0 and $grade->{$_} < 60} keys %$grade;
 
 my $adjusted_mean = $g->mean( [values %$grade] );
 my @grades = $l->id . " " . $l->name . " " . $l->field . " Grades\n" .
