@@ -1,6 +1,6 @@
 package Grades;
 
-#Last Edit: 2016 Sep 10, 07:53:34 PM
+#Last Edit: 2017 Jul 02, 03:37:28 PM
 #$Id$
 
 use MooseX::Declare;
@@ -1850,6 +1850,7 @@ class Grades with Homework with Exams with Jigsaw
     use Carp;
     use Grades::Types qw/Weights/;
     use List::Util qw/max min sum/;
+    use List::MoreUtils qw/any/;
 
 =head3 BUILDARGS
 
@@ -1957,6 +1958,44 @@ A hashref of student ids and final grades, curved from $low to $high, with the m
 		my %curved;
 		for my $member ( keys %$grade ) {
 		    if ( $grade->{$member} > $real_median ) {
+			$curved{$member} = $self->sprintround( $median +
+			    ($high - $median) * ($grade->{$member} - $real_median) /
+						($real_high - $real_median) );
+		    }
+		    elsif ( $grade->{$member} <= $real_median ) {
+			$curved{$member} = $self->sprintround( $low + 
+			    ($median - $low) * ($grade->{$member} - $real_low) /
+						($real_median - $real_low) );
+		    }
+		    else {
+			    die "No grade.member, no curved.grade.member?\n"; 
+		    }
+		}
+		\%curved;
+	}
+
+=head3 curve_hashref
+
+A hashref of student ids and final grades, curving given hashref $grade from $low to $high, with the median at $median.
+
+=cut
+
+	method curve_hashref (HashRef[Num] $grade, Str $low, Str $median, Str $high, Str $excluded) {
+		my $league = $self->league;
+		my $members = $league->members;
+		my @ids = map { $_->{id} } @$members;
+		my @grades = values %$grade;
+		my $real_low = min @grades;
+		my $real_median = $self->median( \@grades );
+		my $real_high = max @grades;
+		my @excludes = split ',', $excluded;
+		my %curved;
+		for my $member ( keys %$grade ) {
+		    if ( any { $_ eq $member } @excludes ) {
+			$curved{$member} = $grade->{$member};
+			warn "$member: $curved{$member} excluded from curving\n";
+		    }
+		    elsif ( $grade->{$member} > $real_median ) {
 			$curved{$member} = $self->sprintround( $median +
 			    ($high - $median) * ($grade->{$member} - $real_median) /
 						($real_high - $real_median) );
