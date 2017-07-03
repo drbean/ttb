@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2017 Jul 02, 03:47:33 PM
+# Last Edit: 2017 Jul 03, 03:09:14 PM
 # $Id$
 
 =head1 NAME
@@ -53,7 +53,7 @@ A gradesheet, with grades curved from low, through median to high if exercise (-
 my $hw = $g->homeworkPercent;
 my %hw = map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
 # my $hw = $g->inspect( "$dirs/$dir/homework/total.yaml");
-# my %hw =  map { $_ => $g->sprintround( $hw->{$_} ) } %$hw;
+# my %hw =  map { $_ => $g->sprintround( $hw->{$_} ) } keys %$hw;
 my $classwork = $g->inspect( "$dirs/$dir/classwork/total.yaml");
 my %classwork =  map { $_ => $g->sprintround( $classwork->{$_} ) } keys %$classwork;
 
@@ -102,7 +102,7 @@ push @grades,
 "  Median: " . $median . "\n" .
 "  Mean: " . $adjusted_mean . "\n" .
 "  High: " . $high . "\n" .
-"Name\tId\t   Classwork    Homework\tExams\tGrade\n" if $curving eq "curve";
+"Name\tId\t   Classwork    Homework\tExams\tGrade\n" if defined $curving and $curving and $curving eq "curve";
 
 my @ids = sort keys %m;
 for my $id ( @ids ) {
