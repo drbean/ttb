@@ -64,58 +64,37 @@ colors:
   8 : #99ff66
 
   9 : #66ff33
-  10: #66ff99
-  11: #66ffcc
-  12: #00ffcc
-
-  13: #00ffff
-  14: #33cccc
-  15: #00ccff
-  16: #0099ff
-
-  17: #66a3e0
-  18: #6685e0
-  19: #6666ff
-  20: #9999eb
-
-  21: #9999cc
-  22: #666669
-  23: #757575
-  24: #909090
-
-  25: #c5c5c5
-  26: #f0f0f0
-  1-1 : Black
-  1-2 : Blue
-  1-3 : Brown
-  1-4 : Gray
-  1-5 : Green
-  2-1 : BlackBlack
-  2-2 : BlueBlue
-  2-3 : BrownBrown
-  2-4 : GrayGray
-  3-1 : Black
-  3-2 : DarkBlue
-  3-3 : Brown
-  3-4 : GrayGray
-  3-5 : Green
-  4-1 : Orange
-  4-2 : Pink
-  4-3 : Purple
-  4-4 : Red
-  4-5 : White
-  5-1 : OrangeOrange
-  5-2 : PinkPink
-  5-3 : PurplePurple
-  5-4 : Red
-  5-5 : Yellow
-  6-1 : Yellow
-  6-2 : PurplePurple
-  6-3 : Red
-  6-4 : YellowYellow
-  7-1 : OrangeOrange
-  7-2 : PinkPink
-  7-3 : Purple
+  01 : Black
+  02 : Blue
+  03 : Brown
+  04 : Gray
+  05 : Green
+  11 : BlackBlack
+  12 : BlueBlue
+  13 : BrownBrown
+  14 : GrayGray
+  21 : Black
+  22 : DarkBlue
+  23 : Brown
+  24 : GrayGray
+  25 : Green
+  31 : Orange
+  32 : Pink
+  33 : Purple
+  34 : Red
+  35 : White
+  41 : OrangeOrange
+  42 : PinkPink
+  43 : PurplePurple
+  44 : Red
+  45 : Yellow
+  51 : Yellow
+  52 : PurplePurple
+  53 : Red
+  54 : YellowYellow
+  61 : OrangeOrange
+  62 : PinkPink
+  63 : Purple
   13-1 : Orange
   13-2 : Orange
   14-1 : Yellow
