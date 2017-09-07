@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 10/15/2011 07:52:09 PM
-# Last Edit: 2016 Sep 10, 12:51:48 PM
+# Last Edit: 2017 Sep 07, 08:26:02 PM
 # $Id$
 
 =head1 NAME
@@ -68,8 +68,7 @@ my $gs;
 $gs = try { LoadFile "classwork/$lastsession/groups.yaml" } catch
     { $gs = {} };
 my @keys = keys %$gs;
-my @colors = qw/1-1 1-2 2-1 2-2 3-1 3-2 4-1 4-2 1-3 1-4 2-3 2-4 3-3 3-4
-	4-3 4-4 1-5 1-6 2-5 2-6 3-5 3-6 4-5 4-6 1-7 1-8 2-7 2-8/;
+my @colors = (01 .. 77);
 my %g;
 my @graded = sort { $grades->{$a} <=> $grades->{$b} }keys %m;
 my @t = map  $m{$_}->{name}, @graded;
