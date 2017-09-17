@@ -2,17 +2,14 @@
 
 use strict;
 use warnings;
-use IO::All;
-use YAML::XS qw/LoadFile DumpFile Dump/;
-use Cwd;
-
-$_REPL->load_plugin('DumpHistory');
 
 my $semester=$ENV{SEMESTER};
 # my $semester='061';
-my $school='must';
+my $school='nuu';
 my $league='251';
 my $course_id = 18;
+
+chdir "/var/www/cgi-bin/moodle";
 
 use Grades;
 my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
