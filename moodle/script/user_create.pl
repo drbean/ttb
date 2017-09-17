@@ -9,8 +9,8 @@ use Cwd;
 $_REPL->load_plugin('DumpHistory');
 
 my $semester="$ENV{SEMESTER}";
-my $school='must';
-my $league='251';
+my $school='nuu';
+my $league='BMA0034';
 
 use Grades;
 use Grades::Groupwork;
@@ -28,6 +28,8 @@ my %m = map { $_->{id} => $_ } @{ $l->members };
 #);
 my $approach = $l->approach;
 
+chdir '/var/www/cgi-bin/moodle';
+
 my $cohort_name = $league;
 my $header = join "\t", ( qw/username lastname firstname email password cohort1/ );
 my @cohort = ( $header );
@@ -38,7 +40,7 @@ for my $id ( sort keys %m ) {
 	my $firstname =$m{$id}->{name};
 	my $email = $m{$id}->{email};
 	my $password = $m{$id}->{password};
-	my $city = "Hsinchu";
+	my $city = "Miaoli";
 	system("Moosh user-create --password $password --email $email --city $city --country TW --firstname $firstname --lastname $id $username");
 }
 
