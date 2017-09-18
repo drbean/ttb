@@ -6,11 +6,9 @@ use IO::All;
 use YAML::XS qw/LoadFile DumpFile Dump/;
 use Cwd;
 
-$_REPL->load_plugin('DumpHistory');
-
 my $semester="$ENV{SEMESTER}";
 my $school='nuu';
-my $league='BMA0034';
+my $league='FLA0003';
 
 use Grades;
 use Grades::Groupwork;
