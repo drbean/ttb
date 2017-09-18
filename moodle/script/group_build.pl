@@ -6,8 +6,8 @@ use warnings;
 my $semester=$ENV{SEMESTER};
 # my $semester='061';
 my $school='nuu';
-my $league='251';
-my $course_id = 18;
+my $league='MIA0016';
+my $course_id = 22;
 
 chdir "/var/www/cgi-bin/moodle";
 
