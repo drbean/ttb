@@ -53,53 +53,55 @@ pairexperts:
   58: [48, 38]
   59: [56, 49]
 colors:
-  01: #ff0000
-  02: #ff5050
-  03: #ff6600
-  04: #ff9933
-
   5 : #ffcc00
   6 : #ffff66
   7 : #ccff66
   8 : #99ff66
 
   9 : #66ff33
-  10: #66ff99
-  11: #66ffcc
-  12: #00ffcc
 
-  13: #00ffff
-  14: #33cccc
+  01 : Black
+  02 : Blue
+  03 : Brown
+  04 : Gray
+  05 : Green
+  11 : BlackBlack
+  12 : BlueBlue
+  13 : BrownBrown
+  14 : GrayGray
+  21 : Black
+  22 : DarkBlue
+  23 : Brown
+  24 : GrayGray
+  25 : Green
+  31 : Orange
+  32 : Pink
+  33 : Purple
+  34 : Red
+  35 : White
+  41 : OrangeOrange
+  42 : PinkPink
+  43 : PurplePurple
+  44 : Red
+  45 : Yellow
+  51 : Yellow
+  52 : PurplePurple
+  53 : Red
+  54 : YellowYellow
+  61 : OrangeOrange
+  62 : PinkPink
+  63 : Purple
+
+  10: #66ff99
   15: #00ccff
   16: #0099ff
-
   17: #66a3e0
   18: #6685e0
   19: #6666ff
   20: #9999eb
 
-  21: #9999cc
-  22: #666669
-  23: #757575
-  24: #909090
-
   25: #c5c5c5
   26: #f0f0f0
-
-  31: #66ffcc
-  32: #00ffcc
-  33: #00ffff
-  34: #33cccc
-
-  41: #00ccff
-  42: #0099ff
-  43: #66a3e0
-  44: #6685e0
-
-  51: #66a3e0
-  52: #6685e0
-  53: #6666ff
-  54: #9999eb
 
   1-1 : Black
   1-2 : Blue
