@@ -1,0 +1,61 @@
+#!/usr/bin/perl 
+
+# Created: 
+# Last Edit: 2017 Sep 23, 11:44:45 AM
+# $Id$
+
+=head1 NAME
+
+moodle - "Leverage Moosh's php scripts to do higher-level moodle work in perl" 
+
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION = '0.01';
+
+use strict;
+use warnings;
+
+=head1 SYNOPSIS
+
+moodle user-create -s school -l league
+
+=cut
+
+#!/usr/bin/perl
+
+use FindBin qw/$Bin/;
+
+use lib "$Bin/../lib";
+
+use Moodle;
+
+=head1 DESCRIPTION
+
+The database is language-agnostic, so I could rewrite moosh in perl.
+
+=cut
+
+Moodle->run;
+
+=head1 AUTHOR
+
+Dr Bean C<< <drbean at cpan, then a dot, (.), and org> >>
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2017 Dr Bean, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+# End of moodle
+
+# vim: set ts=8 sts=4 sw=4 noet:
+
+
