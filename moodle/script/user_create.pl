@@ -8,7 +8,7 @@ use Cwd;
 
 my $semester="$ENV{SEMESTER}";
 my $school='nuu';
-my $league='FLA0003';
+my $league='BMA0031';
 
 use Grades;
 use Grades::Groupwork;
