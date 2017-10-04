@@ -1,12 +1,12 @@
 #!/usr/bin/perl 
 
 # Created: 
-# Last Edit: 2017 Sep 23, 11:44:45 AM
+# Last Edit: 2017 Oct 04, 01:36:07 PM
 # $Id$
 
 =head1 NAME
 
-moodle - "Leverage Moosh's php scripts to do higher-level moodle work in perl" 
+moopl - "Leverage Moosh's php scripts to do higher-level moodle work in perl" 
 
 =head1 VERSION
 
@@ -21,7 +21,7 @@ use warnings;
 
 =head1 SYNOPSIS
 
-moodle user-create -s school -l league
+moopl user-create -s school -l league
 
 =cut
 
@@ -54,7 +54,7 @@ under the same terms as Perl itself.
 
 =cut
 
-# End of moodle
+# End of moopl
 
 # vim: set ts=8 sts=4 sw=4 noet:
 
