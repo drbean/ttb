@@ -28,10 +28,7 @@ sub execute {
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	my @course_info = qx/Moosh course-list -n "shortname='$league'"/;
-	my $course_id_line = chomp $course_info[1];
-	(my $course_id = $course_id_line) =~ tr/"//;
-
+	my $course_id = qx/Moosh course-list -i "shortname='$league'"/;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
