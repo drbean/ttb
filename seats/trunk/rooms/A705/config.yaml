@@ -65,10 +65,15 @@ colors:
 
   9 : #66ff33
   01 : Black
+  1-1 : Black
   02 : Blue
+  2-1 : Blue
   03 : Brown
+  1-2 : Brown
   04 : Gray
+  2-2 : Gray
   05 : Green
+  2-3 : Green
   11 : BlackBlack
   12 : BlueBlue
   13 : BrownBrown
@@ -79,9 +84,16 @@ colors:
   24 : GrayGray
   25 : Green
   31 : Orange
+  3-1 : Orange
   32 : Pink
+  4-1 : Pink
+  4-3 : Pink
   33 : Purple
+  3-2 : Purple
+  3-3 : Yellow
   34 : Red
+  4-2 : Red
+  4-4 : Red
   35 : White
   41 : OrangeOrange
   42 : PinkPink
