@@ -1,16 +1,16 @@
-#Last Edit: 2017 Oct 23, 03:04:17 PM
+#Last Edit: 2017 Oct 23, 09:03:34 PM
 #$Id$
 
 use MooseX::Declare;
 
 =head1 NAME
 
-Grades::Groupwork - A way of working as a team in a competition or school
+Grades::Individual - A way of working as an individual in a competition or school
 
 =head1 SYNOPSIS
 
 	use Grades;
-	use Grades::Groupwork;
+	use Grades::Individual;
 
 	my $grades = Grades->new( league => $league );
 	my $classworkgrades = $grades->classwork;
@@ -19,7 +19,7 @@ Grades::Groupwork - A way of working as a team in a competition or school
 
 A superclass for the various ways a group (as opposed to pair) can work together and achieve a result.
 
-Grades' Classwork role delegates its methods to one of a number of approaches. Some popular approaches, or forms of curriculum, are subclasses of Groupwork, like Groupwork::Responsible, Groupwork::NoFault. Other popular non-Groupwork approaches are Compcomp, and Jigsaw.
+Grades' Classwork role delegates its methods to one of a number of approaches. Some popular approaches, or forms of curriculum, are subclasses of Groupwork, like Groupwork::Responsible, Groupwork::NoFault. Other popular non-Groupwork approaches are Compcomp, and Jigsaw, and this one, Individual.
 
 Keywords: gold stars, token economies, bean counter
 
@@ -29,7 +29,7 @@ Keywords: gold stars, token economies, bean counter
 
 =cut
 
-class Groupwork extends Approach {
+class Individual extends Approach {
 	use List::Util qw/max min sum/;
 	use List::MoreUtils qw/any/;
 	use Carp;
@@ -72,7 +72,7 @@ The different beancans for each of the sessions in the series. In the directory 
 
 A hashref of all the beancans in a given session with the names keying the ids of the members of each beancan. The number, composition and names of the beancans may change from one session of the series to the next.
 	
-Players in one beancan all get the same Groupwork grade for that session. The beancan members may be the same as the members of the class group, who work together in class, or may be individuals. Usually in a big class, the beancans will be the same as the groups, and in a small class they will be individuals.
+Players in one beancan all get the same Individual grade for that session. The beancan members may be the same as the members of the class group, who work together in class, or may be individuals. Usually in a big class, the beancans will be the same as the groups, and in a small class they will be individuals.
 
 Players in the 'Absent' beancan all get a grade of 0 for the session.
 
@@ -236,7 +236,7 @@ Given a session, returns the weeks (an array ref of integers) in which beans wer
 
 =head3 week2session
 
-	$Groupwork->week2session(15) # fourth
+	$Individual->week2session(15) # fourth
 
 Given the name of a week, return the name of the session it is in.
 
@@ -278,7 +278,7 @@ A hashref of names of members of beancans (players) and the beancans they were m
 
 =head3 name2beancan
 
-	$Groupwork->name2beancan( $week, $playername )
+	$Individual->name2beancan( $week, $playername )
 
 Given the name of a player, the name of the beancan they were a member of in the given week.
 
@@ -300,7 +300,7 @@ Given the name of a player, the name of the beancan they were a member of in the
 
 =head3 name2letter
 
-	$Groupwork->name2letter( $week, $playername )
+	$Individual->name2letter( $week, $playername )
 
 Given the name of a player, their letter in the beancan they were a member of in the given week. Used in conjunction with name2beancan.
 
@@ -319,7 +319,7 @@ Given the name of a player, their letter in the beancan they were a member of in
 
 =head3 beancansNotInCard
 
-	$Groupwork->beancansNotInCard( $beancans, $card, 3)
+	$Individual->beancansNotInCard( $beancans, $card, 3)
 
 Test all beancans, except Absent, exist in the beancans listed on the card for the week.
 
@@ -335,7 +335,7 @@ Test all beancans, except Absent, exist in the beancans listed on the card for t
 
 =head3 beancanDataOnCard
 
-	$Groupwork->beancansNotInCard( $beancans, $card, 3)
+	$Individual->beancansNotInCard( $beancans, $card, 3)
 
 Test all of the beancans, except Absent, have all the points due them for the week. Duplicates the check done by the Card type.
 
@@ -397,383 +397,6 @@ The numbers of players not on time in the beancans in the given week.
 		+{ map { $_ => $card->{$_}->{tardies} } keys %$beancans };
 	}
 
-}
-
-=head2 Grades' Cooperative Methods
-
-The idea of Cooperative Learning, giving individual members of a group all the same score, is that individuals are responsible for the behavior of the other members of the group. Absences and tardies of individual members can lower the scores of the members who are present.
-
-Also, grading to the curve is employed so that the average classwork grade over a session for each student is 80 percent.
-
-=cut
-
-class Cooperative extends Groupwork {
-	use List::Util qw/max min sum/;
-	use List::MoreUtils qw/any/;
-	use Carp;
-	use POSIX;
-	use Grades::Types qw/Beancans Card Results/;
-	use Try::Tiny;
-
-=head3 payout
-
-How much should be given out for each beancan (except the 'Absent' beancan) for each week in this session, so that the total score of each player over the session averages 80?
-
-=cut
-
-	method payout (Str $session) {
-		my $sessions = $self->series;
-		my $beancans = $self->active($session);
-		my $weeks = $self->weeks($session);
-		my $payout = (80/@$sessions) * (keys %$beancans ) / @$weeks;
-	}
-
-=head3 demerits
-
-The demerits that week. calculated as twice the number of absences, plus the number of tardies. In a four-member beancan, this ranges from 0 to 8.
-
-=cut
-
-	method demerits (Num $week) {
-		my $absences = $self->absences($week);
-		my $tardies = $self->tardies($week);
-		my $session = $self->week2session($week);
-		my $beancans = $self->active($session);
-		+{map {$_ => ($absences->{$_} * 2 + $tardies->{$_} * 1)} keys %$beancans};
-	}
-
-=head3 favor
-
-A score of 1 given to beancans with no more than 6 demerits, to prevent beancans who were all there but didn't do anything (ie had no merits and no demerits) from getting a log score of 0, and so getting a grade of 0 for that week.
-
-=cut
-
-	method favor (Num $week) {
-		my $demerits = $self->demerits($week);
-		my $session = $self->week2session($week);
-		my $beancans = $self->active($session);
-		+{ map {$_ => ($demerits->{$_} < 7? 1: 0)} keys %$beancans };
-	}
-
-=head3 maxDemerit
-
-The max demerit that week. achieved by the beancan with the most absences and tardies.
-
-=cut
-
-	method maxDemerit (Num $week) {
-		my $demerits = $self->demerits($week);
-		max( values %$demerits );
-	}
-
-=head3 meritDemerit
-
-Let beancans with no merits, and no demerits get a score greater than 1, so the log score is greater than 0. Let beancans with 3 or more absences and 1 tardies not be eligible for this favor, but get at least 0. Let other beancans get the number of merits - number of demerits, but also be eligible for the favor, and get a score of above 1.
-
-=cut
-
-	method meritDemerit (Num $week) {
-		my $merits = $self->merits($week);
-		my $demerits = $self->demerits($week);
-		my $maxDemerit = $self->maxDemerit($week);
-		my $favor = $self->favor($week);
-		my $session = $self->week2session($week);
-		my $beancans = $self->active($session);
-		+{ map {$_=> $merits->{$_} + $favor->{$_} +
-				$maxDemerit - $demerits->{$_}}
-			keys %$beancans };
-	}
-
-=head3 work2grades
-
-The work (ie merits - demerits) of the individual beancans for the week, as a percentage of the total work of all the beancans, determines the payout of grades, which should average 80 over the sessions of play. I was logscaling grades. I am now not doing that.
-
-=cut
-
-	method work2grades (Num $week) {
-		# my $work = $self->logwork($week);
-		my $work = $self->meritDemerit($week);
-		my $session = $self->week2session($week);
-		my $beancans = $self->active($session);
-		my $totalwork = sum values %$work;
-		my $payout = $self->payout($session);
-		my %grades = map { $_ => $totalwork == 0? 0:
-					( $work->{$_}*$payout/ $totalwork )
-							} keys %$beancans;
-		$grades{Absent} = 0;
-		return \%grades;
-	}
-
-=head3 logwork
-
-The points given by the teacher are log-scaled to prevent active students from taking all the payout, and the other students getting very low grades. There may be better ways of grading to the curve than using log scaling. The log of one point is 0, which results in a grade of 0 for that week for that beancan.
-
-=cut
-
-	method logwork (Num $week) {
-		my $work = $self->meritDemerit($week);
-		my $session = $self->week2session($week);
-		my $beancans = $self->active($session);
-		+{ map { $_ => $work->{$_} == 0 ?  0 : 1 + log $work->{$_} }
-			keys %$beancans };
-	}
-
-=head3 grades4session
-
-Totals for the beancans over the given session. TODO Why '+=' in sessiontotal?
-
-=cut
-
-	method grades4session (Str $session) {
-		my $weeks = $self->weeks($session);
-		my $beancans = $self->beancan_names($session);
-		my (%sessiontotal);
-		for my $week ( @$weeks ) {
-			my $grade = $self->work2grades($week);
-			for my $can ( keys %$beancans ) {
-				if ( $can =~ m/absent/i ) {
-					$sessiontotal{$can} = 0;
-					next;
-				}
-				carp "$can not in week $week Groupwork"
-					unless defined $grade->{$can};
-				$sessiontotal{$can} += $grade->{$can};
-			}
-		}
-		\%sessiontotal;
-	}
-
-=head3 playerGrade4session
-
-Total for individual ids out of 100, for the given session
-
-=cut
-	method playerGrade4session (Str $session) {
-		my $members = $self->league->members;
-		my $series = $self->series;
-		my %grades; $grades{$_->{id}} = 0 for @$members;
-		my %presentMembers;
-		my $can = $self->names2beancan_names($session);
-		my $grade = $self->grades4session($session);
-		for my $member ( @$members ) {
-			my $name = $member->{name};
-			my $id = $member->{id};
-			my $beancan = $can->{$member->{name}};
-			if ( defined $beancan ) {
-				my $grade = $grade->{$can->{$name}};
-				carp $member->{name} .
-					" not in session $session"
-					unless defined $grade;
-				$grades{$id} += $grade;
-			} else {
-				carp $member->{name} .
-				"'s beancan in session $session?"
-			}
-		}
-		for my $member ( @$members ) {
-			my $id = $member->{id};
-			if ( exists $grades{$id} ) {
-				$grades{$id} = min( 100, $grades{$id} );
-			}
-			else {
-				my $name = $member->{name};
-				carp "$name $id Groupwork?";
-				$grades{$id} = 0;
-			}
-		}
-		\%grades;
-	}
-
-=head3 totalPercent
-
-Running totals for individual ids out of 100, over the whole series.
-
-=cut
-	has 'totalPercent' => ( is => 'ro', isa => Results, lazy_build => 1 );
-	method _build_totalPercent {
-		my $members = $self->league->members;
-		my $series = $self->series;
-		my (%grades);
-		for my $session ( @$series ) {
-			my %presentMembers;
-			my $can = $self->names2beancans($session);
-			my $grade = $self->grades4session($session);
-			for my $member ( @$members ) {
-				my $name = $member->{name};
-				my $id = $member->{id};
-				my $beancan = $can->{$member->{name}};
-				if ( defined $beancan ) {
-					my $grade = $grade->{$can->{$name}};
-					carp $member->{name} .
-						" not in session $session"
-						unless defined $grade;
-					$grades{$id} += $grade;
-				} else {
-					carp $member->{name} .
-					"'s beancan in session $session?"
-				}
-			}
-		}
-		for my $member ( @$members ) {
-			my $id = $member->{id};
-			if ( exists $grades{$id} ) {
-				my $grade = min( 100, $grades{$id} );
-				my $rounded = sprintf '%.2f', $grade;
-				$grades{$id} = $rounded;
-			}
-			else {
-				my $name = $member->{name};
-				carp "$name $id Groupwork?";
-				$grades{$id} = 0;
-			}
-		}
-		\%grades;
-	}
-
-}
-
-=head2 Grades' GroupworkNoFault Approach
-
-Unlike the Cooperative approach, GroupworkNoFault does not penalize members of a group who are present for the absence of other members who are not present or tardy. Instead the individual members not present get a grade of 0 for that class.
-
-Also, no scaling of the grades (a group's merits) takes place. 
-
-=cut
-
-class GroupworkNoFault extends Groupwork {
-	use List::Util qw/max min sum/;
-	use List::MoreUtils qw/any/;
-	use Carp;
-	use POSIX;
-	use Grades::Types qw/Beancans TortCard PlayerNames Results/;
-	use Try::Tiny;
-
-=head3 card
-
-Classwork beans for each beancan for the given week. Not TortCard difference to Groupwork's card method.
-
-=cut
-
-	method card (Num $week) {
-		my $card = $self->data->{$week};
-		# croak "Week $week card probably has undefined or non-numeric Merit, Absence, Tardy scores, or possibly illegal beancan."
-		#     unless is_TortCard( $card );
-		return $card;
-	}
-
-
-=head3 absent
-
-The players absent from each beancan in the given week.
-
-=cut
-
-        method absent (Num $week) {
-                my $session = $self->week2session($week);
-                my $beancans = $self->active($session);
-                my $card = $self->card($week);
-                $self->beancansNotInCard($beancans, $card, $week);
-                $self->beancanDataOnCard($beancans, $card, $week);
-                +{ map { $_ => $card->{$_}->{absent} } keys %$beancans };
-        }
-
-
-=head3 tardy
-
-The players tardy from each beancan in the given week.
-
-=cut
-
-        method tardy (Num $week) {
-                my $session = $self->week2session($week);
-                my $beancans = $self->active($session);
-                my $card = $self->card($week);
-                $self->beancansNotInCard($beancans, $card, $week);
-                $self->beancanDataOnCard($beancans, $card, $week);
-                +{ map { $_ => $card->{$_}->{tardy} } keys %$beancans };
-        }
-
-=head3 points
-
-The merits the beancans gained for the given week, except for those members who were absent, and who get zero, or tardy and who get 1. Keyed on player id.
-
-=cut
-
-	method points (Num $week) {
-	    my $members = $self->league->members;
-	    my %points;
-	    for my $member ( @$members ) {
-		my $name = $member->{name};
-		my $id = $member->{id};
-		my $beancan = $self->name2beancan( $week, $name );
-		my $absent = $self->absent($week)->{$beancan};
-		my $tardy = $self->tardy($week)->{$beancan};
-		unless ( ( $absent and ref $absent eq 'ARRAY' ) or
-			( $tardy and ref $tardy eq 'ARRAY' ) ) {
-		    $points{$id} = $self->merits($week)->{$beancan}; 
-		}
-		else {
-		    $points{$id} = ( any { $name eq $_ } @$absent ) ?
-			0 : ( any { $name eq $_ } @$tardy ) ?
-			1 : $self->merits($week)->{$beancan};
-		}
-	    }
-	    return \%points;
-	}
-
-=head3 sessionMerits
-
-The merits the beancans gained for the given session, with the Absent beancan getting zero. Keyed on beancan.
-
-=cut
-
-    method sessionMerits (Num $session) {
-	my $weeks = $self->weeks($session);
-	my $beancans = $self->beancan_names($session);
-	my %merits;
-	for my $week ( @$weeks ) {
-	    my $merits = $self->merits($week);
-	    $merits->{Absent} = 0;
-	    $merits{$_} += $merits->{$_} for keys %$beancans;
-	}
-	$merits{Absent} = 0;
-	return \%merits;
-    }
-
-=head3 grades4session
-
-Totals for the beancans over the given session, keyed on individual names.
-
-=cut
-
-    method grades4session (Str $session) {
-	my $weeks = $self->weeks($session);
-	my $beancans = $self->beancan_names($session);
-	my %tally;
-	for my $week ( @$weeks ) {
-	    my $grade = $self->merits($week);
-	    my $absent = $self->absent($week);
-	    for my $can ( keys %$beancans ) {
-		my $members = $beancans->{$can};
-		if ( $can =~ m/absent/i ) {
-		    my @missing = @$members;
-			$tally{$_} = 0 for @missing;
-			next;
-		}
-		carp "$can not in week $week Groupwork"
-			unless defined $grade->{$can};
-		my $absent = $self->absent($week)->{$can};
-		for my $member ( @$members ) {
-		    if ( any { $member eq $_ } @$absent ) {
-			$tally{$member} += 0;
-		    }
-		    else { $tally{$member} += $grade->{$can}; }
-		}
-	    }
-	}
-	\%tally;
-    }
-
 =head3 total
 
 Totals for individual ids, over the whole series.
@@ -785,39 +408,20 @@ Totals for individual ids, over the whole series.
 	my $members = $self->league->members;
 	my $series = $self->series;
 	my (%grades);
-	for my $session ( @$series ) {
-	    my %presentMembers;
-	    my $can = $self->names2beancans($session);
-	    my $grade = $self->grades4session($session);
-	    for my $member ( @$members ) {
-		my $name = $member->{name};
-		my $id = $member->{id};
-		warn "Giving $name, $id a grade, but they already have a grade for Session $session of "
-		    . "$grade->{id}. Are they a member twice?" if defined $grade->{$id};
-		my $beancan = $can->{$member->{name}};
-		if ( defined $beancan ) {
-		    my $grade = $grade->{$name};
-		    carp $member->{name} .
-			"'s groupwork in session $session"
-			unless defined $grade;
-		    $grades{$id} += $grade;
-		} else {
-		    carp $member->{name} .
-		    "'s beancan in session $session?"
-		}
-	    }
-	}
+	my $dir = $self->groupworkdirs;
+	my $total = $self->league->inspect( "$dir/total.yaml" );
 	for my $member ( @$members ) {
 	    my $id = $member->{id};
-	    if ( exists $grades{$id} ) {
-	        my $perfect_score = $self->classMax * @{ $self->all_events };
-	        $grades{$id} = min( 100, $grades{$id} );
-	        warn "$member->{name}: ${id}'s classwork score of $grades{$id} where perfect score == $perfect_score\n"
-	            if $grades{$id} > $perfect_score;
+	    if ( exists $total->{$id} ) {
+	        my $perfect_score = 100;
+
+	        $grades{$id} = min( $perfect_score, $total->{$id} );
+	        warn "$member->{name}: ${id}'s classwork score of $total->{$id} where perfect score == $perfect_score\n"
+	            if $total->{$id} > $perfect_score;
 	    }
 	    else {
 		my $name = $member->{name};
-		carp "$name $id Groupwork?";
+		carp "$name $id Individual?";
 		$grades{$id} = 0;
 	    }
 	}
@@ -832,16 +436,14 @@ Running totals for individual ids out of 100, over the whole series.
 	has 'totalPercent' => ( is => 'ro', isa => Results, lazy_build => 1 );
 	method _build_totalPercent {
 		my $members = $self->league->members;
-		my $weeks = $self->all_events;
-		my $weeklyMax = $self->classMax;
-		my $totalMax = $weeklyMax * @$weeks;
+		my $totalMax = 100;
 		my $grades = $self->total;
 		my $series = $self->series;
 		my %percent;
 		for my $member ( @$members ) {
 		    my $id = $member->{id};
 		    my $score = 100 * $grades->{$id} / $totalMax ;
-		    warn "$member->{name}: ${id}'s classwork score of $score"
+		    warn "$member->{name}: ${id}'s classwork score of $score > $totalMax"
 			if $score > 100;
 		    my $rounded = sprintf '%.2f', $score;
 		    $percent{$id} = $rounded;
@@ -851,8 +453,7 @@ Running totals for individual ids out of 100, over the whole series.
 
 }
 
-
-1;    # End of Grades::Groupwork
+1;    # End of Grades::Individual
 
 =head1 AUTHOR
 

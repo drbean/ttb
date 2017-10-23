@@ -1,6 +1,6 @@
 package Grades;
 
-#Last Edit: 2017 Jul 02, 03:37:28 PM
+#Last Edit: 2017 Oct 23, 04:32:00 PM
 #$Id$
 
 use MooseX::Declare;
@@ -1847,6 +1847,7 @@ class Grades with Homework with Exams with Jigsaw
 #    with 'Jigsaw'
 #	=> { -alias => { config => 'jigsaw_config' }, -excludes => 'config' };
     require Grades::Groupwork;
+    require Grades::Individual;
     use Carp;
     use Grades::Types qw/Weights/;
     use List::Util qw/max min sum/;
