@@ -29,6 +29,7 @@ sub execute {
 	chdir "/var/www/cgi-bin/moodle";
 
 	my $course_id = qx/Moosh course-list -i "shortname='$league'"/;
+	chomp $course_id;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
@@ -42,11 +43,13 @@ sub execute {
 	$" = ", ";
 	print "beancans: @groups\n";
 	print "Session: $session, Week: $lastweek\n";
-	my $grouping_id = qx/Moosh grouping-create -d \"session $session\" $session $course_id/;
-	chomp $grouping_id;
+	my $grouping_string = qx/Moosh grouping-create -d \"session $session\" $session $course_id/;
+	chomp $grouping_string;
+	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
 	for my $group ( @groups ) {
-		my $group_id = qx/Moosh group-create \"$session-$group\" $course_id/;
-		chomp $group_id;
+		my $group_string = qx/Moosh group-create \"$session-$group\" $course_id/;
+		chomp $group_string;
+		(my $group_id = $group_string) =~ s/^.*\((.*)\).*$/$1/;
 		my $members = $beancans->{$group};
 		system("Moosh group-assigngrouping -G $grouping_id $group_id");
 		system("Moosh group-memberadd -c $course_id -g $group_id @$members");
