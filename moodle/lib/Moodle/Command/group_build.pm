@@ -39,8 +39,8 @@ sub execute {
 	my $beancans = $cl->beancan_names($session);
 	my @groups = keys %$beancans;
 	print "league: $league\n";
-	$" = " ";
-	print "beancans: ", @groups, "\n";
+	$" = ", ";
+	print "beancans: @groups\n";
 	print "Session: $session, Week: $lastweek\n";
 	my $grouping_id = qx/Moosh grouping-create -d \"session $session\" $session $course_id/;
 	chomp $grouping_id;
