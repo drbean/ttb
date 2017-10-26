@@ -40,13 +40,12 @@ sub execute {
 	my $beancans = $cl->beancan_names($session);
 	my @groups = keys %$beancans;
 	print "league: $league\n";
-	$" = ", ";
+	$" = " ";
 	print "beancans: @groups\n";
 	print "Session: $session, Week: $lastweek\n";
 	my $grouping_string = qx/Moosh grouping-create -d \"session $session\" $session $course_id/;
 	chomp $grouping_string;
 	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
-	$" = " ";
 	for my $group ( @groups ) {
 		my $group_string = qx/Moosh group-create \"$session-$group\" $course_id/;
 		chomp $group_string;
