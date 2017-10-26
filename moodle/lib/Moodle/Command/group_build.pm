@@ -44,6 +44,7 @@ sub execute {
 	print "beancans: @groups\n";
 	print "Session: $session, Week: $lastweek\n";
 	my $grouping_string = qx/Moosh grouping-create -d \"session $session\" $session $course_id/;
+	print $grouping_string;
 	chomp $grouping_string;
 	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
 	for my $group ( @groups ) {
