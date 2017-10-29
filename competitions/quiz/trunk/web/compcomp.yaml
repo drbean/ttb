@@ -1,17 +1,16 @@
 # rename this file to Web.yml and put a : in front of "name" if
 # you want to use yaml like in old versions of Catalyst
 name: CompComp
-# database: comp051
-# dic_database: dic051
-swiss_database: swiss051
-bett_database: bett051
-leagues: /home/drbean/051
+# database: comp061
+# dic_database: dic061
+swiss_database: swiss061
+bett_database: bett061
+leagues: /home/drbean/061
 
-news: FLA0015
+news: FLA0003
 
 conversation:
-  - FLA0003
-  - GL00043
-  - MA1
+  - 2L1a
+  - 2L1b
 
-writing: KB1
+writing: 251
