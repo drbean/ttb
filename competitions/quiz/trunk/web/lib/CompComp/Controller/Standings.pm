@@ -141,7 +141,7 @@ Private method used by standing, history actions to put standings on http://web.
 sub ftp : Private {
 	my ($self, $c, $round) = @_;
 	my $ftp = Net::FTP->new('web.nuu.edu.tw');
-	$ftp->login('greg', '6y6t6y6t');
+	$ftp->login('greg', '');
 	$ftp->binary;
 	my $config = $c->config;
 	my $leaguedirs = $config->{leagues};
