@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 10/29/2017 02:02:50 PM
-# Last Edit: 2017 Oct 29, 03:35:51 PM
+# Last Edit: 2017 Oct 31, 12:38:12 PM
 # $Id$
 
 =head1 NAME
@@ -29,6 +29,12 @@ use List::Util qw/sum first/;
 use IO::All;
 use YAML qw/LoadFile/;
 use Net::FTP;
+use Template;
+
+use lib "/home/drbean/comp/web/lib";
+
+use CompComp::Model::SwissDB;
+use CompComp::SwissSchema;
 
 use Grades;
 
@@ -40,21 +46,19 @@ This could be a Swiss script, but Swiss is just about pairing, rather than the C
 
 =cut
 
-my $script = Grades::Script->new_with_options;
-my $tourid = $script->league or die "League id?";
-my $config = LoadFile "/var/www/cgi-bin/comp/compcomp.yaml";
-my $name = $config->{name};
 require FindBin;
 # FindBin->again;
 unshift @INC, "$FindBin::Bin/../lib";
-use lib "/home/drbean/swiss/web/lib";
-require $name . ".pm";
-my $model = "${name}::Schema";
-my $modelfile = "$name/Model/DB.pm";
-my $modelmodule = "${name}::Model::DB";
-my $connect_info = $modelmodule->config->{connect_info};
-my $d = $model->connect( @$connect_info );
-my $tournament = $d->model('SwissDB::Tournaments')->find(
+
+my $config = LoadFile "/var/www/cgi-bin/comp/compcomp.yaml";
+my $connect_info = CompComp::Model::SwissDB->config->{connect_info};
+my $schema = CompComp::SwissSchema->connect( $connect_info );
+
+my $script = Grades::Script->new_with_options;
+my $tourid = $script->league or die "League id?";
+my $name = $config->{name};
+
+my $tournament = $schema->resultset('Tournaments')->find(
 	{ id => $tourid });
 my $rounds = $tournament->round->value;
 my $members = $tournament->members;
@@ -157,8 +161,15 @@ my %leaguegenre = map { my $genre = $_ ;  my $leagues = $leaguesByGenre{$genre};
 my $genre = $leaguegenre{$tourid};
 
 my $leaguedirs = $config->{leagues};
-my $standingfile = "$leaguedirs/$tourid/comp/standing.html";
-io($standingfile)->print( Template->new({})->process("standings.tt2", $stash ));
+my $compdir = "$leaguedirs/$tourid/comp";
+my $tt = Template->new({ TEMPLATE_EXTENSION => '.tt2',
+    INCLUDE_PATH => "/home/drbean/comp/web/root/src/",
+    OUTPUT_PATH => $compdir,
+    TIMER => 0,
+    # render_die => 0, default_view => 'login.tt2'
+    });
+$tt->process("standings.tt2", $stash, "standing.html" ) || die $tt->error(), "\n";
+my $standingfile = "$compdir/standing.html";
 ftp( $standingfile );
 
 =head2 ftp
@@ -170,8 +181,8 @@ Private method used by standing, history actions to put standings on http://web.
 
 sub ftp {
 	my ($standingfile) = @_;
-	my $ftp = Net::FTP->new('web.nuu.edu.tw');
-	$ftp->login('greg', '');
+	my $ftp = Net::FTP->new('web.nuu.edu.tw') or die "web login\n";
+	$ftp->login('greg', '') or die "web login\n";
 	$ftp->binary;
 	$ftp->cwd("/public_html/$tourid/");
 	$ftp->put($standingfile);
