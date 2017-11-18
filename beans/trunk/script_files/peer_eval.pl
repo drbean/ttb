@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Jun 08, 12:37:49 PM
+# Last Edit: 2017 Nov 18, 11:05:41 AM
 # $Id$
 
 =head1 NAME
@@ -110,7 +110,19 @@ my ( $evaluators, $evaluees );
 for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
     my $exercise = $exercises[$m];
-    my $peers = $g[$n+1]->{$exercise}->{evaluations};
+    my $peers;
+    if ( exists $g[$n+1]->{$exercise}->{evaluations} ){
+	$peers = $g[$n+1]->{$exercise}->{evaluations} }
+    elsif ( exists $g[$n+1]->{$exercise}->{evaluations_by} ) {
+	$evaluees = $g[$n+1]->{$exercise}->{evaluations_by};
+	for my $evaluee (keys %$evaluees) {
+	    my $evaluations = $evaluees->{$evaluee};
+	    for my $evaluator ( keys %$evaluations ) {
+	    $peers->{$evaluator}->{$evaluee} = $evaluations->{$evaluator};
+	    }
+	}
+    }
+    else { die "no evaluations in g$n+1.yaml $exercise\n" }
 
     my $allocatedMax = $examMax / ( $n+1 );
     for my $evaluator ( keys %members ) {
