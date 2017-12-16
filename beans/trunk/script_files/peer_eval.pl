@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Nov 18, 11:05:41 AM
+# Last Edit: 2017 Nov 18, 04:42:27 PM
 # $Id$
 
 =head1 NAME
@@ -121,6 +121,7 @@ for my $m ( 0 .. $n ) {
 	    $peers->{$evaluator}->{$evaluee} = $evaluations->{$evaluator};
 	    }
 	}
+	DumpFile "peers.$exercise.yaml", $peers;
     }
     else { die "no evaluations in g$n+1.yaml $exercise\n" }
 
