@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 16, 05:00:54 PM
+# Last Edit: 2017 Dec 17, 03:43:35 PM
 # $Id$
 
 =head1 NAME
@@ -129,25 +129,29 @@ for my $m ( 0 .. $n ) {
     for my $evaluator ( keys %members ) {
 	if ( exists $peers->{$evaluator} ) {
 	    my $peer_evaluation = $peers->{$evaluator};
-	    my @evaluator_fit;
+	    my ( @evaluator_fit, $evaluator_fit );
 	    for my $evaluee ( keys %$peer_evaluation ) {
 		my $evaluation_difference =  abs ( $teacher_evaluation->{$evaluee} - $peer_evaluation->{$evaluee} );
 		if ( $evaluation_difference == 0 ) {
-		    push @evaluator_fit, $same * $examMax / 100;
+		    $evaluator_fit = $same * $examMax / 100;
 		}
 		elsif ( $evaluation_difference == 1 ) {
-		    push @evaluator_fit, $one * $examMax / 100;
+		    $evaluator_fit = $one * $examMax / 100;
 		}
 		elsif ( $evaluation_difference == 2 ) {
-		    push @evaluator_fit, $two * $examMax / 100;
+		    $evaluator_fit = $two * $examMax / 100;
 		}
-		else { push @evaluator_fit, 5; }
-		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $teacher_evaluation->{$evaluee};
-		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{peer} = $peer_evaluation->{$evaluee};
+		else {
+		    warn "evaluation difference = $evaluation_difference\n";
+		    $evaluator_fit = 10 * $examMax / 100;
+		}
+		push @evaluator_fit, $evaluator_fit;
+		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
+		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{peer} = $peer_evaluation->{$evaluee};
+		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{fit} = $evaluator_fit;
 		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
 	    }
-	    $evaluators->{$evaluator}->{$exercise}->{fit} = sum(@evaluator_fit)/@evaluator_fit;
 	}
 	else {
 	    $evaluators->{$evaluator}->{$exercise}->{fit} = 0;
