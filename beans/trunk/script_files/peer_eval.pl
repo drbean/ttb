@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Nov 18, 04:42:27 PM
+# Last Edit: 2017 Dec 16, 05:00:54 PM
 # $Id$
 
 =head1 NAME
@@ -92,7 +92,7 @@ evaluees:
 
 =cut
 
-my ( @exercises, $n, @g );
+my ( @exercises, $n, @g, $report );
 if ( $exercise ) {
     @exercises = split /,/, $exercise;
     $n = $#exercises;
@@ -133,13 +133,13 @@ for my $m ( 0 .. $n ) {
 	    for my $evaluee ( keys %$peer_evaluation ) {
 		my $evaluation_difference =  abs ( $teacher_evaluation->{$evaluee} - $peer_evaluation->{$evaluee} );
 		if ( $evaluation_difference == 0 ) {
-		    push @evaluator_fit, $same * $allocatedMax / 100;
+		    push @evaluator_fit, $same * $examMax / 100;
 		}
 		elsif ( $evaluation_difference == 1 ) {
-		    push @evaluator_fit, $one * $allocatedMax / 100;
+		    push @evaluator_fit, $one * $examMax / 100;
 		}
 		elsif ( $evaluation_difference == 2 ) {
-		    push @evaluator_fit, $two * $allocatedMax / 100;
+		    push @evaluator_fit, $two * $examMax / 100;
 		}
 		else { push @evaluator_fit, 5; }
 		$evaluators->{$evaluator}->{$exercise}->{$evaluee}->{drbean} = $teacher_evaluation->{$evaluee};
@@ -155,20 +155,28 @@ for my $m ( 0 .. $n ) {
     }
 }
 
-$g[$n+1]->{evaluators} = $evaluators;
-$g[$n+1]->{evaluees} = $evaluees;
+$report->{evaluators} = $evaluators;
+$report->{evaluees} = $evaluees;
 
 for my $evaluator ( keys %members ) {
     my @fitness;
     for my $m ( 0 .. $n ) {
 	my $exercise = $exercises[$m];
-	push @fitness, $evaluators->{$evaluator}->{$exercise}->{fit};
+	push @fitness, $evaluators->{$evaluator}->{$exercise}->{fit}
+	    if exists $evaluators->{$evaluator}
+		and exists $evaluators->{$evaluator}->{$exercise}
+		and exists $evaluators->{$evaluator}->{$exercise}->{fit}
+		and $evaluators->{$evaluator}->{$exercise}->{fit};
     }
-    my $fitness = sum @fitness;
-    $g[$n+1]->{fitness}->{$evaluator} = $fitness;
+    my $fitness;
+    if ( @fitness ) {
+     $fitness = (sum @fitness) / @fitness;
+    }
+    else { $fitness = 0 }
+    $report->{fitness}->{$evaluator} = $fitness;
 }
 
-print Dump $g[$n+1], $g[$n+1]->{fitness};
+print Dump $report, $report->{fitness};
 
 =head1 AUTHOR
 
