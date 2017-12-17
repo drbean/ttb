@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 17, 03:43:35 PM
+# Last Edit: 2017 Dec 17, 03:52:50 PM
 # $Id$
 
 =head1 NAME
@@ -27,7 +27,7 @@ peer_eval.pl -l GL00036 -r 3 -x house,fishing -s 100 -o 70 -t 30 > 3/g3.yaml
 
 use Cwd;
 use File::Basename;
-use YAML qw/LoadFile DumpFile Dump/;
+use YAML qw/LoadFile DumpFile Dump Bless/;
 use Grades;
 use List::Util qw/sum/;
 
@@ -149,6 +149,7 @@ for my $m ( 0 .. $n ) {
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{peer} = $peer_evaluation->{$evaluee};
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{fit} = $evaluator_fit;
+		Bless($evaluators->{$evaluator}->{$evaluee}->{$exercise})->keys(['drbean', 'peer', 'fit']);
 		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
 	    }
