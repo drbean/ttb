@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 17, 04:45:02 PM
+# Last Edit: 2017 Dec 17, 04:56:36 PM
 # $Id$
 
 =head1 NAME
@@ -163,9 +163,6 @@ for my $m ( 0 .. $n ) {
 		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
 	    }
-	}
-	else {
-	    $evaluators->{$evaluator}->{$exercise}->{fit} = 0;
 	}
     }
 }
