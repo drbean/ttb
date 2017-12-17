@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 17, 03:52:50 PM
+# Last Edit: 2017 Dec 17, 04:40:19 PM
 # $Id$
 
 =head1 NAME
@@ -48,13 +48,22 @@ my $examMax = $league->yaml->{examMax};
 Compare peer evaluations in $round/g$n.yaml of form, 
 
 fishing:
-    evaluations:
+    evaluations_by_of:
 	N03200006:
 	    N03200034: 2
 	N03200011:
 	    N03200027: 3
 
 (N03200006 evaluated N03200034's fishing work and gave it a grade of 2)
+
+Or, 
+
+fishing:
+    evaluations_of_by
+	N03200034:
+	    N03200006: 2
+	N03200027:
+	    N03200011: 3
 
 with teacher's in $round/g$m.yaml of form
 
@@ -111,10 +120,10 @@ for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
     my $exercise = $exercises[$m];
     my $peers;
-    if ( exists $g[$n+1]->{$exercise}->{evaluations} ){
-	$peers = $g[$n+1]->{$exercise}->{evaluations} }
-    elsif ( exists $g[$n+1]->{$exercise}->{evaluations_by} ) {
-	$evaluees = $g[$n+1]->{$exercise}->{evaluations_by};
+    if ( exists $g[$n+1]->{$exercise}->{evaluations_by_of} ){
+	$peers = $g[$n+1]->{$exercise}->{evaluations_by_of} }
+    elsif ( exists $g[$n+1]->{$exercise}->{evaluations_of_by} ) {
+	$evaluees = $g[$n+1]->{$exercise}->{evaluations_of_by};
 	for my $evaluee (keys %$evaluees) {
 	    my $evaluations = $evaluees->{$evaluee};
 	    for my $evaluator ( keys %$evaluations ) {
