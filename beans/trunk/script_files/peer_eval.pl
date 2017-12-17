@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 17, 04:40:19 PM
+# Last Edit: 2017 Dec 17, 04:45:02 PM
 # $Id$
 
 =head1 NAME
@@ -119,13 +119,14 @@ my ( $evaluators, $evaluees );
 for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
     my $exercise = $exercises[$m];
+    $report->{$exercise} = $g[$n+1]->{$exercise};
     my $peers;
     if ( exists $g[$n+1]->{$exercise}->{evaluations_by_of} ){
 	$peers = $g[$n+1]->{$exercise}->{evaluations_by_of} }
     elsif ( exists $g[$n+1]->{$exercise}->{evaluations_of_by} ) {
-	$evaluees = $g[$n+1]->{$exercise}->{evaluations_of_by};
-	for my $evaluee (keys %$evaluees) {
-	    my $evaluations = $evaluees->{$evaluee};
+	my $evaluations_of_by = $g[$n+1]->{$exercise}->{evaluations_of_by};
+	for my $evaluee (keys %$evaluations_of_by) {
+	    my $evaluations = $evaluations_of_by->{$evaluee};
 	    for my $evaluator ( keys %$evaluations ) {
 	    $peers->{$evaluator}->{$evaluee} = $evaluations->{$evaluator};
 	    }
