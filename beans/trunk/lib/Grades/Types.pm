@@ -246,7 +246,7 @@ subtype RoundsResults,
 		return 1 if $test or not defined $test;
 	},
 	message {
-"Impossible round number or PlayerId, or missing or non-numerical score," };
+"Impossible round number or PlayerId, or missing or non-numerical score, (or no 'grade' key field)," };
 
 =head2 Beancans
 
