@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 05/28/2017 02:56:13 PM
-# Last Edit: 2017 Dec 17, 04:56:36 PM
+# Last Edit: 2017 Dec 17, 05:58:31 PM
 # $Id$
 
 =head1 NAME
@@ -114,7 +114,7 @@ else {
     $n = $#exercises;
 }
 
-my ( $evaluators, $evaluees );
+my ( $evaluators, $evaluees, $fitness );
 
 for my $m ( 0 .. $n ) {
     my $teacher_evaluation = $g[$m]->{grade};
@@ -139,7 +139,8 @@ for my $m ( 0 .. $n ) {
     for my $evaluator ( keys %members ) {
 	if ( exists $peers->{$evaluator} ) {
 	    my $peer_evaluation = $peers->{$evaluator};
-	    my ( @evaluator_fit, $evaluator_fit );
+	    my $total_fitness = $fitness->{$evaluator};
+	    my ( $evaluator_fit );
 	    for my $evaluee ( keys %$peer_evaluation ) {
 		my $evaluation_difference =  abs ( $teacher_evaluation->{$evaluee} - $peer_evaluation->{$evaluee} );
 		if ( $evaluation_difference == 0 ) {
@@ -155,13 +156,14 @@ for my $m ( 0 .. $n ) {
 		    warn "evaluation difference = $evaluation_difference\n";
 		    $evaluator_fit = 10 * $examMax / 100;
 		}
-		push @evaluator_fit, $evaluator_fit;
+		push @$total_fitness, $evaluator_fit;
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{peer} = $peer_evaluation->{$evaluee};
 		$evaluators->{$evaluator}->{$evaluee}->{$exercise}->{fit} = $evaluator_fit;
 		Bless($evaluators->{$evaluator}->{$evaluee}->{$exercise})->keys(['drbean', 'peer', 'fit']);
 		$evaluees->{$evaluee}->{$exercise}->{drbean} = $teacher_evaluation->{$evaluee};
 		$evaluees->{$evaluee}->{$exercise}->{$evaluator} = $peer_evaluation->{$evaluee};
+		$fitness->{$evaluator} = $total_fitness;
 	    }
 	}
     }
@@ -171,18 +173,10 @@ $report->{evaluators} = $evaluators;
 $report->{evaluees} = $evaluees;
 
 for my $evaluator ( keys %members ) {
-    my @fitness;
-    for my $m ( 0 .. $n ) {
-	my $exercise = $exercises[$m];
-	push @fitness, $evaluators->{$evaluator}->{$exercise}->{fit}
-	    if exists $evaluators->{$evaluator}
-		and exists $evaluators->{$evaluator}->{$exercise}
-		and exists $evaluators->{$evaluator}->{$exercise}->{fit}
-		and $evaluators->{$evaluator}->{$exercise}->{fit};
-    }
+    my $final_fitness = $fitness->{$evaluator};
     my $fitness;
-    if ( @fitness ) {
-     $fitness = (sum @fitness) / @fitness;
+    if ( $final_fitness and @$final_fitness ) {
+     $fitness = (sum @$final_fitness) / @$final_fitness;
     }
     else { $fitness = 0 }
     $report->{fitness}->{$evaluator} = $fitness;
