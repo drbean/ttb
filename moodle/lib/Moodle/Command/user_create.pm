@@ -26,8 +26,11 @@ sub execute {
 
 	my ($school, $league) = @$opt{qw/c l/};
 	my $semester="$ENV{SEMESTER}";
-	my $city = "Miaoli";
-
+	my $city;
+	if ( $l->yaml->{school} eq "must" ) {
+		$city = "Hsinchu";
+	}
+	else { $city = "Miaoli";}
 
 	use Grades;
 	use Grades::Groupwork;
