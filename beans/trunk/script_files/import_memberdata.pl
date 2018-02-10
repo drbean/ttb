@@ -11,10 +11,6 @@ use warnings;
 
 import_memberdata.pl - old students in previous semesters English names
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
 our $VERSION = '0.01';

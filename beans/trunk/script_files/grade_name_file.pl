@@ -8,10 +8,6 @@
 
 grade_dic.pl - Grade only dic letters written
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
 use strict;

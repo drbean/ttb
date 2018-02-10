@@ -8,10 +8,6 @@
 
 letter2name.pl - Name of player from letter in group in session
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
 our $VERSION = '0.01';

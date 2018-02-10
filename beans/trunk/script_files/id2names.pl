@@ -32,10 +32,6 @@ use utf8;
 
 id2names.pl - create class list
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
 our $VERSION = '0.01';

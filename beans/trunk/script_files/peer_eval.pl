@@ -8,10 +8,6 @@
 
 peer_eval.pl - compare peer evaluation with teacher's and score evaluator on closeness of fit
 
-=head1 VERSION
-
-Version 0.01
-
 =cut
 
 our $VERSION = '0.01';

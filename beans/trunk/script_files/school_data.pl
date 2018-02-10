@@ -8,10 +8,6 @@
 
 school_data.pl - Get Chinese names, id info from school data about league members
 
-=head1 VERSION
-
-Version 0.02
-
 =cut
 
 our $VERSION = '0.02';
