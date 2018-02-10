@@ -9,15 +9,9 @@ use warnings;
 
 =head1 NAME
 
-import_memberdata.pl - old students in previous semesters English names
-
-=head1 VERSION
-
-Version 0.01
+merge_email.pl - merge email addresses from ~/admin/$SEMESTER/$SCHOOL/$LEAGUE_email.yaml
 
 =cut
-
-our $VERSION = '0.01';
 
 use strict;
 use warnings;
