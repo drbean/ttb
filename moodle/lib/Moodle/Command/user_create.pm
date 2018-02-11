@@ -26,27 +26,15 @@ sub execute {
 
 	my ($school, $league) = @$opt{qw/c l/};
 	my $semester="$ENV{SEMESTER}";
+
+	use Grades;
+	use Grades::Groupwork;
+	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $city;
 	if ( $l->yaml->{school} eq "must" ) {
 		$city = "Hsinchu";
 	}
 	else { $city = "Miaoli";}
-
-	use Grades;
-	use Grades::Groupwork;
-	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
-	my $g = Grades->new({ league => $l });
-	my $co = Compcomp->new({ league => $l });
-	my $cl = $g->classwork;
-	my %m = map { $_->{id} => $_ } @{ $l->members };
-	#my %m = ( drbean =>
-	#	{ Chinese => "drbean",
-	#	id => "drbean",
-	#	name => "DrBean",
-	#	password => "bean",
-	#	}
-	#);
-	my $approach = $l->approach;
 
 	chdir '/var/www/cgi-bin/moodle';
 
