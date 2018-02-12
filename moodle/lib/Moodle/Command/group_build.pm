@@ -38,7 +38,7 @@ sub execute {
 	my $lastweek = $cl->lastweek + 1;
 	my $session = $cl->week2session($lastweek);
 	my $beancans = $cl->beancan_names($session);
-	my @groups = keys %$beancans;
+	my @groups = sort keys %$beancans;
 	print "league: $league\n";
 	$" = " ";
 	print "beancans: @groups\n";
