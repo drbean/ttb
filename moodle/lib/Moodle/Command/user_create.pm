@@ -5,10 +5,9 @@ use lib "lib";
 use Moodle -command;
 use strict;
 use warnings;
-use YAML qw/Dump LoadFile DumpFile/;
-use IO::All;
+use Scalar::Util qw/looks_like_number/;
 
-sub abstract { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
+sub abstract { "moodle user_create -s nuu -l FLA0003" }
 sub description { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
 
 sub usage_desc { "moodle user_create -s nuu -l FLA0003" }
@@ -39,8 +38,18 @@ sub execute {
 	chdir '/var/www/cgi-bin/moodle';
 
 	my $cohort_name = $league;
-	my $header = join "\t", ( qw/username lastname firstname email password cohort1/ );
-	my @cohort = ( $header );
+	my $field = $l->yaml->{field};
+	if ( $field =~ m/英語會話/ ) {
+		$category_id = 4;
+	elsif ( $field =~ m/商用英文書信實務/) {
+		$category_id = 8;}
+	}
+	else { die "no course category id for $field field\n"}
+
+	my $cohort_id;
+	$cohort_id = qx/moosh cohort-create -c $category_id $cohort_name/;
+	die "$cohort_name cohort already exists? $cohort_id id not number\n"
+		unless looks_like_number( $cohort_id );
 	for my $id ( sort keys %m ) {
 		my $lower_id = lcfirst $id;
 		my $username = $lower_id;
@@ -48,7 +57,12 @@ sub execute {
 		my $firstname =$m{$id}->{name};
 		my $email = $m{$id}->{email};
 		my $password = $m{$id}->{password};
-		system("Moosh user-create --password $password --email $email --city $city --country TW --firstname $firstname --lastname $id $username");
+		my $user_id;
+		$user_id = qx/"moosh user-create --password $password --email $email --city $city --country tw --firstname $firstname --lastname $id $username"/;
+		die "$username user already exists? $user_id id not number\n"
+			unless looks_like_number( $user_id );
+		echo "$username: $user_id\t";
+		system("Moosh cohort-enrol -u $user_id $cohort_name");
 	}
 
 
