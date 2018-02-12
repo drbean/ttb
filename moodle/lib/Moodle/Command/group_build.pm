@@ -55,6 +55,7 @@ sub execute {
 		system("Moosh group-assigngrouping -G $grouping_id $group_id");
 		system("Moosh group-memberadd -c $course_id -g $group_id @$members");
 	}
+	system("Moosh config-set course $course_id defaultgroupingid $grouping_id")
 
 }
 
