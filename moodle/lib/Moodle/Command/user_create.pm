@@ -28,8 +28,8 @@ sub execute {
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
-	my $m = $l->yaml->{members};
-	my %m = map { $_ => $_->{id} } @$m;
+	my $m = $l->members;
+	my %m = map { $_->{id} => $_ } @$m;
 	my $city;
 	if ( $l->yaml->{school} eq "must" ) {
 		$city = "Hsinchu";
@@ -44,9 +44,10 @@ sub execute {
 	if ( $field =~ m/英語會話/ ) {
 		$category_id = 4;
 	}
-	elsif ( $field =~ m/商用英文書信實務/) {
-		$category_id = 8;}
-	else { die "no course category id for $field field\n"}
+	elsif ( $field =~ m/商用英文書信實務/ ) {
+		$category_id = 8;
+	}
+	else { die "no course category for $field\n" }
 
 	my $cohort_id;
 	$cohort_id = qx/moosh cohort-create -c $category_id $cohort_name/;
@@ -60,7 +61,7 @@ sub execute {
 		my $email = $m{$id}->{email};
 		my $password = $m{$id}->{password};
 		my $user_id;
-		$user_id = qx/"Moosh user-create --password $password --email $email --city $city --country tw --firstname $firstname --lastname $id $username"/;
+		$user_id = qx/Moosh user-create --password $password --email $email --city $city --country "tw" --firstname $firstname --lastname $id $username/;
 		die "$username user already exists? $user_id id not number\n"
 			unless looks_like_number( $user_id );
 		print "$username: $user_id\t";
