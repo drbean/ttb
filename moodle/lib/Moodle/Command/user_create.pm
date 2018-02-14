@@ -38,22 +38,22 @@ sub execute {
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	#my $cohort_name = $league;
-	#my $category_id;
-	#my $field = $l->yaml->{field};
-	#if ( $field =~ m/英語會話/ ) {
-	#	$category_id = 4;
-	#}
-	#elsif ( $field =~ m/商用英文書信實務/ ) {
-	#	$category_id = 8;
-	#}
-	#else { die "no course category for $field\n" }
+	my $cohort_name = $league;
+	my $category_id;
+	my $field = $l->yaml->{field};
+	if ( $field =~ m/英語會話/ ) {
+		$category_id = 4;
+	}
+	elsif ( $field =~ m/商用英文書信實務/ ) {
+		$category_id = 8;
+	}
+	else { die "no course category for $field\n" }
 
-	#my $cohort_id;
-	#$cohort_id = qx/moosh cohort-create -c $category_id $cohort_name/;
-	#die "$cohort_name cohort already exists? $cohort_id id not number\n"
-	#	unless looks_like_number( $cohort_id );
-	for my $id ( qw/U0433118/ ) {
+	my $cohort_id;
+	$cohort_id = qx/moosh cohort-create -c $category_id $cohort_name/;
+	die "$cohort_name cohort already exists? $cohort_id id not number\n"
+		unless looks_like_number( $cohort_id );
+	for my $id ( sort keys %m ) {
 		my $lower_id = lcfirst $id;
 		my $username = $lower_id;
 		my $lastname = $id;
@@ -62,10 +62,10 @@ sub execute {
 		my $password = $m{$id}->{password};
 		my $user_id;
 		$user_id = qx/Moosh user-create --password $password --email $email --city $city --country "tw" --firstname $firstname --lastname $id $username/;
-		#die "$username user already exists? $user_id id not number\n"
-		#	unless looks_like_number( $user_id );
+		die "$username user already exists? $user_id id not number\n"
+			unless looks_like_number( $user_id );
 		print "$username: $user_id\t";
-		#system("Moosh cohort-enrol -u $user_id $cohort_name");
+		system("Moosh cohort-enrol -u $user_id $cohort_name");
 	}
 
 
