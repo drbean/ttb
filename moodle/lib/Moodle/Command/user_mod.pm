@@ -28,7 +28,7 @@ sub execute {
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	my $course_id = qx/Moosh course-list -i "shortname='correspondence_062'"/;
+	my $course_id = qx/Moosh course-list -i "shortname='$league'"/;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
