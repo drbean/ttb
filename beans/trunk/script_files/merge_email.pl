@@ -1,28 +1,24 @@
-#!/usr/bin/env perl 
+#!/usr/bin/perl 
 
-use strict;
-use warnings;
-
-# Created: 07/09/15 16:15:17
-# Last Edit:
+# Created: 02/10/2018 01:56:05 PM
+# Last Edit: 2018 Feb 10, 03:10:56 PM
 # $Id$
 
 =head1 NAME
 
-merge_email.pl - merge email addresses from ~/admin/$SEMESTER/$SCHOOL/$LEAGUE_email.yaml
+merge_email.pl - munge league.yaml with email addresses from ~/admin/SEMESTER/SCHOOL/LEAGUE_email.yaml
 
 =cut
 
 use strict;
 use warnings;
-use IO::All;
 use YAML qw/LoadFile Dump/;
 use Cwd; use File::Basename;
 use Grades;
 
 =head1 SYNOPSIS
 
-import_memberdata.pl -l FLA0011 -o FLA0016 -s 041 -x 032
+merge_email.pl -l FLA0011 | sponge league.yaml
 
 =cut
 
@@ -31,51 +27,31 @@ pod2usage(1) if $script->help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
 
 my $leagueId = $script->league;
-my $semester = $script->session;
-my $oldid = $script->one;
-my $old_semester= $script->exercise;
+my $semester = $ENV{SEMESTER};
 my $leagues = "/home/drbean/$semester";
 $leagueId = basename( getcwd ) if $leagueId eq '.';
 
-my $dir = basename( getcwd );
-
-my $l = League->new( leagues => "/home/drbean/$semester", id => $dir );
-my $g = Grades->new({ league => $l });
-my %m = map { $_->{id} => $_ } @{ $l->members };
-my $approach = $l->approach;
-
-my $ol = League->new( leagues => "/home/drbean/$old_semester", id => $oldid );
-my $om = $ol->members;
-my %om = map { $_->{id} => $_ } @$om;
-
-# my @grades = io("../../class/$oldid/grades.txt")->chomp->slurp;
-# @grades = map { [ split /: /, $_ ] } @grades;
-# my %grades = map { $_->[0] => $_->[1] } @grades;
-
-my $yaml = $l->yaml;
-my $members = $l->members;
-my @rated;
-for my $member ( @$members ) {
-	my $id = $member->{id};
-	$member->{name} = $om{ $id }->{name} if $om{ $id }->{name};
-	# $member->{password} ||= $om{ $id }->{password};
-	# $member->{rating} ||= $grades{ $id };
-	push @rated, $member;
-}
-
-$yaml->{member} = \@rated;
-
-print Dump $yaml;
-
 =head1 DESCRIPTION
 
-Fill in missing (mostly English name) data from old students if it exists in league.yaml files from previous semesters.
-
-Use 'ack field ../../$OLD_SEMESTER' to find suitable leagues.
-
+Email addresses in ~/admin/SEMESTER/SCHOOL/LEAGUE_email.yaml, which has to be created by hand, are added to the Chinese, id, name, password and rating values of the corresponding member, keyed on their school id.
 
 =cut
 
+my $l = League->new( leagues => "/home/drbean/$semester", id => $leagueId );
+my $c = $l->yaml;
+my $school = $c->{school};
+my %m = map { $_->{id} => $_ } @{ $l->members };
+
+my $email_file = "$ENV{HOME}/admin/$semester/$school/${leagueId}_email.yaml";
+my $e = LoadFile $email_file;
+for my $member ( keys %m ) {
+    die "$member not in $email_file\n" if not exists $e->{$member};
+}
+$m{$_}->{email} = $e->{$_} for (keys %m) ;
+my @m;
+push @m, $m{$_} for sort keys %m;
+$c->{member} = \@m;
+print Dump $c;
 
 =head1 AUTHOR
 
@@ -83,15 +59,13 @@ Dr Bean C<< <drbean at cpan, then a dot, (.), and org> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2015 Dr Bean, all rights reserved.
+Copyright 2018 Dr Bean, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
 
-# End of import_memberdata.pl
+# End of merge_email.pl
 
 # vim: set ts=8 sts=4 sw=4 noet:
-
-
