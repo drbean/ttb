@@ -7,10 +7,10 @@ use strict;
 use warnings;
 use Scalar::Util qw/looks_like_number/;
 
-sub abstract { "moodle user_create -s nuu -l FLA0003" }
+sub abstract { "moopl user_create -s nuu -l FLA0003" }
 sub description { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
 
-sub usage_desc { "moodle user_create -s nuu -l FLA0003" }
+sub usage_desc { "moopl user_create -s nuu -l FLA0003" }
 
 sub opt_spec  {
         return (
