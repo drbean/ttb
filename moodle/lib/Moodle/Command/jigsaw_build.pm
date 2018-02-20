@@ -1,4 +1,4 @@
-package Moodle::Command::group_build;
+package Moodle::Command::jigsaw_build;
 
 use lib "lib";
 
@@ -8,14 +8,20 @@ use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 
-sub abstract { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
-sub description { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
+sub abstract { "moopl jigsaw_build -l 2L1b -c conversation -t story -s gold -f 0 -x 5 -g 45" }
+sub description { "Build jigsaw for course, session 5, grouping id 45" }
 
-sub usage_desc { "moodle group_build -l BMA0031 -c 23" }
+sub usage_desc { "moodle jigsaw_build -l BMA0031 -c 23" }
 
 sub opt_spec  {
         return (
                 ["l=s", "league"]
+				, ["c=s", "course"]
+				, ["t=s", "topic"]
+				, ["s=s", "story"]
+				, ["f=s", "form"]
+				, ["g=s", "grouping"]
+				, ["x=s", "section"]
 	);
 }
 
@@ -23,39 +29,34 @@ sub opt_spec  {
 sub execute {
 	my ($self, $opt, $args) = @_;
 
-	my ($league) = @$opt{qw/l/};
+	my ($league, $course, $topic, $story, $form, $grouping, $section) = @$opt{qw/l c t s f g x/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
 
 	my $course_id = qx/Moosh course-list -i "shortname='$league'"/;
 	chomp $course_id;
+	my $expert_groups = qx/Moosh group-list -G $grouping $course_id/;
+	my @expert_groups = split /\n/, $expert_groups;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
-	my $g = Grades->new({ league => $l });
-	my $cl = $g->classwork;
-	my $lastweek = $cl->lastweek + 1;
-	my $session = $cl->week2session($lastweek);
-	my $beancans = $cl->beancan_names($session);
-	my @groups = sort keys %$beancans;
-	print "league: $league\n";
-	$" = " ";
-	print "beancans: @groups\n";
-	print "Session: $session, Week: $lastweek\n";
-	my $grouping_string = qx/Moosh grouping-create -d "session $session" $session $course_id/;
-	print $grouping_string;
-	chomp $grouping_string;
-	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
-	for my $group ( @groups ) {
-		my $group_string = qx/Moosh group-create "$session-$group" $course_id/;
-		chomp $group_string;
-		(my $group_id = $group_string) =~ s/^.*\((.*)\).*$/$1/;
-		my $members = $beancans->{$group};
-		system("Moosh group-assigngrouping -G $grouping_id $group_id");
-		system("Moosh group-memberadd -c $course_id -g $group_id @$members");
+	my $yaml = LoadFile "/home/drbean/curriculum/$course/$topic/cards.yaml";
+	my $cards = $yaml->{$story}->{jigsaw}->{$form};
+	my @roles = qw/A B C/;
+	my %role_cards;
+	@role_cards{@roles}= @$cards{@roles};
+	my $quiz_cards = $cards->{quiz};
+
+	print "cards: $story, $form\n";
+	for my $group ( @expert_groups ) {
+		next unless $group =~ m/\bgroup\b/;
+		( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
+		( my $role = $group ) =~ s/^.*"\d+-([ABC]).*$/$1/;
+		my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
+		system("Moosh activity-add -n $story$form -c \"$role_cards{$role}\" -s $section -a \"$json\" page $course_id");
 	}
-	system("Moosh course-config-set course $course_id defaultgroupingid $grouping_id")
+	# system("moopl group_build -l $league");
 
 }
 
