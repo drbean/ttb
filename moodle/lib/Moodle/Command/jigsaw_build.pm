@@ -56,6 +56,13 @@ sub execute {
 		my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
 		system("Moosh activity-add -n $story$form -c \"$role_cards{$role}\" -s $section -a \"$json\" page $course_id");
 	}
+	my $quiz_id = qx/Moosh activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
+	print $quiz_id . "\n";
+	my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
+	my $xml = io "/home/drbean/curriculum/$course/$topic/quiz_${story}_jigsaw_$form.xml";
+	io($xml)->print($quiz_content);
+	system("Moosh question-import /home/drbean/curriculum/$course/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
+
 	# system("moopl group_build -l $league");
 
 }
