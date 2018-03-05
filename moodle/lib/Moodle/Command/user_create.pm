@@ -41,10 +41,11 @@ sub execute {
 	my $cohort_name = $league;
 	my $category_id;
 	my $field = $l->yaml->{field};
+	my $id = $l->yaml->{id};
 	if ( $field =~ m/英語會話/ ) {
 		$category_id = 4;
 	}
-	elsif ( $field =~ m/商用英文書信實務/ ) {
+	elsif ( $id =~ m/BMA|MIA/ ) {
 		$category_id = 8;
 	}
 	else { die "no course category for $field\n" }
@@ -61,7 +62,7 @@ sub execute {
 		my $email = $m{$id}->{email};
 		my $password = $m{$id}->{password};
 		my $user_id;
-		$user_id = qx/Moosh user-create --password $password --email $email --city $city --country "tw" --firstname $firstname --lastname $id $username/;
+		$user_id = qx/Moosh user-create --password $password --email $email --city $city --country TW --firstname $firstname --lastname $id $username/;
 		die "$username user already exists? $user_id id not number\n"
 			unless looks_like_number( $user_id );
 		print "$username: $user_id\t";
