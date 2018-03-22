@@ -28,7 +28,7 @@ sub execute {
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	my $course_id = qx/Moosh course-list -i "shortname='$league'"/;
+	my $course_id = qx/Moosh -n course-list -i "shortname='$league'"/;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
@@ -46,7 +46,7 @@ sub execute {
 	}
 	else { $city = "Miaoli";}
 
-	my $user_list = qx/Moosh user-list --course $course_id/;
+	my $user_list = qx/Moosh -n user-list --course $course_id/;
 	my @user_list = split /\n/, $user_list;
 	my @users;
 	for my $user ( @user_list ) {
@@ -63,7 +63,7 @@ sub execute {
 		my $firstname = $m{$schoolid}->{name};
 		my $email = $m{$schoolid}->{email};
 		my $city = $city;
-		system("Moosh user-mod -i --firstname $firstname --password $password --email $email $id");
+		system("Moosh -n user-mod -i --firstname $firstname --password $password --email $email $id");
 		push @mod, {firstname => $firstname, id => $id};
 	}
 	print "firstname: " . $_->{firstname} . "\tid: " . $_->{id} . "\n" for @mod;
