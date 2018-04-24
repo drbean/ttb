@@ -8,8 +8,8 @@ use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 
-sub abstract { "moopl jigsaw_deploy -l 2L1b -c conversation -t story -s gold -f 0 -x 5 -g 45" }
-sub description { "Build jigsaw for course, session 5, grouping id 45" }
+sub abstract { "moopl jigsaw_deploy -l 2L1b -c conversation -t story -s gold -f 0,1,2 -x 5 -g 45" }
+sub description { "Build gold jigsaw for course, session 5, grouping id 45" }
 
 sub usage_desc { "moodle jigsaw_deploy -l BMA0031 -c 23" }
 
@@ -42,27 +42,30 @@ sub execute {
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $yaml = LoadFile "/home/drbean/curriculum/$course/$topic/cards.yaml";
-	my $cards = $yaml->{$story}->{jigsaw}->{$form};
-	my @roles = qw/A B/;
-	my %role_cards;
-	@role_cards{@roles}= @$cards{@roles};
-	$role_cards{$_} .= "\n" for @roles;
-	my $quiz_cards = $cards->{quiz};
+	my @form = split /,/, $form;
+	for my $form ( @form ) {
+		my $cards = $yaml->{$story}->{jigsaw}->{$form};
+		my @roles = qw/A B/;
+		my %role_cards;
+		@role_cards{@roles}= @$cards{@roles};
+		$role_cards{$_} .= "\n" for @roles;
+		my $quiz_cards = $cards->{quiz};
 
-	print "cards: $story, $form\n";
-	for my $group ( @expert_groups ) {
-		next unless $group =~ m/\bgroup\b/;
-		( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
-		( my $role = $group ) =~ s/^.*"\d+-([ABC]).*$/$1/;
-		my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
-		system("Moosh -n activity-add -n $story$form -s $section -o \"--content='$role_cards{$role}' --availability='$json'\" page $course_id");
+		print "cards: $story, $form\n";
+		for my $group ( @expert_groups ) {
+			next unless $group =~ m/\bgroup\b/;
+			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
+			( my $role = $group ) =~ s/^.*"\d+-([ABC]).*$/$1/;
+			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
+			system("Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}' --availability='$json'\" page $course_id");
+		}
+		my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
+		print $quiz_id . "\n";
+		my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
+		my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
+		io($xml)->print($quiz_content);
+		system("Moosh -n question-import /var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
 	}
-	my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
-	print $quiz_id . "\n";
-	my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
-	my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
-	io($xml)->print($quiz_content);
-	system("Moosh -n question-import /var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
 
 	# system("moopl group_build -l $league");
 
