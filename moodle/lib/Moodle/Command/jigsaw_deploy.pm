@@ -34,9 +34,9 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $course_id = qx/Moosh course-list -i "shortname='correspondence_062'"/;
+	my $course_id = qx/Moosh -n course-list -i "shortname='correspondence_062'"/;
 	chomp $course_id;
-	my $expert_groups = qx/Moosh group-list -G $grouping $course_id/;
+	my $expert_groups = qx/Moosh -n group-list -G $grouping $course_id/;
 	my @expert_groups = split /\n/, $expert_groups;
 
 	use Grades;
@@ -54,14 +54,14 @@ sub execute {
 		( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
 		( my $role = $group ) =~ s/^.*"\d+-([ABC]).*$/$1/;
 		my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
-		system("Moosh activity-add -n $story$form -c \"$role_cards{$role}\" -s $section -a \"$json\" page $course_id");
+		system("Moosh -n activity-add -n $story$form -c \"$role_cards{$role}\" -s $section -a \"$json\" page $course_id");
 	}
-	my $quiz_id = qx/Moosh activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
+	my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
 	print $quiz_id . "\n";
 	my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
-	my $xml = io "/home/drbean/curriculum/$course/$topic/quiz_${story}_jigsaw_$form.xml";
+	my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
 	io($xml)->print($quiz_content);
-	system("Moosh question-import /home/drbean/curriculum/$course/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
+	system("Moosh -n question-import /var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
 
 	# system("moopl group_build -l $league");
 
