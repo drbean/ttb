@@ -42,7 +42,7 @@ sub execute {
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $yaml = LoadFile "/home/drbean/curriculum/$course/$topic/cards.yaml";
-	my $cards = $yaml->{$story}->{drag}->{$form};
+	my $cards = $yaml->{$story}->{jigsaw}->{$form};
 	my @roles = qw/A B/;
 	my %role_cards;
 	@role_cards{@roles}= @$cards{@roles};
