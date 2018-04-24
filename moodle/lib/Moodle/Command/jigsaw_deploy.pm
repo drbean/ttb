@@ -46,6 +46,7 @@ sub execute {
 	my @roles = qw/A B C/;
 	my %role_cards;
 	@role_cards{@roles}= @$cards{@roles};
+	$role_cards{$_} .= "\n" for @roles;
 	my $quiz_cards = $cards->{quiz};
 
 	print "cards: $story, $form\n";
