@@ -43,7 +43,7 @@ sub execute {
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $yaml = LoadFile "/home/drbean/curriculum/$course/$topic/cards.yaml";
 	my $cards = $yaml->{$story}->{drag}->{$form};
-	my @roles = qw/A B C/;
+	my @roles = qw/A B/;
 	my %role_cards;
 	@role_cards{@roles}= @$cards{@roles};
 	$role_cards{$_} .= "\n" for @roles;
