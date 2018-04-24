@@ -56,9 +56,7 @@ sub execute {
 			next unless $group =~ m/\bgroup\b/;
 			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
 			( my $role = $group ) =~ s/^.*"\d+-([ABC]).*$/$1/;
-			print $group, $role_cards{$role};
 			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
-			print "Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}' --availability='$json'\" page $course_id";
 			system("Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}' --availability='$json'\" page $course_id");
 		}
 		my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
