@@ -55,6 +55,8 @@ sub execute {
 		for my $group ( @expert_groups ) {
 			next unless $group =~ m/\bgroup\b/;
 			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
+			( my $group_form = $group ) =~ s/^[\D]*\d+-(\d+)-.*$/$1/;
+			next unless $form eq $group_form;
 			( my $role = $group ) =~ s/^.*"\d+-\d+-([AB]).*$/$1/;
 			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
 			system("Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
