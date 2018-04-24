@@ -21,7 +21,7 @@ sub opt_spec  {
 				, ["s=s", "story"]
 				, ["f=s", "form"]
 				, ["g=s", "grouping"]
-				, ["x=s", "section"]
+				, ["w=s", "section"]
 	);
 }
 
@@ -29,7 +29,7 @@ sub opt_spec  {
 sub execute {
 	my ($self, $opt, $args) = @_;
 
-	my ($league, $course, $topic, $story, $form, $grouping, $section) = @$opt{qw/l c t s f g x/};
+	my ($league, $course, $topic, $story, $form, $grouping, $section) = @$opt{qw/l c t s f g w/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
