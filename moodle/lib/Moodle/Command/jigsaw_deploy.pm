@@ -34,7 +34,7 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $course_id = qx/Moosh -n course-list -i "shortname='correspondence_062'"/;
+	my $course_id = qx/Moosh -n course-list -i "shortname='$course'"/;
 	chomp $course_id;
 	my $expert_groups = qx/Moosh -n group-list -G $grouping $course_id/;
 	my @expert_groups = split /\n/, $expert_groups;
