@@ -57,7 +57,7 @@ sub execute {
 			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
 			( my $role = $group ) =~ s/^.*"\d+-\d+-([AB]).*$/$1/;
 			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
-			system("Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}' --availability='$json'\" page $course_id");
+			system("Moosh -n -v activity-add -n ${story}_$form -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
 		}
 		my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
 		print $quiz_id . "\n";
