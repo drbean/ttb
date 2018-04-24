@@ -55,18 +55,19 @@ sub execute {
 		for my $group ( @expert_groups ) {
 			next unless $group =~ m/\bgroup\b/;
 			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
-			( my $group_form = $group ) =~ s/^[\D]*\d+-(\d+)-.*$/$1/;
+			( my $group_form = $group ) =~ s/^[\D]*\d+\s"\d+-(\d+)-.*$/$1/;
 			next unless $form eq $group_form;
 			( my $role = $group ) =~ s/^.*"\d+-\d+-([AB]).*$/$1/;
 			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
 			system("Moosh -n -v activity-add -n \"$story $form $role\" -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
 		}
-		my $quiz_id = qx/Moosh -n activity-add -n \"$story$form quiz\" -s $section quiz $course_id/;
-		print $quiz_id . "\n";
+		my $quiz_id = qx/Moosh -n activity-add -n \"$story $form quiz\" -s $section quiz $course_id/;
+		chomp $quiz_id;
 		my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
 		my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
 		io($xml)->print($quiz_content);
-		system("Moosh -n question-import /var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml $quiz_id");
+		my $question_category_id = 3209 + $form;
+		system("Moosh -n question-import $xml $quiz_id $question_category_id");
 	}
 
 	# system("moopl group_build -l $league");
