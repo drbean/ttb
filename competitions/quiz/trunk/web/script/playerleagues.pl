@@ -35,11 +35,6 @@ my $genres = [
 my $leaguegenres = [
 			[ qw/league genre/ ],
 			[ "2L2",	7 ],
-			[ "MB2",	7 ],
-			[ "FLA0003",	7 ],
-			[ "FLA0013",	7 ],
-			[ "FLA0019",	2 ],
-			[ "FLA0021",	11 ],
 
 		];
 
