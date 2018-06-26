@@ -43,6 +43,7 @@ sub execute {
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $yaml = LoadFile "/home/drbean/curriculum/$course/$topic/cards.yaml";
 	my @form = split /,/, $form;
+	my $n=0;
 	for my $form ( @form ) {
 		my $cards = $yaml->{$story}->{jigsaw}->{$form};
 		my @roles = qw/A B/;
@@ -54,10 +55,12 @@ sub execute {
 		print "cards: $story, $form\n";
 		for my $group ( @expert_groups ) {
 			next unless $group =~ m/\bgroup\b/;
-			( my $id = $group ) =~ s/^[\D]*(\d+).*$/$1/;
-			( my $group_form = $group ) =~ s/^[\D]*\d+\s"\d+-(\d+)-.*$/$1/;
+			my $group_id_re = qr/\d+/;
+			my $group_name_re = qr/\d-\d/;
+			( my $id = $group ) =~ s/^[\D]*($group_id_re).*$/$1/;
+			( my $group_form = $group ) =~ s/^[\D]*$group_id_re\s"$section-($group_name_re).*$/$1/;
 			next unless $form eq $group_form;
-			( my $role = $group ) =~ s/^.*"\d+-\d+-([AB]).*$/$1/;
+			( my $role = $group ) =~ s/^.*"$group_id_re-$group_name_re-([AB]).*$/$1/;
 			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
 			system("Moosh -n -v activity-add -n \"$story $form $role\" -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
 		}
@@ -66,7 +69,7 @@ sub execute {
 		my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
 		my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
 		io($xml)->print($quiz_content);
-		my $question_category_id = 3209 + $form;
+		my $question_category_id = 3593 + ++$n;
 		system("Moosh -n question-import $xml $quiz_id $question_category_id");
 	}
 
