@@ -22,6 +22,7 @@ sub opt_spec  {
 				, ["f=s", "form"]
 				, ["g=s", "grouping"]
 				, ["w=s", "section"]
+				, ["q=s", "question category"]
 	);
 }
 
@@ -29,7 +30,7 @@ sub opt_spec  {
 sub execute {
 	my ($self, $opt, $args) = @_;
 
-	my ($league, $course, $topic, $story, $form, $grouping, $section) = @$opt{qw/l c t s f g w/};
+	my ($league, $course, $topic, $story, $form, $grouping, $section, $question1_cat) = @$opt{qw/l c t s f g w q/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
@@ -61,7 +62,7 @@ sub execute {
 			( my $group_form = $group ) =~ s/^[\D]*$group_id_re\s"$section-($group_name_re).*$/$1/;
 			next unless $form eq $group_form;
 			( my $role = $group ) =~ s/^.*"$group_id_re-$group_name_re-([AB]).*$/$1/;
-			my $json = q/{\"op\":\"&\",\"c\":[{\"type\":\"group\",\"id\":/ . $id . q/}],\"showc\":[false]}/;
+			my $json = qq/{"op":"&","c":[{"type":"group","id":$id}],"showc":[false]}/;
 			system("Moosh -n -v activity-add -n \"$story $form $role\" -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
 		}
 		my $quiz_id = qx/Moosh -n activity-add -n \"$story $form quiz\" -s $section quiz $course_id/;
@@ -69,7 +70,7 @@ sub execute {
 		my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
 		my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
 		io($xml)->print($quiz_content);
-		my $question_category_id = 3593 + ++$n;
+		my $question_category_id = $question1_cat + ++$n;
 		system("Moosh -n question-import $xml $quiz_id $question_category_id");
 	}
 
