@@ -65,7 +65,7 @@ sub execute {
 			my $json = qq/{"op":"&","c":[{"type":"group","id":$id}],"showc":[false]}/;
 			system("Moosh -n -v activity-add -n \"$story $form $role\" -s $section -o \"--content='$role_cards{$role}'\" page $course_id");
 		}
-		my $quiz_id = qx/Moosh -n activity-add -n \"$story $form quiz\" -s $section quiz $course_id/;
+		my $quiz_id = qx/Moosh -n activity-add -n \"$story $form quiz\" -s $section -o '--availabilityconditionsjson={"op":"&","c":[{"op":"|","c":[{"type":"completion","cm":2951,"e":1},{"type":"completion","cm":2950,"e":1}]}],"showc":[false]}' quiz $course_id/;
 		chomp $quiz_id;
 		my $quiz_content = qx/yaml4moodle xml -c $course -t $topic -s $story -f $form/;
 		my $xml = io "/var/lib/moodle/repository/$topic/quiz_${story}_jigsaw_$form.xml";
