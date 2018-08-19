@@ -1,4 +1,4 @@
-package Moodle::Command::jigsaw_build;
+package Moodle::Command::quiz_build;
 
 use lib "lib";
 
@@ -8,10 +8,10 @@ use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 
-sub abstract { "moopl jigsaw_build -l 2L1b -c conversation -t story -s gold -f 0 -x 5 -g 45" }
-sub description { "Build jigsaw for course, session 5, grouping id 45" }
+sub abstract { "moopl quiz_build -l 2L1b -c conversation -t story -s gold -f 0 -x 5 -g 45" }
+sub description { "Build quiz for course, session 5, grouping id 45" }
 
-sub usage_desc { "moodle jigsaw_build -l BMA0031 -c 23" }
+sub usage_desc { "moodle quiz_build -l BMA0031 -c 23" }
 
 sub opt_spec  {
         return (
