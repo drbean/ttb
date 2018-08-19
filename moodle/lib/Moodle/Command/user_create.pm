@@ -51,10 +51,10 @@ sub execute {
 	else { die "no course category for $field\n" }
 
 	my $cohort_id;
-	$cohort_id = qx/moosh cohort-create -c $category_id $cohort_name/;
-	die "$cohort_name cohort already exists? $cohort_id id not number\n"
-		unless looks_like_number( $cohort_id );
-	for my $id ( sort keys %m ) {
+	#$cohort_id = qx/Moosh cohort-create -c $category_id $cohort_name/;
+	#die "$cohort_name cohort already exists? $cohort_id id not number\n"
+	#	unless looks_like_number( $cohort_id );
+	for my $id ( q/U0334047/ ) {
 		my $lower_id = lcfirst $id;
 		my $username = $lower_id;
 		my $lastname = $id;
@@ -62,11 +62,11 @@ sub execute {
 		my $email = $m{$id}->{email};
 		my $password = $m{$id}->{password};
 		my $user_id;
-		$user_id = qx/Moosh user-create --password $password --email $email --city $city --country TW --firstname $firstname --lastname $id $username/;
+		$user_id = qx/Moosh -n user-create --password $password --email $email --city $city --country TW --firstname $firstname --lastname $id $username/;
 		die "$username user already exists? $user_id id not number\n"
 			unless looks_like_number( $user_id );
 		print "$username: $user_id\t";
-		system("Moosh cohort-enrol -u $user_id $cohort_name");
+		# system("Moosh cohort-enrol -u $user_id $cohort_name");
 	}
 
 
