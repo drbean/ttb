@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 02/10/2018 01:56:05 PM
-# Last Edit: 2018 Feb 10, 03:10:56 PM
+# Last Edit: 2018 Sep 15, 04:01:56 PM
 # $Id$
 
 =head1 NAME
@@ -33,14 +33,17 @@ $leagueId = basename( getcwd ) if $leagueId eq '.';
 
 =head1 DESCRIPTION
 
-Email addresses in ~/admin/SEMESTER/SCHOOL/LEAGUE_email.yaml, which has to be created by hand, are added to the Chinese, id, name, password and rating values of the corresponding member, keyed on their school id.
+Email addresses in ~/admin/SEMESTER/SCHOOL/LEAGUE_email.yaml, which has to be created by hand, are added to the Chinese, id, name, password and rating values of the corresponding member, keyed on their school id. (Remember the BOM!)
 
 =cut
 
 my $l = League->new( leagues => "/home/drbean/$semester", id => $leagueId );
 my $c = $l->yaml;
+# my $c = LoadFile "/home/drbean/071/B91/league.yaml";
 my $school = $c->{school};
-my %m = map { $_->{id} => $_ } @{ $l->members };
+# my $school = "must";
+my $members = $c->{member};
+my %m = map { $_->{id} => $_ } @$members;
 
 my $email_file = "$ENV{HOME}/admin/$semester/$school/${leagueId}_email.yaml";
 my $e = LoadFile $email_file;
