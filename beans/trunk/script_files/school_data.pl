@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 08/28/2012 02:53:15 PM
-# Last Edit: 2014 Sep 15, 05:12:03 PM
+# Last Edit: 2018 Sep 15, 04:02:30 PM
 # $Id$
 
 =head1 NAME
@@ -39,7 +39,7 @@ $leagueId = basename( getcwd ) if $leagueId eq '.';
 
 =head1 DESCRIPTION
 
-UTF-16LE Windows files in ~/admin/$semester/$school/$leagueId.txt must be converted to UTF-8 by removing non-member lines, setting fileencoding to utf-8. Make sure the characters in 2-character names are not separated by a space.
+UTF-16LE Windows files in ~/admin/$semester/$school/$leagueId.txt must be converted to UTF-8 by removing non-member lines, setting fileencoding to utf-8. (Remember the BOM!) Make sure the characters in 2-character names are not separated by a space.
 
 Make sure that there is a sensible member in the members field before running the script.
 
@@ -51,8 +51,11 @@ use Grades;
 my $l = League->new( leagues => "/home/drbean/$semester", id => $leagueId );
 my $g = Grades->new({ league => $l });
 my $c = $l->yaml;
+# my $c = LoadFile "/home/drbean/071/$leagueId/league.yaml";
 my $school = $c->{school};
-my %m = map { $_->{id} => $_ } @{ $l->members };
+# my $school = "must";
+my $members = $c->{member};
+my %m = map { $_->{id} => $_ } @$members;
 my $io = io("/home/drbean/admin/$semester/$school/$leagueId.txt");
 my @members;
 my @lines = $io->slurp;
