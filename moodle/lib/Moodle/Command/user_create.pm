@@ -38,14 +38,15 @@ sub execute {
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	my $cohort_name = $league;
+	my $cohort_name = $semester . $league;
 	my $category_id;
 	my $field = $l->yaml->{field};
 	my $id = $l->yaml->{id};
-	if ( $field =~ m/英語會話/ ) {
+	my $english = qr/\x{82f1}\x{8a9e}/; # 英語
+	if ( $field =~ $english) {
 		$category_id = 4;
 	}
-	elsif ( $id =~ m/BMA|MIA/ ) {
+	elsif ( $id =~ m/BMA00|MIA00|FIA00/ ) {
 		$category_id = 8;
 	}
 	else { die "no course category for $field\n" }
@@ -54,11 +55,11 @@ sub execute {
 	#$cohort_id = qx/Moosh cohort-create -c $category_id $cohort_name/;
 	#die "$cohort_name cohort already exists? $cohort_id id not number\n"
 	#	unless looks_like_number( $cohort_id );
-	for my $id ( q/U0334047/ ) {
+	for my $id ( sort keys %m ) {
 		my $lower_id = lcfirst $id;
 		my $username = $lower_id;
 		my $lastname = $id;
-		my $firstname =$m{$id}->{name};
+		my $firstname = '"' . $m{$id}->{name} . '"';
 		my $email = $m{$id}->{email};
 		my $password = $m{$id}->{password};
 		my $user_id;
@@ -66,7 +67,8 @@ sub execute {
 		die "$username user already exists? $user_id id not number\n"
 			unless looks_like_number( $user_id );
 		print "$username: $user_id\t";
-		# system("Moosh cohort-enrol -u $user_id $cohort_name");
+		chomp $user_id;
+		system("Moosh -n cohort-enrol -u $user_id $cohort_name");
 	}
 
 
