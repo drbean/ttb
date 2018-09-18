@@ -16,6 +16,7 @@ sub usage_desc { "moodle group_build -l BMA0031 -c 23" }
 sub opt_spec  {
         return (
                 ["l=s", "league"]
+                , ["c=i", "course id on moodle"]
 	);
 }
 
@@ -24,12 +25,16 @@ sub execute {
 	my ($self, $opt, $args) = @_;
 
 	my ($league) = @$opt{qw/l/};
+	my $course_id;
+	($course_id) = @$opt{qw/c/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $course_id = qx/Moosh -n course-list -i "shortname='$league'"/;
-	chomp $course_id;
+	unless ( $course_id ) {
+		$course_id = qx/Moosh -n course-list -i "shortname='$league'"/;
+		chomp $course_id;
+	}
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
@@ -47,6 +52,7 @@ sub execute {
 	print $grouping_string;
 	chomp $grouping_string;
 	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
+	# my $grouping_id = "126";
 	for my $group ( @groups ) {
 		my $group_string = qx/Moosh -n group-create "$session-$group" $course_id/;
 		chomp $group_string;
