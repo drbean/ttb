@@ -40,8 +40,8 @@ sub execute {
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
 	my $g = Grades->new({ league => $l });
 	my $cl = $g->classwork;
-	my $thissession = $cl->lastsession;
-	my $beancans = $cl->beancan_names($thissession);
+	my $session = $cl->lastsession;
+	my $beancans = $cl->beancan_names($session);
 	my @groups = sort keys %$beancans;
 	print "league: $league\n";
 	$" = " ";
