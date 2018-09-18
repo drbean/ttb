@@ -58,6 +58,7 @@ sub execute {
 		chomp $group_string;
 		(my $group_id = $group_string) =~ s/^.*\((.*)\).*$/$1/;
 		my $members = $beancans->{$group};
+		my @members = map { '"' . $_ . '"' } @$members;
 		system("Moosh -n group-assigngrouping -G $grouping_id $group_id");
 		system("Moosh -n group-memberadd -c $course_id -g $group_id @$members");
 	}
