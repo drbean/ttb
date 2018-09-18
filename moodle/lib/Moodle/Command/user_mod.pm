@@ -16,6 +16,7 @@ sub usage_desc { "moodle user_mod -s nuu -l FLA0003" }
 sub opt_spec  {
         return (
                 ["l=s", "league"]
+                , ["c=s", "course id on moodle"]
 	);
 }
 
@@ -24,11 +25,15 @@ sub execute {
 	my ($self, $opt, $args) = @_;
 
 	my ($league) = @$opt{qw/l/};
+	my ($course_id) = @$opt{qw/c/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir '/var/www/cgi-bin/moodle';
 
-	my $course_id = qx/Moosh -n course-list -i "shortname='$league'"/;
+	unless ( $course_id ) {
+		my $course_id = qx/Moosh -n course-list -i "shortname='$league'"/;
+		chomp $course_id;
+	}
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
@@ -59,11 +64,16 @@ sub execute {
 	for my $user ( @users ) {
 		my $id = $user->{id};
 		my $schoolid = ucfirst $user->{username};
+		my $cohorter = $m{$schoolid};
+		unless ( defined $cohorter ) {
+			warn "No user with $schoolid id in $league league";
+			next;
+		}
 		my $password = $m{$schoolid}->{password};
 		my $firstname = $m{$schoolid}->{name};
 		my $email = $m{$schoolid}->{email};
 		my $city = $city;
-		system("Moosh -n user-mod -i --firstname $firstname --password $password --email $email $id");
+		system("Moosh -n user-mod -i --firstname $firstname --email $email $id");
 		push @mod, {firstname => $firstname, id => $id};
 	}
 	print "firstname: " . $_->{firstname} . "\tid: " . $_->{id} . "\n" for @mod;
