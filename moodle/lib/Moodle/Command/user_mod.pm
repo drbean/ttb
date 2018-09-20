@@ -70,7 +70,7 @@ sub execute {
 			next;
 		}
 		my $password = $m{$schoolid}->{password};
-		my $firstname = $m{$schoolid}->{name};
+		my $firstname = '"' . $m{$schoolid}->{name} . '"';
 		my $email = $m{$schoolid}->{email};
 		my $city = $city;
 		system("Moosh -n user-mod -i --firstname $firstname --email $email $id");
