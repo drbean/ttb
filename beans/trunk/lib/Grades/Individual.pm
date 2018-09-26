@@ -1,4 +1,4 @@
-#Last Edit: 2017 Oct 23, 09:03:34 PM
+#Last Edit: 2018 Sep 18, 03:41:33 PM
 #$Id$
 
 use MooseX::Declare;
@@ -124,7 +124,7 @@ The files containing classwork points (beans) awarded to beancans, of form, grou
 	method _build_all_ided_files {
 		my $files = $self->allfiles;
 		my %files = map { m|/(\d+)\.yaml$|; $1 => $_ } @$files;
-		croak "No classwork files: $files?" unless %files;
+		carp "No classwork files: $files?" unless %files;
 		return \%files;
 	}
 
