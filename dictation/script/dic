@@ -26,7 +26,7 @@ use lib "$Bin/../lib";
 
 =head1 SYNOPSIS
 
-dic text/conversation/fourhand -c CTEST -t TOPIC -s STORY -f FORM -p <a7|a6>
+dic text/conversation/fourhand -c COURSE -z CTEST -t TOPIC -s STORY -f FORM -p <a7|a6>
 
 =cut
 
