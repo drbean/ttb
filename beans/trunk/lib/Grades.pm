@@ -1,6 +1,6 @@
 package Grades;
 
-#Last Edit: 2017 Oct 23, 04:32:00 PM
+#Last Edit: 2018 Sep 18, 03:17:17 PM
 #$Id$
 
 use MooseX::Declare;
@@ -871,6 +871,7 @@ Handles Classwork's classwork_total and classworkPercent methods. Calls the tota
 =cut
 
 class Approach {
+    use List::Util qw/max/;
 
 =head3 league
 
@@ -926,6 +927,18 @@ The sessions (weeks) over the series (semester) in each of which there was a dif
         my @subdirs = grep { -d } glob "$dir/*";
         [ sort { $a <=> $b } map m/^$dir\/(\d+)$/, @subdirs ];
     }
+
+=head3 lastsession
+
+The last session in which beans were awarded, players were assigned to groups, or something else happened. TODO lexicographic order, not numerical order.
+
+=cut
+
+	has 'lastsession' => ( is => 'ro', isa => 'Int', lazy_build => 1 );
+	method _build_lastsession {
+		my $session = $self->series;
+		max @$session;
+	}
 
 #=head3 all_events
 #
