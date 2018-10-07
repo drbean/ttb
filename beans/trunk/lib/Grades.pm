@@ -1,6 +1,6 @@
 package Grades;
 
-#Last Edit: 2018 Oct 02, 09:14:45 PM
+#Last Edit: 2018 Sep 18, 03:17:17 PM
 #$Id$
 
 use MooseX::Declare;
@@ -91,7 +91,7 @@ The path to the league directory.
 =cut
 
 	has 'leagues' => (is => 'ro', isa => 'Str', required => 1, lazy => 1,
-	    default => "/home/drbean/071" );
+	    default => "/home/drbean/$ENV{SEMESTER}" );
 
 =head3 id
 
@@ -893,7 +893,8 @@ The directory under which there are subdirectories containing beancan membership
 	my $league = $self->league;
 	my $id = $league->id;
 	my $leaguedir = $self->league->leagues . "/" . $id;
-	my $basename = "session";
+	my $basename = $league->yaml->{group} ||
+			$league->yaml->{compcomp} || "session";
 	my $beancandirs = $leaguedir .'/' . $basename;
 	}
 
