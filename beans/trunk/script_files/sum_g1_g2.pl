@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 04/28/2013 04:26:17 PM
-# Last Edit: 2017 Jun 27, 09:53:27 PM
+# Last Edit: 2018 Oct 06, 08:18:10 PM
 # $Id$
 
 =head1 NAME
@@ -59,7 +59,7 @@ my $g2_again = $league->inspect("$leagues/$id/exam/$exam/g2.yaml");
 my $file3 = "$leagues/$id/exam/$exam/g3.yaml";
 my %g;
 if ( -e $file3 ) {
-    my $g3 = $league->inspect( $file3 );
+    my ($workings, $g3) = LoadFile $file3;
     warn "averaging with $file3";
     $weights = "33.33,33.33,33.33" unless defined $weights and $weights;
     my @weight = split /,/, $weights; 
