@@ -1,6 +1,6 @@
 package Grades;
 
-#Last Edit: 2018 Sep 18, 03:17:17 PM
+#Last Edit: 2018 Oct 07, 02:31:42 PM
 #$Id$
 
 use MooseX::Declare;
@@ -22,6 +22,8 @@ has 'beancan' => ( metaclass => 'Getopt', is => 'ro', isa => 'Int',
 		cmd_flag => 'n',);
 has 'tables' => ( metaclass => 'Getopt', is => 'ro', isa => 'Str',
 		cmd_flag => 'g',);
+has 'file' => ( metaclass => 'Getopt', is => 'ro', isa => 'Str',
+		cmd_flag => 'f',);
 
 
 has 'round' => ( metaclass => 'Getopt', is => 'ro', isa => 'Str',
