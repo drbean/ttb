@@ -12,7 +12,7 @@ my $name = "comp$ENV{SEMESTER}";
 __PACKAGE__->config(
     schema_class => 'CompComp::Schema',
     connect_info =>  {
-        dsn => "dbi:Pg:dbname=$name",
+        dsn => "dbi:Pg:dbname=$name;port=5434",
         user => '',
         password => '',
     }
