@@ -3,13 +3,14 @@
 name: CompComp
 # database: comp061
 # dic_database: dic061
-swiss_database: swiss062
-bett_database: bett062
-leagues: /home/drbean/062
+swiss_database: swiss071
+bett_database: bett071
+leagues: /home/drbean/071
 
 news: FLA0003
 
 conversation:
-  - 2L2
+  - 2L1
+  - B91
 
 writing: 251
