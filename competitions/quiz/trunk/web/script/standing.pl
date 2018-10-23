@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 10/29/2017 02:02:50 PM
-# Last Edit: 2017 Oct 31, 12:38:12 PM
+# Last Edit: 2018 Oct 23, 03:05:03 PM
 # $Id$
 
 =head1 NAME
@@ -31,7 +31,7 @@ use YAML qw/LoadFile/;
 use Net::FTP;
 use Template;
 
-use lib "/home/drbean/comp/web/lib";
+use lib "/home/drbean/ttb/competitions/quiz/trunk/web/lib";
 
 use CompComp::Model::SwissDB;
 use CompComp::SwissSchema;
@@ -163,7 +163,7 @@ my $genre = $leaguegenre{$tourid};
 my $leaguedirs = $config->{leagues};
 my $compdir = "$leaguedirs/$tourid/comp";
 my $tt = Template->new({ TEMPLATE_EXTENSION => '.tt2',
-    INCLUDE_PATH => "/home/drbean/comp/web/root/src/",
+    INCLUDE_PATH => "/home/drbean/ttb/competitions/quiz/trunk/web/root/src/",
     OUTPUT_PATH => $compdir,
     TIMER => 0,
     # render_die => 0, default_view => 'login.tt2'
