@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 21, 10:01:03 AM
+# Last Edit: 2018 Nov 21, 10:35:25 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -70,14 +70,14 @@ my @latex = (
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,8" },
 		{ page => 1, xy => "8,8" },
-		{ page => 2, xy => "8,0" },
 		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "8,8" },
+		{ page => 2, xy => "8,0" },
 		{ page => 2, xy => "0,8" },
-		{ page => 3, xy => "0,0" },
+		{ page => 2, xy => "8,8" },
 		{ page => 3, xy => "8,0" },
-		{ page => 3, xy => "0,8" },
+		{ page => 3, xy => "0,0" },
 		{ page => 3, xy => "8,8" },
+		{ page => 3, xy => "0,8" },
 		{ page => 4, xy => "8,0" },
 		{ page => 4, xy => "0,0" },
 		{ page => 4, xy => "8,8" },
