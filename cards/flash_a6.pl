@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 21, 10:35:25 AM
+# Last Edit: 2018 Nov 21, 03:12:05 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -175,14 +175,23 @@ my @loser = grep { $_ ne $winner[0] } @clinchers;
 my %words; @words{ @words } = (); delete @words{@clinchers};
 my @pruned = keys %words;
 my (@call, @lost_call);
+my $number_on_page = 0;
+my @prompts = keys %prompts;
+my @staged;
 if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
 	push @call, "$_: $prompts{$_}" for (@pruned, @winner);
 	push @lost_call, "$_: $prompts{$_}" for (@loser);
 
 }
 elsif ( ref $flashcard eq 'HASH' ) {
-	push @call, keys %prompts;
-	push @call, values %prompts;
+	while ( $number_on_page <=3 ) {
+		push @staged, ( pop @prompts );
+		$number_on_page++;
+	}
+	push @call, @staged;
+	push @call, %prompts{$_} for @staged;
+	@staged = ();
+	$number_on_page = 0;
 }
 else {
 	@call = @prompts{ @pruned, @winner };
