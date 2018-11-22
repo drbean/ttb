@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 21, 03:12:05 PM
+# Last Edit: 2018 Nov 22, 02:41:41 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -70,18 +70,21 @@ my @latex = (
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,8" },
 		{ page => 1, xy => "8,8" },
-		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "8,0" },
+
 		{ page => 2, xy => "0,8" },
 		{ page => 2, xy => "8,8" },
-		{ page => 3, xy => "8,0" },
+		{ page => 2, xy => "0,0" },
+		{ page => 2, xy => "8,0" },
+
 		{ page => 3, xy => "0,0" },
-		{ page => 3, xy => "8,8" },
+		{ page => 3, xy => "8,0" },
 		{ page => 3, xy => "0,8" },
-		{ page => 4, xy => "8,0" },
-		{ page => 4, xy => "0,0" },
-		{ page => 4, xy => "8,8" },
+		{ page => 3, xy => "8,8" },
+
 		{ page => 4, xy => "0,8" },
+		{ page => 4, xy => "8,8" },
+		{ page => 4, xy => "8,0" },
+		{ page => 4, xy => "8,0" },
 	);
 my $paging = 0;
 my $threepages = 0;
@@ -184,14 +187,16 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
 
 }
 elsif ( ref $flashcard eq 'HASH' ) {
-	while ( $number_on_page <=3 ) {
-		push @staged, ( pop @prompts );
-		$number_on_page++;
+	while ( @prompts  ) {
+		while ( $number_on_page <=3 ) {
+			push @staged, ( pop @prompts );
+			$number_on_page++;
+		}
+		push @call, @staged;
+		push @call, $prompts{$_} for @staged;
+		@staged = ();
+		$number_on_page = 0;
 	}
-	push @call, @staged;
-	push @call, %prompts{$_} for @staged;
-	@staged = ();
-	$number_on_page = 0;
 }
 else {
 	@call = @prompts{ @pruned, @winner };
