@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 22, 03:04:27 PM
+# Last Edit: 2018 Nov 24, 01:42:56 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -84,7 +84,7 @@ my @latex = (
 
 		{ page => 4, xy => "0,8" },
 		{ page => 4, xy => "8,8" },
-		{ page => 4, xy => "8,0" },
+		{ page => 4, xy => "0,0" },
 		{ page => 4, xy => "8,0" },
 	);
 my $paging = 0;
