@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 24, 01:42:56 PM
+# Last Edit: 2018 Nov 24, 01:53:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -38,7 +38,6 @@ my $latexString = <<"START_LATEX";
 \\usepackage[a4paper,landscape]{geometry}
 % \\newcommand{\\printlandscape}{\\special{landscape}}
 \\usepackage[T1]{fontenc}
-\\fontsize{50cm}{50.2cm}\\selectfont
 \\usepackage{xeCJK}
 \\setCJKmainfont{WenQuanYi Zen Hei}
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
