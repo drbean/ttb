@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 10/15/2011 07:52:09 PM
-# Last Edit: 2017 Sep 07, 08:38:28 PM
+# Last Edit: 2018 Nov 13, 09:09:37 PM
 # $Id$
 
 =head1 NAME
@@ -65,7 +65,7 @@ my $lastsession = $session > 1 ? $session - 1 : 1;
 my $n = $script->beancan || 3;
 
 my $gs;
-$gs = try { LoadFile "classwork/$lastsession/groups.yaml" } catch
+$gs = try { LoadFile "session/$lastsession/groups.yaml" } catch
     { $gs = {} };
 my @keys = keys %$gs;
 my @colors = ("01" .. "04", "11" .. "14", "21" .. "24", "31" .. "34",
