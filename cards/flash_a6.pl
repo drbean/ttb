@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2018 Nov 24, 01:53:09 PM
+# Last Edit: 2018 Nov 29, 04:03:28 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -39,7 +39,7 @@ my $latexString = <<"START_LATEX";
 % \\newcommand{\\printlandscape}{\\special{landscape}}
 \\usepackage[T1]{fontenc}
 \\usepackage{xeCJK}
-\\setCJKmainfont{WenQuanYi Zen Hei}
+\\setCJKmainfont[Scale=2.0]{WenQuanYi Zen Hei}
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
 \\usepackage[absolute,showboxes]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
