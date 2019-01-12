@@ -31,12 +31,14 @@ sub execute {
 	chdir "/var/www/cgi-bin/moodle";
 
 	# Save questions in ${exam}_exam_$semester category for quiz
-	my @category = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
+	my $category = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
+	my @category = split /\n/, $category;
 	die "${exam}_exam_$semester category id is which @category category?\n"
 		unless @category == 1;
-	my $category = shift @category;
-	die "${exam}_exam_$semester category id is $category?\n"
-		unless looks_like_number($category);
+	my $id = shift @category;
+	chomp $id;
+	die "${exam}_exam_$semester category id is $id?\n"
+		unless looks_like_number($id);
 
 	# Get exam quiz activity id
 	my $quiz = qx/Moosh -n sql-run "SELECT id FROM {quiz} WHERE name =  \'${exam}_exam_$semester\'"/;
