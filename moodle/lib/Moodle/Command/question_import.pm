@@ -31,9 +31,10 @@ sub execute {
 	chdir "/var/www/cgi-bin/moodle";
 
 	# Save questions in ${exam}_exam_$semester category for quiz
-	my $category =
-qx/Moosh -n sql-run "SELECT id FROM {question_categories} WHERE name = \'${exam}_exam_$semester\'"/;
-	chomp $category;
+	my @category = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
+	die "${exam}_exam_$semester category id is which @category category?\n"
+		unless @category == 1;
+	my $category = shift @category;
 	die "${exam}_exam_$semester category id is $category?\n"
 		unless looks_like_number($category);
 
