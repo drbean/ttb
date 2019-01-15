@@ -30,7 +30,7 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 	# Save questions in ${exam}_exam_$semester category for quiz
-	my $candidates = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
+	my $candidates = qx{~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id};
 	my @category = split /\n/, $candidates;
 	die "${exam}_exam_$semester category id is which @category category?\n"
 		unless @category == 1;
