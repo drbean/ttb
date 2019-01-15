@@ -30,7 +30,7 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 	# Save questions in ${exam}_exam_$semester category for quiz
-	my $candidates = qx{~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v test_of_question-import -s id};
+	my $candidates = qx{~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u drbean -t question_categories -a select -k name  -v test_of_question-import -s id};
 	my @category = split /\n/, $candidates;
 	die "${exam}_exam_$semester category id is which @category category?\n"
 		unless @category == 1;
@@ -41,7 +41,7 @@ sub execute {
 		unless looks_like_number($category);
 
 	# Get exam quiz activity id
-	my $quiz = qx{~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v test_of_question-import -s id};
+	my $quiz = qx{~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u drbean -t quiz -a select -k name  -v test_of_question-import -s id};
 	chomp $quiz;
 	# my $quiz= 2281;
 	die "${exam}_exam_$semester quiz id is $quiz?\n"
