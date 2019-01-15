@@ -29,21 +29,21 @@ sub execute {
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
-	## Save questions in ${exam}_exam_$semester category for quiz
-	#my $category = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
-	#my @category = split /\n/, $category;
-	#die "${exam}_exam_$semester category id is which @category category?\n"
-	#	unless @category == 1;
-	#my $id = shift @category;
-	#chomp $id;
-	my $category = 4755;
+	# Save questions in ${exam}_exam_$semester category for quiz
+	my $category = qx|~/dot/postgres/db/script/db moodle -p 5433 -d mood071 -u postgres  -t question_categories -a select -k name  -v final_exam_071 -s id|;
+	my @category = split /\n/, $category;
+	die "${exam}_exam_$semester category id is which @category category?\n"
+		unless @category == 1;
+	my $id = shift @category;
+	chomp $id;
+	# my $category = 4755;
 	die "${exam}_exam_$semester category id is $category?\n"
 		unless looks_like_number($category);
 
-	## Get exam quiz activity id
-	#my $quiz = qx/Moosh -n sql-run "SELECT id FROM {quiz} WHERE name =  \'${exam}_exam_$semester\'"/;
-	#chomp $quiz;
-	my $quiz= 2281;
+	# Get exam quiz activity id
+	my $quiz = qx/Moosh -n sql-run "SELECT id FROM {quiz} WHERE name =  \'${exam}_exam_$semester\'"/;
+	chomp $quiz;
+	# my $quiz= 2281;
 	die "${exam}_exam_$semester quiz id is $quiz?\n"
 		unless looks_like_number($quiz);
 
