@@ -10,7 +10,7 @@ use IO::All;
 use Scalar::Util qw/looks_like_number/;
 
 sub abstract { "moopl question_import -e midterm" }
-sub description { "Run moosh question_import for list of quiz questions in exam/question.yamlk" }
+sub description { "Run moosh question_import for list of quiz questions in exam/question.yaml" }
 
 sub usage_desc { "moopl question_import -e midterm" }
 
