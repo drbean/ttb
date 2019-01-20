@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: 03/21/2013 10:08:14 PM
-# Last Edit: 2018 Apr 30, 12:41:54 PM
+# Last Edit: 2019 Jan 20, 03:05:28 PM
 # $Id$
 
 =head1 NAME
@@ -77,7 +77,17 @@ my $middle = $g->median( \@nonzeros );
 my $mean = $g->mean( \@nonzeros );
 
 if ( defined $curving and $curving and $curving eq "curve" ) {
-    $grade = $g->curve_hashref( $grade, $low, $median, $high, $excluded );
+    my (@exclude_ids, $exclude_ids);
+    if ( defined $excluded and $excluded ) {
+	my @excluded = split ',', $excluded;
+	for my $name ( @excluded ) {
+	    my $id = $l->ided( $name );
+	    die "no player named $name\n" unless defined $id and $id;
+	    push @exclude_ids, $id;
+	}
+	$exclude_ids = join ",", @exclude_ids;
+    }
+    $grade = $g->curve_hashref( $grade, $low, $median, $high, $exclude_ids );
 }
 my $fails = grep {$grade->{$_} != 0 and $grade->{$_} < 60} keys %$grade;
 
