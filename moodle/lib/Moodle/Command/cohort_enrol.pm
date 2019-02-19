@@ -25,6 +25,7 @@ sub execute {
 
 	my ($cohort_name, $league) = @$opt{qw/c l/};
 	my $semester="$ENV{SEMESTER}";
+	$cohort_name = $semester . $league unless $cohort_name;
 
 	use Grades;
 	my $l = League->new( leagues => "/home/drbean/$semester", id => $league );
