@@ -36,7 +36,7 @@ sub execute {
 	for my $activity ( @$activity_list ) {
 		my ($name, $question_list) = map { $activity->{$_} } qw/name question/;
 		die "No \"$name\" activity with $question_list questions?\n" unless  $name and $question_list ;
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=goodwill --grade=3 --gradecat=475 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=fa490bbb44096e7be888c2c0f164b9c01478691b9ce05c101761d2c885e0b6e5" quiz 36);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=goodwill --grade=3 --gradecat=475 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
 		
 
 		chomp $quiz_id;
