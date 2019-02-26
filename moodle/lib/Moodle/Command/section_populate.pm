@@ -33,12 +33,14 @@ sub execute {
 
 	my $activity_list = LoadFile "/home/drbean/curriculum/correspondence/section/$section/activity.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
+	my $n = 0;
 	for my $activity ( @$activity_list ) {
-		my ($name, $question_list) = map { $activity->{$_} } qw/name question/;
-		die "No \"$name\" activity with $question_list questions?\n" unless  $name and $question_list ;
+		$n++;
+		my $question_list =  $activity->{$_};
+		die "No activity $n with $question_list questions?\n" unless
+			defined $question_list and ref($question_list) = 'ARRAY' and $question_list;
+		my $name = $question_list->[0]->{identifier};
 		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=goodwill --grade=3 --gradecat=475 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
-		
-
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
