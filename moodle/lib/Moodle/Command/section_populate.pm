@@ -34,12 +34,18 @@ sub execute {
 	my $activity_list = LoadFile "/home/drbean/curriculum/correspondence/section/$section/activity.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	my $n = 0;
-	for my $activity ( @$activity_list ) {
-		$n++;
-		my $question_list =  $activity->{$_};
+	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
-			defined $question_list and ref($question_list) = 'ARRAY' and $question_list;
-		my $name = $question_list->[0]->{identifier};
+			defined $question_list and ref($question_list) eq 'ARRAY';
+		my $first_one = $question_list->[0];
+		my ( $topic, $story, $type, $form ) = 
+			map { $first_one->{$_} } qw/topic story type form/;
+		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
+			$topic and  $story and  $type and  defined $form;
+		my $cards = "/home/drbean/curriculum/correspondence/$topic/cards.yaml";
+		my $yaml = LoadFile $cards;
+		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
+		die "name='$name'?" unless $name;
 		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=goodwill --grade=3 --gradecat=475 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
@@ -54,6 +60,7 @@ sub execute {
 			system( "Moosh -n question-import -r $random -t '$name' $file $quiz_id $category") == 0 or die 
 				"question import of '$story': '$form' with '$random' random questions in '$category' category failed";
 		}
+		$n++;
 	}
 }
 
