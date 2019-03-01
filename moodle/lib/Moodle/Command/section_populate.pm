@@ -57,8 +57,15 @@ sub execute {
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 			die "No $story ($type) $form form file in repository/$topic?" unless
 				-e $file;
-			system( "Moosh -n question-import -r $random -t '$name' $file $quiz_id $category") == 0 or die 
-				"question import of '$story': '$form' with '$random' random questions in '$category' category failed";
+			if ( $type eq 'jigsaw' or $type eq 'drag' ) {
+				system( "Moosh -n question-import -r $random -t '$name' $file $quiz_id $category") == 0 or die 
+				"question import of '$story' '$type' activity: '$form' form with '$random' random questions in '$category' category failed";
+			}
+			else {
+				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
+				"question import of all '$story' '$type' activity: '$form' form questions in '$category' category failed";
+
+			}
 		}
 		$n++;
 	}
