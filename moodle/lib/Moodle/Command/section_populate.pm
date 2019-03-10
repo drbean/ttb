@@ -12,7 +12,7 @@ use Scalar::Util qw/looks_like_number/;
 sub abstract { "moopl section_populate -c question_category -s course_section -r random_question_number" }
 sub description { "Run moosh section_populate for list of quiz questions in section/9/question.yaml" }
 
-sub usage_desc { "moopl section_populate -c question_category -s course_section - random_question_number" }
+sub usage_desc { "moopl section_populate -c question_category -s course_section -r random_question_number" }
 
 sub opt_spec  {
         return (
@@ -45,7 +45,7 @@ sub execute {
 		my $cards = "/home/drbean/curriculum/correspondence/$topic/cards.yaml";
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
-		die "name='$name'?" unless $name;
+		die "No name='$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
 		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=goodwill --grade=3 --gradecat=475 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
@@ -54,6 +54,8 @@ sub execute {
 				map { $question->{$_} } qw/topic story type form/;
 			die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 				$topic and  $story and  $type and  defined $form;
+			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c correspondence -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
+				== 0 or die "No upload of '$topic' '$type' quiz for, '$story' story, '$form' to moodle repo\n";
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 			die "No $story ($type) $form form file in repository/$topic?" unless
 				-e $file;
