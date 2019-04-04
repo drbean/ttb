@@ -56,7 +56,7 @@ sub execute {
 			die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 				$topic and  $story and  $type and  defined $form;
 			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c correspondence -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
-				== 0 or die "No upload of '$topic' '$type' quiz for, '$story' story, '$form' to moodle repo\n";
+				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 			die "No $story ($type) $form form file in repository/$topic?" unless
 				-e $file;
