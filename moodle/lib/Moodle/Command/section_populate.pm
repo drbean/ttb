@@ -9,16 +9,17 @@ use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 use Scalar::Util qw/looks_like_number/;
 
-sub abstract { "moopl section_populate -c question_category -s course_section -r random_question_number" }
+sub abstract { "moopl section_populate -c question_category -s course_section -r random_question_number -g grade_category" }
 sub description { "Run moosh section_populate for list of quiz questions in section/9/question.yaml" }
 
-sub usage_desc { "moopl section_populate -c question_category -s course_section -r random_question_number" }
+sub usage_desc { "moopl section_populate -c question_category -s course_section -r random_question_number -g grade_category"}
 
 sub opt_spec  {
         return (
 		["c=s", "question_category"]
 		, ["s=s", "course_section"]
 		, ["r=s", "random_question_number"]
+		, ["g=s", "grade_category"]
 	);
 }
 
@@ -26,7 +27,7 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random) = @$opt{qw/c s r/};
+	my ($category, $section, $random, $gradecat) = @$opt{qw/c s r g/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
@@ -46,7 +47,7 @@ sub execute {
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$topic: $story $form --grade=3 --gradecat=480 --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$topic: $story $form --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
