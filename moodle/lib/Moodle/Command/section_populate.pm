@@ -16,10 +16,10 @@ sub usage_desc { "moopl section_populate -c question_category -s course_section 
 
 sub opt_spec  {
         return (
-		["c=s", "question_category"]
-		, ["s=s", "course_section"]
-		, ["r=s", "random_question_number"]
-		, ["g=s", "grade_category"]
+		["c=i", "question_category"]
+		, ["s=i", "course_section"]
+		, ["r=i", "random_question_number"]
+		, ["g=i", "grade_category"]
 	);
 }
 
@@ -27,7 +27,7 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random, $gradecat) = @$opt{qw/c s r g/};
+	my ($category, $section, $random_option, $gradecat) = @$opt{qw/c s r g/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
@@ -47,7 +47,7 @@ sub execute {
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$topic: $story $form --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz 36);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$topic: $story $form --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=fa490bbb44096e7be888c2c0f164b9c01478691b9ce05c101761d2c885e0b6e5" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
@@ -60,15 +60,26 @@ sub execute {
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 			die "No $story ($type) $form form file in repository/$topic?" unless
 				-e $file;
+			my $random = 0;
 			if ( $type eq 'jigsaw' or $type eq 'drag' ) {
+				my $random_question = $question->{random};
+				if ( $random_question and looks_like_number($random_question) ) {
+					$random = $random_question;
+				}
+				elsif ( $random_option ) {
+					$random = $random_option;
+				}
+			}
+			if ( $random == 0 ) {
+				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
+				"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
+			}
+			elsif ( looks_like_number( $random ) ) {
 				system( "Moosh -n question-import -r $random -t '$name' $file $quiz_id $category") == 0 or die 
 				"question import of '$story' '$type' activity: '$form' form with '$random' random questions in '$category' category failed";
-			}
-			else {
-				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
-				"question import of all '$story' '$type' activity: '$form' form questions in '$category' category failed";
 
 			}
+			else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
 		}
 		$n++;
 	}
