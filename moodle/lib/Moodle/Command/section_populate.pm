@@ -48,7 +48,7 @@ sub execute {
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
 		$intro .= ". $topic: $story $form";
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=edd662e2067f5464d0d736071516e7fb9a534a01e60a21ae527a1db445c4b54c" quiz 36);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=4 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=d72a0777b0c56bdbe2256674601d104beaa00077838da2be77703cf5790fe114" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
