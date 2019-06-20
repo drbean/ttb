@@ -39,15 +39,16 @@ sub execute {
 		die "No activity $n with $question_list questions?\n" unless
 			defined $question_list and ref($question_list) eq 'ARRAY';
 		my $first_one = $question_list->[0];
-		my ( $topic, $story, $type, $form, $intro ) = 
-			map { $first_one->{$_} } qw/topic story type form intro/;
+		my ( $topic, $story, $type, $form ) = 
+			map { $first_one->{$_} } qw/topic story type form/;
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
 		my $cards = "/home/drbean/curriculum/correspondence/$topic/cards.yaml";
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
-		$intro .= ". $topic: $story $form";
+		my $intro = delete $first_one->{intro};
+		$intro = "$topic: $story $form" unless $intro;
 		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=d72a0777b0c56bdbe2256674601d104beaa00077838da2be77703cf5790fe114" quiz 36);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
