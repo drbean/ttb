@@ -53,10 +53,17 @@ sub execute {
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
-			my ( $topic, $story, $type, $form ) = 
-				map { $question->{$_} } qw/topic story type form/;
+			my ( $topic, $story, $type, $form, $intro ) = 
+				map { $question->{$_} } qw/topic story type form intro/;
 			die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 				$topic and  $story and  $type and  defined $form;
+			if ( $intro ) {
+				my $description = qx"yaml4moodle description -d '$intro' -i $name -t $topic -s $story -f $form";
+				my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
+				$description > io( $file );
+				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
+				"question import of '$story' '$form' form intro/description in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
+			}
 			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c correspondence -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
 				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
