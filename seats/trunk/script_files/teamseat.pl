@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2017 May 18, 03:01:46 PM
+# Last Edit: 2019 Aug 16, 02:06:48 PM
 # $Id$
 
 package Script;
@@ -129,9 +129,9 @@ sub run {
 	my $experttext = encode(
 		'UTF-8', $t->fill_in( HASH => $expertchart ) );
 	io("$sessionpath/$session/expertseat.$filetype")->print($experttext);
-	my $web = Net::FTP->new( 'web.nuu.edu.tw' ) or warn "web.nuu?"; 
-	$web->login("greg", "") or warn "login: greg?"; 
-	$web->cwd( 'public_html' ) or die "No cwd to public_html,"; 
+	my $web = Net::FTP->new( 'sdf.org' ) or warn "sdf?"; 
+	$web->login("drbean", "") or warn "login: drbean?"; 
+	$web->cwd( 'html' ) or die "No cwd to html,"; 
 	$web->put( "$sessionpath/$session/teamseat.$filetype", "${leagueId}_$n.html" )
 			or die "put teamseat_$n.html?" if $filetype eq "html"; 
 	$web->put( "$sessionpath/$session/expertseat.$filetype",
