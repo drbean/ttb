@@ -47,12 +47,18 @@ sub execute {
 		$category_id = 4;
 	}
 	elsif ( $id =~ m/BMA00|MIA00|FIA00/ ) {
-		$category_id = 8;
+		$category_id = 8; # correspondence
+	}
+	elsif ( $id =~ m/CLA00/ ) {
+		$category_id = 10; # writing+reading
+	}
+	elsif ( $id =~ m/GL00027/ ) {
+		$category_id = 11; # testing
 	}
 	else { die "no course category for $field\n" }
 
 	my $cohort_id;
-	#$cohort_id = qx/Moosh cohort-create -c $category_id $cohort_name/;
+	#$cohort_id = qx/Moosh -n cohort-create -c $category_id $cohort_name/;
 	#die "$cohort_name cohort already exists? $cohort_id id not number\n"
 	#	unless looks_like_number( $cohort_id );
 	for my $id ( sort keys %m ) {
