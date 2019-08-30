@@ -9,17 +9,18 @@ use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 use Scalar::Util qw/looks_like_number/;
 
-sub abstract { "moopl section_populate -c question_category -s course_section -r random_question_number -g grade_category" }
+sub abstract { "moopl section_populate -q question_category -s course_section -r random_question_number -g grade_category -c course" }
 sub description { "Run moosh section_populate for list of quiz questions in section/9/question.yaml" }
 
-sub usage_desc { "moopl section_populate -c question_category -s course_section -r random_question_number -g grade_category"}
+sub usage_desc { "moopl section_populate -q question_category -s course_section -r random_question_number -g grade_category -c course"}
 
 sub opt_spec  {
         return (
-		["c=i", "question_category"]
+		["q=i", "question_category"]
 		, ["s=i", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
+		, ["c=i", "course"]
 	);
 }
 
@@ -27,7 +28,7 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random_option, $gradecat) = @$opt{qw/c s r g/};
+	my ($category, $section, $random_option, $gradecat, $course) = @$opt{qw/q s r g c/};
 	my $semester="$ENV{SEMESTER}";
 
 	chdir "/var/www/cgi-bin/moodle";
@@ -49,7 +50,7 @@ sub execute {
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=d72a0777b0c56bdbe2256674601d104beaa00077838da2be77703cf5790fe114" quiz 36);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=d72a0777b0c56bdbe2256674601d104beaa00077838da2be77703cf5790fe114" quiz $course);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
 		for my $question ( @$question_list ) {
