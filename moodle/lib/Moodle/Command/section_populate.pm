@@ -32,7 +32,7 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $activity_list = LoadFile "/home/drbean/curriculum/correspondence/section/$section/activity.yaml";
+	my $activity_list = LoadFile "/home/drbean/curriculum/correspondence/fall/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
