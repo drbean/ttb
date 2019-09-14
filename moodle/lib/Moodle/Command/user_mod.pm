@@ -73,7 +73,7 @@ sub execute {
 		my $firstname = '"' . $m{$schoolid}->{name} . '"';
 		my $email = $m{$schoolid}->{email};
 		my $city = $city;
-		system("Moosh -n user-mod -i --idnumber $schoolid --firstname $firstname --email $email $id");
+		system("Moosh -n user-mod -i --idnumber $schoolid --firstname $firstname $id");
 		push @mod, {firstname => $firstname, id => $id, idnumber => $schoolid};
 	}
 	print "firstname: " . $_->{firstname} . "\tid: " . $_->{id} . "\tidnumber: " . $_->{idnumber} . "\n" for @mod;
