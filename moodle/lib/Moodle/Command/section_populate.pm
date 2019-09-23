@@ -21,6 +21,7 @@ sub opt_spec  {
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
 		, ["c=i", "course"]
+		, ["n=s", "course_name"]
 	);
 }
 
@@ -28,12 +29,13 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random_option, $gradecat, $course) = @$opt{qw/q s r g c/};
+	my ($category, $section, $random_option, $gradecat, $course, $course_name) = @$opt{qw/q s r g c n/};
 	my $semester="$ENV{SEMESTER}";
+	# my $course_name = "$ENV{COURSE_NAME[$course]}"
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $activity_list = LoadFile "/home/drbean/curriculum/correspondence/fall/$section.yaml";
+	my $activity_list = LoadFile "/home/drbean/curriculum/$course_name/fall/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
@@ -44,7 +46,7 @@ sub execute {
 			map { $first_one->{$_} } qw/topic story type form/;
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
-		my $cards = "/home/drbean/curriculum/correspondence/$topic/cards.yaml";
+		my $cards = "/home/drbean/curriculum/$course_name/$topic/cards.yaml";
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
@@ -66,7 +68,7 @@ sub execute {
 				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
 				"question import of '$story' '$form' form intro/description in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
 			}
-			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c correspondence -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
+			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c $course_name -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
 				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
 			my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 			die "No $story ($type) $form form file in repository/$topic?" unless
