@@ -46,13 +46,18 @@ sub execute {
 			map { $first_one->{$_} } qw/topic story type form/;
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
+		if ( $type eq 'forum' ) {
+			my $name = $first_one->{intro};
+			my $forum_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.txt) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0" forum $course);
+			next;
+		}
 		my $cards = "/home/drbean/curriculum/$course_name/$topic/cards.yaml";
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in '$topic' '$type' quiz for '$story' '$form' form\n" unless $name;
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
-		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=d72a0777b0c56bdbe2256674601d104beaa00077838da2be77703cf5790fe114" quiz $course);
+		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=ce1d2c15a11c5ae861c97e8fadc7e88d8edee4c66290693d8049f68e5c68070d" quiz $course);
 		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=127 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz $course);
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
