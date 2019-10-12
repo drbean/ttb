@@ -47,11 +47,11 @@ sub execute {
 	$" = " ";
 	print "beancans: @groups\n";
 	print "Session: $session\n";
-	my $grouping_string = qx/Moosh -n grouping-create -d "session $session" $session $course_id/;
-	print $grouping_string;
-	chomp $grouping_string;
-	(my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
-	# my $grouping_id = "126";
+	# my $grouping_string = qx/Moosh -n grouping-create -d "session $session" $session $course_id/;
+	# print $grouping_string;
+	# chomp $grouping_string;
+	# (my $grouping_id = $grouping_string) =~ s/^.*\((.*)\).*$/$1/;
+	my $grouping_id = "130";
 	for my $group ( @groups ) {
 		my $group_string = qx/Moosh -n group-create "$session-$group" $course_id/;
 		chomp $group_string;
