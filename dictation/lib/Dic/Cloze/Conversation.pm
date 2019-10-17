@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2017 May 19, 09:56:25 AM
+# Last Edit: 2019 Oct 17, 03:07:45 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -23,25 +23,25 @@ use Parse::RecDescent;
 our %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
-	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	];
 $onlastletter{total} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
-	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	];
 $onlastletter{first} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword-1 ), " \\\\rmfamily\\\\large ";
-	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 
 	];
 $onlastletter{firstlast} = q [
 	if ( $#cword >= 2 ) {
 		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1], " \\\\rmfamily\\\\large ";
-		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	}
 	if ( $#cword == 1 ) {
 		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Conversation::word_score}", " \\\\rmfamily\\\\large ";
-		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	}
 	];
 $onlastletter{ctestpluslast} = q [
@@ -49,12 +49,12 @@ $onlastletter{ctestpluslast} = q [
 		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}"
 			, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
 		, $cword[-1], " \\\\rmfamily\\\\large ";
-		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	}
 	else {
 		$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Conversation::word_score}"
 			, map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1), " \\\\rmfamily\\\\large ";
-		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\tiny $Dic::Cloze::Conversation::word_score}";
+		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\small $Dic::Cloze::Conversation::word_score}";
 	}
 	];
 
