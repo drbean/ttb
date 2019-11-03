@@ -73,7 +73,7 @@ sub execute {
 				my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 				$description > io( $file );
 				system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
-				"question import of '$story' '$form' form intro/description in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
+				"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
 			}
 			system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c $course_name -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
 				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
