@@ -20,6 +20,7 @@ sub opt_spec  {
 		, ["s=i", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
+		, ["t=i", "tag_collection_id"]
 		, ["c=i", "course"]
 		, ["n=s", "course_name"]
 	);
@@ -29,7 +30,7 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random_option, $gradecat, $course, $course_name) = @$opt{qw/q s r g c n/};
+	my ($category, $section, $random_option, $tagcollid, $gradecat, $course, $course_name) = @$opt{qw/q s r t g c n/};
 	my $semester="$ENV{SEMESTER}";
 	# my $course_name = "$ENV{COURSE_NAME[$course]}"
 
@@ -95,7 +96,7 @@ sub execute {
 				"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
 			}
 			elsif ( looks_like_number( $random ) ) {
-				system( "Moosh -n question-import -r $random --tag '$name' $file $quiz_id $category") == 0 or die 
+				system( "Moosh -n question-import -r $random --tag '$name' --collection=$tagcollid $file $quiz_id $category") == 0 or die 
 				"question import of '$story' '$type' activity: '$form' form with '$random' random questions in '$category' category failed";
 
 			}
