@@ -1,12 +1,12 @@
 #!/usr/bin/perl 
 
 # Created: Thu 26 Dec 2019 12:36:07 PM CST
-# Last Edit: 2019 Dec 26, 12:51:22 PM
+# Last Edit: 2019 Dec 26, 04:12:51 PM
 # $Id$
 
 =head1 NAME
 
-collate_gradebook.pl - convert beancan-sorted name-keyed week.yaml scores into id-keyed week.csv file
+collate_gradebook.pl - classwork.yaml scores to moodle-friendly csv
 
 =cut
 
@@ -18,7 +18,7 @@ use Pod::Usage;
 
 =head1 SYNOPSIS
 
-collate_gradebook.pl -w 3 -t internetPerson > 3.csv
+collate_gradebook.pl -l BMA0034 -w 3 -t internetPerson > 3.csv
 
 =cut
 
@@ -32,9 +32,13 @@ pod2usage(1) if $script->help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
 
 my $leagueId = $script->league;
+my $lastweek = $script->weights;
+my $topic = $script->two;
 my $semester = $ENV{SEMESTER};
 my $leagues = "/home/drbean/$semester";
 $leagueId = basename( getcwd ) if not defined $leagueId;
+$lastweek = $ENV{LASTWEEK} if not defined $lastweek;
+$topic = $ENV{TOPIC} if not defined $topic;
 
 =head1 DESCRIPTION
 
@@ -45,25 +49,19 @@ Converts beancan-sorted name-keyed $lastweek.yaml scores into id-keyed $lastweek
 my $l = League->new( leagues => "/home/drbean/$semester", id => $leagueId );
 my $g = Grades->new({ league => $l });
 my $c = $l->yaml;
-
-use Grades;
-my $l = League->new( leagues => "/home/drbean/$ENV{SEMESTER}", id => $dir  );
 my $m = $l->members;
 my %m = map { $_->{name} => $_  } @$m;
 
-my $y = LoadFile 'classwork/3.yaml';
+my $y = LoadFile "classwork/$lastweek.yaml";
 my %scores;
 @scores{ keys %$_  } = values %$_ for values %$y;
 my %grade;
 $grade{$m{$_}->{id} } = $scores{$_} for keys %scores;
 
-my $io = io 'classwork/14.csv';
-$io->print( '"ID number","Quiz: transaction"' . "\n"  );
-$io->append( "$_,$grade{$_}\n" ) for keys %grade;
+my $io = io "-";
+$io->print( '"ID number","Quiz: ' . $topic . '"' . "\n"  );
+$io->append( "$_,$grade{$_}\n" ) for sort keys %grade;
 $io->autoflush;
-~
-
-print Dump $c;
 
 =head1 AUTHOR
 
