@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Sat 28 Dec 2019 12:38:13 PM CST
-# Last Edit: 2019 Dec 28, 09:23:17 PM
+# Last Edit: 2019 Dec 28, 09:25:53 PM
 # $Id$
 
 =head1 NAME
@@ -33,6 +33,7 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $script->man;
 
 my $leagueId = $script->league;
 my $lastweek = $script->round;
+my $topic = $script->exercise;
 my $semester = $ENV{SEMESTER};
 my $leagues = "/home/drbean/$semester";
 $leagueId = basename( getcwd ) if not defined $leagueId;
