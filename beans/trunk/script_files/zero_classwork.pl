@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Sat 28 Dec 2019 12:38:13 PM CST
-# Last Edit: 2019 Dec 28, 09:21:25 PM
+# Last Edit: 2019 Dec 28, 09:23:17 PM
 # $Id$
 
 =head1 NAME
@@ -18,7 +18,7 @@ use Pod::Usage;
 
 =head1 SYNOPSIS
 
-zero_classwork.pl -l FLA0019 -w 3 > classwork/3.yaml
+zero_classwork.pl -l FLA0019 -r 3 > classwork/3.yaml
 
 =cut
 
