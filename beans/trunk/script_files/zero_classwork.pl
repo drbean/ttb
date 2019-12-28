@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Sat 28 Dec 2019 12:38:13 PM CST
-# Last Edit: 2019 Dec 28, 01:27:14 PM
+# Last Edit: 2019 Dec 28, 08:49:56 PM
 # $Id$
 
 =head1 NAME
@@ -10,7 +10,7 @@ zero_classwork.pl - hand-filled-in classwork.yaml
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use strict;
 use warnings;
