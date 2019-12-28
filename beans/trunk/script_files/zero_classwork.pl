@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Sat 28 Dec 2019 12:38:13 PM CST
-# Last Edit: 2019 Dec 28, 09:25:53 PM
+# Last Edit: 2019 Dec 28, 09:34:43 PM
 # $Id$
 
 =head1 NAME
@@ -51,9 +51,10 @@ my $g = Grades->new({ league => $l });
 my $cl = $g->classwork;
 my $m = $l->members;
 my %m = map { $_->{name} => $_  } @$m;
+my $session = $cl->week2session($lastweek);
 
 my $grades;
-my $beancans = $cl->beancan_names(2);
+my $beancans = $cl->beancan_names($session);
 for my $beancan (keys %$beancans) {
 	my $players = $beancans->{$beancan};
 	my %zeros;
