@@ -96,8 +96,8 @@ sub execute {
 				"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
 			}
 			elsif ( looks_like_number( $random ) ) {
-				system( "Moosh -n question-import -r $random --tag '$name' --collection=$tagcollid $file $quiz_id $category") == 0 or die 
-				"question import of '$story' '$type' activity: '$form' form with '$random' random questions in '$category' category failed";
+				system( "Moosh -n question-import -r $random --tag='$name' --collection=$tagcollid $file $quiz_id $category") == 0 or die 
+				"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in '$tagcollid' collection in '$category' category failed";
 
 			}
 			else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
