@@ -60,7 +60,7 @@ sub execute {
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
 		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=128 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=ce1d2c15a11c5ae861c97e8fadc7e88d8edee4c66290693d8049f68e5c68070d" quiz $course);
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1" quiz $course);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212" quiz $course);
 		warn "quiz_id=$quiz_id";
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
