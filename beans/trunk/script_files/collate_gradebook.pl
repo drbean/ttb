@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Thu 26 Dec 2019 12:36:07 PM CST
-# Last Edit: 2019 Dec 30, 12:56:51 PM
+# Last Edit: 2019 Dec 30, 03:58:18 PM
 # $Id$
 
 =head1 NAME
@@ -58,7 +58,8 @@ my %scores;
 my %grade;
 $grade{$m{$_}->{id} } = $scores{$_} for keys %scores;
 
-my $io = io "classwork/$lastweek.csv";
+# my $io = io "classwork/$lastweek.csv";
+my $io = io( "-");
 $io->print( '"ID number","' . $topic . '"' . "\n"  );
 $io->append( "$_,$grade{$_}\n" ) for sort keys %grade;
 $io->autoflush;
