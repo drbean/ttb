@@ -1,7 +1,7 @@
 #!/usr/bin/perl 
 
 # Created: Thu 26 Dec 2019 12:36:07 PM CST
-# Last Edit: 2019 Dec 26, 04:12:51 PM
+# Last Edit: 2019 Dec 30, 12:56:51 PM
 # $Id$
 
 =head1 NAME
@@ -58,8 +58,8 @@ my %scores;
 my %grade;
 $grade{$m{$_}->{id} } = $scores{$_} for keys %scores;
 
-my $io = io "-";
-$io->print( '"ID number","Quiz: ' . $topic . '"' . "\n"  );
+my $io = io "classwork/$lastweek.csv";
+$io->print( '"ID number","' . $topic . '"' . "\n"  );
 $io->append( "$_,$grade{$_}\n" ) for sort keys %grade;
 $io->autoflush;
 
@@ -78,14 +78,4 @@ under the same terms as Perl itself.
 
 # End of collate_gradebook.pl
 
-# vim: set ts=8 sts=4 sw=4 noet:my $y = LoadFile 'classwork/3.yaml';
-# my %scores;
-# @scores{ keys %$_ } = values %$_ for values %$y;
-# my %grade;
-# $grade{$m{$_}->{id} } = $scores{$_} for keys %scores;
-#
-# my $io = io 'classwork/14.csv';
-# $io->print( '"ID number","Quiz: transaction"' . "\n" );
-# $io->append( "$_,$grade{$_}\n") for keys %grade;
-# $io->autoflush;
-# ~}"
+# vim: set ts=8 sts=4 sw=4 noet:
