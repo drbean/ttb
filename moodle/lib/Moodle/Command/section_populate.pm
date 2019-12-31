@@ -53,6 +53,12 @@ sub execute {
 			warn "forum_id=$forum_id";
 			next;
 		}
+		if ( $type eq 'studentquiz' ) {
+			my $name = $first_one->{intro};
+			my $studentquiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --grade=3 --gradecat=$gradecat --decimalpoints=0" studentquiz $course);
+			warn "studentquiz_id=$studentquiz_id";
+			next;
+		}
 		my $cards = "/home/drbean/curriculum/$course_name/$topic/cards.yaml";
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
