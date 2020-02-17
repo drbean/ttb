@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Aug 26, 12:32:54 PM
+# Last Edit: 2020 Feb 11, 09:47:45 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -37,7 +37,10 @@ my %romanize = (
 
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
-\\usepackage[T1]{fontenc}
+% \\usepackage[T1]{fontenc}
+\\usepackage{fontspec}
+\\usepackage{xltxtra}
+\\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
 \\usepackage{xeCJK}
 \\setCJKmainfont{WenQuanYi Zen Hei}
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
