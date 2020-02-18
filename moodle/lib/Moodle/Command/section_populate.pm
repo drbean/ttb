@@ -8,6 +8,7 @@ use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 use Scalar::Util qw/looks_like_number/;
+use List::MoreUtils qw/all/;
 
 sub abstract { "moopl section_populate -q question_category -s course_section -r random_question_number -g grade_category -c course" }
 sub description { "Run moosh section_populate for list of quiz questions in section/9/question.yaml" }
@@ -36,8 +37,12 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my $activity_list = LoadFile "/home/drbean/curriculum/$course_name/fall/$section.yaml";
+	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/fall/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
+	my $option_string;
+	die "options $options not a HASH\n" unless ref $options eq 'HASH';
+	die "options $options not a HASH of option strings\n" unless all { ref $_ eq 'SCALAR' } values %$options;
+	$option_string .= "--$_=$options->{$_} " for keys %$options;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
@@ -65,8 +70,8 @@ sub execute {
 		die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
-		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --groupmode=1 --groupingid=128 --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212 --browsersecurity=safebrowser --safeexambrowser_allowedkeys=ce1d2c15a11c5ae861c97e8fadc7e88d8edee4c66290693d8049f68e5c68070d" quiz $course);
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212" quiz $course);
+		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="$option_string" quiz $course);
+		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212" quiz $course);
 		warn "quiz_id=$quiz_id";
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
