@@ -37,11 +37,11 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
-	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/fall/$section.yaml";
+	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	my $option_string;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
-	die "options $options not a HASH of option strings\n" unless all { ref $_ eq 'SCALAR' } values %$options;
+	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
 	$option_string .= "--$_=$options->{$_} " for keys %$options;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
@@ -70,7 +70,8 @@ sub execute {
 		die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
-		my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="$option_string" quiz $course);
+		my $incantation = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
+		my $quiz_id = qx( $incantation );
 		# my $quiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o="--timeopen=1 --intro=$intro --introformat=4 --grade=3 --gradecat=$gradecat --attempts=1 --decimalpoints=0 --overduehandling=0 --shuffleanswers=1 --subnet=210.60.168.212" quiz $course);
 		warn "quiz_id=$quiz_id";
 		chomp $quiz_id;
