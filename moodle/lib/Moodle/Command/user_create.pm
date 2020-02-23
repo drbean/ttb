@@ -42,7 +42,7 @@ sub execute {
 	my $category_id;
 	my $field = $l->yaml->{field};
 	my $id = $l->yaml->{id};
-	my $english = qr/\x{82f1}\x{8a9e}/; # 英語
+	my $english = qr/\x{82f1}/; # 英
 	if ( $field =~ $english) {
 		$category_id = 4;
 	}
