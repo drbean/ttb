@@ -58,7 +58,7 @@ sub execute {
 	else { die "no course category for $field\n" }
 
 	my $cohort_id;
-	#$cohort_id = qx/Moosh -n cohort-create -c $category_id $cohort_name/;
+	#$cohort_id = qx/Moosh -n cohort-create -c $category_id -i $cohort_name $cohort_name/;
 	#die "$cohort_name cohort already exists? $cohort_id id not number\n"
 	#	unless looks_like_number( $cohort_id );
 	for my $id ( sort keys %m ) {
