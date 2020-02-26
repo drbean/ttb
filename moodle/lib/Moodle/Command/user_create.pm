@@ -14,7 +14,7 @@ sub usage_desc { "moopl user_create -s nuu -l FLA0003" }
 
 sub opt_spec  {
         return (
-                ["c=s", "school"]
+                ["s=s", "school"]
                 , ["l=s", "league"]
 	);
 }
