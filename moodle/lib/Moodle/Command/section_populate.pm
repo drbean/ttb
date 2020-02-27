@@ -39,10 +39,11 @@ sub execute {
 
 	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
-	my $option_string;
+	my (@option_list, $option_string);
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
-	$option_string .= "--$_=$options->{$_} " for keys %$options;
+	push @option_list, "--$_=$options->{$_}" for keys %$options;
+	$option_string = "@option_list";
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
@@ -71,9 +72,6 @@ sub execute {
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
 		my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
-		{
-			local $/ = ' '; chomp $activity_add_line;
-		}
 		warn "activity-add-line='$activity_add_line'\n";
 		my $quiz_id = qx( $activity_add_line );
 		warn "quiz_id=$quiz_id";
