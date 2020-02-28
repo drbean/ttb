@@ -80,7 +80,7 @@ sub execute {
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
 		my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
-		warn "activity-add-line='$activity_add_line'\n";
+		warn "\nactivity-add-line='$activity_add_line'\n";
 		my $quiz_id = qx( $activity_add_line );
 		warn "quiz_id=$quiz_id";
 		chomp $quiz_id;
