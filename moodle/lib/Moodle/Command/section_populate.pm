@@ -42,7 +42,6 @@ sub execute {
 	my (%option_hash, $option_string);
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
-	$option_hash{$_} = "$options->{$_}" for keys %$options;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
@@ -52,15 +51,16 @@ sub execute {
 			map { $first_one->{$_} } qw/topic story type form/;
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
+		$option_hash{$_} = "$options->{$_}" for keys %$options;
 		if ( exists $first_one->{option} ) {
 			my $more_opts = delete $first_one->{option};
 			die "more_opts '$more_opts' not a HASH\n" unless ref $options eq 'HASH';
 			die "more_opts '$more_opts' not a HASH of option strings\n" unless
 				all { ref $_ eq '' } values %$more_opts;
 			$option_hash{$_} = "$more_opts->{$_}" for keys %$more_opts;
-			my @option_list; push @option_list, "$_=$option_hash{$_}" for keys %option_hash;
-			$option_string = join ' ', "@option_list";
 		}
+		my @option_list; push @option_list, "$_=$option_hash{$_}" for keys %option_hash;
+		$option_string = join ' ', "@option_list";
 		if ( $type eq 'forum' ) {
 			my $name = $first_one->{intro};
 			my $forum_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0" forum $course);
