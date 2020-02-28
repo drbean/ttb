@@ -57,7 +57,7 @@ sub execute {
 			die "more_opts '$more_opts' not a HASH\n" unless ref $options eq 'HASH';
 			die "more_opts '$more_opts' not a HASH of option strings\n" unless
 				all { ref $_ eq '' } values %$more_opts;
-			$option_hash{$_} = "$options->{$_}" for keys %$more_opts;
+			$option_hash{$_} = "$more_opts->{$_}" for keys %$more_opts;
 			my @option_list; push @option_list, "$_=$option_hash{$_}" for keys %option_hash;
 			$option_string = join ' ', "@option_list";
 		}
