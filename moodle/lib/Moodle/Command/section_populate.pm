@@ -59,7 +59,7 @@ sub execute {
 				all { ref $_ eq '' } values %$more_opts;
 			$option_hash{$_} = "$more_opts->{$_}" for keys %$more_opts;
 		}
-		my @option_list; push @option_list, "$_=$option_hash{$_}" for keys %option_hash;
+		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
 		$option_string = join ' ', "@option_list";
 		if ( $type eq 'forum' ) {
 			my $name = $first_one->{intro};
