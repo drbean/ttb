@@ -43,7 +43,6 @@ sub execute {
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
 	push @option_list, "--$_=$options->{$_}" for keys %$options;
-	$option_string = "@option_list";
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
@@ -54,12 +53,12 @@ sub execute {
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
 		if ( exists $first_one->{option} ) {
-			my $more_opts = $first_one->{option};
+			my $more_opts = delete $first_one->{option};
 			die "more_opts '$more_opts' not a HASH\n" unless ref $options eq 'HASH';
 			die "more_opts '$more_opts' not a HASH of option strings\n" unless
 				all { ref $_ eq '' } values %$more_opts;
 			push @option_list, "--$_=$more_opts->{$_}" for keys %$more_opts;
-			delete $first_one->{option};
+			$option_string = "@option_list";
 		}
 		if ( $type eq 'forum' ) {
 			my $name = $first_one->{intro};
