@@ -39,10 +39,10 @@ sub execute {
 
 	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
-	my (@option_list, $option_string);
+	my (%option_hash, $option_string);
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
-	push @option_list, "--$_=$options->{$_}" for keys %$options;
+	$option_hash{$_} = "$options->{$_}" for keys %$options;
 	my $n = 0;
 	for my $question_list ( @$activity_list ) {
 		die "No activity $n with $question_list questions?\n" unless
@@ -57,8 +57,9 @@ sub execute {
 			die "more_opts '$more_opts' not a HASH\n" unless ref $options eq 'HASH';
 			die "more_opts '$more_opts' not a HASH of option strings\n" unless
 				all { ref $_ eq '' } values %$more_opts;
-			push @option_list, "--$_=$more_opts->{$_}" for keys %$more_opts;
-			$option_string = "@option_list";
+			$option_hash{$_} = "$options->{$_}" for keys %$more_opts;
+			my @option_list; push @option_list, "$_=$option_hash{$_}" for keys %option_hash;
+			$option_string = join ' ', "@option_list";
 		}
 		if ( $type eq 'forum' ) {
 			my $name = $first_one->{intro};
