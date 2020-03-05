@@ -39,12 +39,11 @@ sub execute {
 
 	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
-	my (%option_hash, $option_string);
-	$option_hash{gradecat} = $gradecat;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
 	my $n = 0;
-	for my $question_list ( @$activity_list ) {
+	for my $activity ( @$activity_list ) {
+		my $question_list = delete $activity->{question};
 		die "No activity $n with $question_list questions?\n" unless
 			defined $question_list and ref($question_list) eq 'ARRAY';
 		my $first_one = $question_list->[0];
@@ -52,14 +51,20 @@ sub execute {
 			map { $first_one->{$_} } qw/topic story type form/;
 		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
+		my (%option_hash, $option_string);
+		$option_hash{gradecat} = $gradecat;
 		$option_hash{$_} = "$options->{$_}" for keys %$options;
-		if ( exists $first_one->{option} ) {
-			my $more_opts = delete $first_one->{option};
-			die "more_opts '$more_opts' not a HASH\n" unless ref $options eq 'HASH';
+		my $more_opts;
+		if ( keys %$activity ) {
+			my $more_opts = $activity;
+			die "more_opts '$more_opts' not a HASH\n" unless ref $more_opts eq 'HASH';
 			die "more_opts '$more_opts' not a HASH of option strings\n" unless
 				all { ref $_ eq '' } values %$more_opts;
 			$option_hash{$_} = "$more_opts->{$_}" for keys %$more_opts;
 		}
+		my $intro = delete $first_one->{intro};
+		$intro = "$topic: $story $form" unless $intro;
+		$option_hash{intro} = "\\\"$intro\\\"";
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
 		$option_string = join ' ', "@option_list";
 		if ( $type eq 'forum' ) {
@@ -78,8 +83,6 @@ sub execute {
 		my $yaml = LoadFile $cards;
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
-		my $intro = delete $first_one->{intro};
-		$intro = "$topic: $story $form" unless $intro;
 		my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
 		warn "\nactivity-add-line='$activity_add_line'\n";
 		my $quiz_id = qx( $activity_add_line );
