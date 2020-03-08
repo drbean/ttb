@@ -40,16 +40,19 @@ sub execute {
 	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
-	die "options $options not a HASH of option strings\n" unless all { ref $_ eq '' } values %$options;
+	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
+	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
 	my $n = 0;
 	for my $activity ( @$activity_list ) {
-		my $question_list = delete $activity->{question};
-		die "No activity $n with $question_list questions?\n" unless
-			defined $question_list and ref($question_list) eq 'ARRAY';
-		my $first_one = $question_list->[0];
+		my $content_list = delete $activity->{content};
+		#die "No activity $n with $content_list contents?\n" unless
+		#	defined $content_list and ref($content_list) eq 'ARRAY';
+		my $first_one = $content_list->[0];
 		my ( $topic, $story, $type, $form ) = 
 			map { $first_one->{$_} } qw/topic story type form/;
-		die "No '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
+		my $cards = "/home/drbean/curriculum/$course_name/$topic/cards.yaml";
+		my $yaml = LoadFile $cards;
+		die "No '$type' activity for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
 		my (%option_hash, $option_string);
 		$option_hash{gradecat} = $gradecat;
@@ -79,8 +82,12 @@ sub execute {
 			warn "studentquiz_id=$studentquiz_id";
 			next;
 		}
-		my $cards = "/home/drbean/curriculum/$course_name/$topic/cards.yaml";
-		my $yaml = LoadFile $cards;
+		if ( $type eq 'url' ) {
+			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
+			my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --externalurl=$option_hash{url}" url $course);
+			warn "url_id=$url_id";
+			next;
+		}
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
 		my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
@@ -89,7 +96,7 @@ sub execute {
 		warn "quiz_id=$quiz_id";
 		chomp $quiz_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
-		for my $question ( @$question_list ) {
+		for my $question ( @$content_list ) {
 			my ( $topic, $story, $type, $form, $intro ) = 
 				map { $question->{$_} } qw/topic story type form intro/;
 			die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
