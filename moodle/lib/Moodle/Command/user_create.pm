@@ -52,7 +52,7 @@ sub execute {
 	elsif ( $id =~ m/CLA00/ ) {
 		$category_id = 10; # writing+reading
 	}
-	elsif ( $id =~ m/GL00027/ ) {
+	elsif ( $id =~ m/GL00020/ ) {
 		$category_id = 11; # testing
 	}
 	else { die "no course category for $field\n" }
