@@ -84,7 +84,11 @@ sub execute {
 		}
 		if ( $type eq 'url' ) {
 			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
-			my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --externalurl=$option_hash{url}" url $course);
+			$option_hash{url} = $yaml->{$story}->{$type}->{$form}->{externalurl};
+			my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalurl=$option_hash{url}" url $course);
+			# my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
+			# warn "\nactivity-add-line='$activity_add_line'\n";
+			# my $url_id = qx( $activity_add_line );
 			warn "url_id=$url_id";
 			next;
 		}
