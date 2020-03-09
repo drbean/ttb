@@ -92,6 +92,16 @@ sub execute {
 			warn "url_id=$url_id";
 			next;
 		}
+		if ( $type eq 'assign' ) {
+			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
+			# $option_string .= "--intro=$yaml->{$story}->{$type}->{$form}->{rubric}";
+			# my $assign_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalassign=$option_hash{assign}" assign $course);
+			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
+			warn "\nactivity-add-line='$activity_add_line'\n";
+			my $assign_id = qx( $activity_add_line );
+			warn "assign_id=$assign_id";
+			next;
+		}
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
 		my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
