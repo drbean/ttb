@@ -37,6 +37,17 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
+	my %module = ( jigsaw => 'quiz'
+		, drag => 'quiz'
+		, match => 'quiz'
+		, scramble => 'quiz'
+		, description => 'quiz'
+		, essay => 'quiz'
+		, studentquiz => 'studentquiz'
+		, assign => 'assign'
+		, url => 'url'
+		, forum => 'forum'
+	);
 	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
@@ -54,9 +65,10 @@ sub execute {
 		my $yaml = LoadFile $cards;
 		die "No '$type' activity for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
+		my $module_options = $options->{ $module{$type} };
 		my (%option_hash, $option_string);
 		$option_hash{gradecat} = $gradecat;
-		$option_hash{$_} = "$options->{$_}" for keys %$options;
+		$option_hash{$_} = "$module_options->{$_}" for keys %$module_options;
 		my $more_opts;
 		if ( keys %$activity ) {
 			my $more_opts = $activity;
