@@ -83,13 +83,13 @@ sub execute {
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
 		$option_string = join ' ', "@option_list";
 		if ( $type eq 'forum' ) {
-			my $name = $first_one->{intro};
+			my $name = $intro;
 			my $forum_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0" forum $course);
 			warn "forum_id=$forum_id";
 			next;
 		}
 		if ( $type eq 'studentquiz' ) {
-			my $name = $first_one->{intro};
+			my $name = $intro;
 			my $studentquiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --grade=3 --gradecat=$gradecat --decimalpoints=0" studentquiz $course);
 			warn "studentquiz_id=$studentquiz_id";
 			next;
