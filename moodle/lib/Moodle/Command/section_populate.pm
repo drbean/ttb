@@ -155,7 +155,7 @@ sub execute {
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
 					system( "Moosh -n question-import -r $random --tag='$tag' --component=$tagcomponent --collection=$tagcollid $file $quiz_id $category") == 0 or die 
-					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in '$tagcollid' collection in '$category' category failed";
+					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category' category failed";
 
 				}
 				else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
