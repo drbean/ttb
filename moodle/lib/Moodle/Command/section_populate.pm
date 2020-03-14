@@ -112,7 +112,7 @@ sub execute {
 			my $assign_id = qx( $activity_add_line );
 			warn "assign_id=$assign_id";
 		}
-		elsif ( $type eq 'quiz' ) {
+		elsif ( $module{$type} eq 'quiz' ) {
 			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 			die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
 			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
