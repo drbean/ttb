@@ -21,7 +21,8 @@ sub opt_spec  {
 		, ["s=i", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
-		, ["t=i", "tag_collection_id"]
+		, ["l=i", "tag_collection_id"]
+		, ["m=s", "tag_component_name"]
 		, ["c=i", "course"]
 		, ["n=s", "course_name"]
 	);
@@ -115,7 +116,7 @@ sub execute {
 		elsif ( $module{$type} eq 'quiz' ) {
 			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 			die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
-			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" quiz $course";
+			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"$option_string\" quiz $course";
 			warn "\nactivity-add-line='$activity_add_line'\n";
 			my $quiz_id = qx( $activity_add_line );
 			warn "quiz_id=$quiz_id";
@@ -154,7 +155,7 @@ sub execute {
 				}
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
-					system( "Moosh -n question-import -r $random --tag='$tag' --component=$tagcomponent --collection=$tagcollid $file $quiz_id $category") == 0 or die 
+					system( "Moosh -n question-import -r $random --tag='$tag' -m $tagcomponent -l $tagcollid $file $quiz_id $category") == 0 or die 
 					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category' category failed";
 
 				}
