@@ -31,7 +31,7 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random_option, $tagcollid, $gradecat, $course, $course_name) = @$opt{qw/q s r t g c n/};
+	my ($category, $section, $random_option, $tagcollid, $tagcomponent, $gradecat, $course, $course_name) = @$opt{qw/q s r l m g c n/};
 	my $semester="$ENV{SEMESTER}";
 	# my $course_name = "$ENV{COURSE_NAME[$course]}"
 
@@ -154,7 +154,7 @@ sub execute {
 				}
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
-					system( "Moosh -n question-import -r $random --tag='$tag' --collection=$tagcollid $file $quiz_id $category") == 0 or die 
+					system( "Moosh -n question-import -r $random --tag='$tag' --component=$tagcomponent --collection=$tagcollid $file $quiz_id $category") == 0 or die 
 					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in '$tagcollid' collection in '$category' category failed";
 
 				}
