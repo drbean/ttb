@@ -96,12 +96,14 @@ sub execute {
 		}
 		if ( $type eq 'url' ) {
 			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
-			$option_hash{url} = $yaml->{$story}->{$type}->{$form}->{externalurl};
-			my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalurl=$option_hash{url}" url $course);
-			# my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
-			# warn "\nactivity-add-line='$activity_add_line'\n";
-			# my $url_id = qx( $activity_add_line );
-			warn "url_id=$url_id";
+			$option_hash{externalurl} = $yaml->{$story}->{$type}->{$form}->{externalurl};
+		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
+		$option_string = join ' ', "@option_list";
+			# my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalurl=$option_hash{url}" url $course);
+			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
+			warn "\nactivity-add-line='$activity_add_line'\n";
+			my $activity_id = qx( $activity_add_line );
+			warn "$module{$type}_id=$activity_id";
 			next;
 		}
 		if ( $type eq 'assign' ) {
