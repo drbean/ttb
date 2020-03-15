@@ -105,7 +105,7 @@ sub execute {
 			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
 		}
 		elsif ( $module{$type} eq 'quiz' ) {
-			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"$option_string\" quiz $course";
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" quiz $course";
 		}
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
