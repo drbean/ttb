@@ -83,62 +83,54 @@ sub execute {
 		$option_hash{intro} = "\\\"$intro\\\"";
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
 		$option_string = join ' ', "@option_list";
+		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
+		die "No '$name' identifier in the topic '$topic' '$type' activity about the '$story' story, '$form' form\n" unless $name;
+		my $activity_add_line;
 		if ( $type eq 'forum' ) {
-			my $name = $intro;
-			my $forum_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0" forum $course);
-			warn "forum_id=$forum_id";
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		}
 		elsif ( $type eq 'studentquiz' ) {
-			my $name = $intro;
-			my $studentquiz_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --grade=3 --gradecat=$gradecat --decimalpoints=0" studentquiz $course);
-			warn "studentquiz_id=$studentquiz_id";
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --grade=3 --gradecat=$gradecat --decimalpoints=0\" studentquiz $course";
 		}
 		elsif ( $type eq 'url' ) {
-			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 			$option_hash{externalurl} = $yaml->{$story}->{$type}->{$form}->{externalurl};
-		my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
-		$option_string = join ' ', "@option_list";
+			my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
+			$option_string = join ' ', "@option_list";
 			# my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalurl=$option_hash{url}" url $course);
-			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
-			warn "\nactivity-add-line='$activity_add_line'\n";
-			my $activity_id = qx( $activity_add_line );
-			warn "$module{$type}_id=$activity_id";
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
 		}
 		elsif ( $type eq 'assign' ) {
-			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
-			# $option_string .= "--intro=$yaml->{$story}->{$type}->{$form}->{rubric}";
+			$option_string .= " --intro=$yaml->{$story}->{$type}->{$form}->{rubric}";
 			# my $assign_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalassign=$option_hash{assign}" assign $course);
-			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
-			warn "\nactivity-add-line='$activity_add_line'\n";
-			my $assign_id = qx( $activity_add_line );
-			warn "assign_id=$assign_id";
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
 		}
 		elsif ( $module{$type} eq 'quiz' ) {
-			my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
-			die "No '$name' identifier in the topic '$topic' '$type' quiz about the '$story' story, '$form' form\n" unless $name;
-			my $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"$option_string\" quiz $course";
-			warn "\nactivity-add-line='$activity_add_line'\n";
-			my $quiz_id = qx( $activity_add_line );
-			warn "quiz_id=$quiz_id";
-			chomp $quiz_id;
-			die "Failed to add '$name' activity to section $section with activity-add! activity_id=$quiz_id\n" unless looks_like_number( $quiz_id );
+			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"$option_string\" quiz $course";
+		}
+		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
+		warn "\n$module{$type}-add-line='$activity_add_line'\n";
+		my $activity_id = qx( $activity_add_line );
+		warn "$module{$type}_id=$activity_id";
+		chomp $activity_id;
+		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
+		if ( @$content_list ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
-					map { $question->{$_} } qw/topic story type form intro/;
+				map { $question->{$_} } qw/topic story type form intro/;
 				die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
-					$topic and  $story and  $type and  defined $form;
+				$topic and  $story and  $type and  defined $form;
 				if ( $intro ) {
 					my $description = qx"yaml4moodle description -d '$intro' -i $name -t $topic -s $story -f $form";
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 					$description > io( $file );
-					system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
-					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
+					system( "Moosh -n question-import $file $activity_id $category") == 0 or die 
+					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c $course_name -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
-					== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
+				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
 				my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
 				die "No $story ($type) $form form file in repository/$topic?" unless
-					-e $file;
+				-e $file;
 				my $random = 0;
 				if ( $type eq 'jigsaw' or $type eq 'drag' ) {
 					my $random_question = $question->{random};
@@ -150,19 +142,18 @@ sub execute {
 					}
 				}
 				if ( $random == 0 ) {
-					system( "Moosh -n question-import $file $quiz_id $category") == 0 or die 
-					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$quiz_id' quiz, from '$file' file failed. ";
+					system( "Moosh -n question-import $file $activity_id $category") == 0 or die 
+					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
-					system( "Moosh -n question-import -r $random --tag='$tag' -m $tagcomponent -l $tagcollid $file $quiz_id $category") == 0 or die 
+					system( "Moosh -n question-import -r $random --tag='$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category") == 0 or die 
 					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category' category failed";
 
 				}
 				else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
 			}
 		}
-		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		$n++;
 	}
 }
