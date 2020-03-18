@@ -68,7 +68,6 @@ sub execute {
 			$topic and  $story and  $type and  defined $form;
 		my $default_options = $options->{ $module{$type} };
 		my %option_hash;
-		my $option_string = '';
 		$option_hash{gradecat} = $gradecat;
 		$option_hash{$_} = "$default_options->{$_}" for keys %$default_options;
 		my $more_opts;
@@ -86,38 +85,32 @@ sub execute {
 		die "No '$name' identifier in the topic '$topic' '$type' activity about the '$story' story, '$form' form\n" unless $name;
 		my $activity_add_line;
 		if ( $type eq 'forum' ) {
+			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
 			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=\"$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		}
 		elsif ( $type eq 'studentquiz' ) {
-			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --grade=3 --gradecat=$gradecat --decimalpoints=0\" studentquiz $course";
+			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
 		}
 		elsif ( $type eq 'url' ) {
 			$option_hash{externalurl} = $yaml->{$story}->{$type}->{$form}->{externalurl};
-			my @option_list; push @option_list, "--$_=$option_hash{$_}" for keys %option_hash;
-			$option_string = join ' ', "@option_list";
-			# my $url_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalurl=$option_hash{url}" url $course);
-			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
+			$option_hash{intro} = $intro;
 		}
 		elsif ( $type eq 'assign' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
-			# my $assign_id = qx(/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o "--timeopen=1 --intro=$intro --introformat=4 --externalassign=$option_hash{assign}" assign $course);
-			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o=\"$option_string\" $type $course";
 		}
 		elsif ( $module{$type} eq 'quiz' ) {
-			$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" quiz $course";
+			$option_hash{intro} = $intro;
 		}
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
-		for my $key (keys %option_hash) {
-			 $option_string .= join ' ', "--$key='$option_hash{$key}'";
-		 }
-		$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" quiz $course";
+		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
+		my $option_string = join ' ', @option_list;
+		$activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" $module{$type} $course";
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
-		# $activity_add_line = "/home/drbean/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=\"$(IFS= cat /home/drbean/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
 		chomp $activity_id;
 		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
-		if ( @$content_list ) {
+		if ( $module{$type} eq 'quiz' ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
 				map { $question->{$_} } qw/topic story type form intro/;
