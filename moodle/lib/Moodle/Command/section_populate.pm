@@ -49,7 +49,8 @@ sub execute {
 		, url => 'url'
 		, forum => 'forum'
 	);
-	my ( $options, $activity_list ) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
+	my $options = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
+	my $activity_list = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
