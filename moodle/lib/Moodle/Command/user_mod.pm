@@ -8,10 +8,10 @@ use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
 use IO::All;
 
-sub abstract { "moopl user-mod -l FLA0003" }
-sub description { "Leverage Moosh's php scripts to do higher-level moodle work in perl" }
+sub abstract { "moopl user_mod -c 41 -l FLA0003" }
+sub description { "Leverage Moosh's user-mod php script to do higher-level moodle user_mod work in perl (set username and idnumber)" }
 
-sub usage_desc { "moodle user_mod -s nuu -l FLA0003" }
+sub usage_desc { "moodle user_mod -c 41 -l FLA0003" }
 
 sub opt_spec  {
         return (
