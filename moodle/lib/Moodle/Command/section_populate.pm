@@ -155,7 +155,7 @@ sub execute {
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
 					# my $import_random_line = "/home/drbean/moodle/moosh/moosh.php -n -v question-importrandom -r $random -t '$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category_id";
-					my $import_random_line = "/home/drbean/moodle/moosh/moosh.php -n -v question-importrandom $file $activity_id $category_id $random $tag $tagcollid $tagcomponent";
+					my $import_random_line = "/home/drbean/moodle/moosh/moosh.php -n question-importrandom $file $activity_id $category_id $random $tag $tagcollid $tagcomponent";
 					warn "\nimportrandom-line='$import_random_line'\n";
 					system( $import_random_line ) == 0 or die 
 					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$tag' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category_id' category failed";
