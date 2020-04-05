@@ -17,7 +17,7 @@ sub usage_desc { "moopl section_populate -q question_category -s course_section 
 
 sub opt_spec  {
         return (
-		["q=i", "question_category"]
+		["q=s", "question_category"]
 		, ["s=i", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
@@ -101,6 +101,7 @@ sub execute {
 		}
 		elsif ( $module{$type} eq 'quiz' ) {
 			$option_hash{intro} = $intro;
+			$option_hash{questioncategory} = $category if $category;
 		}
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
@@ -116,12 +117,20 @@ sub execute {
 				my ( $topic, $story, $type, $form, $intro ) = 
 				map { $question->{$_} } qw/topic story type form intro/;
 				die "No '$name' '$type' quiz for '$topic' topic, '$story' story, '$form' form?\n" unless
-				$topic and  $story and  $type and  defined $form;
+					$topic and  $story and  $type and  defined $form;
+				die "No '$option_hash{parentcategory}' parent category, '$option_hash{categorycontext}' context for '$option_hash{questioncategory}' question category\n"
+					unless $option_hash{parentcategory} and $option_hash{categorycontext} and $option_hash{questioncategory};
+				my $category_create_line = "/home/drbean/moodle/moosh/moosh.php -n questioncategory-create --reuse -p $option_hash{parentcategory} -c $option_hash{categorycontext} $option_hash{questioncategory}";
+				warn "\ncategory-create-line='$category_create_line'\n";
+				my $category_id = qx( $category_create_line );
+				warn "category_id=$category_id\n";
+				die "category_id?\n" unless $category_id;
+				chomp $category_id;
 				if ( $intro ) {
 					my $description = qx"yaml4moodle description -d '$intro' -i $name -t $topic -s $story -f $form";
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 					$description > io( $file );
-					system( "Moosh -n question-import $file $activity_id $category") == 0 or die 
+					system( "/home/drbean/moodle/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c $course_name -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
@@ -140,13 +149,16 @@ sub execute {
 					}
 				}
 				if ( $random == 0 ) {
-					system( "Moosh -n question-import $file $activity_id $category") == 0 or die 
+					system( "/home/drbean/moodle/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
-					system( "Moosh -n question-import -r $random --tag='$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category") == 0 or die 
-					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$name' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category' category failed";
+					# my $import_random_line = "/home/drbean/moodle/moosh/moosh.php -n -v question-importrandom -r $random -t '$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category_id";
+					my $import_random_line = "/home/drbean/moodle/moosh/moosh.php -n -v question-importrandom $file $activity_id $category_id $random $tag $tagcollid $tagcomponent";
+					warn "\nimportrandom-line='$import_random_line'\n";
+					system( $import_random_line ) == 0 or die 
+					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$tag' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category_id' category failed";
 
 				}
 				else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
