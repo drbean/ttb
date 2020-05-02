@@ -47,6 +47,7 @@ sub execute {
 		, studentquiz => 'studentquiz'
 		, assign => 'assign'
 		, url => 'url'
+		, page => 'page'
 		, forum => 'forum'
 	);
 	my $options = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
@@ -94,6 +95,10 @@ sub execute {
 		}
 		elsif ( $type eq 'url' ) {
 			$option_hash{externalurl} = $yaml->{$story}->{$type}->{$form}->{externalurl};
+			$option_hash{intro} = $intro;
+		}
+		elsif ( $type eq 'page' ) {
+			$option_hash{content} = $yaml->{$story}->{$type}->{$form}->{rubric};
 			$option_hash{intro} = $intro;
 		}
 		elsif ( $type eq 'assign' ) {
