@@ -50,7 +50,11 @@ sub execute {
 		, page => 'page'
 		, forum => 'forum'
 	);
-	my $options = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
+	my $curriculum_options = LoadFile "/home/drbean/curriculum/spring/default.yaml";
+	my $course_options = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
+	my $options;
+	$options->{$_} = $curriculum_options->{$_} for keys %$curriculum_options;
+	$options->{$_} = $course_options->{$_} for keys %$course_options;
 	my $activity_list = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
