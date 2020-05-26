@@ -55,7 +55,8 @@ sub execute {
 	my $options;
 	$options->{$_} = $curriculum_options->{$_} for keys %$curriculum_options;
 	$options->{$_} = $course_options->{$_} for keys %$course_options;
-	my $activity_list = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
+	my ($section_options, $activity_list) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
+	$options->{$_} = $section_options->{$_} for keys %$section_options;
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "options $options not a HASH\n" unless ref $options eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
