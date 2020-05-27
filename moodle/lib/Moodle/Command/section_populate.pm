@@ -38,6 +38,7 @@ sub execute {
 
 	chdir "/var/www/cgi-bin/moodle";
 
+	my @types = qw/quiz studentquiz assign url page forum/;
 	my %module = ( jigsaw => 'quiz'
 		, drag => 'quiz'
 		, match => 'quiz'
@@ -50,15 +51,19 @@ sub execute {
 		, page => 'page'
 		, forum => 'forum'
 	);
-	my $curriculum_options = LoadFile "/home/drbean/curriculum/spring/default.yaml";
-	my $course_options = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
-	my $options;
-	$options->{$_} = $curriculum_options->{$_} for keys %$curriculum_options;
-	$options->{$_} = $course_options->{$_} for keys %$course_options;
-	my ($section_options, $activity_list) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
-	$options->{$_} = $section_options->{$_} for keys %$section_options;
+	my $curriculum_default = LoadFile "/home/drbean/curriculum/spring/default.yaml";
+	my $course_default = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
+	my $default_option;
+	$default_option->{$_} = $curriculum_default->{$_} for keys %$curriculum_default;
+	my ($section_default, $activity_list) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
+	for my $type ( @types ) {
+		$default_option->{$type}->{$_} = $course_default->{$type}->{$_}
+			for keys %{$course_default->{$type}};
+		$default_option->{$type}->{$_} = $section_default->{$type}->{$_}
+			for keys %{$section_default->{$type}};
+	}
 	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
-	die "options $options not a HASH\n" unless ref $options eq 'HASH';
+	die "default options $default_option not a HASH\n" unless ref $default_option eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
 	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
 	my $n = 0;
@@ -73,7 +78,7 @@ sub execute {
 		my $yaml = LoadFile $cards;
 		die "No '$type' activity for '$topic' topic, '$story' story, '$form' form?\n" unless
 			$topic and  $story and  $type and  defined $form;
-		my $default_options = $options->{ $module{$type} };
+		my $default_options = $default_option->{ $module{$type} };
 		my %option_hash;
 		$option_hash{gradecat} = $gradecat;
 		$option_hash{$_} = "$default_options->{$_}" for keys %$default_options;
