@@ -53,6 +53,10 @@ pairexperts:
   58: [48, 38]
   59: [56, 49]
 colors:
+  Front left-hand corner : Yellow
+  Front right-hand corner: Gray
+  Back left-hand corner  : White
+  Back right-hand corner : Red
   5 : #ffcc00
   6 : #ffff66
   7 : #ccff66
@@ -172,6 +176,10 @@ colors:
   Yellow    :
   YellowYellow: Yellow
 fours:
+  Front left-hand corner : [11, 12, 13, 14, 15, 16]
+  Back left-hand corner  : [21, 22, 23, 24]
+  Front right-hand corner: [41, 42, 43, 44]
+  Back right-hand corner : [31, 32, 33, 34]
   Green     : [25, 25a, 26, 26a]
   Gray      : [23, 15, 24, 16]
   Brown     : [21, 13, 22, 14]
