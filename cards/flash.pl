@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2016 Jan 21, 16:08:02
+# Last Edit: 2020 Jun 02, 10:30:04 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -55,7 +55,7 @@ my $latexString = <<"START_LATEX";
 	\\small #1 #2
 	\\par
 	\\parbox[t][6.7cm][c]{9.5cm}{%
-	\\hspace{0.1cm} \\Huge#3\\\\
+	\\hspace{0.1cm} \\large#3\\\\
 	\\normalsize#4 #5
 	}
 }
@@ -174,10 +174,10 @@ for my $word ( @words ) {
 	die "calling '$word' word $word_count{$word} times"
 		unless $word_count{$word} == 1;
 }
-for my $part ( keys %part_count ) {
-	die "'$part' dupe present $part_count{$part} times"
-		unless $part_count{$part} == 0;
-}
+#for my $part ( keys %part_count ) {
+#	die "'$part' dupe present $part_count{$part} times"
+#		unless $part_count{$part} == 0;
+#}
 die "No word for some prompts" unless
 	values %prompts == scalar @words;
 	
