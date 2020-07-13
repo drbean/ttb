@@ -1,6 +1,12 @@
 #!/usr/bin/perl
 
+<<<<<<< .mine
+# Last Edit: 2020 Jul 13, 11:20:47 AM
+||||||| .r2638
+# Last Edit: 2017 May 18, 03:01:46 PM
+=======
 # Last Edit: 2019 Aug 16, 02:06:48 PM
+>>>>>>> .r2754
 # $Id$
 
 package Script;
@@ -75,7 +81,7 @@ sub run {
 	my $expertseats = $roomconfig->{ $beancansize->{$n} . 'experts'};
 	my $teamchart = { league => $league->{id}, session => $session, 
 		room_id => $roomconfig->{id} };
-	my @letter = qw/A B C/;
+	my @letter = qw/A B C D/;
 	for my $team ( keys %$arrangement ) {
 		my $seats = $arrangement->{$team};
 		my @seats = map { "s$_" } @$seats;
@@ -123,7 +129,8 @@ sub run {
 	my $t = Text::Template->new(TYPE=>'FILE',
 		SOURCE=>"$rooms/$room/${fileprefix}seats.tmpl",
 						DELIMITERS => ['[*', '*]']);
-	my $teamtext = $t->fill_in( HASH => $teamchart );
+	my $teamtext = $t->fill_in( HASH => $teamchart ) or 
+		die "Couldn't fill in template: $Text::Template::ERROR";
 
 	io("$sessionpath/$session/teamseat.$filetype")->print( encode('UTF-8', $teamtext) );
 	my $experttext = encode(
