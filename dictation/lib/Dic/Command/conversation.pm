@@ -1,6 +1,6 @@
 package Dic::Command::conversation;
 
-# Last Edit: 2017 Mar 12, 03:41:47 PM
+# Last Edit: 2020 Jul 16, 04:21:58 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -130,7 +130,7 @@ sub execute {
 \\end{textblock}\n";
 		}
 		$tmplString .= "
-\\begin{tiny}" . ( $j+1 ) . "\\end{tiny}\\newpage\n\n";
+\\begin{Large}" . ( $j+1 ) . "\\end{Large}\\newpage\n\n";
 
 
 	}
