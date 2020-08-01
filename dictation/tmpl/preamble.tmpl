@@ -1,7 +1,6 @@
 <TMPL>$autogen</TMPL>
 \documentclass[a4paper]{article}
 \usepackage{fontspec}
-\usepackage{xltxtra}
 % \setmainfont{texgyrebonum-regular.otf}[Scale=MatchLowercase]
 % \setmainfont{Latin Modern Roman}[Scale=MatchLowercase]
 \setmainfont{Linux Libertine O}[Scale=MatchLowercase]
@@ -9,12 +8,14 @@
 % \setmonofont{Inconsolata}[Scale=MatchLowercase]
 % \setmonofont{Hack}[Scale=MatchLowercase]
 % \setmonofont{Deja Sans Mono}[Scale=MatchLowercase]
-\setmonofont{Droid Sans Mono}[Scale=MatchLowercase]
+% \setmonofont{Droid Sans Mono}[Scale=MatchLowercase]
 % \setmonofont{Source Code Pro}[Scale=MatchLowercase]
 % \setmonofont{Fira Mono}[Scale=MatchLowercase]
 % \setmonofont{Sans Regular}[Scale=MatchLowercase]
 \usepackage{xeCJK}
-\setCJKmainfont{WenQuanYi Zen Hei}
+\setCJKmainfont{NotoSansCJK-Black.ttc}[
+	Path = /usr/share/fonts/noto/,
+]
 % \usepackage[absolute,noshowtext,showboxes]{textpos}
 \usepackage[absolute]{textpos}
 \TPMargin{0.2cm}
