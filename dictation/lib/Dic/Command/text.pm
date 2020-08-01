@@ -40,7 +40,7 @@ sub execute {
 
 	my ($course, $cloze_style, $topic, $story, $form, $size) = @$opt{qw/c z t s f p/};
 	my ($text_list, $question) = LoadFile
-		"/home/drbean/curriculum/$course/" . $opt->{t} . "/dic.yaml";
+		"/home/$ENV{USER}/curriculum/$course/" . $opt->{t} . "/dic.yaml";
 
 	my $fields = shift( @$text_list );
 
@@ -94,7 +94,7 @@ sub execute {
 	my $paging = 0;
 	my $threepages = 0;
 
-	my $tmpl = io "/home/drbean/ttb/dictation/tmpl/preamble.tmpl";
+	my $tmpl = io "/home/$ENV{USER}/ttb/dictation/tmpl/preamble.tmpl";
 	my $tmplString = $tmpl->all;
 
 	my $identifier;
@@ -147,7 +147,7 @@ sub execute {
 
 	my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 					, DELIMITERS => [ '<TMPL>', '</TMPL>' ] );
-	open TEX, ">/home/drbean/curriculum/$course/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
+	open TEX, ">/home/$ENV{USER}/curriculum/$course/$opt->{t}/dic_$opt->{s}_$opt->{f}.tex" or die "No open on " . $opt->{t} . ": " . $!;
 	print TEX $template->fill_in( HASH => $quiz );
 
 }
