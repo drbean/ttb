@@ -42,7 +42,7 @@ my $latexString = <<"START_LATEX";
 \\usepackage{xltxtra}
 \\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
 \\usepackage{xeCJK}
-\setCJKmainfont{NotoSansCJK-Black.ttc}[
+\\setCJKmainfont{NotoSansCJK-Regular.ttc}[
 	Path = /usr/share/fonts/noto/,
 ]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
