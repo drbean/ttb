@@ -42,7 +42,9 @@ my $latexString = <<"START_LATEX";
 \\usepackage{xltxtra}
 \\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
 \\usepackage{xeCJK}
-\\setCJKmainfont{WenQuanYi Zen Hei}
+\setCJKmainfont{NotoSansCJK-Black.ttc}[
+	Path = /usr/share/fonts/noto/,
+]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
 \\usepackage[absolute,showboxes]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
