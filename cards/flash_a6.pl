@@ -37,9 +37,14 @@ my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage[a4paper,landscape]{geometry}
 % \\newcommand{\\printlandscape}{\\special{landscape}}
-\\usepackage[T1]{fontenc}
+\\usepackage{fontspec}
+\\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
 \\usepackage{xeCJK}
-\\setCJKmainfont[Scale=2.5]{WenQuanYi Zen Hei}
+\\setCJKmainfont{NotoSansCJK-Regular.ttc}[
+	Path = /usr/share/fonts/noto/,
+	Scale = 2.5,
+]
+\\usepackage{xeCJK}
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
 \\usepackage[absolute,showboxes]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
