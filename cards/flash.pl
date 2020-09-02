@@ -38,7 +38,7 @@ my $latexString = <<"START_LATEX";
 \\usepackage{fontspec}
 \\usepackage{xeCJK}
 \\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
-\\setCJKmainfont{NotoSansCJK-Black.ttc}[
+\\setCJKmainfont{NotoSansCJK-Regular.ttc}[
 	       Path = /usr/share/fonts/noto/,
 	       ]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
