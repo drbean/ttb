@@ -1,0 +1,5 @@
+Makefile.PL
+MANIFEST
+script/moopl
+lib/Moodle.pm
+lib/Moodle/Command/section_populate.pm
