@@ -51,11 +51,11 @@ sub execute {
 		, page => 'page'
 		, forum => 'forum'
 	);
-	my $curriculum_default = LoadFile "/home/drbean/curriculum/spring/default.yaml";
-	my $course_default = LoadFile "/home/drbean/curriculum/$course_name/spring/default.yaml";
+	my $curriculum_default = LoadFile "/home/drbean/curriculum/online/default.yaml";
+	my $course_default = LoadFile "/home/drbean/curriculum/$course_name/online/default.yaml";
 	my $default_option;
 	$default_option->{$_} = $curriculum_default->{$_} for keys %$curriculum_default;
-	my ($section_default, $activity_list) = LoadFile "/home/drbean/curriculum/$course_name/spring/$section.yaml";
+	my ($section_default, $activity_list) = LoadFile "/home/drbean/curriculum/$course_name/online/$section.yaml";
 	for my $type ( @types ) {
 		$default_option->{$type}->{$_} = $course_default->{$type}->{$_}
 			for keys %{$course_default->{$type}};
