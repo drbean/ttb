@@ -58,7 +58,7 @@ my $latexString = <<"START_LATEX";
 	\\small #1 #2
 	\\par
 	\\parbox[t][6.7cm][c]{9.5cm}{%
-	\\hspace{0.1cm} \\large#3\\\\
+	\\hspace{0.1cm} \\Huge#3\\\\
 	\\normalsize#4 #5
 	}
 }
