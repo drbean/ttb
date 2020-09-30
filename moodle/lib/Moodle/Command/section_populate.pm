@@ -2,11 +2,11 @@ package Moodle::Command::section_populate;
 
 use lib "lib";
 
-use Moodle -command;
+# use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
-use IO::All;
+# use IO::All;
 use Scalar::Util qw/looks_like_number/;
 use List::MoreUtils qw/all/;
 
@@ -144,7 +144,13 @@ sub execute {
 				if ( $intro ) {
 					my $description = qx"yaml4moodle description -d '$intro' -i $name -t $topic -s $story -f $form";
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
-					$description > io( $file );
+
+my $handle   = undef;
+my $encoding = ":encoding(UTF-8)";
+open($handle, "> $encoding", $file)
+    || die "$0: can't open $file in write-open mode: $!";
+print $handle $description;
+					# $description > io( $file );
 					system( "/home/drbean/moodle/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
