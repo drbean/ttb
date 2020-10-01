@@ -18,7 +18,7 @@ sub usage_desc { "moopl section_populate -q question_category -s course_section 
 sub opt_spec  {
         return (
 		["q=s", "question_category"]
-		, ["s=i", "course_section"]
+		, ["s=s", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
 		, ["l=i", "tag_collection_id"]
