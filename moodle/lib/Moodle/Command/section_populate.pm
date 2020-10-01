@@ -98,7 +98,7 @@ sub execute {
 		my $activity_add_line;
 		if ( $type eq 'forum' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
-			$activity_add_line = "/home/$ENV{USER}/moodle/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
+			$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		}
 		elsif ( $type eq 'studentquiz' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
@@ -121,7 +121,7 @@ sub execute {
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
 		my $option_string = join ' ', @option_list;
-		$activity_add_line = "/home/$ENV{USER}/moodle/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" $module{$type} $course";
+		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" $module{$type} $course";
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
@@ -135,7 +135,7 @@ sub execute {
 					$topic and  $story and  $type and  defined $form;
 				die "No '$option_hash{parentcategory}' parent category, '$option_hash{categorycontext}' context for '$option_hash{questioncategory}' question category\n"
 					unless $option_hash{parentcategory} and $option_hash{categorycontext} and $option_hash{questioncategory};
-				my $category_create_line = "/home/$ENV{USER}/moodle/moosh/moosh.php -n questioncategory-create --reuse -p $option_hash{parentcategory} -c $option_hash{categorycontext} $option_hash{questioncategory}";
+				my $category_create_line = "/home/$ENV{USER}/moosh/moosh.php -n questioncategory-create --reuse -p $option_hash{parentcategory} -c $option_hash{categorycontext} $option_hash{questioncategory}";
 				warn "\ncategory-create-line='$category_create_line'\n";
 				my $category_id = qx( $category_create_line );
 				warn "category_id=$category_id\n";
@@ -151,7 +151,7 @@ open($handle, "> $encoding", $file)
     || die "$0: can't open $file in write-open mode: $!";
 print $handle $description;
 					# $description > io( $file );
-					system( "/home/$ENV{USER}/moodle/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
+					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do yaml4moodle \$format -c $course_name -t \$TOPIC -s \$STORY -q \$QUIZ -f \$FORM > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
@@ -170,13 +170,13 @@ print $handle $description;
 					}
 				}
 				if ( $random == 0 ) {
-					system( "/home/$ENV{USER}/moodle/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
+					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				elsif ( looks_like_number( $random ) ) {
 					my $tag = "${topic}_${story}_${type}_$form";
-					# my $import_random_line = "/home/$ENV{USER}/moodle/moosh/moosh.php -n -v question-importrandom -r $random -t '$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category_id";
-					my $import_random_line = "/home/$ENV{USER}/moodle/moosh/moosh.php -n question-importrandom $file $activity_id $category_id $random $tag $tagcollid $tagcomponent";
+					# my $import_random_line = "/home/$ENV{USER}/moosh/moosh.php -n -v question-importrandom -r $random -t '$tag' -m $tagcomponent -l $tagcollid $file $activity_id $category_id";
+					my $import_random_line = "/home/$ENV{USER}/moosh/moosh.php -n question-importrandom $file $activity_id $category_id $random $tag $tagcollid $tagcomponent";
 					warn "\nimportrandom-line='$import_random_line'\n";
 					system( $import_random_line ) == 0 or die 
 					"question import of '$story' '$type' activity: '$form' form with '$random' random questions with '$tag' tag in the '$tagcollid' collection for the '$tagcomponent' component in '$category_id' category failed";
