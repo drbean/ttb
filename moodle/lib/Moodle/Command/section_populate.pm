@@ -51,6 +51,14 @@ sub execute {
 		, page => 'page'
 		, forum => 'forum'
 	);
+	my $section_n = { general => 0
+		, read => 1
+		, pic => 2
+		, question => 3
+		, info => 4
+		, solution => 5
+		, opinion => 6
+		}->{$section};
 	my $curriculum_default = LoadFile "/home/$ENV{USER}/curriculum/online/default.yaml";
 	my $course_default = LoadFile "/home/$ENV{USER}/curriculum/$course_name/online/default.yaml";
 	my $default_option;
@@ -98,7 +106,7 @@ sub execute {
 		my $activity_add_line;
 		if ( $type eq 'forum' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
-			$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add -n '$name' -s $section -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
+			$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add -n '$name' -s $section_n -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		}
 		elsif ( $type eq 'studentquiz' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
@@ -121,12 +129,12 @@ sub execute {
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
 		my $option_string = join ' ', @option_list;
-		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name='$name' -s $section --options=\"$option_string\" $module{$type} $course";
+		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name='$name' -s $section_n --options=\"$option_string\" $module{$type} $course";
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
 		chomp $activity_id;
-		die "Failed to add '$name' activity to section $section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
+		die "Failed to add '$name' activity to section $section_n with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
 		if ( $module{$type} eq 'quiz' ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
