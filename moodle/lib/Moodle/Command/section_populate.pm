@@ -6,7 +6,6 @@ use lib "lib";
 use YAML4Moodle::Command::description;
 use YAML4Moodle::Command::xml;
 use YAML4Moodle::Command::gift;
-use n
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -153,12 +152,12 @@ sub execute {
 				warn "category_id=$category_id\n";
 				die "category_id?\n" unless $category_id;
 				chomp $category_id;
+my $handle   = undef;
+my $encoding = ":encoding(UTF-8)";
 				if ( $intro ) {
 					my $description = qx"YAML4Moodle::Command::description::execute('', { d=>'$intro', i=>$name, t=>$topic, s=>$story, f=>$form})";
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 
-my $handle   = undef;
-my $encoding = ":encoding(UTF-8)";
 open($handle, "> $encoding", $file)
     || die "$0: can't open $file in write-open mode: $!";
 print $handle $description;
@@ -166,12 +165,18 @@ print $handle $description;
 					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
-				system( "FORM=$form; STORY=$story; QUIZ=$type; TOPIC=$topic; for format in gift xml ; do YAML4Moodle::Command::\$format::execute('', { c=>$course_name, t=>\$TOPIC, s=>\$STORY, q=>\$QUIZ, f=>\$FORM });
-					, > /var/lib/moodle/repository/\${TOPIC}/quiz_\${STORY}_\${QUIZ}_\${FORM}.\$format ; done" )
-				== 0 or die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n";
-				my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.xml";
-				die "No $story ($type) $form form file in repository/$topic?" unless
-				-e $file;
+				my $file;
+				for my $format ( qw(gift xml) ) {
+					my $question = YAML4Moodle::Command::xml::execute('', { c=>$course_name, t=>$topic, s=>$story, q=>$type, f=>$form });
+					die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n"
+						unless $question;
+					$file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.$format";
+					open($handle, "> $encoding", $file)
+						|| die "$0: can't open $file in write-open mode: $!";
+					print $handle $question;
+					die "No $story ($type) $form form file in repository/$topic?" unless
+						-e $file;
+				}
 				my $random = 0;
 				if ( $type eq 'jigsaw' or $type eq 'drag' ) {
 					my $random_question = $question->{random};
