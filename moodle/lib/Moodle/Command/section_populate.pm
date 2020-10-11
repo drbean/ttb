@@ -58,7 +58,7 @@ sub execute {
 		, read => 1
 		, pic => 2
 		, question => 3
-		, info => 4
+		, information => 4
 		, solution => 5
 		, opinion => 6
 		}->{$section};
