@@ -166,7 +166,7 @@ print $handle $description;
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 				}
 				my $file;
-				for my $format ( qw(gift xml) ) {
+				for my $format ( qw(xml) ) {
 					my $question = YAML4Moodle::Command::xml::execute('', { c=>$course_name, t=>$topic, s=>$story, q=>$type, f=>$form });
 					die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n"
 						unless $question;
