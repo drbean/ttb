@@ -106,10 +106,11 @@ sub execute {
 		$option_hash{intro} = "\\\"$intro\\\"";
 		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in the topic '$topic' '$type' activity about the '$story' story, '$form' form\n" unless $name;
+		$name = "\"$name\"";
 		my $activity_add_line;
 		if ( $type eq 'forum' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
-			$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add -n '$name' -s $section_n -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
+			$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add -n $name -s $section_n -o \"--timeopen=1 --intro=\"$(IFS= cat /home/$ENV{USER}/curriculum/$course_name/$story/intro.md) --introformat=4 --type=eachuser  --grade=3 --gradecat=$gradecat --decimalpoints=0\" forum $course";
 		}
 		elsif ( $type eq 'studentquiz' ) {
 			$option_hash{intro} = $yaml->{$story}->{$type}->{$form}->{rubric};
@@ -132,7 +133,7 @@ sub execute {
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
 		my $option_string = join ' ', @option_list;
-		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name='$name' -s $section_n --options=\"$option_string\" $module{$type} $course";
+		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name=$name -s $section_n --options=\"$option_string\" $module{$type} $course";
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
