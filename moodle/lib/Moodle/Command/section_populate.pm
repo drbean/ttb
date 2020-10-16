@@ -104,7 +104,7 @@ sub execute {
 		my $intro = delete $first_one->{intro};
 		$intro = "$topic: $story $form" unless $intro;
 		$option_hash{intro} = "\\\"$intro\\\"";
-		my $name = "\\\"$yaml->{$story}->{$type}->{$form}->{identifier}\\\"";
+		my $name = $yaml->{$story}->{$type}->{$form}->{identifier};
 		die "No '$name' identifier in the topic '$topic' '$type' activity about the '$story' story, '$form' form\n" unless $name;
 		my $activity_add_line;
 		if ( $type eq 'forum' ) {
