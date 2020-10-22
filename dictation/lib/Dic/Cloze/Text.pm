@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2017 Mar 22, 10:20:47 AM
+# Last Edit: 2020 Oct 22,  4:08:09 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -123,7 +123,6 @@ sub cloze
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
-				$Dic::Cloze::Text::word_score++;
 				$Dic::Cloze::Text::clozeline .= $item[2];
 				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
 			}
