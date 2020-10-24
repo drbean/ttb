@@ -66,6 +66,7 @@ sub cloze
 	our (%word_score, $word_score);
 
 	my $lineN = 0;
+	my $wordN = 0;
 
 	foreach my $line ( @lines )
 	{
@@ -119,6 +120,8 @@ sub cloze
 			}
 		end: m/^\Z/
 	]; 
+	if ( $unclozeables ~= m/\d+/ ) {
+		if $wor
 	if ( $unclozeables ) {
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
