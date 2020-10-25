@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Jun 02, 10:30:04 AM
+# Last Edit: 2020 Oct 25,  3:41:23 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -52,6 +52,14 @@ my $latexString = <<"START_LATEX";
 \\usepackage{soul}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
+\\usepackage{graphicx}
+\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{topic} }
+\\pagestyle{empty}
+\\setlength{\unitlength}{1cm}
+
+%\newcommand{\myXonebeanXZeroXAcontent}[0]{
+%\includegraphics[angle=00,height=0.06\paperheight,width=0.24\paperwidth]{one_bean.png}
+}
 
 \\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.1cm}
