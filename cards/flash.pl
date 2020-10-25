@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Oct 25,  3:41:23 PM
+# Last Edit: 2020 Oct 25,  9:02:30 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -53,13 +53,9 @@ my $latexString = <<"START_LATEX";
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 \\usepackage{graphicx}
-\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{topic} }
+\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC} }
 \\pagestyle{empty}
 \\setlength{\unitlength}{1cm}
-
-%\newcommand{\myXonebeanXZeroXAcontent}[0]{
-%\includegraphics[angle=00,height=0.06\paperheight,width=0.24\paperwidth]{one_bean.png}
-}
 
 \\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.1cm}
@@ -198,6 +194,14 @@ my @winner = sample( set => \@clinchers );
 my @loser = grep { $_ ne $winner[0] } @clinchers;
 my %words; @words{ @words } = (); delete @words{@clinchers};
 my @pruned = keys %words;
+
+for my $word ( keys %prompts ) {
+	if ( $prompts{$word} =~ m/^[[:alnum:]]+\.(png|jpg|gif)$/ ) {
+		$prompts{$word} =
+"\\includegraphics[angle=00,height=0.20\paperheight,width=0.40\paperwidth]{$prompts{$word}}";
+	}
+}
+
 my (@call, @lost_call);
 if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
 	push @call, "$_: $prompts{$_}" for (@pruned, @winner);
