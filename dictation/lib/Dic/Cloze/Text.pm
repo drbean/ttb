@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 22,  4:08:09 PM
+# Last Edit: 2020 Oct 25,  2:46:08 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -66,7 +66,7 @@ sub cloze
 	our (%word_score, $word_score);
 
 	my $lineN = 0;
-	my $wordN = 0;
+	my $cloze_count = 0;
 
 	foreach my $line ( @lines )
 	{
@@ -120,9 +120,21 @@ sub cloze
 			}
 		end: m/^\Z/
 	]; 
-	if ( $unclozeables ~= m/\d+/ ) {
-		if $wor
-	if ( $unclozeables ) {
+	if ( $Dic::Cloze::Text::unclozeable ~= m/^\d+$/ ) {
+		if ( $++cloze_count % $Dic::Cloze::Text::unclozeable ) {
+			$letterGrammar .= q[
+			unclozeable: <reject: $inWord> m/\w+/
+				{
+					$Dic::Cloze::Text::clozeline .= $item[2];
+				}
+			]
+		}
+		else {
+			$letterGrammar .= q[
+			];
+		}
+	}
+	elsif ( $unclozeables ) {
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
