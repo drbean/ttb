@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Oct 25,  9:02:30 PM
+# Last Edit: 2020 Oct 28, 12:33:35 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -53,7 +53,7 @@ my $latexString = <<"START_LATEX";
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 \\usepackage{graphicx}
-\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC} }
+\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC} } }
 \\pagestyle{empty}
 \\setlength{\unitlength}{1cm}
 
@@ -198,7 +198,7 @@ my @pruned = keys %words;
 for my $word ( keys %prompts ) {
 	if ( $prompts{$word} =~ m/^[[:alnum:]]+\.(png|jpg|gif)$/ ) {
 		$prompts{$word} =
-"\\includegraphics[angle=00,height=0.20\paperheight,width=0.40\paperwidth]{$prompts{$word}}";
+"\\includegraphics[angle=00,height=0.20\\paperheight,width=0.40\\paperwidth]{$prompts{$word}}";
 	}
 }
 
