@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Oct 28, 12:33:35 PM
+# Last Edit: 2020 Oct 28, 12:36:00 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -55,7 +55,6 @@ my $latexString = <<"START_LATEX";
 \\usepackage{graphicx}
 \\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC} } }
 \\pagestyle{empty}
-\\setlength{\unitlength}{1cm}
 
 \\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.1cm}
