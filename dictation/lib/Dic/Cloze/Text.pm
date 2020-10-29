@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 25,  2:46:08 PM
+# Last Edit: 2020 Oct 29,  4:24:29 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -19,6 +19,7 @@ BEGIN {
 our @EXPORT_OK;
 
 use Parse::RecDescent;
+use Scalar::Util qw/looks_like_number/;
 
 our %onlastletter;
 $onlastletter{ctest} = q [
@@ -59,14 +60,14 @@ sub cloze
 	chomp $unclozeables;
 	our @unclozeable = split '\|', $unclozeables;
 	our $first = shift @unclozeable;
-	our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
+	# our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
+	our $unclozeable = 7;
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
 	our (%word_score, $word_score);
 
 	my $lineN = 0;
-	my $cloze_count = 0;
 
 	foreach my $line ( @lines )
 	{
@@ -76,6 +77,7 @@ sub cloze
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
 			my $letter = qr/[A-Za-z0-9']/;
+			my $word = qr/[A-Za-z0-9']+/;
 			my $skip = '';
 			my @cword;
 			my ($index, $inWord) = (0) x 2;
@@ -120,21 +122,24 @@ sub cloze
 			}
 		end: m/^\Z/
 	]; 
-	if ( $Dic::Cloze::Text::unclozeable ~= m/^\d+$/ ) {
-		if ( $++cloze_count % $Dic::Cloze::Text::unclozeable ) {
+	if ( looks_like_number($Dic::Cloze::Text::unclozeable) ) {
+	# if ( 1 ) {
+		$Dic::Cloze::Text::cloze_count++;
+		if ( $Dic::Cloze::Text::cloze_count <= 7 ) {
+		# if ( 1 ) {
 			$letterGrammar .= q[
-			unclozeable: <reject: $inWord> m/\w+/
+			unclozeable: <reject: $inWord> m/$word(?=$punctuation)/
 				{
 					$Dic::Cloze::Text::clozeline .= $item[2];
 				}
-			]
+			];
 		}
 		else {
 			$letterGrammar .= q[
 			];
 		}
 	}
-	elsif ( $unclozeables ) {
+	elsif ( $Dic::Cloze::Text::unclozeable ) {
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
