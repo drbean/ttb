@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 30,  4:24:01 PM
+# Last Edit: 2020 Oct 30,  9:40:04 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -73,6 +73,7 @@ print "unclozeable: $unclozeable\n";
 	foreach my $line ( @lines )
 	{
 	our $clozeline = '';
+	# $Parse::RecDescent::skip = '';
 	my $letterGrammar = q[
 		{
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
@@ -123,16 +124,18 @@ print "unclozeable: $unclozeable\n";
 			}
 		end: m/^\Z/
 	]; 
-print  "number?: ", looks_like_number($unclozeables), "\n";
-	if ( looks_like_number($unclozeables) ) {
+print  "$Dic::Cloze::Text::unclozeables is number?: ", looks_like_number($Dic::Cloze::Text::unclozeables), "\n";
+	$Dic::Cloze::Text::cloze_count++;
+print "cloze_OK= ", $Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables, "\n" if looks_like_number($Dic::Cloze::Text::unclozeables);
+	if ( looks_like_number($Dic::Cloze::Text::unclozeables) and ($Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables)) {
 	# if ( 0 ) {
 print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
 			$letterGrammar .= q[
-			unclozeable: <reject: $inWord> m/(\b{wb}[-_'[:alnum:]]+\b{wb}){$Dic::Cloze::Text::unclozeables}/
+			unclozeable: <reject: $inWord> m/(\b$letter+\b){$Dic::Cloze::Text::unclozeables}/
 				{
 					$Dic::Cloze::Text::clozeline .= $item[2];
-					$Dic::Cloze::Text::cloze_count++;
 print "unclozeable: $item[2]\n";
+	$Dic::Cloze::Text::cloze_count++;
 				}
 			];
 	}
