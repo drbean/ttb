@@ -1,7 +1,7 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 29,  4:24:29 PM
-# $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
+# Last Edit: 2020 Oct 30,  4:24:01 PM
+# $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
 use warnings;
@@ -21,7 +21,7 @@ our @EXPORT_OK;
 use Parse::RecDescent;
 use Scalar::Util qw/looks_like_number/;
 
-our %onlastletter;
+my %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
 	];
@@ -56,16 +56,17 @@ sub cloze
 {
 	$::RD_HINT=1;
 	my $cloze_style = shift;
-	my $unclozeables = shift;
+	our $unclozeables = shift;
 	chomp $unclozeables;
 	our @unclozeable = split '\|', $unclozeables;
 	our $first = shift @unclozeable;
-	# our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
-	our $unclozeable = 7;
+	our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
+print "unclozeable: $unclozeable\n";
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
 	our (%word_score, $word_score);
+	our $cloze_count = 0;
 
 	my $lineN = 0;
 
@@ -77,7 +78,7 @@ sub cloze
 			my $punctuation = qr/[^-A-Za-z0-9']+/;
 			my $name = qr/[A-Z][-A-Za-z0-9']*/; # qr/\u\w\w*\b/;
 			my $letter = qr/[A-Za-z0-9']/;
-			my $word = qr/[A-Za-z0-9']+/;
+			my $word = qr/[-_'[:alnum:]]+/;
 			my $skip = '';
 			my @cword;
 			my ($index, $inWord) = (0) x 2;
@@ -122,22 +123,18 @@ sub cloze
 			}
 		end: m/^\Z/
 	]; 
-	if ( looks_like_number($Dic::Cloze::Text::unclozeable) ) {
-	# if ( 1 ) {
-		$Dic::Cloze::Text::cloze_count++;
-		if ( $Dic::Cloze::Text::cloze_count <= 7 ) {
-		# if ( 1 ) {
+print  "number?: ", looks_like_number($unclozeables), "\n";
+	if ( looks_like_number($unclozeables) ) {
+	# if ( 0 ) {
+print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
 			$letterGrammar .= q[
-			unclozeable: <reject: $inWord> m/$word(?=$punctuation)/
+			unclozeable: <reject: $inWord> m/(\b{wb}[-_'[:alnum:]]+\b{wb}){$Dic::Cloze::Text::unclozeables}/
 				{
 					$Dic::Cloze::Text::clozeline .= $item[2];
+					$Dic::Cloze::Text::cloze_count++;
+print "unclozeable: $item[2]\n";
 				}
 			];
-		}
-		else {
-			$letterGrammar .= q[
-			];
-		}
 	}
 	elsif ( $Dic::Cloze::Text::unclozeable ) {
 		$letterGrammar .= q[
@@ -145,6 +142,7 @@ sub cloze
 			{
 				$Dic::Cloze::Text::clozeline .= $item[2];
 				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
+print "unclozeable: $item[2]\n";
 			}
 		];
 	}
