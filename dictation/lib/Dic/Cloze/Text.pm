@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 30,  9:40:04 PM
+# Last Edit: 2020 Oct 31,  5:00:34 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -61,12 +61,11 @@ sub cloze
 	our @unclozeable = split '\|', $unclozeables;
 	our $first = shift @unclozeable;
 	our $unclozeable = $unclozeables? qr/(?:$first)/: undef;
-print "unclozeable: $unclozeable\n";
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
 	our (%word_score, $word_score);
-	our $cloze_count = 0;
+	our $cloze_count = 1;
 
 	my $lineN = 0;
 
@@ -83,6 +82,7 @@ print "unclozeable: $unclozeable\n";
 			my $skip = '';
 			my @cword;
 			my ($index, $inWord) = (0) x 2;
+			my $cloze_up = 1;
 		}
 		string: token(s) end | <error>
 		token: unclozeable | singularletter | firstletter | middleletter | lastletter | blankline | punctuation 
@@ -124,18 +124,19 @@ print "unclozeable: $unclozeable\n";
 			}
 		end: m/^\Z/
 	]; 
-print  "$Dic::Cloze::Text::unclozeables is number?: ", looks_like_number($Dic::Cloze::Text::unclozeables), "\n";
-	$Dic::Cloze::Text::cloze_count++;
-print "cloze_OK= ", $Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables, "\n" if looks_like_number($Dic::Cloze::Text::unclozeables);
+print "$Dic::Cloze::Text::unclozeables unclozeable\n";
+print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
 	if ( looks_like_number($Dic::Cloze::Text::unclozeables) and ($Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables)) {
 	# if ( 0 ) {
 print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
 			$letterGrammar .= q[
-			unclozeable: <reject: $inWord> m/(\b$letter+\b){$Dic::Cloze::Text::unclozeables}/
+			unclozeable: <reject: not $cloze_up> m/((\b$letter+\b)$punctuation){$Dic::Cloze::Text::unclozeables}/
 				{
 					$Dic::Cloze::Text::clozeline .= $item[2];
-print "unclozeable: $item[2]\n";
-	$Dic::Cloze::Text::cloze_count++;
+print "$Dic::Cloze::Text::unclozeables unclozeable: $item[2]\n";
+					$Dic::Cloze::Text::cloze_count += $Dic::Cloze::Text::unclozeables;
+					$cloze_up=$Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables;
+print "cloze_up= ", $cloze_up, "\n";
 				}
 			];
 	}
@@ -145,12 +146,14 @@ print "unclozeable: $item[2]\n";
 			{
 				$Dic::Cloze::Text::clozeline .= $item[2];
 				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
-print "unclozeable: $item[2]\n";
+print "real unclozeable: $item[2]\n";
 			}
 		];
 	}
 	else {
 		$letterGrammar .= q[
+		$Dic::Cloze::Text::cloze_count++;
+		print "No unclozeables\";
 		];
 	}
 
