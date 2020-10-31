@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 31,  5:00:34 PM
+# Last Edit: 2020 Oct 31,  9:33:28 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -65,7 +65,6 @@ sub cloze
 	my %text = ();
 	our (%letter_score, $letter_score);
 	our (%word_score, $word_score);
-	our $cloze_count = 1;
 
 	my $lineN = 0;
 
@@ -82,7 +81,7 @@ sub cloze
 			my $skip = '';
 			my @cword;
 			my ($index, $inWord) = (0) x 2;
-			my $cloze_up = 1;
+			my $cloze_up = 0;
 		}
 		string: token(s) end | <error>
 		token: unclozeable | singularletter | firstletter | middleletter | lastletter | blankline | punctuation 
@@ -100,6 +99,7 @@ sub cloze
 			}
 		lastletter: <reject: not $inWord> m/$letter(?=$punctuation)/
 			{
+				$cloze_up=0;
 				$inWord=0;
 				$index++;
 				$Dic::Cloze::Text::letter_score++;
@@ -124,36 +124,26 @@ sub cloze
 			}
 		end: m/^\Z/
 	]; 
-print "$Dic::Cloze::Text::unclozeables unclozeable\n";
-print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
-	if ( looks_like_number($Dic::Cloze::Text::unclozeables) and ($Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables)) {
-	# if ( 0 ) {
-print "cloze_count= ", $Dic::Cloze::Text::cloze_count, "\n";
-			$letterGrammar .= q[
-			unclozeable: <reject: not $cloze_up> m/((\b$letter+\b)$punctuation){$Dic::Cloze::Text::unclozeables}/
-				{
-					$Dic::Cloze::Text::clozeline .= $item[2];
-print "$Dic::Cloze::Text::unclozeables unclozeable: $item[2]\n";
-					$Dic::Cloze::Text::cloze_count += $Dic::Cloze::Text::unclozeables;
-					$cloze_up=$Dic::Cloze::Text::cloze_count%$Dic::Cloze::Text::unclozeables;
-print "cloze_up= ", $cloze_up, "\n";
-				}
-			];
+	if ( looks_like_number($Dic::Cloze::Text::unclozeables) ) {
+		$letterGrammar .= q[
+		unclozeable: <reject: $cloze_up> m/((\b$letter+\b)$punctuation){$Dic::Cloze::Text::unclozeables}/
+			{
+				$Dic::Cloze::Text::clozeline .= $item[2];
+				$cloze_up=1;
+			}
+		];
 	}
-	elsif ( $Dic::Cloze::Text::unclozeable ) {
+	elsif ( $Dic::Cloze::Text::unclozeable and not looks_like_number($Dic::Cloze::Text::unclozeables)) {
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
 				$Dic::Cloze::Text::clozeline .= $item[2];
 				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
-print "real unclozeable: $item[2]\n";
 			}
 		];
 	}
 	else {
 		$letterGrammar .= q[
-		$Dic::Cloze::Text::cloze_count++;
-		print "No unclozeables\";
 		];
 	}
 
