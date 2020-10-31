@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2020 Oct 30,  1:43:33 PM
+# Last Edit: 2020 Oct 31,  5:02:49 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -98,7 +98,8 @@ my $encoding = ":encoding(UTF-8)";
 my $tmpl = "/home/$ENV{USER}/ttb/dictation/tmpl/preamble.tmpl";
 open($tmpl_handle, "< $encoding", $tmpl) || die "$0: can't open $tmpl in read mode: $!";
 
-my $tmplString .= $_ while <$tmpl_handle>;
+my $tmplString;
+$tmplString .= $_ while <$tmpl_handle>;
 
 my $identifier;
 my %romanize = (
@@ -153,6 +154,8 @@ my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 open TEX, ">/home/$ENV{USER}/curriculum/$course/$topic/dic_${story}_$form.tex" or die "No open on $topic: " . $!;
 print TEX $template->fill_in( HASH => $quiz );
 
-
-
+system "xelatex --output-directory=/home/$ENV{USER}/curriculum/$course/$topic \
+	/home/$ENV{USER}/curriculum/$course/$topic/dic_${story}_$form.tex && \
+	lftp -c 'open greg\@web.nuu.edu.tw && cd public_html/$course && \
+	put ./$topic/dic_${story}_$form.pdf'";
 1;
