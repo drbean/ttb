@@ -61,6 +61,8 @@ sub execute {
 		, information => 4
 		, solution => 5
 		, opinion => 6
+		, test0 => 7
+		, test1 => 8
 		}->{$section};
 	my $curriculum_default = LoadFile "/home/$ENV{USER}/curriculum/online/default.yaml";
 	my $course_default = LoadFile "/home/$ENV{USER}/curriculum/$course_name/online/default.yaml";
