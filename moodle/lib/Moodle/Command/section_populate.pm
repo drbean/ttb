@@ -68,7 +68,7 @@ sub execute {
 	my $course_default = LoadFile "/home/$ENV{USER}/curriculum/$course_name/online/default.yaml";
 	my $default_option;
 	$default_option->{$_} = $curriculum_default->{$_} for keys %$curriculum_default;
-	my ($section_default, $activity_list) = LoadFile "/home/$ENV{USER}/curriculum/$course_name/online/$section.yaml";
+	my ($section_default, $section_naming, $activity_list) = LoadFile "/home/$ENV{USER}/curriculum/$course_name/online/$section.yaml";
 	for my $type ( @types ) {
 		$default_option->{$type}->{$_} = $course_default->{$type}->{$_}
 			for keys %{$course_default->{$type}};
@@ -79,6 +79,8 @@ sub execute {
 	die "default options $default_option not a HASH\n" unless ref $default_option eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
 	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
+	my $section_name = $section_naming->{name} or die "no '$section' section name\n";
+	my $section_summary = $section_naming->{summary} or die "no '$section' section summary\n";
 	my $n = 0;
 	for my $activity ( @$activity_list ) {
 		my $content_list = delete $activity->{content};
@@ -206,6 +208,10 @@ print $handle $description;
 				else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
 			}
 		}
+		Moosh -n section-config-set course $course $s name "${name[$s]}"
+		Moosh -n section-config-set course $course $s summary "${description[$s]}"
+					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
+					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 		$n++;
 	}
 }
