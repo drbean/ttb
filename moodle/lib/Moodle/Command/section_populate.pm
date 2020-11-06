@@ -79,8 +79,14 @@ sub execute {
 	die "default options $default_option not a HASH\n" unless ref $default_option eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
 	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
-	my $section_name = $section_naming->{name} or die "no '$section' section name\n";
-	my $section_summary = $section_naming->{summary} or die "no '$section' section summary\n";
+	my $section_name = $section_naming->{section}->{name} or die "no '$section' section name\n";
+	my $section_summary = $section_naming->{section}->{summary} or die "no '$section' section summary\n";
+	my $section_set_line;
+	$section_set_line = "/home/$ENV{USER}/moosh/moosh.php -n section-config-set course $course $section_n name '$section_name'";
+	warn "\nsection-set-line='$section_set_line'\n";
+	system( $section_set_line );
+	system( "Moosh -n section-config-set course $course $section_n summaryformat 4" );
+	system( "Moosh -n section-config-set course $course $section_n summary '$section_summary'" );
 	my $n = 0;
 	for my $activity ( @$activity_list ) {
 		my $content_list = delete $activity->{content};
@@ -142,7 +148,7 @@ sub execute {
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
 		chomp $activity_id;
-		die "Failed to add '$name' activity to section $section_n with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
+		die "Failed to add '$name' activity to '$section' section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
 		if ( $module{$type} eq 'quiz' ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
@@ -208,10 +214,6 @@ print $handle $description;
 				else { die "'$random' questions in '$story' '$type' activity: '$form' form?" }
 			}
 		}
-		Moosh -n section-config-set course $course $s name "${name[$s]}"
-		Moosh -n section-config-set course $course $s summary "${description[$s]}"
-					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
-					"question import of all '$story' '$type' activity: '$form' form questions in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
 		$n++;
 	}
 }
