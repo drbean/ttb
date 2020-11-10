@@ -85,7 +85,7 @@ sub execute {
 	for my $setting ( @section_set ) {
 		my $section_set_line = "/home/$ENV{USER}/moosh/moosh.php -n section-config-set -s $section_n course $course $setting";
 		warn "\nsection-set-line='$section_set_line'\n";
-		system( $section_set_line );
+		system( $section_set_line ) == 0 or die "'$section_set_line' failed";
 	}
 	my $n = 0;
 	for my $activity ( @$activity_list ) {
@@ -149,6 +149,11 @@ sub execute {
 		warn "$module{$type}_id=$activity_id";
 		chomp $activity_id;
 		die "Failed to add '$name' activity to '$section' section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
+		if ( $module{$type} eq 'forum' ) {
+			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro $option_hash{intro}";
+			warn "\n$module{$type}-set-line='$activity_set_line'";
+			system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
+		}
 		if ( $module{$type} eq 'quiz' ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
