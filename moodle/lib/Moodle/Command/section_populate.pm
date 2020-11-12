@@ -81,7 +81,7 @@ sub execute {
 	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
 	my $section_name = $section_naming->{section}->{name} or die "no '$section' section name\n";
 	my $section_summary = $section_naming->{section}->{summary} or die "no '$section' section summary\n";
-	my @section_set = ("name '$section_name'", "summaryformat 4", "summary '$section_summary'");
+	my @section_set = ("name \"$section_name\"", "summaryformat 4", "summary \"$section_summary\"");
 	for my $setting ( @section_set ) {
 		my $section_set_line = "/home/$ENV{USER}/moosh/moosh.php -n section-config-set -s $section_n course $course $setting";
 		warn "\nsection-set-line='$section_set_line'\n";
@@ -150,7 +150,7 @@ sub execute {
 		chomp $activity_id;
 		die "Failed to add '$name' activity to '$section' section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
 		if ( $module{$type} eq 'forum' ) {
-			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro $option_hash{intro}";
+			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro \"$option_hash{intro}\"";
 			warn "\n$module{$type}-set-line='$activity_set_line'";
 			system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
 		}
