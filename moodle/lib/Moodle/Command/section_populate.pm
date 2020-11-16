@@ -149,11 +149,11 @@ sub execute {
 		warn "$module{$type}_id=$activity_id";
 		chomp $activity_id;
 		die "Failed to add '$name' activity to '$section' section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
-		#if ( $module{$type} eq 'forum' ) {
-		#	my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro \"$option_hash{intro}\"";
-		#	warn "\n$module{$type}-set-line='$activity_set_line'";
-		#	system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
-		#}
+		if ( $module{$type} eq 'forum' ) {
+			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro \"$option_hash{intro}\"";
+			warn "\n$module{$type}-set-line='$activity_set_line'";
+			system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
+		}
 		if ( $module{$type} eq 'quiz' ) {
 			for my $question ( @$content_list ) {
 				my ( $topic, $story, $type, $form, $intro ) = 
