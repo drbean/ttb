@@ -171,7 +171,7 @@ sub execute {
 my $handle   = undef;
 my $encoding = ":encoding(UTF-8)";
 				if ( $intro ) {
-					my $description = qx"YAML4Moodle::Command::description::execute('', { d=>'$intro', i=>$name, t=>$topic, s=>$story, f=>$form})";
+					my $description = YAML4Moodle::Command::description::execute('', { d=>$intro, i=>$name, t=>$topic, s=>$story, f=>$form});
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 
 open($handle, "> $encoding", $file)
