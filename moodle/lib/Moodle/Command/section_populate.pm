@@ -75,7 +75,7 @@ sub execute {
 		$default_option->{$type}->{$_} = $section_default->{$type}->{$_}
 			for keys %{$section_default->{$type}};
 	}
-	die "list of activities: $activity_list\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
+	die "list of activities: $activity_list?\n" unless ref( $activity_list) eq "ARRAY" and $activity_list;
 	die "default options $default_option not a HASH\n" unless ref $default_option eq 'HASH';
 	# die "Not all activity options in $options a HASH\n" unless all { ref $options->{$_} eq 'HASH' } keys %$options;
 	# die "Not all activity options in $options option strings\n" unless all { ref $_ eq '' } ( values %{ $options->{$_} } for keys %options );
@@ -177,6 +177,8 @@ my $encoding = ":encoding(UTF-8)";
 open($handle, "> $encoding", $file)
     || die "$0: can't open $file in write-open mode: $!";
 print $handle $description;
+die "No $story description $form form file in repository/$topic?" unless
+	-s $file;
 					# $description > io( $file );
 					system( "/home/$ENV{USER}/moosh/moosh.php -n question-import $file $activity_id $category_id") == 0 or die 
 					"question import of '$story' '$form' form '$intro' description intro in '$category' category into '$activity_id' quiz, from '$file' file failed. ";
@@ -191,7 +193,7 @@ print $handle $description;
 						|| die "$0: can't open $file in write-open mode: $!";
 					print $handle $question;
 					die "No $story ($type) $form form file in repository/$topic?" unless
-						-e $file;
+						-s $file;
 				}
 				my $random = 0;
 				if ( $type eq 'jigsaw' or $type eq 'drag' ) {
