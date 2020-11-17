@@ -177,6 +177,7 @@ my $encoding = ":encoding(UTF-8)";
 open($handle, "> $encoding", $file)
     || die "$0: can't open $file in write-open mode: $!";
 print $handle $description;
+close $handle or die "$0: can't close $file";
 die "No $story description $form form file in repository/$topic?" unless
 	-s $file;
 					# $description > io( $file );
@@ -192,6 +193,7 @@ die "No $story description $form form file in repository/$topic?" unless
 					open($handle, "> $encoding", $file)
 						|| die "$0: can't open $file in write-open mode: $!";
 					print $handle $question;
+					close $handle or die "$0: can't close $file";
 					die "No $story ($type) $form form file in repository/$topic?" unless
 						-s $file;
 				}
