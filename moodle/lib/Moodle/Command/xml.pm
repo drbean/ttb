@@ -1,8 +1,8 @@
-package YAML4Moodle::Command::xml;
+package Moodle::Command::xml;
 
 use lib "lib";
 
-# use YAML4Moodle -command;
+# use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -13,7 +13,7 @@ use XML::DOM;
 sub abstract { "Convert drbean's YAML quiz questions to Moodle xml format" }
 sub description { "Convert drbean's YAML quiz questions to Moodle xml format" }
 
-sub usage_desc { "yaml4moodle xml -c news -t people -s kiss -q jigsaw -f 0" }
+sub usage_desc { "moopl xml -c news -t people -s kiss -q jigsaw -f 0" }
 
 sub opt_spec  {
         return (

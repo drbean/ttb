@@ -1,8 +1,8 @@
-package YAML4Moodle::Command::gradebook;
+package Moodle::Command::gradebook;
 
 use lib "lib";
 
-use YAML4Moodle -command;
+use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -14,7 +14,7 @@ use File::Basename;
 sub abstract { "import-ready csv file from beancan-name yaml file" }
 sub description { "munges in-class evaluated yaml beancan-name file to moodle-ready cvs gradebook file. Do not use if not name-keyed. For manually-created gradeitem, 'Quiz: ' may not be prepended." }
 
-sub usage_desc { 'yaml4moodle gradebook -l BMA0034 -t "Saying something about letters" -w 3' }
+sub usage_desc { 'moopl gradebook -l BMA0034 -t "Saying something about letters" -w 3' }
 
 sub opt_spec  {
         return (

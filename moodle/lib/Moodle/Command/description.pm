@@ -1,8 +1,8 @@
-package YAML4Moodle::Command::description;
+package Moodle::Command::description;
 
 use lib "lib";
 
-# use YAML4Moodle -command;
+# use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -13,7 +13,7 @@ use XML::DOM;
 sub abstract { "Create Moodle description quiz question in xml format on fly" }
 sub description { "Markdown text description inserted in multi-question quiz" }
 
-sub usage_desc { 'yaml4moodle description -t $markdown_text -i identifier' }
+sub usage_desc { 'moopl description -t $markdown_text -i identifier' }
 
 sub opt_spec  {
         return (

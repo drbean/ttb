@@ -1,8 +1,8 @@
-package YAML4Moodle::Command::intro;
+package Moodle::Command::intro;
 
 use lib "lib";
 
-use YAML4Moodle -command;
+use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -12,7 +12,7 @@ use IO::All;
 sub abstract { "Create file for Moodle intro text from cards.yaml" }
 sub description { "Frequent use transfering intro text from essay rubric in cards.yaml" }
 
-sub usage_desc { 'yaml4moodle intro -t read -s vacation -f 0' }
+sub usage_desc { 'moopl intro -t read -s vacation -f 0' }
 
 sub opt_spec  {
         return (

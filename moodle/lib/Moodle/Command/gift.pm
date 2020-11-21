@@ -1,8 +1,8 @@
-package YAML4Moodle::Command::gift;
+package Moodle::Command::gift;
 
 use lib "lib";
 
-# use YAML4Moodle -command;
+# use Moodle -command;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -11,7 +11,7 @@ use YAML qw/Dump LoadFile DumpFile/;
 sub abstract { "Convert drbean's YAML quiz questions to Moodle gift format" }
 sub description { "Convert drbean's YAML quiz questions to Moodle gift format" }
 
-sub usage_desc { "yaml4moodle gift -c news -t people -s kiss -q jigsaw -f 0" }
+sub usage_desc { "moopl gift -c news -t people -s kiss -q jigsaw -f 0" }
 
 sub opt_spec  {
         return (
