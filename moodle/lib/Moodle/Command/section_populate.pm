@@ -3,9 +3,9 @@ package Moodle::Command::section_populate;
 use lib "lib";
 
 # use Moodle -command;
-use YAML4Moodle::Command::description;
-use YAML4Moodle::Command::xml;
-use YAML4Moodle::Command::gift;
+use Moodle::Command::description;
+use Moodle::Command::xml;
+use Moodle::Command::gift;
 use strict;
 use warnings;
 use YAML qw/Dump LoadFile DumpFile/;
@@ -171,7 +171,7 @@ sub execute {
 my $handle   = undef;
 my $encoding = ":encoding(UTF-8)";
 				if ( $intro ) {
-					my $description = YAML4Moodle::Command::description::execute('', { d=>$intro, i=>$name, t=>$topic, s=>$story, f=>$form});
+					my $description = Moodle::Command::description::execute('', { d=>$intro, i=>$name, t=>$topic, s=>$story, f=>$form});
 					my $file = "/var/lib/moodle/repository/$topic/quiz_${story}_description_${form}.xml";
 
 open($handle, "> $encoding", $file)
@@ -186,8 +186,8 @@ die "No $story description $form form file in repository/$topic?" unless
 				}
 				my $file;
 				for my $format ( qw(xml) ) {
-					my $question = YAML4Moodle::Command::xml::execute('', { c=>$course_name, t=>$topic, s=>$story, q=>$type, f=>$form });
-					die "YAML4Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n"
+					my $question = Moodle::Command::xml::execute('', { c=>$course_name, t=>$topic, s=>$story, q=>$type, f=>$form });
+					die "Moodle build of '$topic' '$type' quiz for, '$story' story, '$form' failed\n"
 						unless $question;
 					$file = "/var/lib/moodle/repository/$topic/quiz_${story}_${type}_$form.$format";
 					open($handle, "> $encoding", $file)
