@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Oct 28, 12:51:01 PM
+# Last Edit: 2020 Dec 03,  3:49:39 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -57,9 +57,10 @@ my $latexString = <<"START_LATEX";
 \\pagestyle{empty}
 
 \\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
-	\\vspace{0.1cm}
+	\\vspace{0.8cm}
 	\\small #1 #2
 	\\par
+	\\vspace{-0.7cm}
 	\\parbox[t][6.7cm][c]{9.5cm}{%
 	\\hspace{0.1cm} \\Huge#3\\\\
 	\\normalsize#4 #5
