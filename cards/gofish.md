@@ -1,40 +1,30 @@
-% Splash page
+% Go Fish Instructions
 
 <style>
 body {
-  background-image: url('splash.png');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
   font-family: arial,helvetica,courier;
-  font-size: 32px;
-  color: blue;
-}
-
-#container {
-  color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#content {
-  flex: 0 0 360px;
+  font-size: 48px;
 }
 </style>
 
-<div id="container">
-  <div id="content">
+1. The aim is to get pairs of cards in each of 3 (or 4) sets.
 
-Do TOEIC® Speaking tests!
+2. When you get a pair, show them to Dr Bean, and you get a point. Don't collect them. No points after the game is over.
 
-Do quizzes about TOEIC® Speaking tests!
+3. Use English to talk to each other.
 
-And more!
+			Paul: Peter, do you have any
+			*Supermarket* cards?
+			Peter: Here, take them!
+Or, if Peter doesn't have any *Supermarket* cards,
 
-[Do it!](https://toeic.moodlecloud.com)
+			Peter: No, I don't. Go fish!
 
-  </div>
-</div>
+			( Paul picks up a card from
+			the pool.)
+
+4. You have to give the cards to the person who asks for them if you have them.
+
+5. The next person asks someone for cards.
 
 
