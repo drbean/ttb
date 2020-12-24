@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Dec 03,  3:49:39 PM
+# Last Edit: 2020 Dec 24,  3:18:26 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -115,7 +115,7 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $flashcard;
-if (exists $story->{flashcard} && exists $story->{flash}->[$f] ) {
+if (exists $story->{flash} && exists $story->{flash}->[$f] ) {
 	$flashcard = $story->{flash}->[$f];
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
