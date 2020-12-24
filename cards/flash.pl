@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Dec 24,  3:18:26 PM
+# Last Edit: 2020 Dec 24,  3:33:44 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -136,6 +136,9 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcar
 }
 if ( ref $flashcard eq 'HASH' ) {
 		@words = keys %$flashcard;
+	if ( @words > 4 ) {
+		@words = sample( set => \@words, sample_size => 4 );
+	}
        $prompts{$_} = $flashcard->{$_} for @words;
        die "Undefined prompts"
                unless all { defined $prompts{$_} } keys %prompts;
