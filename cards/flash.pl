@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2020 Dec 30,  3:09:13 PM
+# Last Edit: 2021 Jan 14,  3:12:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -13,13 +13,14 @@ use List::Util qw/sum all/;
 
 my $man = 0;
 my $help = 0;
-my $n = 7;
+my $n = 8;
+my $t = 1;
 my $s = '';
 my $f = 0;
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
-	'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
+	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -136,7 +137,7 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcar
 }
 if ( ref $flashcard eq 'HASH' ) {
 		@words = keys %$flashcard;
-		#if ( @words > 4 ) {
+		#if ( $n > 4 ) {
 		#	@words = sample( set => \@words, sample_size => 4 );
 		#}
        $prompts{$_} = $flashcard->{$_} for @words;
@@ -231,7 +232,7 @@ else {
 # $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 # &paging;
 
-for my $card ( 0 .. 2*$n-1 ) {
+for my $card ( 0 .. 2*$t-1 ) {
 	my @candidate = sample( set => \@clinchers );
 	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
 	my @ordered;
