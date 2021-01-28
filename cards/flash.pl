@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Jan 14,  3:12:09 PM
+# Last Edit: 2021 Jan 28,  3:51:25 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -275,12 +275,12 @@ flashcard.pl - Create flashcard cards from list in cards.yaml
 
 =head1 SYNOPSIS
 
-perl ttb/cards/flashcard.pl -n 15 -s cell_phones -f 0 topics/phones
+perl ttb/cards/flashcard.pl -t 3 -n 4 -s cell_phones -f 0 topics/phones
 
 =head1 DESCRIPTION
 
-Makes n cards from fth flashcard sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
+Makes n cards from fth flashcard sequence in cell_phones mapping in topics/phones/cards.yaml. If n is less than the number of cards in the sequence, make a random sample of them.
 
-If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
+If the optional -t (team) option exists, create t different randomly-selected sets of cards.
 
 =cut
