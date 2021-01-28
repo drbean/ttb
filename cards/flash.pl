@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Jan 28,  3:51:25 PM
+# Last Edit: 2021 Jan 28,  4:23:58 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -127,130 +127,132 @@ else { die "No flashcard for $s story, form $f" }
 
 $latexString .= "\\begin{document}\n\n";
 
-my (@words, %prompts);
-if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
-       @words = split m/ /, $flashcard->{word};
-       my @prompts = @{ $flashcard->{call} };
-       @prompts{@words} = @prompts;
-       die "Unequal word, call numbers. Also check order"
-               unless ( @words == @prompts );
-}
-if ( ref $flashcard eq 'HASH' ) {
-		@words = keys %$flashcard;
-		#if ( $n > 4 ) {
-		#	@words = sample( set => \@words, sample_size => 4 );
-		#}
-       $prompts{$_} = $flashcard->{$_} for @words;
-       die "Undefined prompts"
-               unless all { defined $prompts{$_} } keys %prompts;
-}
-elsif ( ref $flashcard eq 'ARRAY' ) {
-	my $n;
-	for my $prompt ( @$flashcard ) {
-		(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
-		push @words, $word;
-		die "No $word word in ${n}th, \"$prompt\" prompt"
-			unless $word;
-		$n++;
-		$prompts{$word} = $prompt;
+for my $set ( 0..$t-1 ) {
+	my (@words, %prompts);
+	if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
+	       @words = split m/ /, $flashcard->{word};
+	       my @prompts = @{ $flashcard->{call} };
+	       @prompts{@words} = @prompts;
+	       die "Unequal word, call numbers. Also check order"
+		       unless ( @words == @prompts );
 	}
-}
-else {
-	@words = split m/ /, $flashcard;
-	@prompts{@words} = @words;
-}
+	if ( ref $flashcard eq 'HASH' ) {
+			@words = keys %$flashcard;
+			if ( @words > $n ) {
+				@words = sample( set => \@words, sample_size => $n );
+			}
+	       $prompts{$_} = $flashcard->{$_} for @words;
+	       die "Undefined prompts"
+		       unless all { defined $prompts{$_} } keys %prompts;
+	}
+	elsif ( ref $flashcard eq 'ARRAY' ) {
+		my $n;
+		for my $prompt ( @$flashcard ) {
+			(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
+			push @words, $word;
+			die "No $word word in ${n}th, \"$prompt\" prompt"
+				unless $word;
+			$n++;
+			$prompts{$word} = $prompt;
+		}
+	}
+	else {
+		@words = split m/ /, $flashcard;
+		@prompts{@words} = @words;
+	}
 
-my (%word_count, %part_count);
-$word_count{$_}++ for @words;
-for my $word ( keys %prompts ) {
-	for my $other ( keys %prompts ) {
-		next if $word eq $other;
-		my $prompt = $prompts{$other};
-		my @noise = split /[-,._\s]/, $prompt;
-		my @lc_noise = map (lc, @noise);
-		my @parts = split m/[_\s]/, $word;
-		my @lc_parts = map (lc, @parts);
-		for my $part ( @lc_parts ) {
-			for my $dupe ( @lc_noise ) {
-				$part_count{$part}++ if 
-					(($dupe eq $part)
-						# or ($dupe =~ m/$part/)
-						# or ($part =~ m/$dupe/)
-			);
+	my (%word_count, %part_count);
+	$word_count{$_}++ for @words;
+	for my $word ( keys %prompts ) {
+		for my $other ( keys %prompts ) {
+			next if $word eq $other;
+			my $prompt = $prompts{$other};
+			my @noise = split /[-,._\s]/, $prompt;
+			my @lc_noise = map (lc, @noise);
+			my @parts = split m/[_\s]/, $word;
+			my @lc_parts = map (lc, @parts);
+			for my $part ( @lc_parts ) {
+				for my $dupe ( @lc_noise ) {
+					$part_count{$part}++ if 
+						(($dupe eq $part)
+							# or ($dupe =~ m/$part/)
+							# or ($part =~ m/$dupe/)
+				);
+				}
 			}
 		}
 	}
-}
-for my $word ( @words ) {
-	die "calling '$word' word $word_count{$word} times"
-		unless $word_count{$word} == 1;
-}
-#for my $part ( keys %part_count ) {
-#	die "'$part' dupe present $part_count{$part} times"
-#		unless $part_count{$part} == 0;
-#}
-die "No word for some prompts" unless
-	values %prompts == scalar @words;
-	
-warn "There are " . (sum values %word_count ) . " words\n";
-my @clinchers = sample( set => \@words, sample_size => 2 );
-my @winner = sample( set => \@clinchers );
-my @loser = grep { $_ ne $winner[0] } @clinchers;
-my %words; @words{ @words } = (); delete @words{@clinchers};
-my @pruned = keys %words;
-
-for my $word ( keys %prompts ) {
-	if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-		$prompts{$word} =
-"\\includegraphics[angle=00,height=0.20\\paperheight,width=0.40\\paperwidth]{$prompts{$word}}";
+	for my $word ( @words ) {
+		die "calling '$word' word $word_count{$word} times"
+			unless $word_count{$word} == 1;
 	}
-}
+	#for my $part ( keys %part_count ) {
+	#	die "'$part' dupe present $part_count{$part} times"
+	#		unless $part_count{$part} == 0;
+	#}
+	die "No word for some prompts" unless
+		values %prompts == scalar @words;
+		
+	warn "There are " . (sum values %word_count ) . " words\n";
+	my @clinchers = sample( set => \@words, sample_size => 2 );
+	my @winner = sample( set => \@clinchers );
+	my @loser = grep { $_ ne $winner[0] } @clinchers;
+	my %words; @words{ @words } = (); delete @words{@clinchers};
+	my @pruned = keys %words;
 
-my (@call, @lost_call);
-if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
-	push @call, "$_: $prompts{$_}" for (@pruned, @winner);
-	push @lost_call, "$_: $prompts{$_}" for (@loser);
+	for my $word ( keys %prompts ) {
+		if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+			$prompts{$word} =
+	"\\includegraphics[angle=00,height=0.20\\paperheight,width=0.40\\paperwidth]{$prompts{$word}}";
+		}
+	}
 
-}
-elsif ( ref $flashcard eq 'HASH' ) {
-	push @call, keys %prompts;
-	push @call, values %prompts;
-}
-else {
-	@call = @prompts{ @pruned, @winner };
-	@lost_call = @prompts{@loser};
-}
+	my (@call, @lost_call);
+	if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
+		push @call, "$_: $prompts{$_}" for (@pruned, @winner);
+		push @lost_call, "$_: $prompts{$_}" for (@loser);
 
-# $latexString .=
-# "\\TPshowboxestrue
-# \\begin{textblock}{8}($latex[$paging]->{xy})
-# \\textblocklabel{picture$latex[$paging]->{xy}}
-# \\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{}
-# {\\parbox{9.0cm}{";
-# $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-# $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
-# $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-# &paging;
-
-for my $card ( 0 .. 2*$t-1 ) {
-	my @candidate = sample( set => \@clinchers );
-	my @presented = sample( set => \@pruned, sample_size => @pruned/2);
-	my @ordered;
-	if  ( $card % 2 == 0 ) {
-		@ordered = sort {$a cmp $b} (@presented, @candidate);
+	}
+	elsif ( ref $flashcard eq 'HASH' ) {
+		push @call, keys %prompts;
+		push @call, values %prompts;
 	}
 	else {
-		@ordered = sort {$b cmp $a} (@presented, @candidate);
+		@call = @prompts{ @pruned, @winner };
+		@lost_call = @prompts{@loser};
 	}
 
-	$latexString .= 
-"\\TPshowboxestrue
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
-\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
-	$latexString .= "$call[$card] \\hfill ";
-	$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-	&paging;
+	# $latexString .=
+	# "\\TPshowboxestrue
+	# \\begin{textblock}{8}($latex[$paging]->{xy})
+	# \\textblocklabel{picture$latex[$paging]->{xy}}
+	# \\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{}
+	# {\\parbox{9.0cm}{";
+	# $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
+	# $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
+	# $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+	# &paging;
+
+	for my $card ( 0 .. 2*$n-1 ) {
+		my @candidate = sample( set => \@clinchers );
+		my @presented = sample( set => \@pruned, sample_size => @pruned/2);
+		my @ordered;
+		if  ( $card % 2 == 0 ) {
+			@ordered = sort {$a cmp $b} (@presented, @candidate);
+		}
+		else {
+			@ordered = sort {$b cmp $a} (@presented, @candidate);
+		}
+
+		$latexString .= 
+	"\\TPshowboxestrue
+	\\begin{textblock}{8}($latex[$paging]->{xy})
+	\\textblocklabel{picture$latex[$paging]->{xy}}
+	\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
+		$latexString .= "$call[$card] \\hfill ";
+		$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+		&paging;
+	}
 }
 $latexString .= "\\end{document}\n";
 
