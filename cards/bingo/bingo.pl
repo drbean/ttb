@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Feb 24, 12:48:28 PM
+# Last Edit: 2021 Feb 24, 12:50:47 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -111,7 +111,7 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $bingo;
-if (exists $story->{match} && exists $story->{match}->[$f] ) {
+if (exists $story->{match} && exists $story->{match}->{$f} ) {
         $bingo = $story->{match}->[$f];
 }
 elsif (exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
