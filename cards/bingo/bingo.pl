@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Feb 18, 12:48:55 PM
+# Last Edit: 2021 Feb 24, 12:48:28 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -18,10 +18,11 @@ my $help = 0;
 my $n = 7;
 my $s = '';
 my $f = 0;
+my $r = 0;
 
 GetOptions (
         'help|?' => \$help, man => \$man,
-        'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
+        'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f, 'r=i' => \$r)
                 or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -53,7 +54,7 @@ my $latexString = <<"START_LATEX";
 \\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
 \\usepackage{texdraw}
 \\usepackage{multicol}
-\\usepackage{soul}
+% \\usepackage{soul}
 \\usepackage{tabto}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
@@ -285,4 +286,5 @@ Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/ca
 
 If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
 
+The reverse bingo option (-r) makes n cards with the words and one card is the bingo card.
 =cut
