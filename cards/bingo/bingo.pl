@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Feb 24, 12:52:54 PM
+# Last Edit: 2021 Feb 24,  1:04:31 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -219,6 +219,7 @@ my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
 s/$regex/translit($1)/ge for @call;
 s/$regex/translit($1)/ge for @lost_call;
 
+for my $card ( 0 .. $n-1 ) {
 $latexString .=
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex[$paging]->{xy})
@@ -226,11 +227,13 @@ $latexString .=
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.6cm}{";
 $latexString .= (s/_/\\_/g, "$_ ") for @call;
-$latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
+$latexString .= (s/_/\\_/g, "${_} ") for @lost_call;
 $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 &paging;
+}
 
-for my $card ( 0 .. $n-1 ) {
+# for my $card ( 0 .. $n-1 ) {
+my $card = 0;
         my @candidate = sample( set => \@clinchers );
         my @presented = sample( set => \@pruned, sample_size => @pruned/2);
         my ( @ordered, $it );
@@ -254,7 +257,7 @@ for my $card ( 0 .. $n-1 ) {
         }
         $latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
         &paging;
-}
+# }
 $latexString .= "\\end{document}\n";
 
 my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
