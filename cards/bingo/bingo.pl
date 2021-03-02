@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Feb 24,  1:04:31 PM
+# Last Edit: 2021 Mar 02,  4:02:55 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -232,8 +232,7 @@ $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 &paging;
 }
 
-# for my $card ( 0 .. $n-1 ) {
-my $card = 0;
+for my $card ( 0 .. 1 ) {
         my @candidate = sample( set => \@clinchers );
         my @presented = sample( set => \@pruned, sample_size => @pruned/2);
         my ( @ordered, $it );
@@ -257,7 +256,7 @@ my $card = 0;
         }
         $latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
         &paging;
-# }
+}
 $latexString .= "\\end{document}\n";
 
 my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
