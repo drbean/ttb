@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 09,  4:01:53 PM
+# Last Edit: 2021 Mar 09,  4:28:00 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -227,18 +227,22 @@ my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
 s/$regex/translit($1)/ge for @call;
 s/$regex/translit($1)/ge for @lost_call;
 
-$latexString .=
+my $prompt_n = $reverse? $n : 0 ;
+for my $prompt ( 0 .. $prompt_n ) {
+        $latexString .=
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex[$paging]->{xy})
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.6cm}{";
-$latexString .= (s/_/\\_/g, "$_ ") for @call;
-$latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
-$latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-&paging;
+        $latexString .= (s/_/\\_/g, "$_ ") for @call;
+        $latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
+        $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+        &paging;
+}
 
-for my $card ( 0 .. $n-1 ) {
+my $card_n = $reverse? 1 : $n-2;
+for my $card ( 0 .. $card_n ) {
         my @candidate = sample( set => \@clinchers );
         my @presented = sample( set => \@pruned, sample_size => @pruned/2);
         my ( @ordered, $it );
