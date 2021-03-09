@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 09,  3:47:57 PM
+# Last Edit: 2021 Mar 09,  4:01:53 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -18,13 +18,13 @@ my $help = 0;
 my $n = 7;
 my $s = '';
 my $f = 0;
-my $r = '';
-my $sw = '';
+my $reverse = '';
+my $swap = '';
 
 GetOptions (
         'help|?' => \$help, man => \$man,
         'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f,
-        'swap' => \$sw, 'reverse' => \$r)
+        'swap' => \$swap, 'reverse' => \$reverse)
                 or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
