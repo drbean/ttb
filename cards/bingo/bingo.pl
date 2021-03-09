@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 02,  4:02:55 PM
+# Last Edit: 2021 Mar 09,  3:47:57 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -18,11 +18,13 @@ my $help = 0;
 my $n = 7;
 my $s = '';
 my $f = 0;
-my $r = 0;
+my $r = '';
+my $sw = '';
 
 GetOptions (
         'help|?' => \$help, man => \$man,
-        'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f, 'r=i' => \$r)
+        'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f,
+        'swap' => \$sw, 'reverse' => \$r)
                 or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -128,9 +130,15 @@ $latexString .= "\\begin{document}\n\n";
 my (@words, %prompts);
 if ( ref $bingo eq 'HASH' and exists $bingo->{pair} ) {
         my $pair = $bingo->{pair};
-       push @words, $pair->[$_]->[1] for (0..$#$pair);
        my @prompts;
-       push @prompts, $pair->[$_]->[0] for (0..$#$pair);
+       if ( $swap ) {
+               push @words, $pair->[$_]->[0] for (0..$#$pair);
+               push @prompts, $pair->[$_]->[1] for (0..$#$pair);
+       }
+       else {
+               push @words, $pair->[$_]->[1] for (0..$#$pair);
+               push @prompts, $pair->[$_]->[0] for (0..$#$pair);
+       }
        @prompts{@words} = @prompts;
        die "Unequal word, call numbers. Also check order"
                unless ( @words == @prompts );
@@ -219,7 +227,6 @@ my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
 s/$regex/translit($1)/ge for @call;
 s/$regex/translit($1)/ge for @lost_call;
 
-for my $card ( 0 .. $n-1 ) {
 $latexString .=
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex[$paging]->{xy})
@@ -227,12 +234,11 @@ $latexString .=
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.6cm}{";
 $latexString .= (s/_/\\_/g, "$_ ") for @call;
-$latexString .= (s/_/\\_/g, "${_} ") for @lost_call;
+$latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
 $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 &paging;
-}
 
-for my $card ( 0 .. 1 ) {
+for my $card ( 0 .. $n-1 ) {
         my @candidate = sample( set => \@clinchers );
         my @presented = sample( set => \@pruned, sample_size => @pruned/2);
         my ( @ordered, $it );
@@ -288,5 +294,8 @@ Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/ca
 
 If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
 
-The reverse bingo option (-r) makes n cards with the words and one card is the bingo card.
+The reverse bingo option (--reverse) makes n cards with the words and one card is the bingo card.
+
+The swap option (--swap) swaps first and second values of the match pairs (not bingo ones), to go from prompt-answer (word) pairings to the reverse, answer/word-prompt pairings.
+
 =cut
