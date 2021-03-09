@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Jan 28,  4:23:58 PM
+# Last Edit: 2021 Mar 03,  2:54:54 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -50,7 +50,7 @@ my $latexString = <<"START_LATEX";
 \\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
 \\usepackage{texdraw}
 \\usepackage{multicol}
-\\usepackage{soul}
+% \\usepackage{soul}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 \\usepackage{graphicx}
@@ -116,8 +116,8 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $flashcard;
-if (exists $story->{flash} && exists $story->{flash}->[$f] ) {
-	$flashcard = $story->{flash}->[$f];
+if (exists $story->{flash} && exists $story->{flash}->{$f} ) {
+	$flashcard = $story->{flash}->{$f};
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
 	$flashcard = $story->{$f}->{flash};
