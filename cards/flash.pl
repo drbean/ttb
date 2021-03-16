@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 16,  3:46:23 PM
+# Last Edit: 2021 Mar 16,  4:14:13 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -48,7 +48,8 @@ $landscape
 	       Path = /usr/share/fonts/noto/,
 	       ]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
-\\usepackage[absolute,showboxes]{textpos}
+% \\usepackage[absolute,showboxes]{textpos}
+\\usepackage[absolute]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
 % \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
 % \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
@@ -75,7 +76,45 @@ $landscape
 
 START_LATEX
 
-my @latex = (
+my @latex;
+if ( $nine ) {
+	@latex = (
+		{ page => 1, xy => "0,0" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "8,4" },
+		{ page => 1, xy => "0,8" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "0,12" },
+		{ page => 1, xy => "8,12" },
+		{ page => 2, xy => "0, 0" },
+		{ page => 2, xy => "5.3, 0" },
+		{ page => 2, xy => "10.6, 0" },
+		{ page => 2, xy => "0, 5.3" },
+		{ page => 2, xy => "5.3, 5.3" },
+		{ page => 2, xy => "10.6, 5.3" },
+		{ page => 2, xy => "0, 10.6" },
+		{ page => 2, xy => "5.3, 10.6" },
+		{ page => 2, xy => "10.6, 10.6" },
+		{ page => 3, xy => "0,0" },
+		{ page => 3, xy => "8,0" },
+		{ page => 3, xy => "0,4" },
+		{ page => 3, xy => "8,4" },
+		{ page => 3, xy => "0,8" },
+		{ page => 3, xy => "8,8" },
+		{ page => 3, xy => "0,12" },
+		{ page => 3, xy => "8,12" },
+		{ page => 4, xy => "8,0" },
+		{ page => 4, xy => "0,0" },
+		{ page => 4, xy => "8,4" },
+		{ page => 4, xy => "0,4" },
+		{ page => 4, xy => "8,8" },
+		{ page => 4, xy => "0,8" },
+		{ page => 4, xy => "8,12" },
+		{ page => 4, xy => "0,12" },
+	);
+} else {
+	@latex = (
 		{ page => 1, xy => "0,0" },
 		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "0,4" },
@@ -109,6 +148,7 @@ my @latex = (
 		{ page => 4, xy => "8,12" },
 		{ page => 4, xy => "0,12" },
 	);
+}
 my $paging = 0;
 my $threepages = 0;
 
@@ -208,7 +248,7 @@ for my $set ( 0..$t-1 ) {
 	for my $word ( keys %prompts ) {
 		if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$prompts{$word} =
-	"\\includegraphics[angle=00,height=0.20\\paperheight,width=0.40\\paperwidth]{$prompts{$word}}";
+	"\\includegraphics[angle=00,height=0.30\\paperheight,width=0.30\\paperwidth]{$prompts{$word}}";
 		}
 	}
 
