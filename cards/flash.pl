@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 03,  2:54:54 PM
+# Last Edit: 2021 Mar 16,  3:46:23 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -17,10 +17,12 @@ my $n = 8;
 my $t = 1;
 my $s = '';
 my $f = 0;
+my $nine = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
-	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f)
+	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
+	, 'nine' => \$nine)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -34,10 +36,13 @@ my %romanize = (
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
 
+my $landscape;
+$landscape = "\\usepackage[landscape]{geometry}\n" if $nine;
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage{fontspec}
 \\usepackage{xeCJK}
+$landscape
 \\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
 \\setCJKmainfont{NotoSansCJK-Regular.ttc}[
 	       Path = /usr/share/fonts/noto/,
