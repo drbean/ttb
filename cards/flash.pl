@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 16,  4:14:13 PM
+# Last Edit: 2021 Mar 16,  4:26:48 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -185,6 +185,9 @@ for my $set ( 0..$t-1 ) {
 			@words = keys %$flashcard;
 			if ( @words > $n ) {
 				@words = sample( set => \@words, sample_size => $n );
+			}
+			if ( @words < $n ) {
+				push @words, sample( set => \@words, sample_size => $n-@words );
 			}
 	       $prompts{$_} = $flashcard->{$_} for @words;
 	       die "Undefined prompts"
