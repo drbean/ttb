@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Mar 02,  3:46:47 PM
+# Last Edit: 2021 Mar 10,  1:40:54 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -19,7 +19,7 @@ sub opt_spec  {
 	);
 }
 
-use lib qw{$ENV{HOME}/User/ttb/dictation/lib/};
+use lib qq{$ENV{HOME}/ttb/dictation/lib/};
 
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
