@@ -1,7 +1,7 @@
 package Dic;
 
 # Created: 06/25/2016 10:28:33 AM
-# Last Edit: 2016 Jun 26, 02:14:46 PM
+# Last Edit: 2021 Mar 10,  1:26:42 PM
 # $Id$
 
 =head1 NAME
