@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 16,  4:26:48 PM
+# Last Edit: 2021 Mar 17,  1:12:50 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -173,7 +173,7 @@ else { die "No flashcard for $s story, form $f" }
 $latexString .= "\\begin{document}\n\n";
 
 for my $set ( 0..$t-1 ) {
-	my (@words, %prompts);
+	my (@words, %prompts, @extra);
 	if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
 	       @words = split m/ /, $flashcard->{word};
 	       my @prompts = @{ $flashcard->{call} };
@@ -187,7 +187,8 @@ for my $set ( 0..$t-1 ) {
 				@words = sample( set => \@words, sample_size => $n );
 			}
 			if ( @words < $n ) {
-				push @words, sample( set => \@words, sample_size => $n-@words );
+				@extra = sample( set => \@words, sample_size => $n-@words );
+				$prompts{"${_}-extra"} = $flashcard->{$_} for @extra;
 			}
 	       $prompts{$_} = $flashcard->{$_} for @words;
 	       die "Undefined prompts"
@@ -239,7 +240,7 @@ for my $set ( 0..$t-1 ) {
 	#		unless $part_count{$part} == 0;
 	#}
 	die "No word for some prompts" unless
-		values %prompts == scalar @words;
+		(values %prompts) - @extra == scalar @words;
 		
 	warn "There are " . (sum values %word_count ) . " words\n";
 	my @clinchers = sample( set => \@words, sample_size => 2 );
