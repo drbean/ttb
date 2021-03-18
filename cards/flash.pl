@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 17,  1:12:50 PM
+# Last Edit: 2021 Mar 18,  4:18:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -36,8 +36,12 @@ my %romanize = (
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
 
-my $landscape;
+my ($landscape, $parbox);
 $landscape = "\\usepackage[landscape]{geometry}\n" if $nine;
+$parbox = $nine ? "\\parbox[t][6.7cm][c]{9.5cm}{%" :
+		"\\parbox[t][6.7cm][c]{9.5cm}{%";
+
+	
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage{fontspec}
@@ -68,7 +72,7 @@ $landscape
 	\\small #1 #2
 	\\par
 	\\vspace{-0.7cm}
-	\\parbox[t][6.7cm][c]{9.5cm}{%
+	$parbox
 	\\hspace{0.1cm} \\Huge#3\\\\
 	\\normalsize#4 #5
 	}
@@ -249,10 +253,12 @@ for my $set ( 0..$t-1 ) {
 	my %words; @words{ @words } = (); delete @words{@clinchers};
 	my @pruned = keys %words;
 
+	my $height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
+	my $width = $nine ? "0.30\\paperwidth" : "0.40\\paperwidth";
 	for my $word ( keys %prompts ) {
 		if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$prompts{$word} =
-	"\\includegraphics[angle=00,height=0.30\\paperheight,width=0.30\\paperwidth]{$prompts{$word}}";
+	"\\includegraphics[angle=00,height=$height,width=$width]{$prompts{$word}}";
 		}
 	}
 
@@ -309,7 +315,7 @@ my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
 $bio->print( $latexString );
 
 sub paging
-{       if ($paging == 7 or $paging == 15 or $paging == 23 )
+{       if ($paging == $n-1 or $paging == 2*$n-1 or $paging == 3*$n-1 )
         {
                 $latexString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .                      +"\\end{tiny}\\newpage\n\n";
