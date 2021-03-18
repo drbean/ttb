@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2019 Jan 09, 09:58:36 AM
+# Last Edit: 2021 Mar 17,  1:40:21 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -53,7 +53,7 @@ my $latexString = <<"START_LATEX";
 \\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
 \\usepackage{texdraw}
 \\usepackage{multicol}
-\\usepackage{soul}
+% \\usepackage{soul}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 
