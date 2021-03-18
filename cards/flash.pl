@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 18,  4:33:52 PM
+# Last Edit: 2021 Mar 18,  5:17:55 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -38,7 +38,7 @@ my %romanize = (
 
 my ($landscape, $parbox);
 $landscape = "\\usepackage[landscape]{geometry}\n" if $nine;
-$parbox = $nine ? "\\parbox[t][6.7cm][c]{9.5cm}{%" :
+$parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
 		"\\parbox[t][6.7cm][c]{9.5cm}{%";
 
 	
@@ -256,12 +256,13 @@ for my $set ( 0..$t-1 ) {
 	my %words; @words{ @words } = (); delete @words{@clinchers};
 	my @pruned = keys %words;
 
-	my $height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
-	my $width = $nine ? "0.30\\paperwidth" : "0.40\\paperwidth";
+	my $width = $nine ? "5.3" : "8";
+	my $pic_height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
+	my $pic_width = $nine ? "0.30\\paperwidth" : "0.40\\paperwidth";
 	for my $word ( keys %prompts ) {
 		if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$prompts{$word} =
-	"\\includegraphics[angle=00,height=$height,width=$width]{$prompts{$word}}";
+	"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
 		}
 	}
 
@@ -304,7 +305,7 @@ for my $set ( 0..$t-1 ) {
 
 		$latexString .= 
 	"\\TPshowboxestrue
-	\\begin{textblock}{8}($latex[$paging]->{xy})
+	\\begin{textblock}{$width}($latex[$paging]->{xy})
 	\\textblocklabel{picture$latex[$paging]->{xy}}
 	\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
 		$latexString .= "$call[$card] \\hfill ";
