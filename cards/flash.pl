@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 25,  5:09:51 PM
+# Last Edit: 2021 Mar 25,  5:13:46 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -343,5 +343,7 @@ perl ttb/cards/flashcard.pl -t 3 -n 4 -s cell_phones -f 0 topics/phones
 Makes n cards from fth flashcard sequence in cell_phones mapping in topics/phones/cards.yaml. If n is less than the number of words in the sequence, make a random sample of them. If n is greater, add sampled extra words.
 
 If the optional -t (team) option exists, create t different randomly-selected sets of cards.
+
+nine option (--nine) makes 3 x 3 cards on each page, landscape-wise.
 
 =cut
