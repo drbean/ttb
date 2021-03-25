@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 09,  4:28:00 PM
+# Last Edit: 2021 Mar 25,  5:03:30 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -235,6 +235,7 @@ for my $prompt ( 0 .. $prompt_n ) {
 \\textblocklabel{picture$latex[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.6cm}{";
+	$latexString .= "\\Large\n" if $reverse;
         $latexString .= (s/_/\\_/g, "$_ ") for @call;
         $latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
         $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
