@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 01, 12:59:10 PM
+# Last Edit: 2021 Apr 01,  2:04:26 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -197,6 +197,7 @@ for my $set ( 0..$t-1 ) {
 	}
 	elsif ( ref $flashcard eq 'HASH' ) {
 			@words = keys %$flashcard;
+			@prompts = values %$flashcard;
 	}
 	elsif ( ref $flashcard eq 'ARRAY' ) {
 		my $n;
@@ -211,6 +212,7 @@ for my $set ( 0..$t-1 ) {
 	}
 	else {
 		@words = split m/ /, $flashcard;
+		@prompts = @words;
 	}
 	if ( @words > $n ) {
 		@words = sample( set => \@words, sample_size => $n );
@@ -325,13 +327,15 @@ my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
 $bio->print( $latexString );
 
 sub paging
-{       if ($paging == $n-1 or $paging == 2*$n-1 or $paging == 3*$n-1 )
-        {
-                $latexString .= "
-\\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .                      +"\\end{tiny}\\newpage\n\n";
-        }
-        if ($paging == 3*$n-1) { $threepages = $threepages+3; $paging = 0; }
-        else { $paging++; }
+{
+	my $newpage=$nine?9:8;
+	if ($paging == $newpage-1 or $paging == 2*$newpage-1 or $paging == 3*$newpage-1 )
+	{
+		$latexString .= "
+\\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .			+"\\end{tiny}\\newpage\n\n";
+	}
+	if ($paging == 3*$newpage-1) { $threepages = $threepages+3; $paging = 0; }
+	else { $paging++; }
 }
 
 __END__
