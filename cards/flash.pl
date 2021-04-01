@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 01,  3:51:08 PM
+# Last Edit: 2021 Apr 01,  3:53:42 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -215,7 +215,9 @@ for my $set ( 0..$t-1 ) {
 		@prompts = @words;
 	}
 	if ( @words > $n ) {
-		@words = sample( set => \@words, sample_size => $n );
+		my @sample = sample( set => [0..$#words], sample_size => $n );
+		@words = @words[@sample];
+		@prompts = @prompts[@sample];
 	}
 	if ( @words < $n ) {
 		@extra = sample( set => \@words, sample_size => $n-@words );
