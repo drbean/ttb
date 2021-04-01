@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 01,  3:53:42 PM
+# Last Edit: 2021 Apr 01,  5:05:03 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -221,7 +221,7 @@ for my $set ( 0..$t-1 ) {
 	}
 	if ( @words < $n ) {
 		@extra = sample( set => \@words, sample_size => $n-@words );
-		$prompts{"${_}-extra"} = $flashcard->{$_} for @extra;
+		$prompts{"extra ${_}"} = $flashcard->{$_} for @extra;
 	}
 	@prompts{@words} = @prompts;
 	die "Undefined prompts"
