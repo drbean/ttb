@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Mar 25,  5:23:58 PM
+# Last Edit: 2021 Apr 01, 12:59:10 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -168,7 +168,10 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $flashcard;
-if (exists $story->{flash} && exists $story->{flash}->{$f} ) {
+if (exists $story->{match} && exists $story->{match}->{$f} ) {
+        $flashcard = $story->{match}->{$f};
+}
+elsif (exists $story->{flash} && exists $story->{flash}->{$f} ) {
 	$flashcard = $story->{flash}->{$f};
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
@@ -180,26 +183,20 @@ else { die "No flashcard for $s story, form $f" }
 $latexString .= "\\begin{document}\n\n";
 
 for my $set ( 0..$t-1 ) {
-	my (@words, %prompts, @extra);
-	if ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
+	my (@words, %prompts, @prompts, @extra);
+	if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
+		my $pair = $flashcard->{pair};
+		push @words, $pair->[$_]->[1] for (0..$#$pair);
+		push @prompts, $pair->[$_]->[0] for (0..$#$pair);
+	}
+	elsif ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
 	       @words = split m/ /, $flashcard->{word};
-	       my @prompts = @{ $flashcard->{call} };
-	       @prompts{@words} = @prompts;
+	       @prompts = @{ $flashcard->{call} };
 	       die "Unequal word, call numbers. Also check order"
 		       unless ( @words == @prompts );
 	}
-	if ( ref $flashcard eq 'HASH' ) {
+	elsif ( ref $flashcard eq 'HASH' ) {
 			@words = keys %$flashcard;
-			if ( @words > $n ) {
-				@words = sample( set => \@words, sample_size => $n );
-			}
-			if ( @words < $n ) {
-				@extra = sample( set => \@words, sample_size => $n-@words );
-				$prompts{"${_}-extra"} = $flashcard->{$_} for @extra;
-			}
-	       $prompts{$_} = $flashcard->{$_} for @words;
-	       die "Undefined prompts"
-		       unless all { defined $prompts{$_} } keys %prompts;
 	}
 	elsif ( ref $flashcard eq 'ARRAY' ) {
 		my $n;
@@ -214,8 +211,17 @@ for my $set ( 0..$t-1 ) {
 	}
 	else {
 		@words = split m/ /, $flashcard;
-		@prompts{@words} = @words;
 	}
+	if ( @words > $n ) {
+		@words = sample( set => \@words, sample_size => $n );
+	}
+	if ( @words < $n ) {
+		@extra = sample( set => \@words, sample_size => $n-@words );
+		$prompts{"${_}-extra"} = $flashcard->{$_} for @extra;
+	}
+	@prompts{@words} = @prompts;
+	die "Undefined prompts"
+	       unless all { defined $prompts{$_} } keys %prompts;
 
 	my (%word_count, %part_count);
 	$word_count{$_}++ for @words;
