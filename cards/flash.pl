@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 01,  2:04:26 PM
+# Last Edit: 2021 Apr 01,  3:51:08 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -301,15 +301,6 @@ for my $set ( 0..$t-1 ) {
 	# &paging;
 
 	for my $card ( 0 .. 2*$n-1 ) {
-		my @candidate = sample( set => \@clinchers );
-		my @presented = sample( set => \@pruned, sample_size => @pruned/2);
-		my @ordered;
-		if  ( $card % 2 == 0 ) {
-			@ordered = sort {$a cmp $b} (@presented, @candidate);
-		}
-		else {
-			@ordered = sort {$b cmp $a} (@presented, @candidate);
-		}
 
 		$latexString .= 
 	"\\TPshowboxestrue
