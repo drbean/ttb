@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2020 Oct 31,  9:33:28 PM
+# Last Edit: 2021 Apr 08,  4:48:57 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -115,7 +115,7 @@ sub cloze
 		end: m/^\Z/
 		singularletter: <reject: $inWord> m/(\w)(?=$punctuation)/m
 			{
-				$Dic::Cloze::Text::word_score++;
+				# $Dic::Cloze::Text::word_score++;
 				$Dic::Cloze::Text::clozeline .= $item[2];
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
