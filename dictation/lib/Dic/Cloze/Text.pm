@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Apr 08,  4:48:57 PM
+# Last Edit: 2021 Apr 08,  5:10:25 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -50,6 +50,7 @@ $onlastletter{ctestpluslast} = q [
 $onlastletter{total} = q [
 	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} 1 .. $#cword);
+	push @Dic::Cloze::Text::word, join '', @cword;
 	];
 
 sub cloze
@@ -64,7 +65,7 @@ sub cloze
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
-	our (%word_score, $word_score);
+	our (@word, $word_score);
 
 	my $lineN = 0;
 
@@ -152,6 +153,7 @@ sub cloze
 	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
 	$text{B} .= "~\\\\" . $clozeline;
 		$lineN++;
+	$text{word} = \@word if @word;
 	}
 	return \%text;
 
