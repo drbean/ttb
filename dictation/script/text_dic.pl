@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Apr 15,  4:09:31 PM
+# Last Edit: 2021 Apr 15,  4:22:08 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -119,7 +119,11 @@ my $text = cloze($cloze_style, $unclozeables, @lines);
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-my $words = join ' ', sort @$word;
+my $words; 
+if (ref $word eq 'ARRAY') {
+	$words = join ' ', sort @$word;
+	$words .= "\\\\";
+}
 
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
@@ -127,13 +131,13 @@ for my $j ( 0) {
 		\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words}\\\\$textA}
+		{{\\tt $words} $textA}
 		\\end{textblock}\n";
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words}\\\\$textB}
+		{{\\tt $words} $textB}
 		\\end{textblock}\n";
 	}
 	$tmplString .= "
