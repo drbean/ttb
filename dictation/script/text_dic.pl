@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Apr 08,  5:14:10 PM
+# Last Edit: 2021 Apr 15,  4:09:31 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -127,13 +127,13 @@ for my $j ( 0) {
 		\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{$words\\\\$textA}
+		{{\\tt $words}\\\\$textA}
 		\\end{textblock}\n";
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{$words\\\\$textB}
+		{{\\tt $words}\\\\$textB}
 		\\end{textblock}\n";
 	}
 	$tmplString .= "
