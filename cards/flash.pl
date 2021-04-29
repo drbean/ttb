@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 01,  5:05:03 PM
+# Last Edit: 2021 Apr 29,  3:32:38 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -37,7 +37,7 @@ my %romanize = (
 );
 
 my ($landscape, $parbox);
-$landscape = "\\usepackage[landscape]{geometry}\n" if $nine;
+$landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
 		"\\parbox[t][6.7cm][c]{9.5cm}{%";
 
