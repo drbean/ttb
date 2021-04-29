@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 29,  3:32:38 PM
+# Last Edit: 2021 Apr 29,  3:37:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -321,13 +321,13 @@ $bio->print( $latexString );
 
 sub paging
 {
-	my $newpage=$nine?9:8;
-	if ($paging == $newpage-1 or $paging == 2*$newpage-1 or $paging == 3*$newpage-1 )
+	my $fullpage=$nine?9:8;
+	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
 \\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .			+"\\end{tiny}\\newpage\n\n";
 	}
-	if ($paging == 3*$newpage-1) { $threepages = $threepages+3; $paging = 0; }
+	if ($paging == 3*$fullpage-1) { $threepages = $threepages+3; $paging = 0; }
 	else { $paging++; }
 }
 
