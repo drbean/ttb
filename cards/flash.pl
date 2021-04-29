@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 29,  3:37:09 PM
+# Last Edit: 2021 Apr 29,  4:36:08 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -325,9 +325,9 @@ sub paging
 	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
-\\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .			+"\\end{tiny}\\newpage\n\n";
+\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
 	}
-	if ($paging == 3*$fullpage-1) { $threepages = $threepages+3; $paging = 0; }
+	if ($paging == 3*$fullpage-1) { $paging = 0; }
 	else { $paging++; }
 }
 
