@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 29,  4:36:08 PM
+# Last Edit: 2021 Apr 29,  5:23:27 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -158,7 +158,7 @@ if ( $nine ) {
 }
 my $paging = 0;
 my $threepages = 0;
-
+my $lastcard = 0;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
@@ -184,6 +184,7 @@ $latexString .= "\\begin{document}\n\n";
 
 for my $set ( 0..$t-1 ) {
 	my (@words, %prompts, @prompts, @extra);
+	$lastcard = 0;
 	if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
 		my $pair = $flashcard->{pair};
 		push @words, $pair->[$_]->[1] for (0..$#$pair);
@@ -313,6 +314,8 @@ for my $set ( 0..$t-1 ) {
 		$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 		&paging;
 	}
+	$lastcard = 1;
+	&paging;
 }
 $latexString .= "\\end{document}\n";
 
@@ -322,6 +325,12 @@ $bio->print( $latexString );
 sub paging
 {
 	my $fullpage=$nine?9:8;
+	if ( $lastcard ) {
+		$paging = 0;
+		$latexString .= "
+\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
+		return;
+	}
 	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
