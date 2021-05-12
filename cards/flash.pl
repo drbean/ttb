@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Apr 29,  5:23:27 PM
+# Last Edit: 2021 May 12,  1:39:19 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -325,18 +325,22 @@ $bio->print( $latexString );
 sub paging
 {
 	my $fullpage=$nine?9:8;
-	if ( $lastcard ) {
-		$paging = 0;
+	my $end_check = $paging == $fullpage-1 or
+		$paging == 2*$fullpage-1 or
+		$paging == 3*$fullpage-1;
+	if ( $lastcard and not $end_check ) {
 		$latexString .= "
 \\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
-		return;
+		$paging = 0;
 	}
-	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
+	elsif ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
 \\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
+		$paging++;
+
 	}
-	if ($paging == 3*$fullpage-1) { $paging = 0; }
+	elsif ($paging == 3*$fullpage-1) { $paging = 0; }
 	else { $paging++; }
 }
 
