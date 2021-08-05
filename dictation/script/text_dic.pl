@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Apr 15,  4:22:08 PM
+# Last Edit: 2021 Aug 05,  4:27:19 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -25,7 +25,7 @@ use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
 use Dic::Cloze::Text qw/cloze/;
-use List::Util qw/shuffle/;
+use List::Util qw/any shuffle/;
 
 our $RD_HINT = 1;
 
@@ -93,7 +93,7 @@ my $latex = $paper->{$size}->{latex};
 my $paging = 0;
 my $threepages = 0;
 
-my $tmpl_handle   = undef;
+my $tmpl_handle = undef;
 my $encoding = ":encoding(UTF-8)";
 my $tmpl = "/home/$ENV{USER}/ttb/dictation/tmpl/preamble.tmpl";
 open($tmpl_handle, "< $encoding", $tmpl) || die "$0: can't open $tmpl in read mode: $!";
@@ -119,7 +119,22 @@ my $text = cloze($cloze_style, $unclozeables, @lines);
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-my $words; 
+my ($words, @nwords, @vwords, @awords, @owords, @uwords); 
+if ( $text[0][6] ) {
+	my ( $noun, $verb, $ad, $other, $unspec ) = @{$text[0][6]};
+	my (@noun, @verb, @ad, @other);
+	@noun = split ' ', $noun;
+	@verb = split ' ', $verb;
+	$ad = split ' ', $ad;
+	$other = split ' ', $other;
+	for my $pos (@$word) {
+		push @nwords, $pos if grep { $pos } @noun;
+		push @vwords, $pos if grep { $pos } @verb;
+		push @awords, $pos if grep { $pos } @ad;
+		push @owords, $pos if grep { $pos } @other;
+		push @uwords, $pos unless grep { $pos } @other, @ad, @verb, @noun;
+	}
+}
 if (ref $word eq 'ARRAY') {
 	$words = join ' ', sort @$word;
 	$words .= "\\\\";
