@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 May 12,  1:39:19 PM
+# Last Edit: 2021 May 14,  1:08:51 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -159,6 +159,7 @@ if ( $nine ) {
 my $paging = 0;
 my $threepages = 0;
 my $lastcard = 0;
+my $fullpage=$nine?9:8;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
@@ -220,13 +221,13 @@ for my $set ( 0..$t-1 ) {
 		@words = @words[@sample];
 		@prompts = @prompts[@sample];
 	}
-	if ( @words < $n ) {
-		@extra = sample( set => \@words, sample_size => $n-@words );
-		$prompts{"extra ${_}"} = $flashcard->{$_} for @extra;
-	}
-	@prompts{@words} = @prompts;
 	die "Undefined prompts"
 	       unless all { defined $prompts{$_} } keys %prompts;
+	if ( @words < $n ) {
+		@extra = sample( set => \@words, sample_size => $n-@words );
+		$prompts{"extra ${_}"} = $prompts{$_} for @extra;
+	}
+	@prompts{@words} = @prompts;
 
 	my (%word_count, %part_count);
 	$word_count{$_}++ for @words;
@@ -315,8 +316,13 @@ for my $set ( 0..$t-1 ) {
 		&paging;
 	}
 	$lastcard = 1;
-	&paging;
-}
+	$latexString .= "
+\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n" unless
+		$paging == $fullpage or
+		$paging == 2*$fullpage or
+		$paging == 3*$fullpage;
+		$paging = 0;
+	}
 $latexString .= "\\end{document}\n";
 
 my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
@@ -324,16 +330,10 @@ $bio->print( $latexString );
 
 sub paging
 {
-	my $fullpage=$nine?9:8;
-	my $end_check = $paging == $fullpage-1 or
-		$paging == 2*$fullpage-1 or
-		$paging == 3*$fullpage-1;
-	if ( $lastcard and not $end_check ) {
-		$latexString .= "
-\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
-		$paging = 0;
-	}
-	elsif ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
+	my $end_check = $paging == $fullpage or
+		$paging == 2*$fullpage or
+		$paging == 3*$fullpage;
+	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
 \\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
