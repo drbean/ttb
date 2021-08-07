@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 05,  4:27:19 PM
+# Last Edit: 2021 Aug 07,  1:30:37 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -22,8 +22,8 @@ sub opt_spec  {
 use lib qq{$ENV{HOME}/ttb/dictation/lib/};
 
 use YAML qw/LoadFile/;
-use Parse::RecDescent;
-use Text::Template;
+# use Parse::RecDescent;
+# use Text::Template;
 use Dic::Cloze::Text qw/cloze/;
 use List::Util qw/any shuffle/;
 
@@ -119,26 +119,30 @@ my $text = cloze($cloze_style, $unclozeables, @lines);
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-my ($words, @nwords, @vwords, @awords, @owords, @uwords); 
-if ( $text[0][6] ) {
-	my ( $noun, $verb, $ad, $other, $unspec ) = @{$text[0][6]};
-	my (@noun, @verb, @ad, @other);
-	@noun = split ' ', $noun;
-	@verb = split ' ', $verb;
-	$ad = split ' ', $ad;
-	$other = split ' ', $other;
-	for my $pos (@$word) {
-		push @nwords, $pos if grep { $pos } @noun;
-		push @vwords, $pos if grep { $pos } @verb;
-		push @awords, $pos if grep { $pos } @ad;
-		push @owords, $pos if grep { $pos } @other;
-		push @uwords, $pos unless grep { $pos } @other, @ad, @verb, @noun;
+my $words;
+if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
+	my $check = $text[0][6];
+	my @pos = keys %$check;
+	my ( %hashed_check, $count_check, %binned );
+	for my $pos ( @pos ) {
+		$hashed_check{$pos}{$_}++, $count_check++
+			for split ' ', $check->{$pos};
+		for my $word ( @$word ) {
+			push @{$binned{$pos}}, $word if
+				$hashed_check{$pos}{$word};
+		}
+		$words .= "$pos: " . join ' ', sort @{$binned{$pos}};
+		$words .= "\\\\";
 	}
+	warn "pos check_count=$count_check, but words=" . @$word if
+		$count_check != @$word;
 }
-if (ref $word eq 'ARRAY') {
+elsif (ref $word eq 'ARRAY') {
 	$words = join ' ', sort @$word;
 	$words .= "\\\\";
 }
+
+print $words;
 
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
