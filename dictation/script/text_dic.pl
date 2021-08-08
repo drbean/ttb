@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 07,  1:30:37 PM
+# Last Edit: 2021 Aug 08,  2:32:03 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -22,8 +22,8 @@ sub opt_spec  {
 use lib qq{$ENV{HOME}/ttb/dictation/lib/};
 
 use YAML qw/LoadFile/;
-# use Parse::RecDescent;
-# use Text::Template;
+use Parse::RecDescent;
+use Text::Template;
 use Dic::Cloze::Text qw/cloze/;
 use List::Util qw/any shuffle/;
 
@@ -119,18 +119,22 @@ my $text = cloze($cloze_style, $unclozeables, @lines);
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
+print "words=@$word";
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
 	my @pos = keys %$check;
 	my ( %hashed_check, $count_check, %binned );
 	for my $pos ( @pos ) {
+		next unless $check->{$pos};
 		$hashed_check{$pos}{$_}++, $count_check++
 			for split ' ', $check->{$pos};
 		for my $word ( @$word ) {
 			push @{$binned{$pos}}, $word if
 				$hashed_check{$pos}{$word};
 		}
+		die "No pos checks for pos=$pos, word=@$word?" unless
+			ref $binned{$pos} eq 'ARRAY';
 		$words .= "$pos: " . join ' ', sort @{$binned{$pos}};
 		$words .= "\\\\";
 	}
