@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Apr 08,  5:10:25 PM
+# Last Edit: 2021 Aug 08, 10:48:48 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -14,7 +14,7 @@ BEGIN {
     @ISA         = qw(Exporter);
     # @EXPORT      = qw(&func1 &func2 &func4);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-    @EXPORT_OK   = qw(&cloze);
+    @EXPORT_OK   = qw(&simple_cloze &cloze);
 }
 our @EXPORT_OK;
 
@@ -154,6 +154,56 @@ sub cloze
 	$text{B} .= "~\\\\" . $clozeline;
 		$lineN++;
 	$text{word} = \@word if @word;
+	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	# $text{word} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
+	}
+	return \%text;
+
+}
+
+sub simple_cloze
+{
+	$::RD_HINT=1;
+	my $cloze_style = shift;
+	our $clozes = shift;
+	chomp $clozes;
+	our @clozes = split '\|', $clozes;
+	our $first = shift @clozes;
+	our $cloze_match = $clozes? qr/(?:$first)/: undef;
+	my @lines = @_;
+	my %text = ();
+	our (%letter_score, $letter_score);
+	our (@word, $word_score);
+
+	my $lineN = 0;
+
+	foreach my $line ( @lines )
+	{
+	our $clozeline = '';
+	# $Parse::RecDescent::skip = '';
+	my $grammar = q[
+		{
+			my $word = qr/[-_'.!?[:alnum:]]+/;
+			my @cword;
+		}
+		string: token(s) end | <error>
+		token: cloze | unclozed
+		cloze: m/$Dic::Cloze::Text::cloze_match/ {
+			push @cword, $item[2];
+			push @Dic::Cloze::Text::word, join '', @cword;
+		}
+		unclozed: m/$word/
+			{ push @cword, $item[2]; }
+		end: m/^\Z/
+		];
+	my $parser = Parse::RecDescent->new($grammar);
+	defined $parser->string($line) or die "simple_cloze parse died: $?\n";
+	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
+	$text{B} .= "~\\\\" . $clozeline;
+		$lineN++;
+	$text{word} = \@word if @word;
+	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	# $text{word} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
 	}
 	return \%text;
 
