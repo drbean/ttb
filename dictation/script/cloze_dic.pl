@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 08,  9:58:08 PM
+# Last Edit: 2021 Aug 09,  9:58:36 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -128,7 +128,7 @@ else {
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-print "words=@$word";
+print "words=@$word\n";
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
@@ -142,12 +142,13 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 			push @{$binned{$pos}}, $word if
 				$hashed_check{$pos}{$word};
 		}
-		die "No pos checks for pos=$pos, word=@$word?" unless
+		die 
+"No pos checks for pos=$pos of @pos, word=@$word, text=$text->{A}?" unless
 			ref $binned{$pos} eq 'ARRAY';
 		$words .= "$pos: " . join ' ', sort @{$binned{$pos}};
 		$words .= "\\\\";
 	}
-	warn "pos check_count=$count_check, but words=" . @$word if
+	warn "pos check_count=$count_check, but clozes=" . @$word if
 		$count_check != @$word;
 }
 elsif (ref $word eq 'ARRAY') {
@@ -193,8 +194,8 @@ my $template = Text::Template->new(TYPE => 'STRING', SOURCE => $tmplString
 open TEX, ">/home/$ENV{USER}/curriculum/$course/$topic/dic_${story}_$form.tex" or die "No open on $topic: " . $!;
 print TEX $template->fill_in( HASH => $quiz );
 
-system "xelatex --output-directory=/home/$ENV{USER}/curriculum/$course/$topic \
-	/home/$ENV{USER}/curriculum/$course/$topic/dic_${story}_$form.tex && \
-	lftp -c 'open greg\@web.nuu.edu.tw && cd public_html/$course && \
-	put ./$topic/dic_${story}_$form.pdf'";
+#system "xelatex --output-directory=/home/$ENV{USER}/curriculum/$course/$topic \
+#	/home/$ENV{USER}/curriculum/$course/$topic/dic_${story}_$form.tex && \
+#	lftp -c 'open greg\@web.nuu.edu.tw && cd public_html/$course && \
+#	put ./$topic/dic_${story}_$form.pdf'";
 1;
