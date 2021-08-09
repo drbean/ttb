@@ -1,12 +1,13 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 08,  2:32:03 PM
+# Last Edit: 2021 Aug 08,  9:58:08 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
-sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM -p PAPER" }
+sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM -p PAPER -u 
+	UNCLOZEABLE" }
 
 sub opt_spec  {
 	return (
@@ -16,6 +17,7 @@ sub opt_spec  {
 		, ["s=s", "story"]
 		, ["f=i", "form"]
 		, ["p=s", "paper"]
+		, ["u=s", "unclozeable/clozeable"]
 	);
 }
 
@@ -24,7 +26,7 @@ use lib qq{$ENV{HOME}/ttb/dictation/lib/};
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
-use Dic::Cloze::Text qw/cloze/;
+use Dic::Cloze::Text qw/simple_cloze cloze/;
 use List::Util qw/any shuffle/;
 
 our $RD_HINT = 1;
@@ -35,7 +37,7 @@ our $RD_HINT = 1;
 # my %ids = map { $_->{name} => $_->{id} } @members;
 # my %names = map { $_->{id} => $_->{name} } @members;
 
-my ($course, $cloze_style, $topic, $story, $form, $size) = @ARGV;
+my ($course, $cloze_style, $topic, $story, $form, $size, $unclozeable) = @ARGV;
 
 # my ($course, $cloze_style, $topic, $story, $form, $size) = @$opt{qw/c z t s f p/};
 my ($text_list, $question) = LoadFile
@@ -114,8 +116,15 @@ die "No texts or more than 1 text called $identifier\n" if @text != 1;
 
 my $lines = $text[0][4];
 my @lines = split /\n/, $lines;
-my $unclozeables = $text[0][5];
-my $text = cloze($cloze_style, $unclozeables, @lines);
+my $text;
+if ( $unclozeable ) {
+	my $unclozeables = $text[0][5];
+	$text = cloze($cloze_style, $unclozeables, @lines);
+}
+else {
+	my $clozes = $text[0][5];
+	$text = simple_cloze($cloze_style, $clozes, @lines);
+}
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
