@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 08, 10:48:48 PM
+# Last Edit: 2021 Aug 09,  9:54:47 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -167,9 +167,8 @@ sub simple_cloze
 	my $cloze_style = shift;
 	our $clozes = shift;
 	chomp $clozes;
-	our @clozes = split '\|', $clozes;
-	our $first = shift @clozes;
-	our $cloze_match = $clozes? qr/(?:$first)/: undef;
+	our @clozes = split ' ', $clozes;
+	our $cloze_match = shift @clozes;
 	my @lines = @_;
 	my %text = ();
 	our (%letter_score, $letter_score);
@@ -183,17 +182,20 @@ sub simple_cloze
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		{
-			my $word = qr/[-_'.!?[:alnum:]]+/;
+			my $word = qr/[-_'.!?:[:alnum:]]+/;
 			my @cword;
 		}
 		string: token(s) end | <error>
 		token: cloze | unclozed
 		cloze: m/$Dic::Cloze::Text::cloze_match/ {
-			push @cword, $item[2];
-			push @Dic::Cloze::Text::word, join '', @cword;
+			push @Dic::Cloze::Text::word, $item[1];
+			$Dic::Cloze::Text::word_score++;
+			$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x (length($item[1])-1), ' ';
+			$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
 		}
-		unclozed: m/$word/
-			{ push @cword, $item[2]; }
+		unclozed: m/$word/ {
+			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+			}
 		end: m/^\Z/
 		];
 	my $parser = Parse::RecDescent->new($grammar);
