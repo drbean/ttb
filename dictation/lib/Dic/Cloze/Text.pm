@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 09,  9:54:47 PM
+# Last Edit: 2021 Aug 10,  1:22:56 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -182,12 +182,12 @@ sub simple_cloze
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		{
-			my $word = qr/[-_'.!?:[:alnum:]]+/;
+			my $word = qr/[-_'.!?:,[:alnum:]]+/;
 			my @cword;
 		}
 		string: token(s) end | <error>
 		token: cloze | unclozed
-		cloze: m/$Dic::Cloze::Text::cloze_match/ {
+		cloze: m/$Dic::Cloze::Text::cloze_match/i {
 			push @Dic::Cloze::Text::word, $item[1];
 			$Dic::Cloze::Text::word_score++;
 			$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x (length($item[1])-1), ' ';
