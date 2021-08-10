@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 09,  9:58:36 PM
+# Last Edit: 2021 Aug 10,  2:38:07 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -117,13 +117,25 @@ die "No texts or more than 1 text called $identifier\n" if @text != 1;
 my $lines = $text[0][4];
 my @lines = split /\n/, $lines;
 my $text;
+my ( %hashed_check, $count_check, %binned, %tag_bin );
 if ( $unclozeable ) {
 	my $unclozeables = $text[0][5];
 	$text = cloze($cloze_style, $unclozeables, @lines);
 }
 else {
 	my $clozes = $text[0][5];
-	$text = simple_cloze($cloze_style, $clozes, @lines);
+	my $clean_clozes;
+	for my $cloze ( split ' ', lc $clozes ) {
+		if ( $cloze =~m/^(.*)\.(\w+)$/ ) {
+			my $tagless = $1;
+			my $pos = $2;
+			push @{$tag_bin{$pos}}, $tagless;
+			$clean_clozes .= "$tagless ";
+			$count_check++;
+		}
+		else { $clean_clozes .= "$cloze " }
+	}
+	$text = simple_cloze($cloze_style, $clean_clozes, @lines);
 }
 my $textA = $text->{A};
 my $textB = $text->{B};
@@ -133,14 +145,14 @@ my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
 	my @pos = keys %$check;
-	my ( %hashed_check, $count_check, %binned );
 	for my $pos ( @pos ) {
 		next unless $check->{$pos};
 		$hashed_check{$pos}{$_}++, $count_check++
 			for split ' ', $check->{$pos};
 		for my $word ( @$word ) {
-			push @{$binned{$pos}}, $word if
-				$hashed_check{$pos}{$word};
+			my $Word = lc $word;
+			push @{$binned{$pos}}, $Word if
+				$hashed_check{$pos}{$Word};
 		}
 		die 
 "No pos checks for pos=$pos of @pos, word=@$word, text=$text->{A}?" unless
@@ -148,15 +160,16 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 		$words .= "$pos: " . join ' ', sort @{$binned{$pos}};
 		$words .= "\\\\";
 	}
-	warn "pos check_count=$count_check, but clozes=" . @$word if
-		$count_check != @$word;
+}
+elsif ( %tag_bin ) {
+	$words .= "$_ " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
+		for keys %tag_bin;
 }
 elsif (ref $word eq 'ARRAY') {
 	$words = join ' ', sort @$word;
 	$words .= "\\\\";
 }
-
-print $words;
+warn "pos check_count=$count_check, but clozed words=" . @$word;
 
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
