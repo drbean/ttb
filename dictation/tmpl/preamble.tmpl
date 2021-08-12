@@ -50,8 +50,9 @@
 }
 
 \newcommand{\2}[1]{%
+\setlength{\fboxrule}{0.01pt}
 \begin{picture}(0.5,0.5)
-\put (0,0){\box(0.5,0.5)[br]{\small #1}}
+\put (0,0){\framebox(0.5,0.0)[bl]{\small #1  }}
 \end{picture}%
 }
 
