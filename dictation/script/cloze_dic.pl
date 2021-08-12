@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 10,  2:38:07 PM
+# Last Edit: 2021 Aug 11, 11:35:27 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -157,12 +157,12 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 		die 
 "No pos checks for pos=$pos of @pos, word=@$word, text=$text->{A}?" unless
 			ref $binned{$pos} eq 'ARRAY';
-		$words .= "$pos: " . join ' ', sort @{$binned{$pos}};
+		$words .= "\\textit{$pos}: " . join ' ', sort @{$binned{$pos}};
 		$words .= "\\\\";
 	}
 }
 elsif ( %tag_bin ) {
-	$words .= "$_ " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
+	$words .= "\\textit{$_}: " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
 		for keys %tag_bin;
 }
 elsif (ref $word eq 'ARRAY') {
