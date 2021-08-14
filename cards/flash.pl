@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 May 14,  1:08:51 PM
+# Last Edit: 2021 Aug 14,  4:59:48 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -18,11 +18,12 @@ my $t = 1;
 my $s = '';
 my $f = 0;
 my $nine = '';
+my $slow8 = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine)
+	, 'nine' => \$nine, 'slow8' => \$slow8)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -81,7 +82,29 @@ $landscape
 START_LATEX
 
 my @latex;
-if ( $nine ) {
+if ( $slow8 ) {
+	@latex = (
+		{ page => 1, xy => "0,0" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "0,12" },
+
+		{ page => 1, xy => "4,0" },
+		{ page => 1, xy => "12,4" },
+		{ page => 1, xy => "4,8" },
+		{ page => 1, xy => "4,12" },
+
+		{ page => 1, xy => "8,4" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "8,12" },
+		{ page => 1, xy => "0,8" },
+
+		{ page => 1, xy => "12,0" },
+		{ page => 1, xy => "12,8" },
+		{ page => 1, xy => "4,4" },
+		{ page => 1, xy => "12,12" },
+
+elsif ( $nine ) {
 	@latex = (
 		{ page => 1, xy => "0, 0" },
 		{ page => 1, xy => "5.3, 0" },
@@ -272,7 +295,8 @@ for my $set ( 0..$t-1 ) {
 	my $pic_height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
 	my $pic_width = $nine ? "0.30\\paperwidth" : "0.40\\paperwidth";
 	for my $word ( keys %prompts ) {
-		if ( $prompts{$word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+		my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
+		if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$prompts{$word} =
 	"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
 		}
@@ -361,5 +385,7 @@ Makes n cards from fth flashcard sequence in cell_phones mapping in topics/phone
 If the optional -t (team) option exists, create t different randomly-selected sets of cards.
 
 nine option (--nine) makes 3 x 3 cards on each page, landscape-wise.
+
+The slow8 option (--slow8) arranges 2 x 8 cards on one page for convenient cutting for slow feeding. See http://drbean.sdf.org/SlowFeedCards.html 
 
 =cut
