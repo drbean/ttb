@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 14,  4:59:48 PM
+# Last Edit: 2021 Aug 15,  4:08:19 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -103,7 +103,8 @@ if ( $slow8 ) {
 		{ page => 1, xy => "12,8" },
 		{ page => 1, xy => "4,4" },
 		{ page => 1, xy => "12,12" },
-
+	);
+}
 elsif ( $nine ) {
 	@latex = (
 		{ page => 1, xy => "0, 0" },
