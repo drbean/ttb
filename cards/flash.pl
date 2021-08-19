@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 19, 12:08:25 PM
+# Last Edit: 2021 Aug 19, 12:15:24 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -183,7 +183,7 @@ elsif ( $nine ) {
 my $paging = 0;
 my $threepages = 0;
 my $lastcard = 0;
-my $fullpage=$nine?9:8;
+my $fullpage=$nine? 9: $slow8? 16: 8;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
@@ -362,7 +362,7 @@ sub paging
 	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
-\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n" unless $slow8;
+\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
 		$paging++;
 
 	}
