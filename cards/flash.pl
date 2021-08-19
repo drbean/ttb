@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 19,  1:17:48 PM
+# Last Edit: 2021 Aug 19,  2:36:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -40,8 +40,8 @@ my %romanize = (
 my ($landscape, $parbox);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$slow8? "\\parbox[t][0.225\\paperheight][c]{0.20\\paperwidth}{%" :
-		"\\parbox[t][6.7cm][c]{9.5cm}{%";
+		$slow8? "\\parbox[t][0.235\\paperheight][b]{0.20\\paperwidth}{%" :
+		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
@@ -69,7 +69,7 @@ $landscape
 \\pagestyle{empty}
 
 \\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
-	\\vspace{0.8cm}
+	\\vspace{0.5cm}
 	\\small #1 #2
 	\\par
 	\\vspace{-0.7cm}
@@ -293,7 +293,9 @@ for my $set ( 0..$t-1 ) {
 	my @pruned = keys %words;
 
 	my $width = $nine ? "5.3" : "8";
-	my $pic_height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
+	my $pic_height = $nine ? "0.30\\paperheight" :
+				$slow8 ? "0.195\\paperheight" : 
+				"0.20\\paperheight";
 	my $pic_width = $nine ? "0.30\\paperwidth" : 
 			$slow8 ? "0.20\\paperwidth" : "0.40\\paperwidth";
 	for my $word ( keys %prompts ) {
