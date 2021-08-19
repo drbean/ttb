@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 15,  4:08:19 PM
+# Last Edit: 2021 Aug 19, 12:08:25 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -40,9 +40,9 @@ my %romanize = (
 my ($landscape, $parbox);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
+		$slow8? "\\parbox[t][6.7cm][c]{4.75cm}{%" :
 		"\\parbox[t][6.7cm][c]{9.5cm}{%";
 
-	
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
 \\usepackage{fontspec}
@@ -294,7 +294,8 @@ for my $set ( 0..$t-1 ) {
 
 	my $width = $nine ? "5.3" : "8";
 	my $pic_height = $nine ? "0.30\\paperheight" : "0.20\\paperheight";
-	my $pic_width = $nine ? "0.30\\paperwidth" : "0.40\\paperwidth";
+	my $pic_width = $nine ? "0.30\\paperwidth" : 
+			$slow8 ? "0.20\\paperwidth" : "0.40\\paperwidth";
 	for my $word ( keys %prompts ) {
 		my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
 		if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
@@ -361,7 +362,7 @@ sub paging
 	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
 	{
 		$latexString .= "
-\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
+\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n" unless $slow8;
 		$paging++;
 
 	}
