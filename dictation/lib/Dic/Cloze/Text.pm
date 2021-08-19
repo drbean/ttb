@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 12,  4:53:07 PM
+# Last Edit: 2021 Aug 19,  4:19:21 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -189,10 +189,13 @@ sub simple_cloze
 		string: token(s) end | <error>
 		token: cloze | unclozed
 		cloze: m/$Dic::Cloze::Text::cloze_match/i {
-			push @Dic::Cloze::Text::word, $item[1];
+			my $cloze=$item[1];
+			push @Dic::Cloze::Text::word, $cloze;
 			$Dic::Cloze::Text::word_score++;
-			$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x (length($item[1])-1), ' ';
-			$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
+		];
+	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x (length($cloze)-1), ' ';] if $cloze_style eq 'total';
+	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', (substr $cloze, 0, length($cloze)/2), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x (length($cloze)/2-1), ' ';] if $cloze_style eq 'ctest';
+	$grammar .= q[		$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
 		}
 		unclozed: m/$word/ {
 			$Dic::Cloze::Text::clozeline .= "$item[1] ";
