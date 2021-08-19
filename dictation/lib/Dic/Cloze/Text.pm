@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 10,  1:22:56 PM
+# Last Edit: 2021 Aug 12,  4:53:07 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -24,6 +24,7 @@ use Scalar::Util qw/looks_like_number/;
 my %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
+	push @Dic::Cloze::Text::word, join '', @cword;
 	];
 $onlastletter{first} = q [
 	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-1 ), " \\\\rmfamily\\\\large ";
