@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 11, 11:35:27 AM
+# Last Edit: 2021 Aug 18,  2:43:43 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -140,7 +140,7 @@ else {
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-print "words=@$word\n";
+print "clozed words=@$word\n";
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
