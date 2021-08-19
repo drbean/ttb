@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 19, 12:15:24 PM
+# Last Edit: 2021 Aug 19,  1:17:48 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -40,7 +40,7 @@ my %romanize = (
 my ($landscape, $parbox);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$slow8? "\\parbox[t][6.7cm][c]{4.75cm}{%" :
+		$slow8? "\\parbox[t][0.225\\paperheight][c]{0.20\\paperwidth}{%" :
 		"\\parbox[t][6.7cm][c]{9.5cm}{%";
 
 my $latexString = <<"START_LATEX";
@@ -336,9 +336,9 @@ for my $set ( 0..$t-1 ) {
 	"\\TPshowboxestrue
 	\\begin{textblock}{$width}($latex[$paging]->{xy})
 	\\textblocklabel{picture$latex[$paging]->{xy}}
-	\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
+	\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{";
 		$latexString .= "$call[$card] \\hfill ";
-		$latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+		$latexString .= "}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 		&paging;
 	}
 	$lastcard = 1;
