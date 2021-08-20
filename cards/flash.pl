@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 19,  2:36:11 PM
+# Last Edit: 2021 Aug 20,  4:47:36 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -37,9 +37,12 @@ my %romanize = (
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
 
-my ($landscape, $parbox);
+my ($landscape, $word_box, $pic_box);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
-$parbox = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
+$word_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
+		$slow8? "\\parbox[t][0.235\\paperheight][c]{0.20\\paperwidth}{%" :
+		"\\parbox[b][6.7cm][c]{9.5cm}{%";
+$pic_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
 		$slow8? "\\parbox[t][0.235\\paperheight][b]{0.20\\paperwidth}{%" :
 		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 
@@ -68,12 +71,23 @@ $landscape
 \\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC}/pic/} }
 \\pagestyle{empty}
 
-\\newcommand{\\flashcardX${s}X$romanize{$f}Xcard}[5]{%
+\\newcommand{\\wordX${s}X$romanize{$f}Xcard}[5]{%
 	\\vspace{0.5cm}
 	\\small #1 #2
 	\\par
 	\\vspace{-0.7cm}
-	$parbox
+	$word_box
+	\\hspace{0.1cm} \\Huge#3\\\\
+	\\normalsize#4 #5
+	}
+}
+
+\\newcommand{\\pictureX${s}X$romanize{$f}Xcard}[5]{%
+	\\vspace{0.5cm}
+	\\small #1 #2
+	\\par
+	\\vspace{-0.7cm}
+	$pic_box
 	\\hspace{0.1cm} \\Huge#3\\\\
 	\\normalsize#4 #5
 	}
@@ -298,13 +312,13 @@ for my $set ( 0..$t-1 ) {
 				"0.20\\paperheight";
 	my $pic_width = $nine ? "0.30\\paperwidth" : 
 			$slow8 ? "0.20\\paperwidth" : "0.40\\paperwidth";
-	for my $word ( keys %prompts ) {
-		my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
-		if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-			$prompts{$word} =
-	"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
-		}
-	}
+	#for my $word ( keys %prompts ) {
+	#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
+	#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+	#		$prompts{$word} =
+	#"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
+	#	}
+	#}
 
 	my (@call, @lost_call);
 	if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
@@ -332,14 +346,22 @@ for my $set ( 0..$t-1 ) {
 	# $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 	# &paging;
 
-	for my $card ( 0 .. 2*$n-1 ) {
+	for my $card ( keys %prompts, values %prompts ) {
 
 		$latexString .= 
 	"\\TPshowboxestrue
 	\\begin{textblock}{$width}($latex[$paging]->{xy})
-	\\textblocklabel{picture$latex[$paging]->{xy}}
-	\\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{";
-		$latexString .= "$call[$card] \\hfill ";
+	\\textblocklabel{picture$latex[$paging]->{xy}}";
+		if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+			$latexString .= "
+	\\pictureX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
+		}
+		else {
+			$latexString .= "
+	\\wordX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+	$card \\hfill";
+		}
 		$latexString .= "}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
 		&paging;
 	}
