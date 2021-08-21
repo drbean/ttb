@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 20,  4:47:36 PM
+# Last Edit: 2021 Aug 21,  4:30:48 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -299,13 +299,6 @@ for my $set ( 0..$t-1 ) {
 	die "No word for some prompts" unless
 		(values %prompts) - @extra == scalar @words;
 		
-	warn "There are " . (sum values %word_count ) . " words\n";
-	my @clinchers = sample( set => \@words, sample_size => 2 );
-	my @winner = sample( set => \@clinchers );
-	my @loser = grep { $_ ne $winner[0] } @clinchers;
-	my %words; @words{ @words } = (); delete @words{@clinchers};
-	my @pruned = keys %words;
-
 	my $width = $nine ? "5.3" : "8";
 	my $pic_height = $nine ? "0.30\\paperheight" :
 				$slow8 ? "0.195\\paperheight" : 
@@ -320,31 +313,6 @@ for my $set ( 0..$t-1 ) {
 	#	}
 	#}
 
-	my (@call, @lost_call);
-	if ( ref $flashcard eq 'HASH' and exists $flashcard->{call} ) {
-		push @call, "$_: $prompts{$_}" for (@pruned, @winner);
-		push @lost_call, "$_: $prompts{$_}" for (@loser);
-
-	}
-	elsif ( ref $flashcard eq 'HASH' ) {
-		push @call, keys %prompts;
-		push @call, values %prompts;
-	}
-	else {
-		@call = @prompts{ @pruned, @winner };
-		@lost_call = @prompts{@loser};
-	}
-
-	# $latexString .=
-	# "\\TPshowboxestrue
-	# \\begin{textblock}{8}($latex[$paging]->{xy})
-	# \\textblocklabel{picture$latex[$paging]->{xy}}
-	# \\flashcardX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{}
-	# {\\parbox{9.0cm}{";
-	# $latexString .= (s/_/\\_/g, "$_ \\hfill ") for @call;
-	# $latexString .= (s/_/\\_/g, "\\st{ $_ } \\hfill ") for @lost_call;
-	# $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-	# &paging;
 
 	for my $card ( keys %prompts, values %prompts ) {
 
