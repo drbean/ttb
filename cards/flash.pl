@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 21,  4:30:48 PM
+# Last Edit: 2021 Aug 22,  4:27:22 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -40,7 +40,7 @@ my %romanize = (
 my ($landscape, $word_box, $pic_box);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $word_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$slow8? "\\parbox[t][0.235\\paperheight][c]{0.20\\paperwidth}{%" :
+		$slow8? "\\parbox[b][0.117\\paperheight][c]{0.20\\paperwidth}{%" :
 		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 $pic_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
 		$slow8? "\\parbox[t][0.235\\paperheight][b]{0.20\\paperwidth}{%" :
@@ -62,7 +62,7 @@ $landscape
 % \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
 % \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
 \\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
-\\usepackage{texdraw}
+%\\usepackage{texdraw}
 \\usepackage{multicol}
 % \\usepackage{soul}
 \\pagestyle{empty}
@@ -77,8 +77,20 @@ $landscape
 	\\par
 	\\vspace{-0.7cm}
 	$word_box
-	\\hspace{0.1cm} \\Huge#3\\\\
-	\\normalsize#4 #5
+	\\hspace{0.1cm} \\huge#3\\\\
+	\\normalsize#4 #5 #1
+	}
+}
+
+\\newcommand{\\playingX${s}X$romanize{$f}Xcard}[5]{%
+	\\vspace{0.5cm}
+	\\small #1 #2
+	\\par
+	\\vspace{-0.7cm}
+	$word_box
+	\\hspace{0.1cm} \\huge#3\\\\
+	\\normalsize#4 #5 #1
+	\\rotatebox[origin=c]{180}{\\parbox[t][0.117\\paperheight][c]{0.20\\paperwidth}{\\huge#3}}
 	}
 }
 
@@ -98,25 +110,25 @@ START_LATEX
 my @latex;
 if ( $slow8 ) {
 	@latex = (
-		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "0,4" },
-		{ page => 1, xy => "8,8" },
-		{ page => 1, xy => "0,12" },
+		{ page => 1, x => 0, y => 0, xy => "0,0" },
+		{ page => 1, x => 0, y => 4, xy => "0,4" },
+		{ page => 1, x => 8, y => 8, xy => "8,8" },
+		{ page => 1, x => 0, y => 12, xy => "0,12" },
 
-		{ page => 1, xy => "4,0" },
-		{ page => 1, xy => "12,4" },
-		{ page => 1, xy => "4,8" },
-		{ page => 1, xy => "4,12" },
+		{ page => 1, x => 4, y => 0, xy => "4,0" },
+		{ page => 1, x => 12, y => 4, xy => "12,4" },
+		{ page => 1, x => 4, y => 8, xy => "4,8" },
+		{ page => 1, x => 4, y => 12, xy => "4,12" },
 
-		{ page => 1, xy => "8,4" },
-		{ page => 1, xy => "8,0" },
-		{ page => 1, xy => "8,12" },
-		{ page => 1, xy => "0,8" },
+		{ page => 1, x => 8, y => 4, xy => "8,4" },
+		{ page => 1, x => 8, y => 0, xy => "8,0" },
+		{ page => 1, x => 8, y => 12, xy => "8,12" },
+		{ page => 1, x => 0, y => 8, xy => "0,8" },
 
-		{ page => 1, xy => "12,0" },
-		{ page => 1, xy => "12,8" },
-		{ page => 1, xy => "4,4" },
-		{ page => 1, xy => "12,12" },
+		{ page => 1, x => 12, y => 0, xy => "12,0" },
+		{ page => 1, x => 12, y => 8, xy => "12,8" },
+		{ page => 1, x => 4, y => 4, xy => "4,4" },
+		{ page => 1, x => 12, y => 12, xy => "12,12" },
 	);
 }
 elsif ( $nine ) {
@@ -317,21 +329,39 @@ for my $set ( 0..$t-1 ) {
 	for my $card ( keys %prompts, values %prompts ) {
 
 		$latexString .= 
+	"\\TPshowboxestrue\n";
+		if ( $slow8 and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
+			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
+			$latexString .= "
+	\\begin{textblock}{$width}($latex[$paging]->{xy})
+	\\textblocklabel{topbox$latex[$paging]->{xy}}
+	\\wordX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+	$card \\hfill}{}{} \\end{textblock}
+	\\begin{textblock}{$width}($upside_down_xy)
+	\\textblocklabel{bottombox$upside_down_xy}
+	\\rotatebox[origin=c]{180}{
+	\\wordX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+	$card \\hfill}{}{}}\n \\end{textblock}\n \\TPshowboxesfalse \n";
+			&paging;
+		}
+		else {
+			$latexString .= 
 	"\\TPshowboxestrue
 	\\begin{textblock}{$width}($latex[$paging]->{xy})
 	\\textblocklabel{picture$latex[$paging]->{xy}}";
-		if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-			$latexString .= "
+			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+				$latexString .= "
 	\\pictureX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
 		}
-		else {
-			$latexString .= "
+			else {
+				$latexString .= "
 	\\wordX${s}X$romanize{$f}Xcard{}{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	$card \\hfill";
 		}
 		$latexString .= "}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
-		&paging;
+			&paging;
+	}
 	}
 	$lastcard = 1;
 	$latexString .= "
