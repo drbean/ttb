@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 25, 12:09:25 PM
+# Last Edit: 2021 Aug 25,  3:25:06 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -275,13 +275,13 @@ for my $set ( 0..$t-1 ) {
 		@words = @words[@sample];
 		@prompts = @prompts[@sample];
 	}
+	@prompts{@words} = @prompts;
 	die "Undefined prompts"
 	       unless all { defined $prompts{$_} } keys %prompts;
 	if ( @words < $n ) {
 		@extra = sample( set => \@words, sample_size => $n-@words );
 		$prompts{"extra ${_}"} = $prompts{$_} for @extra;
 	}
-	@prompts{@words} = @prompts;
 
 	my (%word_count, %part_count);
 	$word_count{$_}++ for @words;
