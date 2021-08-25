@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 23,  3:51:38 PM
+# Last Edit: 2021 Aug 25, 12:09:25 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -87,7 +87,7 @@ $landscape
 	\\par
 	\\vspace{+0.7cm}
 	$word_box
-	\\hspace{0.1cm} \\huge#2\\\\
+	\\huge#2\\\\
 	\\vspace{+0.9cm}
 	\\put (0,-0.8){\\rotatebox[origin=c]{180}{\\parbox[t][0.117\\paperheight][c]{0.20\\paperwidth}{\\huge#2}}}
 	%\\rotatebox[origin=rB]{180}{
