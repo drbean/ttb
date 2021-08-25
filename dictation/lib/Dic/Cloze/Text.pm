@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 19,  4:19:21 PM
+# Last Edit: 2021 Aug 19,  5:23:44 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -20,6 +20,7 @@ our @EXPORT_OK;
 
 use Parse::RecDescent;
 use Scalar::Util qw/looks_like_number/;
+use POSIX qw/floor ceil/;
 
 my %onlastletter;
 $onlastletter{ctest} = q [
@@ -190,11 +191,14 @@ sub simple_cloze
 		token: cloze | unclozed
 		cloze: m/$Dic::Cloze::Text::cloze_match/i {
 			my $cloze=$item[1];
+			my $length = length $cloze;
+			my $short = POSIX::floor $length/2;
+			my $long = POSIX::ceil $length/2;
 			push @Dic::Cloze::Text::word, $cloze;
 			$Dic::Cloze::Text::word_score++;
 		];
-	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x (length($cloze)-1), ' ';] if $cloze_style eq 'total';
-	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', (substr $cloze, 0, length($cloze)/2), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x (length($cloze)/2-1), ' ';] if $cloze_style eq 'ctest';
+	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x ($length-1), ' ';] if $cloze_style eq 'total';
+	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', (substr $cloze, 0, $short), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x ($short-1), ' ';] if $cloze_style eq 'ctest';
 	$grammar .= q[		$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
 		}
 		unclozed: m/$word/ {
