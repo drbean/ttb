@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Sep 20,  8:49:43 PM
+# Last Edit: 2021 Sep 20,  9:01:30 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -188,6 +188,7 @@ for my $j ( 0) {
 	}
 	$tmplString .= "
 	\\begin{Large}" . ( $j+1 ) . "\\end{Large}\\newpage\n\n";
+}
 $tmplString .= '
 \end{document}
 ';
