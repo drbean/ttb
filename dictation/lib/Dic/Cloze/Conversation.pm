@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2019 Nov 21, 03:15:28 PM
+# Last Edit: 2021 Sep 21,  3:55:16 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -23,10 +23,6 @@ use Parse::RecDescent;
 our %onlastletter;
 $onlastletter{ctest} = q [
 	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
-	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\large $Dic::Cloze::Conversation::word_score}";
-	];
-$onlastletter{total} = q [
-	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
 	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\large $Dic::Cloze::Conversation::word_score}";
 	];
 $onlastletter{first} = q [
@@ -56,6 +52,10 @@ $onlastletter{ctestpluslast} = q [
 			, map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1), " \\\\rmfamily\\\\large ";
 		$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\large $Dic::Cloze::Conversation::word_score}";
 	}
+	];
+$onlastletter{total} = q [
+	$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\1{$Dic::Cloze::Conversation::word_score}" , "\\\\1{}\\\\-" x ( $#cword );
+	$Dic::Cloze::Conversation::clozeline{$reader} .= join '', @cword, "\\\\hspace{0.05cm}", "\\\\textsubscript{\\\\large $Dic::Cloze::Conversation::word_score}";
 	];
 
 sub cloze
@@ -165,6 +165,82 @@ sub cloze
 	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline{A};
 	$text{B} .= "~\\\\" . $clozeline{B};
 		$lineN++;
+	$text{word} = \@word if @word;
+	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	}
+	return \%text;
+
+}
+
+sub simple_cloze
+{
+	$::RD_HINT=1;
+	my $cloze_style = shift;
+	our $clozes = shift;
+	chomp $clozes;
+	our @clozes = split ' ', $clozes;
+	our $cloze_match = shift @clozes;
+	my @lines = @_;
+	my %text = ();
+	our (%letter_score, $letter_score);
+	our (%word, $word_score);
+	@word{'A', 'B' } = ([]) x 2;
+
+	my $lineN = 0;
+
+	foreach my $line ( @lines )
+	{
+	our %clozeline;
+	@clozeline{'A', 'B' } = ('') x 2;
+	# $Parse::RecDescent::skip = '';
+	my $grammar = q[
+		{
+			my $word = qr/[-_'.!?:,[:alnum:]]+/;
+			my @cword;
+		}
+		string: token(s) end | <error>
+		token: a | b | cloze | unclozed
+		a: m/$a/ {
+			($reader, $writer) = ('A','B');
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1]; }
+		b: m/$b/ {
+			($reader, $writer) = ('B','A');
+			$Dic::Cloze::Conversation::clozeline{$writer} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= $Dic::Cloze::Conversation::lineN . ' ' . $item[1]; }
+		cloze: m/$Dic::Cloze::Conversation::cloze_match/i {
+			my $cloze=$item[1];
+			my $length = length $cloze;
+			my $short = POSIX::floor $length/2;
+			my $long = POSIX::ceil $length/2;
+			push @{$Dic::Cloze::Conversation::word{$writer}}, $cloze;
+			$Dic::Cloze::Conversation::word_score++;
+		];
+	if ($cloze_style eq 'total') {
+		$grammar .= q[$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\2{$Dic::Cloze::Conversation::word_score}", 
+			"\\\\2{}" x ($length-1), ' ';
+			$Dic::Cloze::Conversation::clozeline{$reader} .= "$cloze ";];
+	}
+	if ($cloze_style eq 'ctest'){
+		$grammar .= q[$Dic::Cloze::Conversation::clozeline .= join '', (substr $cloze, 0, $short), 
+			"\\\\1{$Dic::Cloze::Conversation::word_score}", "\\\\1{}" x ($short-1), ' ';];
+	}
+	$grammar .= q[		$Dic::Cloze::Conversation::cloze_match = shift @Dic::Cloze::Conversation::clozes;
+		}
+		unclozed: m/$word/ {
+			$Dic::Cloze::Conversation::clozeline{$writer} .= "$item[1] ";
+			$Dic::Cloze::Conversation::clozeline{$reader} .= "$item[1] ";
+			}
+		end: m/^\Z/
+		];
+	my $parser = Parse::RecDescent->new($grammar);
+	defined $parser->string($line) or die "simple_cloze parse died: $?\n";
+	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
+	$text{B} .= "~\\\\" . $clozeline;
+		$lineN++;
+	$text{word} = \@word if @word;
+	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	# $text{word} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
 	}
 	return \%text;
 
