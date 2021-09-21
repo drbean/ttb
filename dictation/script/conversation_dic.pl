@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Sep 20,  9:01:30 PM
+# Last Edit: 2021 Sep 21,  9:56:45 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -139,8 +139,9 @@ else {
 }
 my $textA = $text->{A};
 my $textB = $text->{B};
-my $word = $text->{word};
-print "clozed words=@$word\n";
+my %word = ( A => $text->{Aword}, B => $text->{Bword} );
+print "clozed Awords=@{$word{A}} Bwords=@{$word{B}}\n";
+my %words; @words{'A', 'B' } = ('') x 2;
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
@@ -149,27 +150,26 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 		next unless $check->{$pos};
 		$hashed_check{$pos}{$_}++, $count_check++
 			for split ' ', $check->{$pos};
-		for my $word ( @$word ) {
-			my $Word = lc $word;
-			push @{$binned{$pos}}, $Word if
+		for my $a_or_b (qw/A B/) {
+			for my $word ( @{$word{$a_or_b}} ) {
+				my $Word = lc $word;
+				push @{$binned{$a_or_b}{$pos}}, $Word if
 				$hashed_check{$pos}{$Word};
+			}
+			die 
+"No pos checks for pos=$pos of @pos, word=@{$word{$a_or_b}}, text=$text->{A}?" unless
+			ref $binned{$a_or_b}{$pos} eq 'ARRAY';
+			$words{$a_or_b} .= "\\textit{$pos}: " . join ' ', sort @{$binned{$a_or_b}{$pos}};
+			$words{$a_or_b} .= "\\\\";
 		}
-		die 
-"No pos checks for pos=$pos of @pos, word=@$word, text=$text->{A}?" unless
-			ref $binned{$pos} eq 'ARRAY';
-		$words .= "\\textit{$pos}: " . join ' ', sort @{$binned{$pos}};
-		$words .= "\\\\";
 	}
 }
 elsif ( %tag_bin ) {
 	$words .= "\\textit{$_}: " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
 		for keys %tag_bin;
 }
-elsif (ref $word eq 'ARRAY') {
-	$words = join ' ', sort @$word;
-	$words .= "\\\\";
-}
-warn "pos check_count=$count_check, but clozed words=" . @$word;
+warn "pos check_count=$count_check, but clozed Awords= @{$word{A}} 
+	 Bwords=@{$word{B}}";
 
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
