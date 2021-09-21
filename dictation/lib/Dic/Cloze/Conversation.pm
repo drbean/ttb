@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Sep 21,  3:55:16 PM
+# Last Edit: 2021 Sep 21,  9:47:23 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -14,11 +14,12 @@ BEGIN {
     @ISA         = qw(Exporter);
     # @EXPORT      = qw(&func1 &func2 &func4);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-    @EXPORT_OK   = qw(&cloze);
+    @EXPORT_OK   = qw(&simple_cloze &cloze);
 }
 our @EXPORT_OK;
 
 use Parse::RecDescent;
+use POSIX;
 
 our %onlastletter;
 $onlastletter{ctest} = q [
@@ -165,8 +166,6 @@ sub cloze
 	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline{A};
 	$text{B} .= "~\\\\" . $clozeline{B};
 		$lineN++;
-	$text{word} = \@word if @word;
-	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
 	}
 	return \%text;
 
@@ -197,6 +196,8 @@ sub simple_cloze
 		{
 			my $word = qr/[-_'.!?:,[:alnum:]]+/;
 			my @cword;
+			my ($reader, $writer);
+			my ($a, $b) = (qr/^[WGA]: /, qr/^[MB]: /);
 		}
 		string: token(s) end | <error>
 		token: a | b | cloze | unclozed
@@ -235,12 +236,13 @@ sub simple_cloze
 		];
 	my $parser = Parse::RecDescent->new($grammar);
 	defined $parser->string($line) or die "simple_cloze parse died: $?\n";
-	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
-	$text{B} .= "~\\\\" . $clozeline;
+	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline{A};
+	$text{B} .= "~\\\\" . $clozeline{B};
 		$lineN++;
-	$text{word} = \@word if @word;
-	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
-	# $text{word} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
+	$text{Aword} = $word{A} if %word;
+	$text{Bword} = $word{B} if %word;
+	$text{Aword} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	$text{Bword} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
 	}
 	return \%text;
 
