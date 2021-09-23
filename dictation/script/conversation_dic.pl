@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Sep 21,  9:56:45 PM
+# Last Edit: 2021 Sep 23,  2:52:07 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -165,8 +165,20 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	}
 }
 elsif ( %tag_bin ) {
-	$words .= "\\textit{$_}: " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
-		for keys %tag_bin;
+	for my $a_or_b (qw/A B/) {
+		my %a_or_b_bin;
+		for my $word ( @{$word{$a_or_b}} ) {
+			for my $pos ( keys %tag_bin ) {
+				push @{$a_or_b_bin{$pos}}, $word 
+					if any {$_ eq $word} @{$tag_bin{$pos}};
+			}
+		}
+		for my $pos ( keys %tag_bin ) {
+			$words{$a_or_b} .= "\\textit{$pos}: " . (join ' ', 
+				sort @{$a_or_b_bin{$pos}}) . "\\\\"
+			if $a_or_b_bin{$pos};
+		}
+	}
 }
 warn "pos check_count=$count_check, but clozed Awords= @{$word{A}} 
 	 Bwords=@{$word{B}}";
@@ -177,17 +189,17 @@ for my $j ( 0) {
 		\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words} $textA}
+		{{\\tt $words{A}} $textA}
 		\\end{textblock}\n";
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words} $textB}
+		{{\\tt $words{B}} $textB}
 		\\end{textblock}\n";
 	}
 	$tmplString .= "
-	\\begin{Large}" . ( $j+1 ) . "\\end{Large}\\newpage\n\n";
+	\\begin{tiny}" . ( $j+1 ) . "\\end{tiny}\\newpage\n\n";
 }
 $tmplString .= '
 \end{document}
