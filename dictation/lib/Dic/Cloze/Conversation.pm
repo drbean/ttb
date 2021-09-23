@@ -1,6 +1,6 @@
 package Dic::Cloze::Conversation;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Sep 21,  9:47:23 PM
+# Last Edit: 2021 Sep 23,  3:22:49 PM
 # $Id: /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -183,7 +183,7 @@ sub simple_cloze
 	my %text = ();
 	our (%letter_score, $letter_score);
 	our (%word, $word_score);
-	@word{'A', 'B' } = ([]) x 2;
+	# @word{'A', 'B' } = ([]) x 2;
 
 	my $lineN = 0;
 
@@ -220,7 +220,7 @@ sub simple_cloze
 	if ($cloze_style eq 'total') {
 		$grammar .= q[$Dic::Cloze::Conversation::clozeline{$writer} .= join '', "\\\\2{$Dic::Cloze::Conversation::word_score}", 
 			"\\\\2{}" x ($length-1), ' ';
-			$Dic::Cloze::Conversation::clozeline{$reader} .= "$cloze ";];
+			$Dic::Cloze::Conversation::clozeline{$reader} .= "\\\\textsubscript{\\\\normalsize $Dic::Cloze::Conversation::word_score}$cloze ";];
 	}
 	if ($cloze_style eq 'ctest'){
 		$grammar .= q[$Dic::Cloze::Conversation::clozeline .= join '', (substr $cloze, 0, $short), 
@@ -241,8 +241,8 @@ sub simple_cloze
 		$lineN++;
 	$text{Aword} = $word{A} if %word;
 	$text{Bword} = $word{B} if %word;
-	$text{Aword} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
-	$text{Bword} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
+	# $text{Aword} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
+	# $text{Bword} = [qw/summer baseball swimming lessons baseball team game weekend park time have doing been come watch play do play don't come watch play know let starts to maybe you/];
 	}
 	return \%text;
 
