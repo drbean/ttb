@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Aug 18,  2:43:43 PM
+# Last Edit: 2021 Sep 26,  5:55:55 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -26,7 +26,7 @@ use lib qq{$ENV{HOME}/ttb/dictation/lib/};
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
 use Text::Template;
-use Dic::Cloze::Text qw/simple_cloze cloze/;
+use Dic::Cloze::Text qw/no_cloze simple_cloze cloze/;
 use List::Util qw/any shuffle/;
 
 our $RD_HINT = 1;
@@ -118,7 +118,10 @@ my $lines = $text[0][4];
 my @lines = split /\n/, $lines;
 my $text;
 my ( %hashed_check, $count_check, %binned, %tag_bin );
-if ( $unclozeable ) {
+if ( $unclozeable eq 'nocloze' ) {
+	$text = no_cloze($cloze_style, 0, @lines);
+}
+elsif ( $unclozeable ) {
 	my $unclozeables = $text[0][5];
 	$text = cloze($cloze_style, $unclozeables, @lines);
 }
@@ -140,7 +143,7 @@ else {
 my $textA = $text->{A};
 my $textB = $text->{B};
 my $word = $text->{word};
-print "clozed words=@$word\n";
+print "clozed words=@$word\n" if $word and ref $word eq 'ARRAY';
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	my $check = $text[0][6];
@@ -169,8 +172,9 @@ elsif (ref $word eq 'ARRAY') {
 	$words = join ' ', sort @$word;
 	$words .= "\\\\";
 }
-warn "pos check_count=$count_check, but clozed words=" . @$word;
-
+else { $words = '~\\\\'; }
+warn "pos check_count=$count_check, but clozed words=" . @$word
+	if $word and ref $word eq 'ARRAY';
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
 		$tmplString .= "
