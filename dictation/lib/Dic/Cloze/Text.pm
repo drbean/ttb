@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Aug 19,  5:23:44 PM
+# Last Edit: 2021 Sep 26,  5:57:10 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -14,7 +14,7 @@ BEGIN {
     @ISA         = qw(Exporter);
     # @EXPORT      = qw(&func1 &func2 &func4);
     %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
-    @EXPORT_OK   = qw(&simple_cloze &cloze);
+    @EXPORT_OK   = qw(&no_cloze &simple_cloze &cloze);
 }
 our @EXPORT_OK;
 
@@ -219,4 +219,40 @@ sub simple_cloze
 
 }
 
+sub no_cloze
+{
+	$::RD_HINT=1;
+	my $cloze_style = shift;
+	our $no_cloze = shift;
+	my @lines = @_;
+	my %text = ();
+	our (%letter_score, $letter_score);
+	our (@word, $word_score);
+
+	my $lineN = 0;
+
+	foreach my $line ( @lines )
+	{
+	our $clozeline = '';
+	# $Parse::RecDescent::skip = '';
+	my $grammar = q[
+		string: token(s) end | <error>
+		token: cloze | unclozed
+		cloze: <reject: not $Dic::Cloze::Text::no_cloze> m/^.*$/ {
+			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+		}
+		unclozed: m/^.*$/ {
+			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+			}
+		end: m/^\Z/
+		];
+	my $parser = Parse::RecDescent->new($grammar);
+	defined $parser->string($line) or die "no_cloze parse died: $?\n";
+	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline . "~\\\\";
+	$text{B} .= "~\\\\" . $clozeline . "~\\\\";
+		$lineN++;
+	}
+	return \%text;
+
+}
 1;  # don’t forget to return a true value from the file
