@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Sep 26,  5:57:10 PM
+# Last Edit: 2021 Sep 29, 12:44:04 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -176,7 +176,7 @@ sub simple_cloze
 	our (%letter_score, $letter_score);
 	our (@word, $word_score);
 
-	my $lineN = 0;
+	my $lineN = 1;
 
 	foreach my $line ( @lines )
 	{
@@ -229,7 +229,7 @@ sub no_cloze
 	our (%letter_score, $letter_score);
 	our (@word, $word_score);
 
-	my $lineN = 0;
+	my $lineN = 1;
 
 	foreach my $line ( @lines )
 	{
@@ -239,7 +239,7 @@ sub no_cloze
 		string: token(s) end | <error>
 		token: cloze | unclozed
 		cloze: <reject: not $Dic::Cloze::Text::no_cloze> m/^.*$/ {
-			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+			$Dic::Cloze::Conversation::clozeline .= "$Dic::Cloze::Conversation::lineN $item[1]";
 		}
 		unclozed: m/^.*$/ {
 			$Dic::Cloze::Text::clozeline .= "$item[1] ";
@@ -248,7 +248,7 @@ sub no_cloze
 		];
 	my $parser = Parse::RecDescent->new($grammar);
 	defined $parser->string($line) or die "no_cloze parse died: $?\n";
-	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline . "~\\\\";
+	$text{A} .= "\\hspace{0cm} ~\\\\" . $clozeline . "~\\\\";
 	$text{B} .= "~\\\\" . $clozeline . "~\\\\";
 		$lineN++;
 	}
