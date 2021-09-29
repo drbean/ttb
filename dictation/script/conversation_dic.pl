@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Sep 23,  2:52:07 PM
+# Last Edit: 2021 Sep 29, 12:58:26 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -168,9 +168,10 @@ elsif ( %tag_bin ) {
 	for my $a_or_b (qw/A B/) {
 		my %a_or_b_bin;
 		for my $word ( @{$word{$a_or_b}} ) {
+			my $Word =lc $word;
 			for my $pos ( keys %tag_bin ) {
 				push @{$a_or_b_bin{$pos}}, $word 
-					if any {$_ eq $word} @{$tag_bin{$pos}};
+					if any {$_ eq $Word} @{$tag_bin{$pos}};
 			}
 		}
 		for my $pos ( keys %tag_bin ) {
