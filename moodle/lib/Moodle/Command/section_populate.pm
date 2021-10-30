@@ -55,6 +55,10 @@ sub execute {
 		, forum => 'forum'
 	);
 	my $section_n = { general => 0
+		, reading => 1
+		, listening => 2
+		, speaking => 3
+		, writing => 4
 		, read => 1
 		, pic => 2
 		, question => 3
