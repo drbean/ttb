@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Nov 25,  3:53:33 PM
+# Last Edit: 2021 Nov 25,  4:10:32 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -19,11 +19,12 @@ my $s = '';
 my $f = 0;
 my $nine = '';
 my $sixteen = '';
+my $pair = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine, 'sixteen' => \$sixteen)
+	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -113,7 +114,27 @@ START_LATEX
 
 my @latex;
 if ( $sixteen ) {
-	@latex = (
+	if ( $pair ) {
+		@latex = (
+		{ page => 1, xy => "0,0" },
+		{ page => 1, xy => "4,0" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "12,0" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "4,4" },
+		{ page => 1, xy => "8,4" },
+		{ page => 1, xy => "12,4" },
+		{ page => 1, xy => "0,8" },
+		{ page => 1, xy => "4,8" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "12,8" },
+		{ page => 1, xy => "0,12" },
+		{ page => 1, xy => "4,12" },
+		{ page => 1, xy => "8,12" },
+		{ page => 1, xy => "12,12" },
+		);
+	} else {
+		@latex = (
 		{ page => 1, x => 0, y => 0, xy => "0,0" },
 		{ page => 1, x => 0, y => 4, xy => "0,4" },
 		{ page => 1, x => 8, y => 8, xy => "8,8" },
@@ -133,7 +154,8 @@ if ( $sixteen ) {
 		{ page => 1, x => 12, y => 8, xy => "12,8" },
 		{ page => 1, x => 4, y => 4, xy => "4,4" },
 		{ page => 1, x => 12, y => 12, xy => "12,12" },
-	);
+		);
+	}
 }
 elsif ( $nine ) {
 	@latex = (
