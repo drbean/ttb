@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Aug 25,  3:25:06 PM
+# Last Edit: 2021 Nov 25,  3:53:33 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -18,12 +18,12 @@ my $t = 1;
 my $s = '';
 my $f = 0;
 my $nine = '';
-my $slow8 = '';
+my $sixteen = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine, 'slow8' => \$slow8)
+	, 'nine' => \$nine, 'sixteen' => \$sixteen)
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -40,10 +40,10 @@ my %romanize = (
 my ($landscape, $word_box, $pic_box);
 $landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
 $word_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$slow8? "\\parbox[b][0.203\\paperheight][c]{0.20\\paperwidth}{%" :
+		$sixteen? "\\parbox[b][0.203\\paperheight][c]{0.20\\paperwidth}{%" :
 		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 $pic_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$slow8? "\\parbox[t][0.232\\paperheight][b]{0.20\\paperwidth}{%" :
+		$sixteen? "\\parbox[t][0.232\\paperheight][b]{0.20\\paperwidth}{%" :
 		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 
 my $latexString = <<"START_LATEX";
@@ -112,7 +112,7 @@ $landscape
 START_LATEX
 
 my @latex;
-if ( $slow8 ) {
+if ( $sixteen ) {
 	@latex = (
 		{ page => 1, x => 0, y => 0, xy => "0,0" },
 		{ page => 1, x => 0, y => 4, xy => "0,4" },
@@ -213,7 +213,7 @@ elsif ( $nine ) {
 my $paging = 0;
 my $threepages = 0;
 my $lastcard = 0;
-my $fullpage=$nine? 9: $slow8? 16: 8;
+my $fullpage=$nine? 9: $sixteen? 16: 8;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
@@ -315,12 +315,12 @@ for my $set ( 0..$t-1 ) {
 	die "No word for some prompts" unless
 		(values %prompts) - @extra == scalar @words;
 		
-	my $width = $nine ? "5.3" : $slow8 ? "4" : "8";
+	my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
 	my $pic_height = $nine ? "0.30\\paperheight" :
-				$slow8 ? "0.195\\paperheight" : 
+				$sixteen ? "0.195\\paperheight" : 
 				"0.20\\paperheight";
 	my $pic_width = $nine ? "0.30\\paperwidth" : 
-			$slow8 ? "0.20\\paperwidth" : "0.40\\paperwidth";
+			$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
 	#for my $word ( keys %prompts ) {
 	#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
 	#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
@@ -332,7 +332,7 @@ for my $set ( 0..$t-1 ) {
 
 	for my $card ( keys %prompts, values %prompts ) {
 
-		if ( $slow8 and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
+		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
 			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
 			$latexString .= "
 	\\TPshowboxestrue
@@ -418,6 +418,6 @@ If the optional -t (team) option exists, create t different randomly-selected se
 
 nine option (--nine) makes 3 x 3 cards on each page, landscape-wise.
 
-The slow8 option (--slow8) arranges 2 x 8 cards on one page for convenient cutting for slow feeding. See http://drbean.sdf.org/SlowFeedCards.html 
+The sixteen option (--sixteen) arranges 2 x 8 cards on one page for convenient cutting for slow feeding. See http://drbean.sdf.org/SlowFeedCards.html 
 
 =cut
