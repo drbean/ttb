@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Nov 25,  4:10:32 PM
+# Last Edit: 2021 Dec 02,  3:36:40 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -116,22 +116,23 @@ my @latex;
 if ( $sixteen ) {
 	if ( $pair ) {
 		@latex = (
-		{ page => 1, xy => "0,0" },
 		{ page => 1, xy => "4,0" },
-		{ page => 1, xy => "8,0" },
 		{ page => 1, xy => "12,0" },
-		{ page => 1, xy => "0,4" },
 		{ page => 1, xy => "4,4" },
-		{ page => 1, xy => "8,4" },
 		{ page => 1, xy => "12,4" },
-		{ page => 1, xy => "0,8" },
 		{ page => 1, xy => "4,8" },
-		{ page => 1, xy => "8,8" },
 		{ page => 1, xy => "12,8" },
-		{ page => 1, xy => "0,12" },
 		{ page => 1, xy => "4,12" },
-		{ page => 1, xy => "8,12" },
 		{ page => 1, xy => "12,12" },
+
+		{ page => 1, xy => "0,0" },
+		{ page => 1, xy => "8,0" },
+		{ page => 1, xy => "0,4" },
+		{ page => 1, xy => "8,4" },
+		{ page => 1, xy => "0,8" },
+		{ page => 1, xy => "8,8" },
+		{ page => 1, xy => "0,12" },
+		{ page => 1, xy => "8,12" },
 		);
 	} else {
 		@latex = (
