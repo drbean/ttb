@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Sep 26,  5:55:55 PM
+# Last Edit: 2021 Dec 09,  3:02:34 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -118,7 +118,7 @@ my $lines = $text[0][4];
 my @lines = split /\n/, $lines;
 my $text;
 my ( %hashed_check, $count_check, %binned, %tag_bin );
-if ( $unclozeable eq 'nocloze' ) {
+if ( defined $unclozeable and $unclozeable eq 'nocloze' ) {
 	$text = no_cloze($cloze_style, 0, @lines);
 }
 elsif ( $unclozeable ) {
