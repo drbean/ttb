@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Jan 05,  1:10:04 PM
+# Last Edit: 2021 Sep 29, 12:58:26 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -139,9 +139,8 @@ else {
 }
 my $textA = $text->{A};
 my $textB = $text->{B};
-# my %word = ( A => $text->{Aword}, B => $text->{Bword} );
-my %word;
-# print "clozed Awords=@{$word{A}} Bwords=@{$word{B}}\n";
+my %word = ( A => $text->{Aword}, B => $text->{Bword} );
+print "clozed Awords=@{$word{A}} Bwords=@{$word{B}}\n";
 my %words; @words{'A', 'B' } = ('') x 2;
 my $words;
 if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
@@ -182,8 +181,8 @@ elsif ( %tag_bin ) {
 		}
 	}
 }
-#warn "pos check_count=$count_check, but clozed Awords= @{$word{A}} 
-#	 Bwords=@{$word{B}}";
+warn "pos check_count=$count_check, but clozed Awords= @{$word{A}} 
+	 Bwords=@{$word{B}}";
 
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
@@ -191,13 +190,13 @@ for my $j ( 0) {
 		\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{ $textA}
+		{{\\tt $words{A}} $textA}
 		\\end{textblock}\n";
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{ $textB}
+		{{\\tt $words{B}} $textB}
 		\\end{textblock}\n";
 	}
 	$tmplString .= "
