@@ -504,6 +504,7 @@ sub execute {
 			}
 		}
 		# $xml > io("-");
+		# print $xml;
 		return $xml;
 
 	}
