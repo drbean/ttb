@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Feb 24,  4:21:33 PM
+# Last Edit: 2022 Feb 24,  4:24:36 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -227,7 +227,7 @@ my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
 s/$regex/translit($1)/ge for @call;
 s/$regex/translit($1)/ge for @lost_call;
 
-my $prompt_n = $reverse? $n : 0 ;
+my $prompt_n = $reverse? $n-2 : 0 ;
 for my $prompt ( 0 .. $prompt_n ) {
         $latexString .=
 "\\TPshowboxestrue
