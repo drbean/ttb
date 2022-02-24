@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2021 Dec 23,  4:10:20 PM
+# Last Edit: 2022 Feb 24,  4:21:33 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -249,7 +249,7 @@ for my $prompt ( 0 .. $prompt_n ) {
         &paging;
 }
 
-my $card_n = $reverse? 1 : $n-2;
+my $card_n = $reverse? 0 : $n-2;
 for my $card ( 0 .. $card_n ) {
         my @candidate = sample( set => \@clinchers );
         my @presented = sample( set => \@pruned, sample_size => @pruned/2);
