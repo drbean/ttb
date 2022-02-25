@@ -21,6 +21,8 @@ sub usage_desc { "moopl section_populate -q question_category -s course_section 
 sub opt_spec  {
         return (
 		["q=s", "question_category"]
+		, ["p=s", "questioncategoryparent"]
+		, ["x=s", "questioncategorycontextid"]
 		, ["s=s", "course_section"]
 		, ["r=i", "random_question_number"]
 		, ["g=i", "grade_category"]
@@ -35,7 +37,9 @@ sub execute {
 
 	my ($self, $opt, $args) = @_;
 
-	my ($category, $section, $random_option, $tagcollid, $tagcomponent, $gradecat, $course, $course_name) = @$opt{qw/q s r l m g c n/};
+	my ($category, $parent, $context, $section, $random_option,
+		$tagcollid, $tagcomponent, $gradecat, $course,
+		$course_name) = @$opt{qw/q p x s r l m g c n/};
 	my $semester="$ENV{SEMESTER}";
 	# my $course_name = "$ENV{COURSE_NAME[$course]}"
 
@@ -134,7 +138,7 @@ sub execute {
 			$option_hash{intro} = $intro;
 		}
 		elsif ( $type eq 'page' ) {
-			$option_hash{content} = $yaml->{$story}->{$type}->{$form}->{rubric};
+			$option_hash{content} = $yaml->{$story}->{$type}->{$form}->{content};
 			$option_hash{intro} = $intro;
 		}
 		elsif ( $type eq 'assign' ) {
@@ -155,6 +159,11 @@ sub execute {
 		die "Failed to add '$name' activity to '$section' section with activity-add! activity_id=$activity_id\n" unless looks_like_number( $activity_id );
 		if ( $module{$type} eq 'forum' ) {
 			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id forum intro \"$option_hash{intro}\"";
+			warn "\n$module{$type}-set-line='$activity_set_line'";
+			system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
+		}
+		if ( $module{$type} eq 'page' ) {
+			my $activity_set_line =  "/home/$ENV{USER}/moosh/moosh.php -n activity-config-set activity $activity_id page content \"$option_hash{content}\"";
 			warn "\n$module{$type}-set-line='$activity_set_line'";
 			system( $activity_set_line ) == 0 or die "'$activity_set_line' failed";
 		}
