@@ -151,7 +151,7 @@ sub execute {
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
 		my $option_string = join ' ', @option_list;
-		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name=$name -s $section_n -d --options=\"$option_string\" $module{$type} $course";
+		$activity_add_line = "/home/$ENV{USER}/moosh/moosh.php -n activity-add --name=$name -s $section_n --showdescription --options=\"$option_string\" $module{$type} $course";
 		warn "\n$module{$type}-add-line='$activity_add_line'\n";
 		my $activity_id = qx( $activity_add_line );
 		warn "$module{$type}_id=$activity_id";
