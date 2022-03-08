@@ -425,7 +425,7 @@ sub execute {
 				for my $sentence ( @$sentences ) {
 					my $words = $sentence->{sentence};
 					my $cloze = $sentence->{clozed};
-					my @word = split /(\s+|\.|,)/, $words;
+					my @word = split /(\s+|\.|,|\?|!)/, $words;
 					die "no words in $words\n" unless @word;
 					my @string = split /\|/, $cloze;
 					die "no clozed words in $cloze\n" unless @string;
