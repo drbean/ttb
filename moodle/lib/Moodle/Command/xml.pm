@@ -427,7 +427,7 @@ sub execute {
 					my $cloze = $sentence->{clozed};
 					my @word = split /(\s+|\.|,|\?|!)/, $words;
 					die "no words in $words\n" unless @word;
-					my @string = split /\|/, $cloze;
+					my @string = split /\s+/, $cloze;
 					die "no clozed words in $cloze\n" unless @string;
 
 					my $comment = XML::DOM::Document->createComment
