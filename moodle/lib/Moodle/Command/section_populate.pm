@@ -147,8 +147,8 @@ sub execute {
 		elsif ( $module{$type} eq 'quiz' ) {
 			$option_hash{intro} = $intro;
 			$option_hash{questioncategory} = $category if $category;
-			$option_hash{parent} = $parent if $parent;
-			$option_hash{context} = $context if $context;
+			$option_hash{parentcategory} = $parent if $parent;
+			$option_hash{categorycontext} = $context if $context;
 		}
 		else {die "'$module{$type}' activity type for '$type' exercise?\n"}
 		my @option_list; push @option_list, "--$_=$option_hash{$_}" for sort keys %option_hash;
