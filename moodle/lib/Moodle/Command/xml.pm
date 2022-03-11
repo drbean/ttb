@@ -423,12 +423,14 @@ sub execute {
 				else { die "Not a drag. No sentences." }
 				my $n = "00";
 				for my $sentence ( @$sentences ) {
+					# warn "sentence: $sentence\n";
 					my $words = $sentence->{sentence};
 					my $cloze = $sentence->{clozed};
 					my @word = split /(\s+|\.|,|\?|!)/, $words;
 					die "no words in $words\n" unless @word;
 					my @string = split /\s+/, $cloze;
 					die "no clozed words in $cloze\n" unless @string;
+					# warn "cloze string=$cloze\n";
 
 					my $comment = XML::DOM::Document->createComment
 						("identifier: $content->{$form}->{identifier}");
@@ -464,6 +466,7 @@ sub execute {
 					}
 					for my $word ( @word ) {
 						++$m;
+						# warn "string=$string[0], word=$word\n";
 						if ( $string[0] eq $word ) {
 							$n++;
 							my $candidate = shift @string;
