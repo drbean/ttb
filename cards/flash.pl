@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Mar 24,  3:49:28 PM
+# Last Edit: 2022 May 19,  3:37:21 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -358,7 +358,7 @@ for my $set ( 0..$t-1 ) {
 	#	die "'$part' dupe present $part_count{$part} times"
 	#		unless $part_count{$part} == 0;
 	#}
-	die "No word for some prompts" unless
+	die "No word for some prompts. Sample size > word number?" unless
 		(values %prompts) - @extra == scalar @words;
 		
 	my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
