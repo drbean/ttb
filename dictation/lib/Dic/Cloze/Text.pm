@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2021 Sep 29, 12:44:04 PM
+# Last Edit: 2022 May 24,  9:34:37 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -52,6 +52,11 @@ $onlastletter{ctestpluslast} = q [
 $onlastletter{total} = q [
 	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} 1 .. $#cword);
+	push @Dic::Cloze::Text::word, join '', @cword;
+	];
+$onlastletter{pos} = q [
+	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
+			, map {"\\\\1{}"} 1 .. 4);
 	push @Dic::Cloze::Text::word, join '', @cword;
 	];
 
