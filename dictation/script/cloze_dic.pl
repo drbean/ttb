@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2021 Dec 09,  3:02:34 PM
+# Last Edit: 2022 May 24,  9:07:46 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -109,6 +109,7 @@ my %romanize = (
 	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
+my %alpha; @alpha{0..25} = (a..z);
 
 $identifier = "$story-$form";
 my @text = grep { $_->[0] eq $identifier } @$text_list;
