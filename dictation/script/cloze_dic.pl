@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 May 24,  9:07:46 PM
+# Last Edit: 2022 May 25, 10:18:51 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -109,7 +109,7 @@ my %romanize = (
 	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
-my %alpha; @alpha{0..25} = (a..z);
+my %alpha; @alpha{0..25} = ('a'..'z');
 
 $identifier = "$story-$form";
 my @text = grep { $_->[0] eq $identifier } @$text_list;
@@ -133,9 +133,11 @@ else {
 		if ( $cloze =~m/^(.*)\.(\w+)$/ ) {
 			my $tagless = $1;
 			my $pos = $2;
-			push @{$tag_bin{$pos}}, $tagless;
+			my $posex = $tag_bin{$pos};
+			$posex->{$tagless}++;
 			$clean_clozes .= "$tagless ";
 			$count_check++;
+			$tag_bin{$pos} = $posex;
 		}
 		else { $clean_clozes .= "$cloze " }
 	}
@@ -166,8 +168,14 @@ if ( $text[0][6] and ref $text[0][6] eq 'HASH') {
 	}
 }
 elsif ( %tag_bin ) {
-	$words .= "\\textit{$_}: " . (join ' ', sort @{$tag_bin{$_}}) . "\\\\"
-		for keys %tag_bin;
+	for my $pos ( sort keys %tag_bin  ) {
+		my $posex = $tag_bin{$pos};
+		my @list = sort keys %$posex;
+		my $line = join ' ',
+			map { "$alpha{$_}.$list[$_]" } (0..$#list);
+		my $POS = ucfirst $pos;
+		$words .= "\\textit{$POS}: " . $line . "\\\\"
+	}
 }
 elsif (ref $word eq 'ARRAY') {
 	$words = join ' ', sort @$word;
