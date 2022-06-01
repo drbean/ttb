@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 May 25, 10:18:51 AM
+# Last Edit: 2022 Jun 01, 10:01:49 AM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -110,6 +110,17 @@ my %romanize = (
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
 my %alpha; @alpha{0..25} = ('a'..'z');
+my %tex_key = (
+	noun => '\\textbf{N}\\emph{oun}'
+	, verb => '\\textbf{V}\\emph{erb}'
+	, ad => '\\textbf{A}\\emph{d}'
+	, adverb => '\\textbf{A}\\emph{dverb}'
+	, adjective => '\\emph{ad}\\textbf{J}\\emph{ective}'
+	, determiner => '\\textbf{D}\\emph{eterminer}'
+	, pronoun => '\\textbf{P}\\emph{ronoun}'
+	, preposition => '\\emph{p}\\textbf{R}\\emph{eposition}'
+	, other => '\\textbf{O}\\emph{ther}'
+);
 
 $identifier = "$story-$form";
 my @text = grep { $_->[0] eq $identifier } @$text_list;
@@ -173,8 +184,7 @@ elsif ( %tag_bin ) {
 		my @list = sort keys %$posex;
 		my $line = join ' ',
 			map { "$alpha{$_}.$list[$_]" } (0..$#list);
-		my $POS = ucfirst $pos;
-		$words .= "\\textit{$POS}: " . $line . "\\\\"
+		$words .= "$tex_key{$pos}: " . $line . "\\\\"
 	}
 }
 elsif (ref $word eq 'ARRAY') {
