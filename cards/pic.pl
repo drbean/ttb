@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 06,  9:26:08 PM
+# Last Edit: 2022 Jun 06,  9:48:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -284,49 +284,24 @@ else { die "No flashcard for $s story, form $f" }
 $latexString .= "\\begin{document}\n\n";
 
 for my $set ( 0..$t-1 ) {
-	my (@words, %prompts, @prompts, @extra);
+	my (@pic);
 	$lastcard = 0;
 	if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
 		my $pair = $flashcard->{pair};
-		push @words, $pair->[$_]->[1] for (0..$#$pair);
-		push @prompts, $pair->[$_]->[0] for (0..$#$pair);
-	}
-	elsif ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
-	       @words = split m/ /, $flashcard->{word};
-	       @prompts = @{ $flashcard->{call} };
-	       die "Unequal word, call numbers. Also check order"
-		       unless ( @words == @prompts );
+		push @pic, $pair->[$_]->[1] for (0..$#$pair);
 	}
 	elsif ( ref $flashcard eq 'HASH' ) {
-			@words = keys %$flashcard;
-			@prompts = values %$flashcard;
-	}
-	elsif ( ref $flashcard eq 'ARRAY' ) {
-		my $n;
-		for my $prompt ( @$flashcard ) {
-			(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
-			push @words, $word;
-			die "No $word word in ${n}th, \"$prompt\" prompt"
-				unless $word;
-			$n++;
-			$prompts{$word} = $prompt;
-		}
+			@pic = values %$flashcard;
 	}
 	else {
-		@words = split m/ /, $flashcard;
-		@prompts = @words;
+		@pic = split m/ /, $flashcard;
 	}
-	if ( @words > $n ) {
-		my @sample = sample( set => [0..$#words], sample_size => $n );
-		@words = @words[@sample];
-		@prompts = @prompts[@sample];
+	if ( @pic > $n ) {
+		my @sample = sample( set => [0..$#pic], sample_size => $n );
+		@pic = @pic[@sample];
 	}
-	@prompts{@words} = @prompts;
-	die "Undefined prompts"
-	       unless all { defined $prompts{$_} } keys %prompts;
-	if ( @words < $n ) {
-		@extra = sample( set => \@words, sample_size => $n-@words );
-		$prompts{"ALSO: ${_}"} = $prompts{$_} for @extra;
+	if ( @pic < $n ) {
+		@extra = sample( set => \@pic, sample_size => $n-@pic );
 	}
 
 	my (%word_count, %part_count);
