@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 06,  4:42:49 PM
+# Last Edit: 2022 Jun 06,  9:23:37 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -112,10 +112,10 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $bingo;
-if ($type="match" && exists $story->{match} && exists $story->{match}->{$f} ) {
+if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
         $bingo = $story->{match}->{$f};
 }
-elsif ($type="bingo" && exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
+elsif ($type eq "bingo" && exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
         $bingo = $story->{bingo}->[$f];
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{bingo} ) {
