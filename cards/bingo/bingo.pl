@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Feb 24,  4:24:36 PM
+# Last Edit: 2022 Jun 06,  4:42:49 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -20,12 +20,15 @@ my $s = '';
 my $f = 0;
 my $reverse = '';
 my $swap = '';
+my $type = '';
+my $paper = 'a7';
 
 GetOptions (
-        'help|?' => \$help, man => \$man,
-        'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f,
-        'swap' => \$swap, 'reverse' => \$reverse)
-                or pod2usage(2);
+        'help|?' => \$help, man => \$man
+        , 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
+        , 'swap' => \$swap, 'reverse' => \$reverse
+        , 'type=s' => \$type, 'paper=s' => \$paper
+                ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -75,34 +78,30 @@ my $latexString = <<"START_LATEX";
 
 START_LATEX
 
-my @latex = (
-                { page => 1, xy => "0,0" },
-                { page => 1, xy => "0,4" },
-                { page => 1, xy => "8,0" },
-                { page => 1, xy => "8,4" },
-                { page => 1, xy => "0,8" },
-                { page => 1, xy => "0,12" },
-                { page => 1, xy => "8,8" },
-                { page => 1, xy => "8,12" },
-                { page => 2, xy => "0,0" },
-                { page => 2, xy => "0,4" },
-                { page => 2, xy => "8,0" },
-                { page => 2, xy => "8,4" },
-                { page => 2, xy => "0,8" },
-                { page => 2, xy => "0,12" },
-                { page => 2, xy => "8,8" },
-                { page => 2, xy => "8,12" },
-                { page => 3, xy => "0,0" },
-                { page => 3, xy => "0,4" },
-                { page => 3, xy => "8,0" },
-                { page => 3, xy => "8,4" },
-                { page => 3, xy => "0,8" },
-                { page => 3, xy => "0,12" },
-                { page => 3, xy => "8,8" },
-                { page => 3, xy => "8,12" },
-        );
+my $layout = { a7 => { latex => [
+                        { page => 1, xy => "0,0" },
+                        { page => 1, xy => "8,0" },
+                        { page => 1, xy => "0,4" },
+                        { page => 1, xy => "8,4" },
+                        { page => 1, xy => "0,8" },
+                        { page => 1, xy => "8,8" },
+                        { page => 1, xy => "0,12" },
+                        { page => 1, xy => "8,12" },
+                ],
+                i => 3},
+        a6 => { latex => [
+                        { page => 1, xy => "8,0" },
+                        { page => 1, xy => "0,0" },
+                        { page => 1, xy => "8,8" },
+                        { page => 1, xy => "0,8" },
+                ],
+                i => 5}
+};
+
+my $latex = $layout->{$paper}->{latex};
+
 my $paging = 0;
-my $threepages = 0;
+my $page_number = 0;
 
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
@@ -113,17 +112,17 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $bingo;
-if (exists $story->{match} && exists $story->{match}->{$f} ) {
+if ($type="match" && exists $story->{match} && exists $story->{match}->{$f} ) {
         $bingo = $story->{match}->{$f};
 }
-elsif (exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
+elsif ($type="bingo" && exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
         $bingo = $story->{bingo}->[$f];
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{bingo} ) {
         $bingo = $story->{$f}->{bingo};
 
 }
-else { die "No bingo for $s story, form $f" }
+else { die "No '$type' bingo for $s story, form $f" }
 
 $latexString .= "\\begin{document}\n\n";
 
@@ -231,8 +230,8 @@ my $prompt_n = $reverse? $n-2 : 0 ;
 for my $prompt ( 0 .. $prompt_n ) {
         $latexString .=
 "\\TPshowboxestrue
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
+\\begin{textblock}{8}($latex->[$paging]->{xy})
+\\textblocklabel{picture$latex->[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
 {\\parbox{9.6cm}{";
 	if ( $reverse ) {
@@ -265,8 +264,8 @@ for my $card ( 0 .. $card_n ) {
 
         $latexString .= 
 "\\TPshowboxestrue
-\\begin{textblock}{8}($latex[$paging]->{xy})
-\\textblocklabel{picture$latex[$paging]->{xy}}
+\\begin{textblock}{8}($latex->[$paging]->{xy})
+\\textblocklabel{picture$latex->[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
         while ( my @word = $it->() ) {
                 tr/_/~/ for @word;
@@ -290,13 +289,25 @@ my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
 $bio->print( $latexString );
 
 sub paging
-{       if ($paging == 7 or $paging == 15 or $paging == 23 )
-        {
-                $latexString .= "
-\\begin{tiny}" . ($threepages + $latex[$paging]->{page}) .                      +"\\end{tiny}\\newpage\n\n";
+{       
+        if ( $paper eq 'a7' ) {
+                if ($paging == 7 or $paging == 15 or $paging == 23 ) {
+                        $latexString .= "
+                \\begin{tiny}" . ($page_number + $latex->[$paging]->{page}) .
+                        "\\end{tiny}\\newpage\n\n";
+                        }
+                if ($paging == 7) { $page_number++; $paging = 0; }
+                else { $paging++; }
         }
-        if ($paging == 23) { $threepages = $threepages+3; $paging = 0; }
-        else { $paging++; }
+        if ( $paper eq 'a6' ) {
+                if ($paging == 3 or $paging == 7 or $paging == 11 or $paging == 15 ) {
+                        $latexString .= "
+                \\begin{tiny}" . ($page_number + $latex->[$paging]->{page}) .
+                        "\\end{tiny}\\newpage\n\n";
+                        }
+                if ($paging == 3) { $page_number++; $paging = 0; }
+                else { $paging++; }
+        }
 }
 
 __END__
