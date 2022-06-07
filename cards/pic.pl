@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  4:35:09 PM
+# Last Edit: 2022 Jun 07,  9:29:38 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,8 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/shuffle sum all/;
+use List::Util qw/shuffle sample any/;
 
 my $man = 0;
 my $help = 0;
@@ -267,13 +266,21 @@ else {
 	@pic = split m/ /, $flashcard;
 }
 if ( @pic > $n ) {
-	my @sample = sample( set => [0..$#pic], sample_size => $n );
+	my @sample = sample $n, @pic;
 	@pic = @pic[@sample];
 }
+my ( %pic, @extra, @duped, @tag );
 if ( @pic < $n ) {
-	my @extra = sample( set => \@pic, sample_size => $n-@pic );
-	push @pic, flashcard$_ for @extra;
+	@extra = sample ($n-@pic), @pic;
 }
+for my $dupe ( @extra ) {
+	@duped = grep { $_ eq $dupe } @pic;
+}
+push @pic, $_ for @extra;
+@pic = shuffle @pic;
+@pic{0..$#pic} = @pic;
+@tag = grep { my $pic=$_; any { $_ eq $pic } @extra }(0..$#pic);
+
 
 my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
 my $pic_height = $nine ? "0.30\\paperheight" :
