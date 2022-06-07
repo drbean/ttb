@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 06,  9:23:37 PM
+# Last Edit: 2022 Jun 07,  2:53:42 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -70,7 +70,7 @@ my $latexString = <<"START_LATEX";
         \\vspace{0.1cm}
         \\small #1 #2
         \\par
-        \\parbox[t][6.7cm][c]{9.5cm}{%
+        \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
         \\hspace{0.1cm} \\Large#3\\\\
         \\normalsize#4 #5
         }
@@ -232,19 +232,18 @@ for my $prompt ( 0 .. $prompt_n ) {
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
-\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}
-{\\parbox{9.6cm}{";
+\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}{";
 	if ( $reverse ) {
-		$latexString .= "\\Large\n" if $reverse;
+		$latexString .= "\\large\n" if $reverse;
 		$latexString .= "\\begin{multicols}{4}";
-		$latexString .= (s/_/\\_/g, "$_\\\\") for sort @call;
+		$latexString .= (s/_/\\_/g, "- $_\\\\") for sort @call;
 		$latexString .= "\\end{multicols}";
 	}
 	else {
 		$latexString .= (s/_/\\_/g, "$_ ") for @call;
 	}
         $latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
-        $latexString .= "}}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+        $latexString .= "}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
         &paging;
 }
 
