@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  4:19:15 PM
+# Last Edit: 2022 Jun 07,  4:35:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -20,12 +20,14 @@ my $f = 0;
 my $nine = '';
 my $sixteen = '';
 my $pair = '';
+my $type = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair)
-		or pod2usage(2);
+	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair
+        , 'type=s' => \$type
+		) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -269,7 +271,7 @@ if ( @pic > $n ) {
 	@pic = @pic[@sample];
 }
 if ( @pic < $n ) {
-	@extra = sample( set => \@pic, sample_size => $n-@pic );
+	my @extra = sample( set => \@pic, sample_size => $n-@pic );
 	push @pic, flashcard$_ for @extra;
 }
 
@@ -288,7 +290,7 @@ my $pic_width = $nine ? "0.30\\paperwidth" :
 #}
 
 for my $set ( 0..$t-1 ) {
-	for my $card ( keys %prompts, values %prompts ) {
+	for my $card ( @pic ) {
 
 		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
 			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
