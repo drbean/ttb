@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  4:04:51 PM
+# Last Edit: 2022 Jun 07,  4:19:15 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -9,7 +9,7 @@ use warnings;
 use Getopt::Long;
 use Pod::Usage;
 use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum all/;
+use List::Util qw/shuffle sum all/;
 
 my $man = 0;
 my $help = 0;
@@ -252,42 +252,42 @@ else { die "No flashcard for $s story, form $f" }
 
 $latexString .= "\\begin{document}\n\n";
 
+my (@pic);
+$lastcard = 0;
+if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
+	my $pair = $flashcard->{pair};
+	push @pic, $pair->[$_]->[1] for (0..$#$pair);
+}
+elsif ( ref $flashcard eq 'HASH' ) {
+		@pic = values %$flashcard;
+}
+else {
+	@pic = split m/ /, $flashcard;
+}
+if ( @pic > $n ) {
+	my @sample = sample( set => [0..$#pic], sample_size => $n );
+	@pic = @pic[@sample];
+}
+if ( @pic < $n ) {
+	@extra = sample( set => \@pic, sample_size => $n-@pic );
+	push @pic, flashcard$_ for @extra;
+}
+
+my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
+my $pic_height = $nine ? "0.30\\paperheight" :
+			$sixteen ? "0.195\\paperheight" : 
+			"0.20\\paperheight";
+my $pic_width = $nine ? "0.30\\paperwidth" : 
+		$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
+#for my $word ( keys %prompts ) {
+#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
+#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+#		$prompts{$word} =
+#"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
+#	}
+#}
+
 for my $set ( 0..$t-1 ) {
-	my (@pic);
-	$lastcard = 0;
-	if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
-		my $pair = $flashcard->{pair};
-		push @pic, $pair->[$_]->[1] for (0..$#$pair);
-	}
-	elsif ( ref $flashcard eq 'HASH' ) {
-			@pic = values %$flashcard;
-	}
-	else {
-		@pic = split m/ /, $flashcard;
-	}
-	if ( @pic > $n ) {
-		my @sample = sample( set => [0..$#pic], sample_size => $n );
-		@pic = @pic[@sample];
-	}
-	if ( @pic < $n ) {
-		@extra = sample( set => \@pic, sample_size => $n-@pic );
-	}
-
-	my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
-	my $pic_height = $nine ? "0.30\\paperheight" :
-				$sixteen ? "0.195\\paperheight" : 
-				"0.20\\paperheight";
-	my $pic_width = $nine ? "0.30\\paperwidth" : 
-			$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
-	#for my $word ( keys %prompts ) {
-	#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
-	#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-	#		$prompts{$word} =
-	#"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
-	#	}
-	#}
-
-
 	for my $card ( keys %prompts, values %prompts ) {
 
 		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
