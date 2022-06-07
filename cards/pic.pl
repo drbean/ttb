@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  4:03:41 PM
+# Last Edit: 2022 Jun 07,  4:04:51 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -68,34 +68,6 @@ $landscape
 \\usepackage{graphicx}
 \\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC}/pic} }
 \\pagestyle{empty}
-
-\\newcommand{\\wordX${s}X$romanize{$f}Xcard}[2]{%
-	\\vspace{0.5cm}
-	\\small #1
-	\\par
-	\\vspace{-0.7cm}
-	$word_box
-	\\hspace{0.1cm} \\huge#2\\\\
-	}
-}
-
-\\newcommand{\\playingX${s}X$romanize{$f}Xcard}[2]{%
-	\\vspace{0.5cm}
-	\\small #1
-	\\par
-	\\vspace{+0.7cm}
-	$word_box
-	\\large#2\\\\
-	\\vspace{+0.9cm}
-	\\put (0,-0.8){\\rotatebox[origin=c]{180}{\\parbox[t][0.117\\paperheight][c]{0.20\\paperwidth}{\\large#2}}}
-	%\\rotatebox[origin=rB]{180}{
-	%\\wordX${s}X$romanize{$f}Xcard{}{%
-	%#2 \\hfill}} \\\\
-	\\vspace{-1.6cm}
-	\\flushright \\rotatebox[origin=c]{180}{\\small #1}
-	\\vfill
-	}
-}
 
 \\newcommand{\\pictureX${s}X$romanize{$f}Xcard}[2]{%
 	\\vspace{0.5cm}
