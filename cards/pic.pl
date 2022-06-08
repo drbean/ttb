@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  9:29:38 PM
+# Last Edit: 2022 Jun 08,  9:10:11 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -266,12 +266,13 @@ else {
 	@pic = split m/ /, $flashcard;
 }
 if ( @pic > $n ) {
-	my @sample = sample $n, @pic;
+	my @sample = sample( $n, @pic );
 	@pic = @pic[@sample];
 }
+
 my ( %pic, @extra, @duped, @tag );
 if ( @pic < $n ) {
-	@extra = sample ($n-@pic), @pic;
+	@extra = sample( $n-@pic, @pic );
 }
 for my $dupe ( @extra ) {
 	@duped = grep { $_ eq $dupe } @pic;
