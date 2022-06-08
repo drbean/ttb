@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 07,  2:53:42 PM
+# Last Edit: 2022 Jun 08,  3:08:19 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -268,6 +268,7 @@ for my $card ( 0 .. $card_n ) {
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
         while ( my @word = $it->() ) {
                 tr/_/~/ for @word;
+		$latexString .= "\\begin{multicols}{4}";
 		if ( $word[2] ) {
 			$latexString .= "- $word[0] \\\\ - $word[1] \\\\ - $word[2] \\hspace{0pt}\\\\";
 		}
@@ -278,6 +279,7 @@ for my $card ( 0 .. $card_n ) {
 			$latexString .= "- $word[0] \\hspace{0pt}\\\\";
 
 		}
+		$latexString .= "\\end{multicols}";
         }
         $latexString .= "}}{}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
         &paging;
