@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09, 10:20:04 AM
+# Last Edit: 2022 Jun 09, 10:39:55 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -195,151 +195,6 @@ my $layout = { tile => [
 		{ page => 1, xy => "10.6, 10.6" },
 		]
 };
-my @latex;
-@latex = @$layout;
-if ( $sixteen ) {
-	if ( $pair ) {
-		if ( $n <= 4 ) {
-			@latex = (
-			{ page => 1, xy => "0,0" },
-			{ page => 1, xy => "8,0" },
-			{ page => 1, xy => "0,4" },
-			{ page => 1, xy => "8,4" },
-
-			{ page => 1, xy => "4,0" },
-			{ page => 1, xy => "12,0" },
-			{ page => 1, xy => "4,4" },
-			{ page => 1, xy => "12,4" },
-
-			{ page => 1, xy => "0,8" },
-			{ page => 1, xy => "8,8" },
-			{ page => 1, xy => "0,12" },
-			{ page => 1, xy => "8,12" },
-			{ page => 1, xy => "4,8" },
-			{ page => 1, xy => "12,8" },
-			{ page => 1, xy => "4,12" },
-			{ page => 1, xy => "12,12" },
-			);
-		} else {
-			@latex = (
-			{ page => 1, xy => "4,0" },
-			{ page => 1, xy => "12,0" },
-			{ page => 1, xy => "4,4" },
-			{ page => 1, xy => "12,4" },
-			{ page => 1, xy => "4,8" },
-			{ page => 1, xy => "12,8" },
-			{ page => 1, xy => "4,12" },
-			{ page => 1, xy => "12,12" },
-
-			{ page => 1, xy => "0,0" },
-			{ page => 1, xy => "8,0" },
-			{ page => 1, xy => "0,4" },
-			{ page => 1, xy => "8,4" },
-			{ page => 1, xy => "0,8" },
-			{ page => 1, xy => "8,8" },
-			{ page => 1, xy => "0,12" },
-			{ page => 1, xy => "8,12" },
-			);
-		}
-	} else {
-		@latex = (
-		{ page => 1, x => 0, y => 0, xy => "0,0" },
-		{ page => 1, x => 0, y => 4, xy => "0,4" },
-		{ page => 1, x => 8, y => 8, xy => "8,8" },
-		{ page => 1, x => 0, y => 12, xy => "0,12" },
-
-		{ page => 1, x => 4, y => 0, xy => "4,0" },
-		{ page => 1, x => 12, y => 4, xy => "12,4" },
-		{ page => 1, x => 4, y => 8, xy => "4,8" },
-		{ page => 1, x => 4, y => 12, xy => "4,12" },
-
-		{ page => 1, x => 8, y => 4, xy => "8,4" },
-		{ page => 1, x => 8, y => 0, xy => "8,0" },
-		{ page => 1, x => 8, y => 12, xy => "8,12" },
-		{ page => 1, x => 0, y => 8, xy => "0,8" },
-
-		{ page => 1, x => 12, y => 0, xy => "12,0" },
-		{ page => 1, x => 12, y => 8, xy => "12,8" },
-		{ page => 1, x => 4, y => 4, xy => "4,4" },
-		{ page => 1, x => 12, y => 12, xy => "12,12" },
-		);
-	}
-}
-elsif ( $nine ) {
-	@latex = (
-		{ page => 1, xy => "0, 0" },
-		{ page => 1, xy => "5.3, 0" },
-		{ page => 1, xy => "10.6, 0" },
-		{ page => 1, xy => "0, 5.3" },
-		{ page => 1, xy => "5.3, 5.3" },
-		{ page => 1, xy => "10.6, 5.3" },
-		{ page => 1, xy => "0, 10.6" },
-		{ page => 1, xy => "5.3, 10.6" },
-		{ page => 1, xy => "10.6, 10.6" },
-		{ page => 2, xy => "10.6, 0" },
-		{ page => 2, xy => "5.3, 0" },
-		{ page => 2, xy => "0, 0" },
-		{ page => 2, xy => "10.6, 5.3" },
-		{ page => 2, xy => "5.3, 5.3" },
-		{ page => 2, xy => "0, 5.3" },
-		{ page => 2, xy => "10.6, 10.6" },
-		{ page => 2, xy => "5.3, 10.6" },
-		{ page => 2, xy => "0, 10.6" },
-		{ page => 3, xy => "0, 0" },
-		{ page => 3, xy => "5.3, 0" },
-		{ page => 3, xy => "10.6, 0" },
-		{ page => 3, xy => "0, 5.3" },
-		{ page => 3, xy => "5.3, 5.3" },
-		{ page => 3, xy => "10.6, 5.3" },
-		{ page => 3, xy => "0, 10.6" },
-		{ page => 3, xy => "5.3, 10.6" },
-		{ page => 3, xy => "10.6, 10.6" },
-		{ page => 4, xy => "10.6, 0" },
-		{ page => 4, xy => "5.3, 0" },
-		{ page => 4, xy => "0, 0" },
-		{ page => 4, xy => "10.6, 5.3" },
-		{ page => 4, xy => "5.3, 5.3" },
-		{ page => 4, xy => "0, 5.3" },
-		{ page => 4, xy => "10.6, 10.6" },
-		{ page => 4, xy => "5.3, 10.6" },
-		{ page => 4, xy => "0, 10.6" },
-	);
-} else {
-	@latex = (
-		{ page => 1, xy => "0,0" },
-		{ page => 1, xy => "8,0" },
-		{ page => 1, xy => "0,4" },
-		{ page => 1, xy => "8,4" },
-		{ page => 1, xy => "0,8" },
-		{ page => 1, xy => "8,8" },
-		{ page => 1, xy => "0,12" },
-		{ page => 1, xy => "8,12" },
-		{ page => 2, xy => "8,0" },
-		{ page => 2, xy => "0,0" },
-		{ page => 2, xy => "8,4" },
-		{ page => 2, xy => "0,4" },
-		{ page => 2, xy => "8,8" },
-		{ page => 2, xy => "0,8" },
-		{ page => 2, xy => "8,12" },
-		{ page => 2, xy => "0,12" },
-		{ page => 3, xy => "0,0" },
-		{ page => 3, xy => "8,0" },
-		{ page => 3, xy => "0,4" },
-		{ page => 3, xy => "8,4" },
-		{ page => 3, xy => "0,8" },
-		{ page => 3, xy => "8,8" },
-		{ page => 3, xy => "0,12" },
-		{ page => 3, xy => "8,12" },
-		{ page => 4, xy => "8,0" },
-		{ page => 4, xy => "0,0" },
-		{ page => 4, xy => "8,4" },
-		{ page => 4, xy => "0,4" },
-		{ page => 4, xy => "8,8" },
-		{ page => 4, xy => "0,8" },
-		{ page => 4, xy => "8,12" },
-		{ page => 4, xy => "0,12" },
-	);
-}
 my $paging = 0;
 my $threepages = 0;
 my $lastcard = 0;
@@ -435,10 +290,10 @@ for my $set ( 0..$t-1 ) {
 		else {
 			$latexString .= 
 	"\\TPshowboxestrue
-	\\begin{textblock}{$width}($latex[$paging]->{xy})";
+	\\begin{textblock}{$width}($layout->{full}->$paging]->{xy})";
 			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 				$latexString .= "
-	\\textblocklabel{picture$latex[$paging]->{xy}}
+	\\textblocklabel{picture$layout->{full}->$paging]->{xy}}
 	\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
 			}
