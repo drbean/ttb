@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09, 11:39:08 AM
+# Last Edit: 2022 Jun 09,  2:44:32 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -71,6 +71,16 @@ $landscape
 \\pagestyle{empty}
 
 \\newcommand{\\pictureX${s}X$romanize{$f}Xcard}[2]{%
+	\\vspace{0.5cm}
+	\\small #1
+	\\par
+	\\vspace{-0.5cm}
+	$pic_box
+	\\hspace{0.1cm} #2\\\\
+	}
+}
+
+\\newcommand{\\pictureX${s}X$romanize{$f}Xtile}[2]{%
 	\\vspace{0.5cm}
 	\\small #1
 	\\par
@@ -258,6 +268,8 @@ my $pic_height = $nine ? "0.30\\paperheight" :
 			"0.20\\paperheight";
 my $pic_width = $nine ? "0.30\\paperwidth" : 
 		$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
+my $tile_width = "0.11\\paperwidth";
+
 #for my $word ( keys %prompts ) {
 #	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
 #	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
@@ -294,8 +306,8 @@ for my $card ( @pic ) {
 		$paging == 3*$fullpage;
 		$paging = 0;
 
-for my $set ( 0..$t-1 ) {
-	for my $card ( @pic ) {
+for my $card ( 0..$t-1 ) {
+	for my $tile ( @pic ) {
 
 		#		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
 		#			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
