@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09,  2:44:32 PM
+# Last Edit: 2022 Jun 09,  3:39:18 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -268,7 +268,9 @@ my $pic_height = $nine ? "0.30\\paperheight" :
 			"0.20\\paperheight";
 my $pic_width = $nine ? "0.30\\paperwidth" : 
 		$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
+		
 my $tile_width = "0.11\\paperwidth";
+my $tile_height = "0.11\\paperheight";
 
 #for my $word ( keys %prompts ) {
 #	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
@@ -307,7 +309,8 @@ for my $card ( @pic ) {
 		$paging = 0;
 
 for my $card ( 0..$t-1 ) {
-	for my $tile ( @pic ) {
+	for my $pos ( 0.. $#pic ) {
+		my $tile = $pic[$pos];
 
 		#		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
 		#			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
@@ -330,12 +333,12 @@ for my $card ( 0..$t-1 ) {
 		#		else {
 			$latexString .= 
 	"\\TPshowboxestrue
-	\\begin{textblock}{$width}($layout->{tile}->[$paging]->[$set]->{xy})";
-			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+	\\begin{textblock}{$width}($layout->{tile}->[$paging]->[$pos]->{xy})";
+			if ( $tile =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 				$latexString .= "
-	\\textblocklabel{picture$layout->{tile}->[$paging]->[$set]->{xy}}
-	\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
+	\\textblocklabel{picture$layout->{tile}->[$paging]->[$pos]->{xy}}
+	\\pictureX${s}X$romanize{$f}Xtile{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+	\\includegraphics[angle=00,height=$tile_height,width=$tile_width]{$tile}";
 			}
 		#			else {
 		#				$latexString .= "
@@ -350,7 +353,7 @@ for my $card ( 0..$t-1 ) {
 	}
 	$lastcard = 1;
 	$latexString .= "
-\\begin{tiny}$layout->{tile}->[$paging]->[$set]->{page}\\end{tiny}\\newpage\n\n" unless
+\\begin{tiny}$layout->{tile}->[$paging]->[$card]->{page}\\end{tiny}\\newpage\n\n" unless
 		$paging == $fullpage or
 		$paging == 2*$fullpage or
 		$paging == 3*$fullpage;
