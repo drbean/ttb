@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09, 11:12:12 AM
+# Last Edit: 2022 Jun 09, 11:25:29 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -236,7 +236,7 @@ else {
 }
 if ( @pic > $n ) {
 	my @sample = sample( $n, @pic );
-	@pic = @pic[@sample];
+	@pic = @sample;
 }
 
 my ( %pic, @extra, @duped, @tag );
