@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09, 11:25:29 AM
+# Last Edit: 2022 Jun 09, 11:39:08 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -265,6 +265,34 @@ my $pic_width = $nine ? "0.30\\paperwidth" :
 #"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
 #	}
 #}
+for my $card ( @pic ) {
+			$latexString .= 
+			"\\TPshowboxestrue
+			\\begin{textblock}{$width}($layout->{full}->[$paging]->{xy})";
+			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+				$latexString .= "
+				\\textblocklabel{picture$layout->{full}->[$paging]->{xy}}
+				\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+				\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
+			}
+			#			else {
+			#				$latexString .= "
+			#	\\textblocklabel{word$layout[$paging]->{xy}}
+			#	\\wordX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+			#	$card \\hfill";
+			#			}
+			$latexString .= "
+			} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
+			# }
+			&paging;
+		}
+		$lastcard = 1;
+		$latexString .= "
+		\\begin{tiny}$layout->{full}->[$paging]->{page}\\end{tiny}\\newpage\n\n" unless
+		$paging == $fullpage or
+		$paging == 2*$fullpage or
+		$paging == 3*$fullpage;
+		$paging = 0;
 
 for my $set ( 0..$t-1 ) {
 	for my $card ( @pic ) {
@@ -290,10 +318,10 @@ for my $set ( 0..$t-1 ) {
 		#		else {
 			$latexString .= 
 	"\\TPshowboxestrue
-	\\begin{textblock}{$width}($layout->{full}->[$paging]->{xy})";
+	\\begin{textblock}{$width}($layout->{tile}->[$paging]->[$set]->{xy})";
 			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 				$latexString .= "
-	\\textblocklabel{picture$layout->{full}->[$paging]->{xy}}
+	\\textblocklabel{picture$layout->{tile}->[$paging]->[$set]->{xy}}
 	\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
 			}
@@ -310,7 +338,7 @@ for my $set ( 0..$t-1 ) {
 	}
 	$lastcard = 1;
 	$latexString .= "
-\\begin{tiny}$layout->{full}->[$paging]->{page}\\end{tiny}\\newpage\n\n" unless
+\\begin{tiny}$layout->{tile}->[$paging]->[$set]->{page}\\end{tiny}\\newpage\n\n" unless
 		$paging == $fullpage or
 		$paging == 2*$fullpage or
 		$paging == 3*$fullpage;
