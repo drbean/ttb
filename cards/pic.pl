@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 11,  3:38:49 PM
+# Last Edit: 2022 Jun 11,  9:30:45 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -323,6 +323,7 @@ for my $card ( 0..$t-1 ) {
 		$paging == $fullpage or
 		$paging == 2*$fullpage or
 		$paging == 3*$fullpage;
+	&paging;
 }
 $latexString .= "\\end{document}\n";
 
@@ -334,14 +335,12 @@ sub paging
 	my $end_check = $paging == $fullpage or
 		$paging == 2*$fullpage or
 		$paging == 3*$fullpage;
-	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
-	{
+	if ($paging == $fullpage-1 ) {
 		$latexString .= "
 \\begin{tiny}$layout->{full}->[$paging]->{page}\\end{tiny}\\newpage\n\n";
-		$paging++;
+		$paging = 0;
 
 	}
-	elsif ($paging == 3*$fullpage-1) { $paging = 0; }
 	else { $paging++; }
 }
 
