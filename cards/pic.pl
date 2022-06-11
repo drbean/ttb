@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 11,  3:25:13 PM
+# Last Edit: 2022 Jun 11,  3:38:49 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -272,13 +272,6 @@ my $pic_width = $nine ? "0.30\\paperwidth" :
 my $tile_width = "0.10\\paperwidth";
 my $tile_height = "0.10\\paperheight";
 
-#for my $word ( keys %prompts ) {
-#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
-#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-#		$prompts{$word} =
-#"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
-#	}
-#}
 for my $card ( @pic ) {
 	my $block_width = "5.3";
 			$latexString .= 
@@ -290,12 +283,6 @@ for my $card ( @pic ) {
 				\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 				\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
 			}
-			#			else {
-			#				$latexString .= "
-			#	\\textblocklabel{word$layout[$paging]->{xy}}
-			#	\\wordX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-			#	$card \\hfill";
-			#			}
 			$latexString .= "
 			} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
 			# }
@@ -316,43 +303,17 @@ for my $card ( 0..$t-1 ) {
 		my $block_width = "1.8";
 		my $tile = $pic{$pos};
 
-		#		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
-		#			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
-		#			$latexString .= "
-		#	\\TPshowboxestrue
-		#	\\begin{textblock}{$width}($latex[$paging]->{xy})
-		#	\\textblocklabel{playingcard$latex[$paging]->{xy}}
-		#	\\playingX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-		#	$card \\hfill}
-		#	%\\begin{textblock}{$width}($upside_down_xy)
-		#	%\\textblocklabel{bottombox$upside_down_xy}
-		#	%\\rotatebox[origin=rB]{180}{
-		#	%\\wordX${s}X$romanize{$f}Xcard{}{%
-		#	%$card \\hfill}} \\\\
-		#	%\\vspace{0.5cm}
-		#	%\\flushright \\rotatebox[origin=c]{180}{\\small \\flashcardX${s}X$romanize{$f}XIdentifier}
-		#	%\\vfill
-		#	\\end{textblock}\n \\TPshowboxesfalse \n";
-		#		}
-		#		else {
-			$latexString .= 
+		$latexString .= 
 	"\\TPshowboxestrue
 	\\begin{textblock}{$block_width}($layout->{tile}->[$card]->[$pos]->{xy})";
-			if ( $tile =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-				$latexString .= "
+		if ( $tile =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
+			$latexString .= "
 	\\textblocklabel{picture$layout->{tile}->[$card]->[$pos]->{xy}}
 	\\pictureX${s}X$romanize{$f}Xtile{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	\\includegraphics[angle=00,height=$tile_height,width=$tile_width]{$tile}";
-			}
-		#			else {
-		#				$latexString .= "
-		#	\\textblocklabel{word$layout[$paging]->{xy}}
-		#	\\wordX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-		#	$card \\hfill";
-		#			}
-			$latexString .= "
+		}
+		$latexString .= "
 	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
-		# }
 	}
 	@pic{ $alternate, $card } = reverse @pic{ $alternate, $card };
 	$paging = 0;
@@ -362,8 +323,7 @@ for my $card ( 0..$t-1 ) {
 		$paging == $fullpage or
 		$paging == 2*$fullpage or
 		$paging == 3*$fullpage;
-		# &paging;
-	}
+}
 $latexString .= "\\end{document}\n";
 
 my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
