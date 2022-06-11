@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 10,  4:34:11 PM
+# Last Edit: 2022 Jun 11,  2:38:12 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -259,7 +259,7 @@ for my $dupe ( @extra ) {
 push @pic, $_ for @extra;
 @pic = shuffle @pic;
 @pic{0..$#pic} = @pic;
-@tag = grep { my $pic=$_; any { $_ eq $pic } @extra }(0..$#pic);
+@tag = grep { my $i=$_; any { $_ eq $pic[$i] } @extra }(0..$#pic);
 
 
 my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
@@ -312,7 +312,7 @@ for my $card ( @pic ) {
 for my $card ( 0..$t-1 ) {
 	for my $pos ( 0.. $#pic ) {
 		my $block_width = "1.8";
-		my $tile = $pic[$pos];
+		my $tile = $pic{$pos};
 
 		#		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
 		#			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
