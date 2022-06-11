@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 11,  2:38:12 PM
+# Last Edit: 2022 Jun 11,  3:25:13 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -310,6 +310,8 @@ for my $card ( @pic ) {
 		$paging = 0;
 
 for my $card ( 0..$t-1 ) {
+	my $alternate = $tag[ $card % 2 ];
+	@pic{ $alternate, $card } = reverse @pic{ $alternate, $card };
 	for my $pos ( 0.. $#pic ) {
 		my $block_width = "1.8";
 		my $tile = $pic{$pos};
@@ -352,6 +354,7 @@ for my $card ( 0..$t-1 ) {
 	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
 		# }
 	}
+	@pic{ $alternate, $card } = reverse @pic{ $alternate, $card };
 	$paging = 0;
 	$lastcard = 1;
 	$latexString .= "
