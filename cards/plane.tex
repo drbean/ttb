@@ -88,6 +88,7 @@ corner
 }
 
 \begin{document}
+%.%
 % \begin{picture}(15,20)(+4.8,-22.05)
 % \begin{tabular}[t]{*{2}{|p{10.05cm}}|}
 
@@ -154,11 +155,19 @@ corner
 }{}{} 
 \end{textblock}
 
+\begin{textblock}{16}(0,0)
+
+\begin{figure}
 \begin{tikzpicture}
-	\draw (-12,0) -- (0,12);
-	 \draw (-1.5,0) -- (1.5,0);
-	   \draw (0,-1.5) -- (0,1.5);
+	\draw (-12,3) -- (-3,12);
+	\draw (-5,-12) -- (-2,12);
+	\draw (12,3) -- (3,12);
+	\draw (5,-12) -- (2,12);
+	\draw[red] (-1.5,0) -- (1.5,0);
+	\draw[red] (0,-0.5) -- (0,0.5);
 \end{tikzpicture}
+\end{figure}
+\end{textblock}
 
 % \begin{tiny}1\end{tiny}\newpage
 
