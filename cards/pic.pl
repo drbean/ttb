@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 13,  1:48:23 PM
+# Last Edit: 2022 Jun 13,  2:05:24 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -327,27 +327,29 @@ for my $card ( 0..$t-1 ) {
 }
 $latexString .= "\\end{document}\n";
 
-my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
+my $bio = io "$ARGV[0]/pic_${s}_$f.tex";
 $bio->print( $latexString );
 
 __END__
 
 =head1 NAME
 
-flashcard.pl - Create flashcard cards from list in cards.yaml
+pic.pl - Create 9/18 2-diff 3x3 card array
 
 =head1 SYNOPSIS
 
-perl ttb/cards/flashcard.pl -t 3 -n 4 -s cell_phones -f 0 topics/phones
+perl ttb/cards/pic.pl -t 18 -n 9 -s equipment -f 0 play
 
 =head1 DESCRIPTION
 
-Makes n cards from fth flashcard sequence in cell_phones mapping in topics/phones/cards.yaml. If n is less than the number of words in the sequence, make a random sample of them. If n is greater, add sampled extra words.
+Makes 9 or 18 cards from fth flashcard sequence in equipment mapping in topics/play/cards.yaml. If n is less than the number of words in the sequence, make a random sample of them. If n is greater, add sampled extra words.
 
-If the optional -t (team) option exists, create t different randomly-selected sets of cards.
+If the optional -t (team) option exists, create t cards.
+
+Each card with 9 tiles has around 2 tiles which are in different positions than in a master arrangement.
 
 nine option (--nine) makes 3 x 3 cards on each page, landscape-wise.
 
-The sixteen option (--sixteen) arranges 2 x 8 cards on one page for convenient cutting for slow feeding. See http://drbean.sdf.org/SlowFeedCards.html 
+Working? The sixteen option (--sixteen) arranges 2 x 8 cards on one page for convenient cutting for slow feeding. See http://drbean.sdf.org/SlowFeedCards.html 
 
 =cut
