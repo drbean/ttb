@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 11,  9:30:45 PM
+# Last Edit: 2022 Jun 13,  1:48:23 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -205,9 +205,6 @@ my $layout = { tile => [
 		{ page => 1, xy => "10.6, 10.6" },
 		]
 };
-my $paging = 0;
-my $threepages = 0;
-my $lastcard = 0;
 my $fullpage=$nine? 9: $sixteen? 16: 8;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
@@ -233,7 +230,6 @@ else { die "No flashcard for $s story, form $f" }
 $latexString .= "\\begin{document}\n\n";
 
 my (@pic);
-$lastcard = 0;
 if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
 	my $pair = $flashcard->{pair};
 	push @pic, $pair->[$_]->[1] for (0..$#$pair);
@@ -272,77 +268,67 @@ my $pic_width = $nine ? "0.30\\paperwidth" :
 my $tile_width = "0.10\\paperwidth";
 my $tile_height = "0.10\\paperheight";
 
-for my $card ( @pic ) {
+for my $pos ( 0 .. $#pic ) {
+	my $card = $pic[$pos];
 	my $block_width = "5.3";
-			$latexString .= 
-			"\\TPshowboxestrue
-			\\begin{textblock}{$block_width}($layout->{full}->[$paging]->{xy})";
-			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-				$latexString .= "
-				\\textblocklabel{picture$layout->{full}->[$paging]->{xy}}
-				\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-				\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
-			}
-			$latexString .= "
-			} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
-			# }
-			&paging;
-		}
-		$lastcard = 1;
+	$latexString .= 
+	"\\TPshowboxestrue
+	\\begin{textblock}{$block_width}($layout->{full}->[$pos]->{xy})";
+	if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 		$latexString .= "
-		\\begin{tiny}$layout->{full}->[$paging]->{page}\\end{tiny}\\newpage\n\n" unless
-		$paging == $fullpage or
-		$paging == 2*$fullpage or
-		$paging == 3*$fullpage;
-		$paging = 0;
+		\\textblocklabel{picture$layout->{full}->[$pos]->{xy}}
+		\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
+		\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
+	}
+	$latexString .= "
+	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
+}
+
+$latexString .= "\\begin{tiny}1\\end{tiny}\\newpage\n\n";
+
+my $page = 0;
+my $next_page = "no";
+my $recard;
 
 for my $card ( 0..$t-1 ) {
+	if ( $next_page eq "yes" ) {
+		$latexString .= "\\begin{tiny}2\\end{tiny}\\newpage\n\n";
+		$page = 0;
+		$next_page = "no";
+	}
+	if ( $card >= $fullpage ) {
+		$recard = $card - $fullpage;
+	}
+	else { $recard = $card }
 	my $alternate = $tag[ $card % 2 ];
-	@pic{ $alternate, $card } = reverse @pic{ $alternate, $card };
+	@pic{ $alternate, $recard } = reverse @pic{ $alternate, $recard }
+		if $pic{$alternate};
+
 	for my $pos ( 0.. $#pic ) {
 		my $block_width = "1.8";
 		my $tile = $pic{$pos};
 
 		$latexString .= 
 	"\\TPshowboxestrue
-	\\begin{textblock}{$block_width}($layout->{tile}->[$card]->[$pos]->{xy})";
+	\\begin{textblock}{$block_width}($layout->{tile}->[$recard]->[$pos]->{xy})";
 		if ( $tile =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$latexString .= "
-	\\textblocklabel{picture$layout->{tile}->[$card]->[$pos]->{xy}}
+	\\textblocklabel{picture$layout->{tile}->[$recard]->[$pos]->{xy}}
 	\\pictureX${s}X$romanize{$f}Xtile{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
 	\\includegraphics[angle=00,height=$tile_height,width=$tile_width]{$tile}";
 		}
 		$latexString .= "
 	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
 	}
-	@pic{ $alternate, $card } = reverse @pic{ $alternate, $card };
-	$paging = 0;
-	$lastcard = 1;
-	$latexString .= "
-% \\begin{tiny}$layout->{tile}->[$paging]->[$card]->{page}\\end{tiny}\\newpage\n\n" unless
-		$paging == $fullpage or
-		$paging == 2*$fullpage or
-		$paging == 3*$fullpage;
-	&paging;
+	@pic{ $alternate, $recard } = reverse @pic{ $alternate, $recard }
+		if $pic{$alternate};
+	$page++;
+	$next_page = "yes" if $page == $fullpage;
 }
 $latexString .= "\\end{document}\n";
 
 my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
 $bio->print( $latexString );
-
-sub paging
-{
-	my $end_check = $paging == $fullpage or
-		$paging == 2*$fullpage or
-		$paging == 3*$fullpage;
-	if ($paging == $fullpage-1 ) {
-		$latexString .= "
-\\begin{tiny}$layout->{full}->[$paging]->{page}\\end{tiny}\\newpage\n\n";
-		$paging = 0;
-
-	}
-	else { $paging++; }
-}
 
 __END__
 
