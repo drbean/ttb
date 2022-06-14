@@ -29,12 +29,12 @@ corner
 }
 
 \newcommand{\myBackRightHandCorner}[0]{
-	\large Back Right Hand Corner
+	\parbox{0.1\paperwidth}{\large Back Right Hand Corner}
 % \includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
 }
 
 \newcommand{\myBackLeftHandCorner}[0]{
-	\large Back Left Hand Corner
+	\parbox{0.1\paperwidth}{\large Back Left Hand Corner}
 % \includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
 }
 
@@ -49,7 +49,7 @@ corner
 }
 
 \newcommand{\myBackMiddle}[0]{
-	\large In the \mbox{Middle} at the Back
+	\parbox{0.1\paperwidth}{\flushleft \large In the \mbox{Middle} at the Back}
 % \includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
 }
 
@@ -92,7 +92,7 @@ corner
 % \begin{picture}(15,20)(+4.8,-22.05)
 % \begin{tabular}[t]{*{2}{|p{10.05cm}}|}
 
-\begin{textblock}{5}(1,1)
+\begin{textblock}{5}(2,1)
 \textblocklabel{picture1}
 \mycard{}{\myCornerIdentifier}{
 \myBackLeftHandCorner
@@ -106,7 +106,7 @@ corner
 }{}{} 
 \end{textblock}
 
-\begin{textblock}{5}(11,1)
+\begin{textblock}{5}(9,1)
 \textblocklabel{picture1}
 \mycard{}{\myCornerIdentifier}{
 \myBackRightHandCorner
@@ -134,7 +134,7 @@ corner
 }{}{} 
 \end{textblock}
 
-\begin{textblock}{5}(1,7)
+\begin{textblock}{5}(0.5,7)
 \textblocklabel{picture3}
 \mycard{}{\myCornerIdentifier}{
 \myFrontLeftHandCorner
