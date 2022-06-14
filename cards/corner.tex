@@ -18,6 +18,7 @@
 \usepackage[none]{hyphenat}
 \usepackage{graphicx}
 \graphicspath{ {/home/$ENV{USER}/ttb/forms/bean/} }
+\usepackage{tikz}
 \pagestyle{empty}
 \setlength{\unitlength}{1cm}
 
@@ -153,6 +154,20 @@ corner
 }{}{} 
 \end{textblock}
 
+\begin{textblock}{16}(0,0)
+\begin{figure}
+\begin{tikzpicture}
+	\draw (-3,-12) -- (-3,12);
+	\draw (6,-12) -- (6,12);
+
+	\draw[red] (-1.5,0) -- (1.5,0);
+	\draw[red] (0,-0.5) -- (0,0.5);
+
+	\draw (-12,-2.5) -- (12,-2.5);
+	\draw (-12,4) -- (12,4);
+\end{tikzpicture}
+\end{figure}
+\end{textblock}
 \begin{tiny}1\end{tiny}\newpage
 
 \end{document}
