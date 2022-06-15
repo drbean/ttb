@@ -1,0 +1,180 @@
+\documentclass[a4paper,landscape]{article}
+\usepackage{fontspec}
+\setmainfont{Linux Libertine O}[
+	Scale=MatchLowercase,
+	Scale = 2.0,
+]
+\usepackage{xeCJK}
+\setCJKmainfont{NotoSansCJK-Regular.ttc}[
+	Path = /usr/share/fonts/noto/,
+]
+% \usepackage[absolute,noshowtext,showboxes]{textpos}
+\usepackage[absolute]{textpos}
+% \textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
+% \textblockorigin{0.05cm}{0.13cm} %HPDeskJet5160
+% \textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
+\usepackage[none]{hyphenat}
+\usepackage{graphicx}
+\graphicspath{ {/home/$ENV{USER}/ttb/forms/bean/} }
+\usepackage{tikz}
+\pagestyle{empty}
+\setlength{\unitlength}{1cm}
+
+\setlength{\TPVertModule}{2.1214cm}
+
+\newcommand{\myCornerIdentifier}[0]{
+corner
+}
+
+\newcommand{\myBackRightHandCorner}[0]{
+	\parbox{0.1\paperwidth}{\large Back Right Hand Corner}
+\includegraphics[angle=00,height=0.07\paperheight,width=0.19\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myBackLeftHandCorner}[0]{
+	\parbox{0.1\paperwidth}{\large Back Left Hand Corner}
+\includegraphics[angle=00,height=0.07\paperheight,width=0.19\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myFrontRightHandCorner}[0]{
+	\Huge Front Right Hand Corner
+\includegraphics[angle=00,height=0.07\paperheight,width=0.29\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myFrontLeftHandCorner}[0]{
+	\Huge Front Left Hand Corner
+\includegraphics[angle=00,height=0.07\paperheight,width=0.29\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myBackMiddle}[0]{
+	\parbox{0.1\paperwidth}{\flushleft \large In the \mbox{Middle} at the Back}
+\includegraphics[angle=00,height=0.07\paperheight,width=0.19\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myRightMiddle}[0]{
+	\flushleft \Large In the \mbox{Middle} on the Right
+\includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myFrontMiddle}[0]{
+	\flushleft \Huge In the \mbox{Middle} at the \mbox{Front}
+\includegraphics[angle=00,height=0.07\paperheight,width=0.29\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myLeftMiddle}[0]{
+	\flushleft \Large In the \mbox{Middle} on the Left
+\includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
+}
+
+\newcommand{\myMiddle}[0]{
+	\Large In the \mbox{Middle}
+\includegraphics[angle=00,height=0.07\paperheight,width=0.24\paperwidth]{five_bean.png}
+}
+
+% \newcommand{\myDcontent}[0]{
+% 
+% }
+
+\newcommand{\mycard}[5]{%
+	\vspace{0.3cm}
+	\tiny #1 #2
+	\vspace{-0.03cm}
+	\par
+	\parbox[t][4.7cm][c]{5.3cm}{%
+	\hspace{-0.8cm} \large#3\\
+	}
+}
+
+\begin{document}
+%.%
+% \begin{picture}(15,20)(+4.8,-22.05)
+% \begin{tabular}[t]{*{2}{|p{10.05cm}}|}
+
+\begin{textblock}{5}(2,1)
+\textblocklabel{picture1}
+\mycard{}{\myCornerIdentifier}{
+\myBackLeftHandCorner
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(6,1)
+\textblocklabel{picture2}
+\mycard{}{\myCornerIdentifier}{
+\myBackMiddle
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(9,1)
+\textblocklabel{picture1}
+\mycard{}{\myCornerIdentifier}{
+\myBackRightHandCorner
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(1,4)
+\textblocklabel{picture2}
+\mycard{}{\myCornerIdentifier}{
+\myLeftMiddle
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(6,4)
+\textblocklabel{picture3}
+\mycard{}{\myCornerIdentifier}{
+\myMiddle
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(11,4)
+\textblocklabel{picture5}
+\mycard{}{\myCornerIdentifier}{
+\myRightMiddle
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(0.5,7)
+\textblocklabel{picture3}
+\mycard{}{\myCornerIdentifier}{
+\myFrontLeftHandCorner
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(6,7)
+\textblocklabel{picture5}
+\mycard{}{\myCornerIdentifier}{
+\myFrontMiddle
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{5}(11,7)
+\textblocklabel{picture3}
+\mycard{}{\myCornerIdentifier}{
+\myFrontRightHandCorner
+}{}{} 
+\end{textblock}
+
+\begin{textblock}{16}(0,0)
+
+\begin{figure}
+\begin{tikzpicture}
+	\draw (-12,5) -- (-3,12);
+	\draw (12,5) -- (3,12);
+
+	\draw (-8,-12) -- (-0.5,12);
+	\draw (8,-12) -- (0.5,12);
+
+	\draw[red] (-1.5,0) -- (1.5,0);
+	\draw[red] (0,-0.5) -- (0,0.5);
+
+	\draw (-12,-3) -- (12,-3);
+	\draw (-12,3) -- (12,3);
+	\draw (-12,10) -- (12,10);
+\end{tikzpicture}
+\end{figure}
+\end{textblock}
+
+% \begin{tiny}1\end{tiny}\newpage
+
+\end{document}
