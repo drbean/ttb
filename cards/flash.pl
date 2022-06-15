@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 May 19,  3:37:21 PM
+# Last Edit: 2022 Jun 09,  3:52:15 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -326,7 +326,7 @@ for my $set ( 0..$t-1 ) {
 	       unless all { defined $prompts{$_} } keys %prompts;
 	if ( @words < $n ) {
 		@extra = sample( set => \@words, sample_size => $n-@words );
-		$prompts{"ALSO: ${_}"} = $prompts{$_} for @extra;
+		$prompts{"* ${_}"} = $prompts{$_} for @extra;
 	}
 
 	my (%word_count, %part_count);
