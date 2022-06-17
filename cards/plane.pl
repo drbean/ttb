@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 May 19,  3:37:21 PM
+# Last Edit: 2022 Jun 17,  3:37:37 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -20,11 +20,16 @@ my $f = 0;
 my $nine = '';
 my $sixteen = '';
 my $pair = '';
+my ($tl, $tm, $tr, $ml, $mm, $mr, $bl, $bm, $br) = 9 x (0);
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair)
+	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair
+	, 'tl' => $tl, 'tm' => $tm, 'tr' => $tr
+	, 'ml' => $ml, 'mm' => $mm, 'mr' => $mr
+	, 'bl' => $bl, 'bm' => $bm, 'br' => $br
+) 
 		or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
