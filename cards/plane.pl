@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  9:03:50 PM
+# Last Edit: 2022 Jun 17,  9:31:22 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -37,6 +37,11 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 use IO::All;
 use YAML qw/LoadFile DumpFile/;
 
+my %corner = ( 
+	'bl' => $bl, 'bm' => $bm, 'br' => $br
+	, 'ml' => $ml, 'mm' => $mm, 'mr' => $mr
+	, 'fl' => $fl, 'fm' => $fm, 'fr' => $fr
+);
 my %romanize = (
 	0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
 	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
@@ -60,39 +65,20 @@ elsif (exists $story->{flash} && exists $story->{flash}->{$f} ) {
 }
 else { die "No match/flash $s story, form $f cards\n" }
 
-for my $set ( 0..$t-1 ) {
-	my (@words, %prompts, @prompts, @extra);
-	$lastcard = 0;
-	if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
-		my $pair = $flashcard->{pair};
-		push @words, $pair->[$_]->[1] for (0..$#$pair);
-		push @prompts, $pair->[$_]->[0] for (0..$#$pair);
-	}
-	elsif ( ref $flashcard eq 'HASH' and exists $flashcard->{word} and exists $flashcard->{call} ) {
-	       @words = split m/ /, $flashcard->{word};
-	       @prompts = @{ $flashcard->{call} };
-	       die "Unequal word, call numbers. Also check order"
-		       unless ( @words == @prompts );
-	}
-	elsif ( ref $flashcard eq 'HASH' ) {
-			@words = keys %$flashcard;
-			@prompts = values %$flashcard;
-	}
-	elsif ( ref $flashcard eq 'ARRAY' ) {
-		my $n;
-		for my $prompt ( @$flashcard ) {
-			(my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
-			push @words, $word;
-			die "No $word word in ${n}th, \"$prompt\" prompt"
-				unless $word;
-			$n++;
-			$prompts{$word} = $prompt;
-		}
-	}
-	else {
-		@words = split m/ /, $flashcard;
-		@prompts = @words;
-	}
+my @pic;
+if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
+	my $pair = $flashcard->{pair};
+	push @pic, $pair->[$_]->[1] for (0..$#$pair);
+}
+elsif ( ref $flashcard eq 'HASH' ) {
+		@pic = values %$flashcard;
+}
+else { die "$s story. form $f Format is match or flash?\n" }
+
+for my $corner ( keys %corner ) {
+	$latex->{$pick} = $corner{$pick} . ".jpg" if $corner{$pick};
+
+}
 	if ( @words > $n ) {
 		my @sample = sample( set => [0..$#words], sample_size => $n );
 		@words = @words[@sample];
