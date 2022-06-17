@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  8:06:10 PM
+# Last Edit: 2022 Jun 17,  8:30:49 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -42,15 +42,6 @@ my %romanize = (
 	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
-
-my ($landscape, $word_box, $pic_box);
-$landscape = $nine ? "\\usepackage[landscape]{geometry}\n" : '';
-$word_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$sixteen? "\\parbox[b][0.203\\paperheight][c]{0.20\\paperwidth}{%" :
-		"\\parbox[b][0.25\\paperheight][c]{9.5cm}{%";
-$pic_box = $nine ? "\\parbox[t][6.3cm][c]{6.5cm}{%" :
-		$sixteen? "\\parbox[t][0.232\\paperheight][b]{0.20\\paperwidth}{%" :
-		"\\parbox[b][6.7cm][c]{9.5cm}{%";
 
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
