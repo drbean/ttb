@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  3:37:37 PM
+# Last Edit: 2022 Jun 17,  8:06:10 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -26,9 +26,9 @@ GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
 	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair
-	, 'tl' => $tl, 'tm' => $tm, 'tr' => $tr
-	, 'ml' => $ml, 'mm' => $mm, 'mr' => $mr
 	, 'bl' => $bl, 'bm' => $bm, 'br' => $br
+	, 'ml' => $ml, 'mm' => $mm, 'mr' => $mr
+	, 'fl' => $fl, 'fm' => $fm, 'fr' => $fr
 ) 
 		or pod2usage(2);
 pod2usage(1) if $help;
