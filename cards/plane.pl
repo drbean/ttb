@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  8:30:49 PM
+# Last Edit: 2022 Jun 17,  8:32:24 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -42,71 +42,6 @@ my %romanize = (
 	, 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
-
-my $latexString = <<"START_LATEX";
-\\documentclass[a4paper]{article}
-\\usepackage{fontspec}
-\\usepackage{xeCJK}
-$landscape
-\\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
-\\setCJKmainfont{NotoSansCJK-Regular.ttc}[
-	       Path = /usr/share/fonts/noto/,
-	       ]
-% \\usepackage[absolute,noshowtext,showboxes]{textpos}
-\\usepackage[absolute,showboxes]{textpos}
-% \\usepackage[absolute]{textpos}
-% \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
-% \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
-% \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
-\\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
-%\\usepackage{texdraw}
-\\usepackage{multicol}
-% \\usepackage{soul}
-\\pagestyle{empty}
-\\setlength{\\unitlength}{1cm}
-\\usepackage{graphicx}
-\\graphicspath{ {/home/$ENV{USER}/curriculum/topics/$ENV{TOPIC}/pic} }
-\\pagestyle{empty}
-
-\\newcommand{\\wordX${s}X$romanize{$f}Xcard}[2]{%
-	\\vspace{0.5cm}
-	\\small #1
-	\\par
-	\\vspace{-0.7cm}
-	$word_box
-	\\hspace{0.1cm} \\huge#2\\\\
-	}
-}
-
-\\newcommand{\\playingX${s}X$romanize{$f}Xcard}[2]{%
-	\\vspace{0.5cm}
-	\\small #1
-	\\par
-	\\vspace{+0.7cm}
-	$word_box
-	\\large#2\\\\
-	\\vspace{+0.9cm}
-	\\put (0,-0.8){\\rotatebox[origin=c]{180}{\\parbox[t][0.117\\paperheight][c]{0.20\\paperwidth}{\\large#2}}}
-	%\\rotatebox[origin=rB]{180}{
-	%\\wordX${s}X$romanize{$f}Xcard{}{%
-	%#2 \\hfill}} \\\\
-	\\vspace{-1.6cm}
-	\\flushright \\rotatebox[origin=c]{180}{\\small #1}
-	\\vfill
-	}
-}
-
-\\newcommand{\\pictureX${s}X$romanize{$f}Xcard}[2]{%
-	\\vspace{0.5cm}
-	\\small #1
-	\\par
-	\\vspace{-0.5cm}
-	$pic_box
-	\\hspace{0.1cm} #2\\\\
-	}
-}
-
-START_LATEX
 
 my @latex;
 if ( $sixteen ) {
