@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  8:35:23 PM
+# Last Edit: 2022 Jun 17,  9:03:50 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -43,13 +43,14 @@ my %romanize = (
 	, 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
 );
 
+my $latex;
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
 my $story = $cards->{$s};
 die "No $s story" unless ref $story eq 'HASH';
 my $identifier = "$s $f";
 $identifier =~ s/_/ /;
-$latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
+$latex->{identifier} = $identifier;
 my $flashcard;
 if (exists $story->{match} && exists $story->{match}->{$f} ) {
         $flashcard = $story->{match}->{$f};
@@ -57,13 +58,7 @@ if (exists $story->{match} && exists $story->{match}->{$f} ) {
 elsif (exists $story->{flash} && exists $story->{flash}->{$f} ) {
 	$flashcard = $story->{flash}->{$f};
 }
-elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
-	$flashcard = $story->{$f}->{flash};
-
-}
-else { die "No flashcard for $s story, form $f" }
-
-$latexString .= "\\begin{document}\n\n";
+else { die "No match/flash $s story, form $f cards\n" }
 
 for my $set ( 0..$t-1 ) {
 	my (@words, %prompts, @prompts, @extra);
