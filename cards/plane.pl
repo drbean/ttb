@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20,  3:31:55 PM
+# Last Edit: 2022 Jun 20,  3:55:44 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -91,10 +91,12 @@ if ( keys %pic > $n ) {
 	@pic = @sample;
 }
 if ( keys %pic < $n ) {
-	my @extra = sample( $n, @pic );
+	my @extra = sample( ($n-keys %pic), @pic );
 	@pic = (@pic, @extra);
 }
 
+die "unpicked=@{[keys %unpicked]}, pic=@pic\n" unless
+	(keys %unpicked) == @pic;
 @$latex{keys %unpicked} = shuffle @pic;
 
 $latex->{cardIdentifier} = "$identifier";
