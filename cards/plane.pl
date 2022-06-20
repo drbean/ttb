@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 12:07:27 PM
+# Last Edit: 2022 Jun 20, 12:15:25 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -83,7 +83,7 @@ for my $pick ( keys %corner ) {
 	}
 }
 
-if ( @pic > $n ) {
+if ( values(%pic) - values(%picked) > $n ) {
 	my @sample = sample( $n, @pic );
 	@pic = @sample;
 }
