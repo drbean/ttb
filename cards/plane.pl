@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 12:06:40 PM
+# Last Edit: 2022 Jun 20, 12:07:27 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -82,14 +82,15 @@ for my $pick ( keys %corner ) {
 		$n--;
 	}
 }
-	if ( @pic > $n ) {
-		my @sample = sample( $n, @pic );
-		@pic = @sample;
-	}
-	if ( @words < $n ) {
-		my @extra = sample( $n, @pic );
-		push @pic, @extra;
-	}
+
+if ( @pic > $n ) {
+	my @sample = sample( $n, @pic );
+	@pic = @sample;
+}
+if ( @words < $n ) {
+	my @extra = sample( $n, @pic );
+	push @pic, @extra;
+}
 
 	for my $card ( keys %prompts, values %prompts ) {
 
