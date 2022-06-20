@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20,  2:59:41 PM
+# Last Edit: 2022 Jun 20,  3:31:55 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -23,7 +23,7 @@ my $topic = '';
 my $nine = '';
 my $sixteen = '';
 my $pair = '';
-my ($fl, $fm, $fr, $ml, $mm, $mr, $bl, $bm, $br) = 9 x ('');
+my ($fl, $fm, $fr, $ml, $mm, $mr, $bl, $bm, $br) = ('') x 9;
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
