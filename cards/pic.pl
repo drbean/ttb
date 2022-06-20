@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 13,  2:05:24 PM
+# Last Edit: 2022 Jun 20,  9:37:43 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -19,18 +19,18 @@ my $f = 0;
 my $nine = '';
 my $sixteen = '';
 my $pair = '';
+my $plane = '';
 my $type = '';
 
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
 	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair
-        , 'type=s' => \$type
+        , 'plane' => \$plane, 'type=s' => \$type
 		) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
-use IO::All;
 use YAML qw/LoadFile DumpFile/;
 
 my %romanize = (
@@ -92,7 +92,7 @@ $landscape
 
 START_LATEX
 
-my $layout = { tile => [
+my $layout = { plane => { tile => [
 	[
 		{ page => 1, xy => "0,0" },
 		{ page => 1, xy => "1.8,0" },
@@ -204,7 +204,127 @@ my $layout = { tile => [
 		{ page => 1, xy => "5.3, 10.6" },
 		{ page => 1, xy => "10.6, 10.6" },
 		]
-};
+	}
+	, { pic => { tile => [
+	[
+		{ page => 1, xy => "0,0" },
+		{ page => 1, xy => "1.8,0" },
+		{ page => 1, xy => "3.6,0" },
+		{ page => 1, xy => "0,1.8" },
+		{ page => 1, xy => "1.8,1.8" },
+		{ page => 1, xy => "3.6,1.8" },
+		{ page => 1, xy => "0,3.6" },
+		{ page => 1, xy => "1.8,3.6" },
+		{ page => 1, xy => "3.6,3.6" },
+	]
+	, [
+		{ page => 1, xy => "5.3,0" },
+		{ page => 1, xy => "7.1,0" },
+		{ page => 1, xy => "8.9,0" },
+		{ page => 1, xy => "5.3,1.8" },
+		{ page => 1, xy => "7.1,1.8" },
+		{ page => 1, xy => "8.9,1.8" },
+		{ page => 1, xy => "5.3,3.6" },
+		{ page => 1, xy => "7.1,3.6" },
+		{ page => 1, xy => "8.9,3.6" },
+	]
+	, [
+		{ page => 1, xy => "10.6,0" },
+		{ page => 1, xy => "12.4,0" },
+		{ page => 1, xy => "14.2,0" },
+		{ page => 1, xy => "10.6,1.8" },
+		{ page => 1, xy => "12.4,1.8" },
+		{ page => 1, xy => "14.2,1.8" },
+		{ page => 1, xy => "10.6,3.6" },
+		{ page => 1, xy => "12.4,3.6" },
+		{ page => 1, xy => "14.2,3.6" },
+	]
+	, [
+		{ page => 1, xy => "  0,5.3" },
+		{ page => 1, xy => "1.8,5.3" },
+		{ page => 1, xy => "3.6,5.3" },
+		{ page => 1, xy => "  0,7.1" },
+		{ page => 1, xy => "1.8,7.1" },
+		{ page => 1, xy => "3.6,7.1" },
+		{ page => 1, xy => "  0,8.9" },
+		{ page => 1, xy => "1.8,8.9" },
+		{ page => 1, xy => "3.6,8.9" },
+	]
+	, [
+		{ page => 1, xy => "5.3,5.3" },
+		{ page => 1, xy => "7.1,5.3" },
+		{ page => 1, xy => "8.9,5.3" },
+		{ page => 1, xy => "5.3,7.1" },
+		{ page => 1, xy => "7.1,7.1" },
+		{ page => 1, xy => "8.9,7.1" },
+		{ page => 1, xy => "5.3,8.9" },
+		{ page => 1, xy => "7.1,8.9" },
+		{ page => 1, xy => "8.9,8.9" },
+	]
+	, [
+		{ page => 1, xy => "10.6,5.3" },
+		{ page => 1, xy => "12.4,5.3" },
+		{ page => 1, xy => "14.2,5.3" },
+		{ page => 1, xy => "10.6,7.1" },
+		{ page => 1, xy => "12.4,7.1" },
+		{ page => 1, xy => "14.2,7.1" },
+		{ page => 1, xy => "10.6,8.9" },
+		{ page => 1, xy => "12.4,8.9" },
+		{ page => 1, xy => "14.2,8.9" },
+	]
+	, [
+		{ page => 1, xy => "  0,10.6" },
+		{ page => 1, xy => "1.8,10.6" },
+		{ page => 1, xy => "3.6,10.6" },
+		{ page => 1, xy => "  0,12.4" },
+		{ page => 1, xy => "1.8,12.4" },
+		{ page => 1, xy => "3.6,12.4" },
+		{ page => 1, xy => "  0,14.2" },
+		{ page => 1, xy => "1.8,14.2" },
+		{ page => 1, xy => "3.6,14.2" },
+	]
+	, [
+		{ page => 1, xy => "5.3,10.6" },
+		{ page => 1, xy => "7.1,10.6" },
+		{ page => 1, xy => "8.9,10.6" },
+		{ page => 1, xy => "5.3,12.4" },
+		{ page => 1, xy => "7.1,12.4" },
+		{ page => 1, xy => "8.9,12.4" },
+		{ page => 1, xy => "5.3,14.2" },
+		{ page => 1, xy => "7.1,14.2" },
+		{ page => 1, xy => "8.9,14.2" },
+	]
+	, [
+		{ page => 1, xy => "10.6,10.6" },
+		{ page => 1, xy => "12.4,10.6" },
+		{ page => 1, xy => "14.2,10.6" },
+		{ page => 1, xy => "10.6,12.4" },
+		{ page => 1, xy => "12.4,12.4" },
+		{ page => 1, xy => "14.2,12.4" },
+		{ page => 1, xy => "10.6,14.2" },
+		{ page => 1, xy => "12.4,14.2" },
+		{ page => 1, xy => "14.2,14.2" },
+	]
+		],
+	full => [
+		{ page => 1, xy => "0, 0" },
+		{ page => 1, xy => "5.3, 0" },
+		{ page => 1, xy => "10.6, 0" },
+		{ page => 1, xy => "0, 5.3" },
+		{ page => 1, xy => "5.3, 5.3" },
+		{ page => 1, xy => "10.6, 5.3" },
+		{ page => 1, xy => "0, 10.6" },
+		{ page => 1, xy => "5.3, 10.6" },
+		{ page => 1, xy => "10.6, 10.6" },
+		]
+	}
+} };
+if  ( $plane ) {
+	$layout->{$_} = $layout->{plane}->{$_} for qw/full tile/;
+}
+else {
+	$layout->{$_} = $layout->{pic}->{$_} for qw/full tile/;
+}
 my $fullpage=$nine? 9: $sixteen? 16: 8;
 
 my $cards = LoadFile "$ARGV[0]/cards.yaml";
@@ -327,8 +447,8 @@ for my $card ( 0..$t-1 ) {
 }
 $latexString .= "\\end{document}\n";
 
-my $bio = io "$ARGV[0]/pic_${s}_$f.tex";
-$bio->print( $latexString );
+open TEX, "> $ENV{HOME}/curriculum/topics/$ARGV[0]/pic_${s}_$f.tex";
+print TEX $latexString;
 
 __END__
 
