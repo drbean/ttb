@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 11:15:06 AM
+# Last Edit: 2022 Jun 20, 11:20:02 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -86,21 +86,6 @@ for my $corner ( keys %corner ) {
 		my @extra = sample( $n, @pic );
 		push @pic, @extra;
 	}
-
-	my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
-	my $pic_height = $nine ? "0.30\\paperheight" :
-				$sixteen ? "0.195\\paperheight" : 
-				"0.20\\paperheight";
-	my $pic_width = $nine ? "0.30\\paperwidth" : 
-			$sixteen ? "0.20\\paperwidth" : "0.40\\paperwidth";
-	#for my $word ( keys %prompts ) {
-	#	my $extracized_word = ( $word =~ m/^extra (.*)$/ ) ? $1 : $word;
-	#	if ( $prompts{$extracized_word} =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-	#		$prompts{$word} =
-	#"\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$prompts{$word}}";
-	#	}
-	#}
-
 
 	for my $card ( keys %prompts, values %prompts ) {
 
