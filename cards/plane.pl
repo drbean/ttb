@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 11:20:02 AM
+# Last Edit: 2022 Jun 20, 12:06:40 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -74,9 +74,13 @@ elsif ( ref $flashcard eq 'HASH' ) {
 }
 else { die "$s story. form $f format is match or flash?\n" }
 
-for my $corner ( keys %corner ) {
-	$latex->{$pick} = $corner{$pick} . ".jpg" if $corner{$pick};
-
+my %picked;
+for my $pick ( keys %corner ) {
+	if ( $corner{$pick} ) {
+		$latex->{$pick} = $corner{$pick} . ".jpg";
+		$picked{$pick} = $corner{$pick};
+		$n--;
+	}
 }
 	if ( @pic > $n ) {
 		my @sample = sample( $n, @pic );
