@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 12:26:46 PM
+# Last Edit: 2022 Jun 20,  1:30:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -74,25 +74,27 @@ elsif ( ref $flashcard eq 'HASH' ) {
 }
 else { die "$s story. form $f format is match or flash?\n" }
 
-my %picked;
+my %unpicked = %corner;
 for my $pick ( keys %corner ) {
 	if ( $corner{$pick} ) {
-		$latex->{$pick} = $corner{$pick} . ".jpg";
-		$picked{$pick} = $corner{$pick};
+		$latex->{$pick} = $corner{$pick};
+		delete $unpicked{$pick};
 		delete $pic{$corner{$pick};
 		$n--;
 	}
 }
 
-my @pic;
-if ( values(%pic) - values(%picked) > $n ) {
-	my @sample = sample( $n, @pic );
+my @pic = keys %pic;
+if ( keys %pic > $n ) {
+	my @sample = sample( $n, values(%pic) );
 	@pic = @sample;
 }
-if ( @words < $n ) {
+if ( keys %pic < $n ) {
 	my @extra = sample( $n, @pic );
-	push @pic, @extra;
+	@pic = (@pic, @extra);
 }
+
+@$latex{keys %$unpicked} = shuffle @pic;
 
 	for my $card ( keys %prompts, values %prompts ) {
 
