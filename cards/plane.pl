@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 11:05:43 AM
+# Last Edit: 2022 Jun 20, 11:15:06 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -87,38 +87,6 @@ for my $corner ( keys %corner ) {
 		push @pic, @extra;
 	}
 
-	my (%word_count, %part_count);
-	$word_count{$_}++ for @words;
-	for my $word ( keys %prompts ) {
-		for my $other ( keys %prompts ) {
-			next if $word eq $other;
-			my $prompt = $prompts{$other};
-			my @noise = split /[-,._\s]/, $prompt;
-			my @lc_noise = map (lc, @noise);
-			my @parts = split m/[_\s]/, $word;
-			my @lc_parts = map (lc, @parts);
-			for my $part ( @lc_parts ) {
-				for my $dupe ( @lc_noise ) {
-					$part_count{$part}++ if 
-						(($dupe eq $part)
-							# or ($dupe =~ m/$part/)
-							# or ($part =~ m/$dupe/)
-				);
-				}
-			}
-		}
-	}
-	for my $word ( @words ) {
-		die "calling '$word' word $word_count{$word} times"
-			unless $word_count{$word} == 1;
-	}
-	#for my $part ( keys %part_count ) {
-	#	die "'$part' dupe present $part_count{$part} times"
-	#		unless $part_count{$part} == 0;
-	#}
-	die "No word for some prompts. Sample size > word number?" unless
-		(values %prompts) - @extra == scalar @words;
-		
 	my $width = $nine ? "5.3" : $sixteen ? "4" : "8";
 	my $pic_height = $nine ? "0.30\\paperheight" :
 				$sixteen ? "0.195\\paperheight" : 
