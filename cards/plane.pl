@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20, 12:15:25 PM
+# Last Edit: 2022 Jun 20, 12:26:46 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -64,13 +64,13 @@ elsif (exists $story->{flash} && exists $story->{flash}->{$f} ) {
 }
 else { die "No match/flash $s story, form $f cards\n" }
 
-my @pic;
+my %pic;
 if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
 	my $pair = $flashcard->{pair};
-	push @pic, $pair->[$_]->[1] for (0..$#$pair);
+	$pic{$pair->[$_]->[1]} = $pair->[$_]->[0] for (0..$#$pair);
 }
 elsif ( ref $flashcard eq 'HASH' ) {
-		@pic = values %$flashcard;
+		$pic{$flashcard->{$_}} = $_ for keys %$flashcard;
 }
 else { die "$s story. form $f format is match or flash?\n" }
 
@@ -79,10 +79,12 @@ for my $pick ( keys %corner ) {
 	if ( $corner{$pick} ) {
 		$latex->{$pick} = $corner{$pick} . ".jpg";
 		$picked{$pick} = $corner{$pick};
+		delete $pic{$corner{$pick};
 		$n--;
 	}
 }
 
+my @pic;
 if ( values(%pic) - values(%picked) > $n ) {
 	my @sample = sample( $n, @pic );
 	@pic = @sample;
