@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 17,  9:31:22 PM
+# Last Edit: 2022 Jun 20, 11:05:43 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,8 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum all/;
+use List::Util qw/sum all sample/;
 
 my $man = 0;
 my $help = 0;
@@ -73,23 +72,19 @@ if ( ref $flashcard eq 'HASH' and exists $flashcard->{pair} ) {
 elsif ( ref $flashcard eq 'HASH' ) {
 		@pic = values %$flashcard;
 }
-else { die "$s story. form $f Format is match or flash?\n" }
+else { die "$s story. form $f format is match or flash?\n" }
 
 for my $corner ( keys %corner ) {
 	$latex->{$pick} = $corner{$pick} . ".jpg" if $corner{$pick};
 
 }
-	if ( @words > $n ) {
-		my @sample = sample( set => [0..$#words], sample_size => $n );
-		@words = @words[@sample];
-		@prompts = @prompts[@sample];
+	if ( @pic > $n ) {
+		my @sample = sample( $n, @pic );
+		@pic = @sample;
 	}
-	@prompts{@words} = @prompts;
-	die "Undefined prompts"
-	       unless all { defined $prompts{$_} } keys %prompts;
 	if ( @words < $n ) {
-		@extra = sample( set => \@words, sample_size => $n-@words );
-		$prompts{"ALSO: ${_}"} = $prompts{$_} for @extra;
+		my @extra = sample( $n, @pic );
+		push @pic, @extra;
 	}
 
 	my (%word_count, %part_count);
