@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20,  1:30:09 PM
+# Last Edit: 2022 Jun 20,  1:36:10 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -96,75 +96,6 @@ if ( keys %pic < $n ) {
 
 @$latex{keys %$unpicked} = shuffle @pic;
 
-	for my $card ( keys %prompts, values %prompts ) {
-
-		if ( $sixteen and $card !~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/) {
-			my $upside_down_xy = "$latex[$paging]->{x}," . ($latex[$paging]->{y} + 2);
-			$latexString .= "
-	\\TPshowboxestrue
-	\\begin{textblock}{$width}($latex[$paging]->{xy})
-	\\textblocklabel{playingcard$latex[$paging]->{xy}}
-	\\playingX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-	$card \\hfill}
-	%\\begin{textblock}{$width}($upside_down_xy)
-	%\\textblocklabel{bottombox$upside_down_xy}
-	%\\rotatebox[origin=rB]{180}{
-	%\\wordX${s}X$romanize{$f}Xcard{}{%
-	%$card \\hfill}} \\\\
-	%\\vspace{0.5cm}
-	%\\flushright \\rotatebox[origin=c]{180}{\\small \\flashcardX${s}X$romanize{$f}XIdentifier}
-	%\\vfill
-	\\end{textblock}\n \\TPshowboxesfalse \n";
-		}
-		else {
-			$latexString .= 
-	"\\TPshowboxestrue
-	\\begin{textblock}{$width}($latex[$paging]->{xy})";
-			if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
-				$latexString .= "
-	\\textblocklabel{picture$latex[$paging]->{xy}}
-	\\pictureX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-	\\includegraphics[angle=00,height=$pic_height,width=$pic_width]{$card}";
-			}
-			else {
-				$latexString .= "
-	\\textblocklabel{word$latex[$paging]->{xy}}
-	\\wordX${s}X$romanize{$f}Xcard{\\flashcardX${s}X$romanize{$f}XIdentifier}{%
-	$card \\hfill";
-			}
-			$latexString .= "
-	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
-		}
-		&paging;
-	}
-	$lastcard = 1;
-	$latexString .= "
-\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n" unless
-		$paging == $fullpage or
-		$paging == 2*$fullpage or
-		$paging == 3*$fullpage;
-		$paging = 0;
-	}
-$latexString .= "\\end{document}\n";
-
-my $bio = io "$ARGV[0]/flash_${s}_$f.tex";
-$bio->print( $latexString );
-
-sub paging
-{
-	my $end_check = $paging == $fullpage or
-		$paging == 2*$fullpage or
-		$paging == 3*$fullpage;
-	if ($paging == $fullpage-1 or $paging == 2*$fullpage-1 or $paging == 3*$fullpage-1 )
-	{
-		$latexString .= "
-\\begin{tiny}$latex[$paging]->{page}\\end{tiny}\\newpage\n\n";
-		$paging++;
-
-	}
-	elsif ($paging == 3*$fullpage-1) { $paging = 0; }
-	else { $paging++; }
-}
 
 __END__
 
