@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 21, 12:52:50 PM
+# Last Edit: 2022 Jun 21,  1:03:50 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -206,7 +206,7 @@ my $layout = { plane => { tile => [
 		{ page => 1, xy => "11, 11" },
 		]
 	}
-	, { pic => { tile => [
+	, pic => { tile => [
 	[
 		{ page => 1, xy => "0,0" },
 		{ page => 1, xy => "1.8,0" },
@@ -319,7 +319,7 @@ my $layout = { plane => { tile => [
 		{ page => 1, xy => "10.6, 10.6" },
 		]
 	}
-} };
+};
 if  ( $plane ) {
 	$layout->{$_} = $layout->{plane}->{$_} for qw/full tile/;
 }
