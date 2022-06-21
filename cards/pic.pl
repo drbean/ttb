@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 21, 11:16:05 AM
+# Last Edit: 2022 Jun 21, 12:04:35 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -198,12 +198,12 @@ my $layout = { plane => { tile => [
 		{ page => 1, xy => "2, 1" },
 		{ page => 1, xy => "6, 1" },
 		{ page => 1, xy => "9, 1" },
-		{ page => 1, xy => "1, 4" },
-		{ page => 1, xy => "6.3, 4" },
-		{ page => 1, xy => "11.6, 4" },
-		{ page => 1, xy => "0.5, 7" },
-		{ page => 1, xy => "6, 7" },
-		{ page => 1, xy => "11, 7" },
+		{ page => 1, xy => "1, 5" },
+		{ page => 1, xy => "6.3, 5" },
+		{ page => 1, xy => "11.6, 5" },
+		{ page => 1, xy => "0.5, 11" },
+		{ page => 1, xy => "6, 11" },
+		{ page => 1, xy => "11, 11" },
 		]
 	}
 	, { pic => { tile => [
