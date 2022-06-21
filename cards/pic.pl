@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 20,  9:37:43 PM
+# Last Edit: 2022 Jun 21, 11:16:05 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -55,8 +55,8 @@ $landscape
 	       Path = /usr/share/fonts/noto/,
 	       ]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
-\\usepackage[absolute,showboxes]{textpos}
-% \\usepackage[absolute]{textpos}
+% \\usepackage[absolute,showboxes]{textpos}
+\\usepackage[absolute]{textpos}
 % \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
 % \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
 % \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
@@ -64,6 +64,7 @@ $landscape
 %\\usepackage{texdraw}
 \\usepackage{multicol}
 % \\usepackage{soul}
+\\usepackage{tikz}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 \\usepackage{graphicx}
@@ -194,15 +195,15 @@ my $layout = { plane => { tile => [
 	]
 		],
 	full => [
-		{ page => 1, xy => "0, 0" },
-		{ page => 1, xy => "5.3, 0" },
-		{ page => 1, xy => "10.6, 0" },
-		{ page => 1, xy => "0, 5.3" },
-		{ page => 1, xy => "5.3, 5.3" },
-		{ page => 1, xy => "10.6, 5.3" },
-		{ page => 1, xy => "0, 10.6" },
-		{ page => 1, xy => "5.3, 10.6" },
-		{ page => 1, xy => "10.6, 10.6" },
+		{ page => 1, xy => "2, 1" },
+		{ page => 1, xy => "6, 1" },
+		{ page => 1, xy => "9, 1" },
+		{ page => 1, xy => "1, 4" },
+		{ page => 1, xy => "6.3, 4" },
+		{ page => 1, xy => "11.6, 4" },
+		{ page => 1, xy => "0.5, 7" },
+		{ page => 1, xy => "6, 7" },
+		{ page => 1, xy => "11, 7" },
 		]
 	}
 	, { pic => { tile => [
@@ -392,7 +393,7 @@ for my $pos ( 0 .. $#pic ) {
 	my $card = $pic[$pos];
 	my $block_width = "5.3";
 	$latexString .= 
-	"\\TPshowboxestrue
+	"%\\TPshowboxestrue
 	\\begin{textblock}{$block_width}($layout->{full}->[$pos]->{xy})";
 	if ( $card =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 		$latexString .= "
@@ -403,6 +404,27 @@ for my $pos ( 0 .. $#pic ) {
 	$latexString .= "
 	} \n \\end{textblock}\n %\\TPshowboxesfalse \n";
 }
+
+$latexString .= "\\begin{textblock}{16}(0,0)
+
+\\begin{figure}
+\\begin{tikzpicture}
+	\\draw (-12,5) -- (-3,12);
+	\\draw (12,5) -- (3,12);
+
+	\\draw (-8,-12) -- (-0.5,12);
+	\\draw (8,-12) -- (0.5,12);
+
+	\\draw[red] (-1.5,0) -- (1.5,0);
+	\\draw[red] (0,-0.5) -- (0,0.5);
+
+	\\draw (-12,-3) -- (12,-3);
+	\\draw (-12,3) -- (12,3);
+	\\draw (-12,10) -- (12,10);
+\\end{tikzpicture}
+\\end{figure}
+\\end{textblock}\n\n" if $plane;
+
 
 $latexString .= "\\begin{tiny}1\\end{tiny}\\newpage\n\n";
 
@@ -429,7 +451,7 @@ for my $card ( 0..$t-1 ) {
 		my $tile = $pic{$pos};
 
 		$latexString .= 
-	"\\TPshowboxestrue
+	"%\\TPshowboxestrue
 	\\begin{textblock}{$block_width}($layout->{tile}->[$recard]->[$pos]->{xy})";
 		if ( $tile =~ m/^[-_[:alnum:]]+\.(png|jpg|gif)$/ ) {
 			$latexString .= "
