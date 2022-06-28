@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 21,  1:03:50 PM
+# Last Edit: 2022 Jun 26,  9:30:47 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -431,15 +431,17 @@ $latexString .= "\\begin{tiny}1\\end{tiny}\\newpage\n\n";
 my $page = 0;
 my $next_page = "no";
 my $recard;
+my $page_count = 0;
 
 for my $card ( 0..$t-1 ) {
 	if ( $next_page eq "yes" ) {
 		$latexString .= "\\begin{tiny}2\\end{tiny}\\newpage\n\n";
 		$page = 0;
 		$next_page = "no";
+		$page_count++;
 	}
 	if ( $card >= $fullpage ) {
-		$recard = $card - $fullpage;
+		$recard = $card - $fullpage * $page_count;
 	}
 	else { $recard = $card }
 	my $alternate = $tag[ $card % 2 ];
@@ -476,7 +478,7 @@ __END__
 
 =head1 NAME
 
-pic.pl - Create 9/18 2-diff 3x3 card array
+pic.pl - Create 2-diff 3x3 card arrays
 
 =head1 SYNOPSIS
 
@@ -484,9 +486,7 @@ perl ttb/cards/pic.pl -t 18 -n 9 -s equipment -f 0 play
 
 =head1 DESCRIPTION
 
-Makes 9 or 18 cards from fth flashcard sequence in equipment mapping in topics/play/cards.yaml. If n is less than the number of words in the sequence, make a random sample of them. If n is greater, add sampled extra words.
-
-If the optional -t (team) option exists, create t cards.
+Makes t cards from fth flashcard sequence in equipment mapping in topics/play/cards.yaml. If n is less than the number of words in the sequence, makes a random sample of them. If n is greater, adds sampled extra words.
 
 Each card with 9 tiles has around 2 tiles which are in different positions than in a master arrangement.
 
