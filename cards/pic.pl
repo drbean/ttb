@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 26,  9:30:47 PM
+# Last Edit: 2022 Jun 28,  9:48:14 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -432,9 +432,49 @@ my $page = 0;
 my $next_page = "no";
 my $recard;
 my $page_count = 0;
+my $tikz = << 'TIKZ';
+\begin{textblock}{16}(-0.5,0.5)
+  \begin{figure}
+  \begin{tikzpicture}
+          \draw[red] (-11.5,7) -- (-8.5,7);
+          \draw (-13,4) -- (-10.5,10); \draw (-7,4) -- (-8.5,10);
+          \draw (-15,8) -- (-11.5,10); \draw (-5,8) -- (-7.5,10);
+          \draw[red] (-1.5,7) -- (1.5,7);
+          \draw (-3,4) -- (-0.5,10); \draw (3,4) -- (0.5,10);
+          \draw (-5,8) -- (-1.5,10); \draw (5,8) -- (1.5,10);
+          \draw[red] (8.5,7) -- (11.5,7);
+          \draw (7,4) -- (9.5,10); \draw (13,4) -- (10.5,10);
+          \draw (5,8) -- (8.5,10); \draw (15,8) -- (11.5,10);
+
+          \draw[red] (-11.5,0) -- (-8.5,0);
+          \draw (-13,-3) -- (-10.5,3); \draw (-7,-3) -- (-8.5,3);
+          \draw (-15,1) -- (-11.5,3); \draw (-5,1) -- (-7.5,3);
+
+          \draw[red] (-1.5,0) -- (1.5,0);
+          \draw (-3,-3) -- (-0.5,3); \draw (3,-3) -- (0.5,3);
+          \draw (-5,1) -- (-1.5,3); \draw (5,1) -- (1.5,3);
+
+          \draw[red] (8.5,0) -- (11.5,0);
+          \draw (7,-3) -- (9.5,3); \draw (13,-3) -- (10.5,3);
+          \draw (5,1) -- (8.5,3); \draw (15,1) -- (11.5,3);
+
+          \draw[red] (-11.5,-7) -- (-8.5,-7);
+          \draw (-13,-10) -- (-10.5,-4); \draw (-7,-10) -- (-8.5,-4);
+          \draw (-15,-6) -- (-11.5,-4); \draw (-5,-6) -- (-7.5,-4);
+          \draw[red] (-1.5,-7) -- (1.5,-7);
+          \draw (-3,-10) -- (-0.5,-4); \draw (3,-10) -- (0.5,-4);
+          \draw (-5,-6) -- (-1.5,-4); \draw (5,-6) -- (1.5,-4);
+          \draw[red] (8.5,-7) -- (11.5,-7);
+          \draw (7,-10) -- (9.5,-4); \draw (13,-10) -- (10.5,-4);
+          \draw (5,-6) -- (8.5,-4); \draw (15,-6) -- (11.5,-4);
+  \end{tikzpicture}
+  \end{figure}
+  \end{textblock}
+TIKZ
 
 for my $card ( 0..$t-1 ) {
 	if ( $next_page eq "yes" ) {
+		$latexString .= $tikz;
 		$latexString .= "\\begin{tiny}2\\end{tiny}\\newpage\n\n";
 		$page = 0;
 		$next_page = "no";
@@ -469,6 +509,7 @@ for my $card ( 0..$t-1 ) {
 	$page++;
 	$next_page = "yes" if $page == $fullpage;
 }
+$latexString .= $tikz;
 $latexString .= "\\end{document}\n";
 
 open TEX, "> $ENV{HOME}/curriculum/topics/$ARGV[0]/pic_${s}_$f.tex";
