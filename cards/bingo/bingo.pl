@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 26,  9:34:29 PM
+# Last Edit: 2022 Aug 01,  4:22:49 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -22,12 +22,15 @@ my $reverse = '';
 my $swap = '';
 my $type = '';
 my $paper = 'a7';
+my $four = '';
+my $five = '';
 
 GetOptions (
         'help|?' => \$help, man => \$man
         , 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
         , 'swap' => \$swap, 'reverse' => \$reverse
         , 'type=s' => \$type, 'paper=s' => \$paper
+	, 'four' => \$four, 'five' => \$five
                 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -79,14 +82,14 @@ my $latexString = <<"START_LATEX";
 START_LATEX
 
 my $layout = { a7 => { latex => [
-                        { page => 1, xy => "0,0" },
-                        { page => 1, xy => "8,0" },
-                        { page => 1, xy => "0,4" },
-                        { page => 1, xy => "8,4" },
-                        { page => 1, xy => "0,8" },
-                        { page => 1, xy => "8,8" },
-                        { page => 1, xy => "0,12" },
-                        { page => 1, xy => "8,12" },
+                        { page => 1, x => "0", y => "0" , xy => "0,0" },
+                        { page => 1, x => "8", y => "0" , xy => "8,0" },
+                        { page => 1, x => "0", y => "4" , xy => "0,4" },
+                        { page => 1, x => "8", y => "4" , xy => "8,4" },
+                        { page => 1, x => "0", y => "8" , xy => "0,8" },
+                        { page => 1, x => "8", y => "8" , xy => "8,8" },
+                        { page => 1, x => "0", y => "12", xy => "0,12" },
+                        { page => 1, x => "8", y => "12", xy => "8,12" },
                 ],
                 i => 3},
         a6 => { latex => [
@@ -97,6 +100,29 @@ my $layout = { a7 => { latex => [
                 ],
                 i => 5}
 };
+
+my $grid;
+if ( $four ) {
+	$grid = [
+		[ x => 0, y => 0 ]
+		, [ x => 0, y => 0 ]
+		, [ x => 1, y => 0 ]
+		, [ x => 2, y => 0 ]
+		, [ x => 3, y => 0 ]
+		, [ x => 0, y => 1 ]
+		, [ x => 1, y => 1 ]
+		, [ x => 2, y => 1 ]
+		, [ x => 3, y => 1 ]
+		, [ x => 0, y => 2 ]
+		, [ x => 1, y => 2 ]
+		, [ x => 2, y => 2 ]
+		, [ x => 3, y => 2 ]
+		, [ x => 0, y => 3 ]
+		, [ x => 1, y => 3 ]
+		, [ x => 2, y => 3 ]
+		, [ x => 3, y => 3 ]
+	];
+}
 
 my $latex = $layout->{$paper}->{latex};
 
@@ -244,10 +270,24 @@ for my $prompt ( 0 .. $prompt_n ) {
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}{";
 	if ( $reverse ) {
-		$latexString .= "\\large\n" if $reverse;
-		$latexString .= "\\begin{multicols}{4}";
-		$latexString .= (s/_/\\_/g, "- $_\\\\") for sort @call;
-		$latexString .= "\\end{multicols}";
+		if ( $four ) {
+			for my $pos ( 0 .. $#call ) {
+				my $cell = ( $latex->[$paging]->{x}
+					+ $grid->[$pos]->{x} ) . "," .
+					( $latex->[$paging]->{y}
+					+ $grid->[$pos]->{y} );
+				$latexString .=
+				"\\begin{textblock}{1}($cell)
+				$call[$pos]
+				\\end{textblock}";
+				}
+		}
+		else {
+			$latexString .= "\\large\n" if $reverse;
+			$latexString .= "\\begin{multicols}{4}";
+			$latexString .= (s/_/\\_/g, "- $_\\\\") for sort @call;
+			$latexString .= "\\end{multicols}";
+		}
 	}
 	else {
 		$latexString .= (s/_/\\_/g, "$_ ") for @call;
@@ -337,7 +377,9 @@ Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/ca
 
 If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
 
-The reverse bingo option (--reverse) makes n cards with the words and one card is the bingo card.
+The reverse bingo option (--reverse) makes n cards with the prompts and one card is the bingo card with the words (answers).
+
+The four & five options (--four, --five) places the 16 or 25 prompts in 4x4 or 5x5 grids.
 
 The swap option (--swap) swaps first and second values of the match pairs (not bingo ones), to go from prompt-answer (word) pairings to the reverse, answer/word-prompt pairings.
 
