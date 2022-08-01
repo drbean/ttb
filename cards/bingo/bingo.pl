@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Aug 01,  8:40:49 PM
+# Last Edit: 2022 Aug 01,  9:08:29 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -269,16 +269,18 @@ for my $prompt ( 0 .. $prompt_n ) {
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}{";
 	if ( $reverse ) {
+		my @call_all = (@call, @lost_call);
 		if ( $four ) {
-			for my $pos ( 0 .. $#call ) {
+			for my $pos ( 0 .. $#call_all ) {
 				my $cell = ( $latex->[$paging]->{x}
 					+ $grid->[$pos]->{x} ) . "," .
 					( $latex->[$paging]->{y}
 					+ $grid->[$pos]->{y} );
 				$latexString .=
 				"\\begin{textblock}{2}($cell)
-				% \\vspace*{0.05\\paperheight}
-				\\center $call[$pos]
+				\\vspace*{0.02\\paperheight}
+				\\center $call_all[$pos]
+				\\vspace*{0.02\\paperheight}
 				\\vfill
 				\\end{textblock}";
 				}
@@ -286,14 +288,14 @@ for my $prompt ( 0 .. $prompt_n ) {
 		else {
 			$latexString .= "\\large\n" if $reverse;
 			$latexString .= "\\begin{multicols}{4}";
-			$latexString .= (s/_/\\_/g, "- $_\\\\") for sort @call;
+			$latexString .= (s/_/\\_/g, "- $_\\\\") for sort @call_all;
 			$latexString .= "\\end{multicols}";
 		}
 	}
 	else {
 		$latexString .= (s/_/\\_/g, "$_ ") for @call;
+		$latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
 	}
-        $latexString .= (s/_/\\_/g, "XX${_}XX ") for @lost_call;
         $latexString .= "}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
         &paging;
 }
