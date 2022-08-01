@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Aug 01,  4:22:49 PM
+# Last Edit: 2022 Aug 01,  8:40:49 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -104,23 +104,22 @@ my $layout = { a7 => { latex => [
 my $grid;
 if ( $four ) {
 	$grid = [
-		[ x => 0, y => 0 ]
-		, [ x => 0, y => 0 ]
-		, [ x => 1, y => 0 ]
-		, [ x => 2, y => 0 ]
-		, [ x => 3, y => 0 ]
-		, [ x => 0, y => 1 ]
-		, [ x => 1, y => 1 ]
-		, [ x => 2, y => 1 ]
-		, [ x => 3, y => 1 ]
-		, [ x => 0, y => 2 ]
-		, [ x => 1, y => 2 ]
-		, [ x => 2, y => 2 ]
-		, [ x => 3, y => 2 ]
-		, [ x => 0, y => 3 ]
-		, [ x => 1, y => 3 ]
-		, [ x => 2, y => 3 ]
-		, [ x => 3, y => 3 ]
+		{ x => 0, y => 0 }
+		, { x => 2, y => 0 }
+		, { x => 4, y => 0 }
+		, { x => 6, y => 0 }
+		, { x => 0, y => 1 }
+		, { x => 2, y => 1 }
+		, { x => 4, y => 1 }
+		, { x => 6, y => 1 }
+		, { x => 0, y => 2 }
+		, { x => 2, y => 2 }
+		, { x => 4, y => 2 }
+		, { x => 6, y => 2 }
+		, { x => 0, y => 3 }
+		, { x => 2, y => 3 }
+		, { x => 4, y => 3 }
+		, { x => 6, y => 3 }
 	];
 }
 
@@ -277,8 +276,10 @@ for my $prompt ( 0 .. $prompt_n ) {
 					( $latex->[$paging]->{y}
 					+ $grid->[$pos]->{y} );
 				$latexString .=
-				"\\begin{textblock}{1}($cell)
-				$call[$pos]
+				"\\begin{textblock}{2}($cell)
+				% \\vspace*{0.05\\paperheight}
+				\\center $call[$pos]
+				\\vfill
 				\\end{textblock}";
 				}
 		}
