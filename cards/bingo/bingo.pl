@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Aug 01,  9:08:29 PM
+# Last Edit: 2022 Aug 05,  3:40:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -120,6 +120,35 @@ if ( $four ) {
 		, { x => 2, y => 3 }
 		, { x => 4, y => 3 }
 		, { x => 6, y => 3 }
+	];
+}
+elsif ( $five ) {
+	$grid = [
+		{ x => 0, y => 0 }
+		, { x => 1.6, y => 0 }
+		, { x => 3.2, y => 0 }
+		, { x => 4.8, y => 0 }
+		, { x => 6.4, y => 0 }
+		, { x => 0,   y => 0.8 }
+		, { x => 1.6, y => 0.8 }
+		, { x => 3.2, y => 0.8 }
+		, { x => 4.8, y => 0.8 }
+		, { x => 6.4, y => 0.8 }
+		, { x => 0,   y => 1.6 }
+		, { x => 1.6, y => 1.6 }
+		, { x => 3.2, y => 1.6 }
+		, { x => 4.8, y => 1.6 }
+		, { x => 6.4, y => 1.6 }
+		, { x => 0,   y => 2.4 }
+		, { x => 1.6, y => 2.4 }
+		, { x => 3.2, y => 2.4 }
+		, { x => 4.8, y => 2.4 }
+		, { x => 6.4, y => 2.4 }
+		, { x => 0,   y => 3.2 }
+		, { x => 1.6, y => 3.2 }
+		, { x => 3.2, y => 3.2 }
+		, { x => 4.8, y => 3.2 }
+		, { x => 6.4, y => 3.2 }
 	];
 }
 
@@ -270,17 +299,19 @@ for my $prompt ( 0 .. $prompt_n ) {
 \\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}{";
 	if ( $reverse ) {
 		my @call_all = (@call, @lost_call);
-		if ( $four ) {
+		if ( $five or $four ) {
 			for my $pos ( 0 .. $#call_all ) {
 				my $cell = ( $latex->[$paging]->{x}
 					+ $grid->[$pos]->{x} ) . "," .
 					( $latex->[$paging]->{y}
 					+ $grid->[$pos]->{y} );
+				my $width = $five ? 1.6 : 2;
+				my $height = $five ? 0.016 : 0.02;
 				$latexString .=
-				"\\begin{textblock}{2}($cell)
-				\\vspace*{0.02\\paperheight}
+				"\\begin{textblock}{$width}($cell)
+				\\vspace*{$height\\paperheight}
 				\\center $call_all[$pos]
-				\\vspace*{0.02\\paperheight}
+				\\vspace*{$height\\paperheight}
 				\\vfill
 				\\end{textblock}";
 				}
