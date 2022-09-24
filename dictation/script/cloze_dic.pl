@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Sep 24,  2:34:24 PM
+# Last Edit: 2022 Sep 24,  4:39:48 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -130,7 +130,7 @@ die "No texts or more than 1 text called $identifier\n" if @text != 1;
 my $lines = $text[0][4];
 my @lines = split /\n/, $lines;
 my $text;
-my ( %hashed_check, $count_check, %binned, %tag_bin );
+my ( %hashed_check, $count_check, %binned, %tag_bin, %word_bin );
 if ( defined $unclozeable and $unclozeable eq 'nocloze' ) {
 	$text = no_cloze($cloze_style, 0, @lines);
 }
@@ -143,20 +143,25 @@ else {
 	my $clean_clozes;
 	for my $cloze ( split ' ', lc $clozes ) {
 		if ( $cloze =~m/^(.*)\.(\w+)$/ ) {
-			my $tagless = $1;
+			my $word = $1;
 			my $pos = $2;
 			my $posex = $tag_bin{$pos};
-			$posex->{$tagless}++;
-			$clean_clozes .= "$tagless ";
+			$posex->{$word}++;
+			$clean_clozes .= "$word ";
 			$count_check++;
 			$tag_bin{$pos} = $posex;
+			if ($word_bin{$word} && $word_bin{$word} ne $pos ) {
+				my $dupe_tag = $word_bin{$word};
+				warn "dupe tag: $dupe_tag, $pos for $word\n";
+			}
+			$word_bin{$word} = $pos;
 		}
 		else { $clean_clozes .= "$cloze " }
 	}
-	$text = simple_cloze($cloze_style, $clean_clozes, @lines);
+	$text = simple_cloze($cloze_style, $clean_clozes, \%word_bin, @lines);
 }
-my $textA = $text->{A};
-my $textB = $text->{B};
+my $textA = join '', "\\hspace{0cm} \\\\", @{$text->{A}};
+my $textB = join '', "~\\\\", $text->{B}};
 my $word = $text->{word};
 print "clozed words=@$word\n" if $word and ref $word eq 'ARRAY';
 my $words;
