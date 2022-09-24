@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 May 25, 10:22:35 AM
+# Last Edit: 2022 Sep 24,  4:44:42 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -118,17 +118,17 @@ sub cloze
 		}
 		blankline: <reject: $inWord> m/^$/
 			{
-				$Dic::Cloze::Text::clozeline .= "~\\\\\\\\";
+				push @Dic::Cloze::Text::clozeline, "~\\\\\\\\";
 			}
 		end: m/^\Z/
 		singularletter: <reject: $inWord> m/(\w)(?=$punctuation)/m
 			{
 				# $Dic::Cloze::Text::word_score++;
-				$Dic::Cloze::Text::clozeline .= $item[2];
+				push @Dic::Cloze::Text::clozeline, $item[2];
 			}
 		punctuation: <reject: $inWord> m/$punctuation/
 			{
-				$Dic::Cloze::Text::clozeline .= $item[2];
+				push @Dic::Cloze::Text::clozeline, $item[2];
 			}
 		end: m/^\Z/
 	]; 
@@ -136,7 +136,7 @@ sub cloze
 		$letterGrammar .= q[
 		unclozeable: <reject: $cloze_up> m/((\b$letter+\b)$punctuation){$Dic::Cloze::Text::unclozeables}/
 			{
-				$Dic::Cloze::Text::clozeline .= $item[2];
+				push @Dic::Cloze::Text::clozeline, $item[2];
 				$cloze_up=1;
 			}
 		];
@@ -145,7 +145,7 @@ sub cloze
 		$letterGrammar .= q[
 		unclozeable: <reject: $inWord> m/($Dic::Cloze::Text::unclozeable)(?=$punctuation)/m
 			{
-				$Dic::Cloze::Text::clozeline .= $item[2];
+				push @Dic::Cloze::Text::clozeline, $item[2];
 				$Dic::Cloze::Text::unclozeable = shift @Dic::Cloze::Text::unclozeable;
 			}
 		];
@@ -157,8 +157,8 @@ sub cloze
 
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
 	defined $letterParser->string($line) or die "letterparse died: $?\n";
-	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
-	$text{B} .= "~\\\\" . $clozeline;
+	$text{A} .= $clozeline;
+	$text{B} .= $clozeline;
 		$lineN++;
 	$text{word} = \@word if @word;
 	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
@@ -175,6 +175,7 @@ sub simple_cloze
 	our $clozes = shift;
 	chomp $clozes;
 	our @clozes = split ' ', $clozes;
+	our $word_bin = shift;
 	our $cloze_match = shift @clozes;
 	my @lines = @_;
 	my %text = ();
@@ -185,7 +186,7 @@ sub simple_cloze
 
 	foreach my $line ( @lines )
 	{
-	our $clozeline = '';
+	our @clozeline = '';
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		{
