@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Jun 01, 10:01:49 AM
+# Last Edit: 2022 Sep 24,  2:34:24 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -17,6 +17,7 @@ sub opt_spec  {
 		, ["s=s", "story"]
 		, ["f=i", "form"]
 		, ["p=s", "paper"]
+		, ["h=s", "hint/no hint"]
 		, ["u=s", "unclozeable/clozeable"]
 	);
 }
