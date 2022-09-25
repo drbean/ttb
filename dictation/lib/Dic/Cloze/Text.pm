@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Sep 24,  4:44:42 PM
+# Last Edit: 2022 Sep 25,  4:04:48 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -24,38 +24,38 @@ use POSIX qw/floor ceil/;
 
 my %onlastletter;
 $onlastletter{ctest} = q [
-	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
+	push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", @cword[0..( $#cword - 1 )/2], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword/2 ), " \\\\rmfamily\\\\large ";
 	push @Dic::Cloze::Text::word, join '', @cword;
 	];
 $onlastletter{first} = q [
-	$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-1 ), " \\\\rmfamily\\\\large ";
+	push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-1 ), " \\\\rmfamily\\\\large ";
 	];
 $onlastletter{firstlast} = q [
 	if ( $#cword >= 2 ) {
-		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1], " \\\\rmfamily\\\\large ";
+		push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}" , "\\\\1{}\\\\-" x ( $#cword-2 ), $cword[-1], " \\\\rmfamily\\\\large ";
 	}
 	if ( $#cword == 1 ) {
-		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}", " \\\\rmfamily\\\\large ";
+		push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", @cword[0], "\\\\1{$Dic::Cloze::Text::word_score}", " \\\\rmfamily\\\\large ";
 	}
 	];
 $onlastletter{ctestpluslast} = q [
 	if ( $#cword > 2 ) {
-		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
+		push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} reverse 2 .. $#cword-($#cword-1)/2-1)
 		, $cword[-1], " \\\\rmfamily\\\\large ";
 	}
 	else {
-		$Dic::Cloze::Text::clozeline .= join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
+		push @Dic::Cloze::Text::clozeline, join '', "\\\\ttfamily\\\\Large ", (@cword[0..$#cword/2], "\\\\1{$Dic::Cloze::Text::word_score}"
 		, map {"\\\\1{}"} reverse 1 .. $#cword-($#cword-1)/2-1), " \\\\rmfamily\\\\large ";
 	}
 	];
 $onlastletter{total} = q [
-	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
+	push @Dic::Cloze::Text::clozeline, join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} 1 .. $#cword);
 	push @Dic::Cloze::Text::word, join '', @cword;
 	];
 $onlastletter{pos} = q [
-	$Dic::Cloze::Text::clozeline .= join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
+	push @Dic::Cloze::Text::clozeline, join '', ("\\\\1{$Dic::Cloze::Text::word_score}"
 			, map {"\\\\1{}"} 1 .. 4);
 	push @Dic::Cloze::Text::word, join '', @cword;
 	];
@@ -78,7 +78,7 @@ sub cloze
 
 	foreach my $line ( @lines )
 	{
-	our $clozeline = '';
+	our @clozeline;
 	# $Parse::RecDescent::skip = '';
 	my $letterGrammar = q[
 		{
@@ -157,8 +157,8 @@ sub cloze
 
 	my $letterParser = Parse::RecDescent->new($letterGrammar);
 	defined $letterParser->string($line) or die "letterparse died: $?\n";
-	$text{A} .= $clozeline;
-	$text{B} .= $clozeline;
+	push @{$text{A}}, @clozeline;
+	push @{$text{B}}, @clozeline;
 		$lineN++;
 	$text{word} = \@word if @word;
 	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
@@ -186,7 +186,7 @@ sub simple_cloze
 
 	foreach my $line ( @lines )
 	{
-	our @clozeline = '';
+	our @clozeline;
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		{
@@ -203,20 +203,20 @@ sub simple_cloze
 			push @Dic::Cloze::Text::word, $cloze;
 			$Dic::Cloze::Text::word_score++;
 		];
-	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x 1, ' ';] if $cloze_style eq 'pos';
-	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x ($length-1), ' ';] if $cloze_style eq 'total';
-	$grammar .= q[$Dic::Cloze::Text::clozeline .= join '', (substr $cloze, 0, $short), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x ($short-1), ' ';] if $cloze_style eq 'ctest';
+	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x 1, ' ';] if $cloze_style eq 'pos';
+	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x ($length-1), ' ';] if $cloze_style eq 'total';
+	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', (substr $cloze, 0, $short), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x ($short-1), ' ';] if $cloze_style eq 'ctest';
 	$grammar .= q[		$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
 		}
 		unclozed: m/$word/ {
-			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+			push @Dic::Cloze::Text::clozeline, "$item[1] ";
 			}
 		end: m/^\Z/
 		];
 	my $parser = Parse::RecDescent->new($grammar);
 	defined $parser->string($line) or die "simple_cloze parse died: $?\n";
-	$text{A} .= "\\hspace{0cm} \\\\" . $clozeline;
-	$text{B} .= "~\\\\" . $clozeline;
+	push @{$text{A}}, @clozeline;
+	push @{$text{B}}, @clozeline;
 		$lineN++;
 	$text{word} = \@word if @word;
 	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
@@ -240,23 +240,23 @@ sub no_cloze
 
 	foreach my $line ( @lines )
 	{
-	our $clozeline = '';
+	our @clozeline;
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		string: token(s) end | <error>
 		token: cloze | unclozed
 		cloze: <reject: not $Dic::Cloze::Text::no_cloze> m/^.*$/ {
-			$Dic::Cloze::Conversation::clozeline .= "$Dic::Cloze::Conversation::lineN $item[1]";
+			push @Dic::Cloze::Conversation::clozeline, "$Dic::Cloze::Conversation::lineN $item[1]";
 		}
 		unclozed: m/^.*$/ {
-			$Dic::Cloze::Text::clozeline .= "$item[1] ";
+			push @Dic::Cloze::Text::clozeline, "$item[1] ";
 			}
 		end: m/^\Z/
 		];
 	my $parser = Parse::RecDescent->new($grammar);
 	defined $parser->string($line) or die "no_cloze parse died: $?\n";
-	$text{A} .= "\\hspace{0cm} ~\\\\" . $clozeline . "~\\\\";
-	$text{B} .= "~\\\\" . $clozeline . "~\\\\";
+	push @{$text{A}}, @clozeline;
+	push @{$text{B}}, @clozeline;
 		$lineN++;
 	}
 	return \%text;
