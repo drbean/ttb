@@ -1,13 +1,13 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Sep 24,  4:39:48 PM
+# Last Edit: 2022 Sep 25,  5:28:00 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
 use warnings;
 
-sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM -p PAPER -u 
-	UNCLOZEABLE" }
+sub usage_desc { "dic text -c CTEST -t TOPIC -s STORY -f FORM -p PAPER
+	-h HINT -u UNCLOZEABLE" }
 
 sub opt_spec  {
 	return (
@@ -22,7 +22,7 @@ sub opt_spec  {
 	);
 }
 
-use lib qq{$ENV{HOME}/ttb/dictation/lib/};
+use lib qq{$ENV{HOME}/ttb/branches/hint/dictation/lib/};
 
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
@@ -38,9 +38,9 @@ our $RD_HINT = 1;
 # my %ids = map { $_->{name} => $_->{id} } @members;
 # my %names = map { $_->{id} => $_->{name} } @members;
 
-my ($course, $cloze_style, $topic, $story, $form, $size, $unclozeable) = @ARGV;
+my ($course, $cloze_style, $topic, $story, $form, $size, $hint, $unclozeable) = @ARGV;
 
-# my ($course, $cloze_style, $topic, $story, $form, $size) = @$opt{qw/c z t s f p/};
+# my ($course, $cloze_style, $hint, $topic, $story, $form, $size) = @$opt{qw/c z h t s f p/};
 my ($text_list, $question) = LoadFile
 	"/home/$ENV{USER}/curriculum/$course/$topic/dic.yaml";
 
@@ -98,7 +98,7 @@ my $threepages = 0;
 
 my $tmpl_handle = undef;
 my $encoding = ":encoding(UTF-8)";
-my $tmpl = "/home/$ENV{USER}/ttb/dictation/tmpl/preamble.tmpl";
+my $tmpl = "/home/$ENV{USER}/ttb/branches/hint/dictation/tmpl/preamble.tmpl";
 open($tmpl_handle, "< $encoding", $tmpl) || die "$0: can't open $tmpl in read mode: $!";
 
 my $tmplString;
@@ -161,7 +161,7 @@ else {
 	$text = simple_cloze($cloze_style, $clean_clozes, \%word_bin, @lines);
 }
 my $textA = join '', "\\hspace{0cm} \\\\", @{$text->{A}};
-my $textB = join '', "~\\\\", $text->{B}};
+my $textB = join '', "~\\\\", @{$text->{B}};
 my $word = $text->{word};
 print "clozed words=@$word\n" if $word and ref $word eq 'ARRAY';
 my $words;
@@ -199,7 +199,7 @@ elsif (ref $word eq 'ARRAY') {
 }
 else { $words = '~\\\\'; }
 warn "pos check_count=$count_check, but clozed words=" . @$word
-	if $word and ref $word eq 'ARRAY';
+	if $word and ref $word eq 'ARRAY' and $count_check != @$word;
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
 		$tmplString .= "
