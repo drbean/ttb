@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Sep 25,  4:04:48 PM
+# Last Edit: 2022 Sep 25, 10:24:13 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -78,7 +78,7 @@ sub cloze
 
 	foreach my $line ( @lines )
 	{
-	our @clozeline;
+	our @clozeline = ();
 	# $Parse::RecDescent::skip = '';
 	my $letterGrammar = q[
 		{
@@ -175,7 +175,8 @@ sub simple_cloze
 	our $clozes = shift;
 	chomp $clozes;
 	our @clozes = split ' ', $clozes;
-	our $word_bin = shift;
+	our $pos = shift;
+	my $hint = shift;
 	our $cloze_match = shift @clozes;
 	my @lines = @_;
 	my %text = ();
@@ -186,7 +187,7 @@ sub simple_cloze
 
 	foreach my $line ( @lines )
 	{
-	our @clozeline;
+	our @clozeline = ();
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		{
@@ -203,7 +204,14 @@ sub simple_cloze
 			push @Dic::Cloze::Text::word, $cloze;
 			$Dic::Cloze::Text::word_score++;
 		];
-	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x 1, ' ';] if $cloze_style eq 'pos';
+	 if ( $cloze_style eq 'pos' ) {
+		 if ( $hint ) {
+			 $grammar .= q[push @Dic::Cloze::Text::clozeline, join '', $Dic::Cloze::Text::pos->{$cloze}, "\\\\2{$Dic::Cloze::Text::word_score}", ' ';];
+		 }
+		 else {
+			 $grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x 1, ' ';];
+		 }
+	 }
 	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x ($length-1), ' ';] if $cloze_style eq 'total';
 	$grammar .= q[push @Dic::Cloze::Text::clozeline, join '', (substr $cloze, 0, $short), "\\\\1{$Dic::Cloze::Text::word_score}", "\\\\1{}" x ($short-1), ' ';] if $cloze_style eq 'ctest';
 	$grammar .= q[		$Dic::Cloze::Text::cloze_match = shift @Dic::Cloze::Text::clozes;
@@ -240,7 +248,7 @@ sub no_cloze
 
 	foreach my $line ( @lines )
 	{
-	our @clozeline;
+	our @clozeline = ();
 	# $Parse::RecDescent::skip = '';
 	my $grammar = q[
 		string: token(s) end | <error>
