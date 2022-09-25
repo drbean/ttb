@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Sep 25,  5:28:00 PM
+# Last Edit: 2022 Sep 25, 10:02:46 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -122,6 +122,17 @@ my %tex_key = (
 	, preposition => '\\emph{p}\\textbf{R}\\emph{eposition}'
 	, other => '\\textbf{O}\\emph{ther}'
 );
+my %short = (
+	noun => 'N'
+	, verb => 'V'
+	, ad => 'A'
+	, adverb => 'A'
+	, adjective => 'J'
+	, determiner => 'D'
+	, pronoun => 'P'
+	, preposition => 'R'
+	, other => 'O'
+);
 
 $identifier = "$story-$form";
 my @text = grep { $_->[0] eq $identifier } @$text_list;
@@ -150,15 +161,15 @@ else {
 			$clean_clozes .= "$word ";
 			$count_check++;
 			$tag_bin{$pos} = $posex;
-			if ($word_bin{$word} && $word_bin{$word} ne $pos ) {
+			if ($word_bin{$word} && $word_bin{$word} ne $short{$pos} ) {
 				my $dupe_tag = $word_bin{$word};
-				warn "dupe tag: $dupe_tag, $pos for $word\n";
+				warn "dupe tag: $dupe_tag, $short{$pos} for $word\n";
 			}
-			$word_bin{$word} = $pos;
+			$word_bin{$word} = $short{$pos};
 		}
 		else { $clean_clozes .= "$cloze " }
 	}
-	$text = simple_cloze($cloze_style, $clean_clozes, \%word_bin, @lines);
+	$text = simple_cloze($cloze_style, $clean_clozes, \%word_bin, $hint, @lines);
 }
 my $textA = join '', "\\hspace{0cm} \\\\", @{$text->{A}};
 my $textB = join '', "~\\\\", @{$text->{B}};
