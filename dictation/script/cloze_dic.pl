@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Sep 25, 10:02:46 PM
+# Last Edit: 2022 Sep 27,  9:29:00 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -171,8 +171,6 @@ else {
 	}
 	$text = simple_cloze($cloze_style, $clean_clozes, \%word_bin, $hint, @lines);
 }
-my $textA = join '', "\\hspace{0cm} \\\\", @{$text->{A}};
-my $textB = join '', "~\\\\", @{$text->{B}};
 my $word = $text->{word};
 print "clozed words=@$word\n" if $word and ref $word eq 'ARRAY';
 my $words;
@@ -211,19 +209,32 @@ elsif (ref $word eq 'ARRAY') {
 else { $words = '~\\\\'; }
 warn "pos check_count=$count_check, but clozed words=" . @$word
 	if $word and ref $word eq 'ARRAY' and $count_check != @$word;
+my %text;
+$text{A} = "\\hspace{0cm} \\\\";
+$text{B} = "~\\\\";
+for my $part ('A', 'B') {
+	for my $next ( @{$text->{$part}} ) {
+		if ( ref $next eq 'ARRAY' ) {
+			my ( $pos, $cloze, $space ) = @$next;
+			$text{$part} .= join '',
+				"\\textbf{\\texttt{$pos}}", $cloze, $space;
+		}
+		else { $text{$part} .= $next }
+	}
+}
 for my $j ( 0) {
 	for my $i ( 0 .. $paper->{$size}->{i}) {
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words} $textA}
+		{{\\tt $words} $text{A}}
 		\\end{textblock}\n";
 		$tmplString .= "
 		\\begin{textblock}{8}($latex->[$j+2*$i+1]->{xy})
 		\\textblocklabel{picture$latex->[$j+2*$i+1]->{xy}}
 		\\dicX${story}X$romanize{$form}Xcard
-		{{\\tt $words} $textB}
+		{{\\tt $words} $text{B}}
 		\\end{textblock}\n";
 	}
 	$tmplString .= "
