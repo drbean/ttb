@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Sep 25, 10:24:13 PM
+# Last Edit: 2022 Sep 27,  8:55:45 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -206,7 +206,7 @@ sub simple_cloze
 		];
 	 if ( $cloze_style eq 'pos' ) {
 		 if ( $hint ) {
-			 $grammar .= q[push @Dic::Cloze::Text::clozeline, join '', $Dic::Cloze::Text::pos->{$cloze}, "\\\\2{$Dic::Cloze::Text::word_score}", ' ';];
+			 $grammar .= q[push @Dic::Cloze::Text::clozeline, [ $Dic::Cloze::Text::pos->{$cloze}, "\\\\2{$Dic::Cloze::Text::word_score}", ' '] ;];
 		 }
 		 else {
 			 $grammar .= q[push @Dic::Cloze::Text::clozeline, join '', "\\\\2{$Dic::Cloze::Text::word_score}", "\\\\2{}" x 1, ' ';];
