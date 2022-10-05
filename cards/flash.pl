@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Jun 09,  3:52:15 PM
+# Last Edit: 2022 Oct 05, 12:43:47 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -17,6 +17,7 @@ my $n = 8;
 my $t = 1;
 my $s = '';
 my $f = 0;
+my $type = '';
 my $nine = '';
 my $sixteen = '';
 my $pair = '';
@@ -24,8 +25,9 @@ my $pair = '';
 GetOptions (
 	'help|?' => \$help, man => \$man,
 	't=i' => \$t, 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
-	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair)
-		or pod2usage(2);
+	, 'nine' => \$nine, 'sixteen' => \$sixteen, 'pair' => \$pair
+	, 'type=s' => \$type
+		) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 
@@ -269,17 +271,17 @@ my $identifier = "$s $f";
 $identifier =~ s/_/ /;
 $latexString .= "\\newcommand{\\flashcardX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
 my $flashcard;
-if (exists $story->{match} && exists $story->{match}->{$f} ) {
+if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
         $flashcard = $story->{match}->{$f};
 }
-elsif (exists $story->{flash} && exists $story->{flash}->{$f} ) {
+elsif ($type eq "flash" && exists $story->{flash} && exists $story->{flash}->{$f} ) {
 	$flashcard = $story->{flash}->{$f};
 }
 elsif (exists $story->{$f} and exists $story->{$f}->{flash} ) {
 	$flashcard = $story->{$f}->{flash};
 
 }
-else { die "No flashcard for $s story, form $f" }
+else { die "No '$type' flashcard for $s story, form $f" }
 
 $latexString .= "\\begin{document}\n\n";
 
