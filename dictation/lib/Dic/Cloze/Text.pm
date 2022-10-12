@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Sep 27,  8:55:45 PM
+# Last Edit: 2022 Oct 05,  2:58:23 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -223,8 +223,8 @@ sub simple_cloze
 		];
 	my $parser = Parse::RecDescent->new($grammar);
 	defined $parser->string($line) or die "simple_cloze parse died: $?\n";
-	push @{$text{A}}, @clozeline;
-	push @{$text{B}}, @clozeline;
+	push @{$text{A}}, @clozeline,  "\\hspace{0cm} \\\\";
+	push @{$text{B}}, @clozeline,  "~\\\\";
 		$lineN++;
 	$text{word} = \@word if @word;
 	# $text{word} = [qw{night medal medal team team time ceremony have been doing stayed watch won had watch saw tired late gold silver women's great men's women's  about so}];
