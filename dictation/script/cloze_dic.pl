@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Last Edit: 2022 Jun 01, 10:01:49 AM
+# Last Edit: 2022 Oct 12,  1:14:42 PM
 # $Id: /cloze/branches/ctest/dic.pl 1134 2007-03-17T11:05:37.500624Z greg  $
 
 use strict;
@@ -21,7 +21,7 @@ sub opt_spec  {
 	);
 }
 
-use lib qq{$ENV{HOME}/ttb/dictation/lib/};
+use lib qq{$ENV{HOME}/ttb/trunk/dictation/lib/};
 
 use YAML qw/LoadFile/;
 use Parse::RecDescent;
@@ -97,7 +97,7 @@ my $threepages = 0;
 
 my $tmpl_handle = undef;
 my $encoding = ":encoding(UTF-8)";
-my $tmpl = "/home/$ENV{USER}/ttb/dictation/tmpl/preamble.tmpl";
+my $tmpl = "/home/$ENV{USER}/ttb/trunk/dictation/tmpl/preamble.tmpl";
 open($tmpl_handle, "< $encoding", $tmpl) || die "$0: can't open $tmpl in read mode: $!";
 
 my $tmplString;
