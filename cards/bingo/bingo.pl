@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 21,  3:46:31 PM
+# Last Edit: 2022 Oct 21,  4:11:12 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -208,6 +208,10 @@ elsif ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call}
 elsif ( ref $bingo eq 'HASH' ) {
        @words = keys %$bingo;
        my @prompts = values %$bingo;
+       if ( $swap ) {
+               @words = values %$bingo;
+               @prompts = keys %$bingo;
+       }
        @prompts{@words} = @prompts;
        die "Unequal word, call numbers. Also check order"
                unless ( @words == @prompts );
