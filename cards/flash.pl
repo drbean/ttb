@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 05, 12:43:47 PM
+# Last Edit: 2022 Oct 21,  3:51:44 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,8 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum all/;
+use List::Util qw/sample sum all/;
 
 my $man = 0;
 my $help = 0;
@@ -319,7 +318,7 @@ for my $set ( 0..$t-1 ) {
 		@prompts = @words;
 	}
 	if ( @words > $n ) {
-		my @sample = sample( set => [0..$#words], sample_size => $n );
+		my @sample = sample $n, (0..$#words);
 		@words = @words[@sample];
 		@prompts = @prompts[@sample];
 	}
@@ -327,7 +326,7 @@ for my $set ( 0..$t-1 ) {
 	die "Undefined prompts"
 	       unless all { defined $prompts{$_} } keys %prompts;
 	if ( @words < $n ) {
-		@extra = sample( set => \@words, sample_size => $n-@words );
+		@extra = sample $n-@words, @words;
 		$prompts{"* ${_}"} = $prompts{$_} for @extra;
 	}
 
