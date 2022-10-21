@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Aug 05,  3:40:11 PM
+# Last Edit: 2022 Oct 21,  3:46:31 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,8 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum/;
+use List::Util qw/sample sum/;
 use List::MoreUtils qw/natatime/;
 use Lingua::Han::PinYin;
 
@@ -262,8 +261,8 @@ die "No word for some prompts" unless
         values %prompts == scalar @words;
         
 warn "There are " . (sum values %word_count ) . " words\n";
-my @clinchers = sample( set => \@words, sample_size => 2 );
-my @winner = sample( set => \@clinchers );
+my @clinchers = sample 2, @words;
+my @winner = sample 1, @clinchers ;
 my @loser = grep { $_ ne $winner[0] } @clinchers;
 my %words; @words{ @words } = (); delete @words{@clinchers};
 my @pruned = keys %words;
@@ -333,8 +332,8 @@ for my $prompt ( 0 .. $prompt_n ) {
 
 my $card_n = $reverse? 0 : $n-2;
 for my $card ( 0 .. $card_n ) {
-        my @candidate = sample( set => \@clinchers );
-        my @presented = sample( set => \@pruned, sample_size => @pruned/2);
+        my @candidate = sample 1, @clinchers;
+        my @presented = sample @pruned/2, @pruned;
         my ( @ordered, $it );
         if  ( $card % 2 == 0 ) {
                 @ordered = sort {$a cmp $b} (@presented, @candidate);
