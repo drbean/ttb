@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 22, 11:51:51 AM
+# Last Edit: 2022 Oct 22, 10:29:32 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -21,15 +21,12 @@ my $reverse = '';
 my $swap = '';
 my $type = '';
 my $paper = 'a7';
-my $four = '';
-my $five = '';
 
 GetOptions (
         'help|?' => \$help, man => \$man
-        , 'n=i' => \$n, 's=s' => \$s, 'f=i' => \$f
+        , 'n=i' => \$n, 's=s' => \$s, 'f=s' => \$f
         , 'swap' => \$swap, 'reverse' => \$reverse
         , 'type=s' => \$type, 'paper=s' => \$paper
-	, 'four' => \$four, 'five' => \$five
                 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2) if $man;
@@ -45,7 +42,6 @@ my %romanize = (
 
 my $latexString = <<"START_LATEX";
 \\documentclass[a4paper]{article}
-% \\usepackage[T1]{fontenc}
 \\usepackage{fontspec}
 \\usepackage{xltxtra}
 \\setmainfont{Linux Libertine O}[Scale=MatchLowercase]
@@ -55,20 +51,18 @@ my $latexString = <<"START_LATEX";
 ]
 % \\usepackage[absolute,noshowtext,showboxes]{textpos}
 \\usepackage[absolute,showboxes]{textpos}
-% \\textblockorigin{-0.02cm}{0.07cm} %HPDeskJet5160
-% \\textblockorigin{0.00cm}{0.00cm} %HPDeskJet5160
-% \\textblockorigin{-0.05cm}{0.13cm} %HPDeskJet5160
 \\textblockorigin{0.00cm}{0.00cm} %HPLaserJet5000LE
-\\usepackage{texdraw}
-\\usepackage{multicol}
 % \\usepackage{soul}
-\\usepackage{tabto}
 \\pagestyle{empty}
 \\setlength{\\unitlength}{1cm}
 
-\\NumTabs{4}
+START_LATEX
 
-\\newcommand{\\bingoX${s}X$romanize{$f}Xcard}[5]{%
+my @form = split ',', $f;
+
+for my $f (@form) {
+	$latexString .= <<"CARD_COMMAND"
+\\newcommand{\\battleshipX${s}X$romanize{$f}Xcard}[5]{%
         \\vspace{0.1cm}
         \\small #1 #2
         \\par
@@ -78,7 +72,8 @@ my $latexString = <<"START_LATEX";
         }
 }
 
-START_LATEX
+CARD_COMMAND
+}
 
 my $layout = { a7 => { latex => [
                         { page => 1, x => "0", y => "0" , xy => "0,0" },
@@ -100,57 +95,6 @@ my $layout = { a7 => { latex => [
                 i => 5}
 };
 
-my $grid;
-if ( $four ) {
-	$grid = [
-		{ x => 0, y => 0 }
-		, { x => 2, y => 0 }
-		, { x => 4, y => 0 }
-		, { x => 6, y => 0 }
-		, { x => 0, y => 1 }
-		, { x => 2, y => 1 }
-		, { x => 4, y => 1 }
-		, { x => 6, y => 1 }
-		, { x => 0, y => 2 }
-		, { x => 2, y => 2 }
-		, { x => 4, y => 2 }
-		, { x => 6, y => 2 }
-		, { x => 0, y => 3 }
-		, { x => 2, y => 3 }
-		, { x => 4, y => 3 }
-		, { x => 6, y => 3 }
-	];
-}
-elsif ( $five ) {
-	$grid = [
-		{ x => 0, y => 0 }
-		, { x => 1.6, y => 0 }
-		, { x => 3.2, y => 0 }
-		, { x => 4.8, y => 0 }
-		, { x => 6.4, y => 0 }
-		, { x => 0,   y => 0.8 }
-		, { x => 1.6, y => 0.8 }
-		, { x => 3.2, y => 0.8 }
-		, { x => 4.8, y => 0.8 }
-		, { x => 6.4, y => 0.8 }
-		, { x => 0,   y => 1.6 }
-		, { x => 1.6, y => 1.6 }
-		, { x => 3.2, y => 1.6 }
-		, { x => 4.8, y => 1.6 }
-		, { x => 6.4, y => 1.6 }
-		, { x => 0,   y => 2.4 }
-		, { x => 1.6, y => 2.4 }
-		, { x => 3.2, y => 2.4 }
-		, { x => 4.8, y => 2.4 }
-		, { x => 6.4, y => 2.4 }
-		, { x => 0,   y => 3.2 }
-		, { x => 1.6, y => 3.2 }
-		, { x => 3.2, y => 3.2 }
-		, { x => 4.8, y => 3.2 }
-		, { x => 6.4, y => 3.2 }
-	];
-}
-
 my $latex = $layout->{$paper}->{latex};
 
 my $paging = 0;
@@ -161,133 +105,46 @@ my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
 my $story = $cards->{$s};
 die "No $s story" unless ref $story eq 'HASH';
-my $identifier = "$s $f";
-$identifier =~ s/_/ /;
-$latexString .= "\\newcommand{\\bingoX${s}X$romanize{$f}XIdentifier}[0]{$identifier\n}\n\n";
-my $bingo;
-if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
-        $bingo = $story->{match}->{$f};
-}
-elsif ($type eq "flash" && exists $story->{flash} && exists $story->{flash}->{$f} ) {
-        $bingo = $story->{flash}->{$f};
-}
-elsif ($type eq "bingo" && exists $story->{bingo} && exists $story->{bingo}->[$f] ) {
-        $bingo = $story->{bingo}->[$f];
-}
-elsif (exists $story->{$f} and exists $story->{$f}->{bingo} ) {
-        $bingo = $story->{$f}->{bingo};
+my $battleship;
 
+for my $f ( @form ) {
+	my $prompt = $story->{$f}->{identifier};
+	$prompt =~ s/_/ /;
+	$latexString .= "\\newcommand{\\battleshipX${s}X$romanize{$f}XPrompt}[0]{$prompt\n}\n\n";
+	if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
+		$battleship = $story->{match}->{$f};
+	}
+	elsif ($type eq "flash" && exists $story->{flash} && exists $story->{flash}->{$f} ) {
+		$battleship = $story->{flash}->{$f};
+	}
+	else { die "No '$type' battleship for $s story, form $f" }
 }
-else { die "No '$type' bingo for $s story, form $f" }
-
 $latexString .= "\\begin{document}\n\n";
 
-my (@words, %prompts);
-if ( ref $bingo eq 'HASH' and exists $bingo->{pair} ) {
-        my $pair = $bingo->{pair};
-       my @prompts;
-       if ( $swap ) {
-               push @words, $pair->[$_]->[0] for (0..$#$pair);
-               push @prompts, $pair->[$_]->[1] for (0..$#$pair);
-       }
-       else {
-               push @words, $pair->[$_]->[1] for (0..$#$pair);
-               push @prompts, $pair->[$_]->[0] for (0..$#$pair);
-       }
-       @prompts{@words} = @prompts;
-       die "Unequal word, call numbers. Also check order"
-               unless ( @words == @prompts );
-}
-elsif ( ref $bingo eq 'HASH' and exists $bingo->{word} and exists $bingo->{call} ) {
-       @words = split m/ /, $bingo->{word};
-       my @prompts = @{ $bingo->{call} };
-       @prompts{@words} = @prompts;
-       die "Unequal word, call numbers. Also check order"
-               unless ( @words == @prompts );
-}
-elsif ( ref $bingo eq 'HASH' ) {
-       @words = keys %$bingo;
-       my @prompts = values %$bingo;
-       @prompts{@words} = @prompts;
-       die "Unequal word, call numbers. Also check order"
-               unless ( @words == @prompts );
-}
-elsif ( ref $bingo eq 'ARRAY' ) {
-        my $n;
-        for my $prompt ( @$bingo ) {
-                (my $word = $prompt ) =~ s/^[^_]*_(.*)_.*$/$1/;
-                push @words, $word;
-                die "No $word word in ${n}th, \"$prompt\" prompt"
-                        unless $word;
-                $n++;
-                $prompts{$word} = $prompt;
+my (@x, @y);
+if ( ref $battleship eq 'HASH' and exists $battleship->{pair} ) {
+        my $pair = $battleship->{pair};
+        if ( $swap ) {
+                push @y, $pair->[$_]->[0] for (0..$#$pair);
+                push @x, $pair->[$_]->[1] for (0..$#$pair);
         }
+        else {
+                push @x, $pair->[$_]->[1] for (0..$#$pair);
+                push @y, $pair->[$_]->[0] for (0..$#$pair);
+        }
+        die "Unequal x, y numbers. Also check order"
+                unless ( @x == @y );
+}
+elsif ( ref $battleship eq 'HASH' ) {
+       @y = keys %$battleship;
+       my @x = values %$battleship;
+       die "Unequal x, y numbers. Also check order"
+               unless ( @x == @y );
 }
 else {
-        @words = split m/ /, $bingo;
-        @prompts{@words} = @words;
+	my $ref = ref $battleship;
+	die "battleship $ref ref not a HASH";
 }
-
-my (%word_count, %part_count);
-$word_count{$_}++ for @words;
-for my $word ( keys %prompts ) {
-        for my $other ( keys %prompts ) {
-                next if $word eq $other;
-                my $prompt = $prompts{$other};
-                my @noise = split /[-,._\s]/, $prompt;
-                my @lc_noise = map (lc, @noise);
-                my @parts = split m/[_\s]/, $word;
-                my @lc_parts = map (lc, @parts);
-                for my $part ( @lc_parts ) {
-                        for my $dupe ( @lc_noise ) {
-                                $part_count{$part}++ if 
-                                        (($dupe eq $part)
-                                                # or ($dupe =~ m/$part/)
-                                                # or ($part =~ m/$dupe/)
-                        );
-                        }
-                }
-        }
-}
-for my $word ( @words ) {
-        die "calling '$word' word $word_count{$word} times"
-                unless $word_count{$word} == 1;
-}
-#for my $part ( keys %part_count ) {
-#       die "'$part' dupe present $part_count{$part} times"
-#               unless $part_count{$part} == 0;
-#}
-die "No word for some prompts" unless
-        values %prompts == scalar @words;
-        
-warn "There are " . (sum values %word_count ) . " words\n";
-my @clinchers = sample( set => \@words, sample_size => 2 );
-my @winner = sample( set => \@clinchers );
-my @loser = grep { $_ ne $winner[0] } @clinchers;
-my %words; @words{ @words } = (); delete @words{@clinchers};
-my @pruned = keys %words;
-my (@call, @lost_call);
-if ( ref $bingo eq 'HASH' and exists $bingo->{call} ) {
-        push @call, "$_: $prompts{$_}" for (@pruned, @winner);
-        push @lost_call, "$_: $prompts{$_}" for (@loser);
-
-}
-else {
-        @call = @prompts{ @pruned, @winner };
-        @lost_call = @prompts{@loser};
-}
-
-my $h2p = Lingua::Han::PinYin->new( tone => 1 );
-
-sub translit {
-        my $chinese = shift ;
-        # return $chinese . "[" . $h2p->han2pinyin( $chinese ) . "]";
-        return $chinese;
-}
-
-my $regex = qr/([\N{U+4E00}-\N{U+9FFF}]+)/;
-s/$regex/translit($1)/ge for @call;
-s/$regex/translit($1)/ge for @lost_call;
 
 my $prompt_n = $reverse? $n-2 : 0 ;
 for my $prompt ( 0 .. $prompt_n ) {
@@ -398,22 +255,22 @@ __END__
 
 =head1 NAME
 
-bingo.pl - Create bingo cards from list in cards.yaml
+battleships.pl - Create battleships cards from list in cards.yaml
 
 =head1 SYNOPSIS
 
-perl ttb/cards/bingo/bingo.pl -n 15 -s cell_phones -f 0 topics/phones
+perl ttb/cards/battleships.pl -n 16 -s cell_phones -f 0 topics/phones
 
 =head1 DESCRIPTION
 
-Makes n cards from fth bingo sequence in cell_phones mapping in topics/phones/cards.yaml. If 20 words, 10 are presented. 2 clinchers are reserved: one winner, one loser. The loser is shown by strikeout.
+Makes n battleship cards from fth match sequence in cell_phones mapping in topics/phones/cards.yaml. If f is an integer comma-separated string, makes multiple battleship grids.
 
-If word, call fields (mappings) exist in fth sequence in cards.yaml, or if the sequence is made up of calls of the form, "a prompt _including not an underscore_ in a string," a prompt is presented, instead of (in addition to) the word in the caller's card.
+The identifier in the fth match, of the form, 'Is Y calling, or will Y call, X?' is used as prompt.
 
-The reverse bingo option (--reverse) makes n cards with the prompts and one card is the bingo card with the words (answers).
+The keys (first values) in the fth match sequence pairs go down the Y axis on the left, and the values (the second values of the pairs) go along the X axis at the top.
 
-The four & five options (--four, --five) places the 16 or 25 prompts in 4x4 or 5x5 grids.
+The swap option (--swap) swaps first and second values of the match pairs, so the first values go along the X axis and the second ones go down the Y axis.
 
-The swap option (--swap) swaps first and second values of the match pairs (not bingo ones), to go from prompt-answer (word) pairings to the reverse, answer/word-prompt pairings.
+The reverse battleships option (--reverse) is reserved for some future use.
 
 =cut
