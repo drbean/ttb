@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Aug 05,  3:40:11 PM
+# Last Edit: 2022 Oct 22, 11:51:51 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,8 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use Algorithm::Numerical::Sample qw/sample/;
-use List::Util qw/sum/;
+use List::Util qw/sample sum/;
 use List::MoreUtils qw/natatime/;
 use Lingua::Han::PinYin;
 
