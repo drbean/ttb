@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 23,  9:32:20 PM
+# Last Edit: 2022 Oct 23,  9:56:14 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -60,7 +60,7 @@ START_LATEX
 # my @form = split ',', $f;
 # 
 # for my $f (@form) {
-	$latexString .= <<"CARD_COMMAND"
+	$latexString .= <<"CARD_COMMAND";
 \\newcommand{\\battleshipX${s}X$roman{$f}Xcard}[5]{%
         \\vspace{0.1cm}
         \\small #1 #2
@@ -106,7 +106,7 @@ my $story = $cards->{$s};
 die "No $s story" unless ref $story eq 'HASH';
 my $battleship;
 
-for my $f ( @form ) {
+# for my $f ( @form ) {
 	my $prompt = $story->{$f}->{identifier};
 	$prompt =~ s/_/ /;
 	$latexString .= "\\newcommand{\\battleshipX${s}X$roman{$f}XPrompt}[0]{$prompt\n}\n\n";
@@ -117,7 +117,7 @@ for my $f ( @form ) {
 		$battleship = $story->{flash}->{$f};
 	}
 	else { die "No '$type' battleship for $s story, form $f" }
-}
+# }
 $latexString .= "\\begin{document}\n\n";
 
 my (@x, @y);
@@ -155,7 +155,7 @@ for my $card ( 0 .. $n-1 ) {
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\battleshipX${s}X$roman{$f}Xcard{}{\\battleshipX${s}X$roman{$f}XPrompt}{}{
-\\begin{tabular}{l*{$column_width\\pagewidth}}";
+\\begin{tabular}{l*{$column_width\\paperwidth}}";
 
 	$latexString .= join " & ", @x;
 	$latexString .= "\\\\";
