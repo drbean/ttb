@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 22, 10:29:32 PM
+# Last Edit: 2022 Oct 22, 11:09:04 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -34,10 +34,10 @@ pod2usage(-exitstatus => 0, -verbose => 2) if $man;
 use IO::All;
 use YAML qw/LoadFile DumpFile/;
 
-my %romanize = (
-        0 => "Zero", 1 => "One", 2 => "Two", 3 =>"Three"
-        , 4 => "Four", 5 => "Five", 6 => "Six", 7 =>"Seven"
-        , 8 => "Eight", 9 => "Nine", 10 => "Ten", 11 =>"Eleven" 
+my %roman = (
+        0 => "Zero", 1 => "I", 2 => "II", 3 =>"III"
+        , 4 => "IV", 5 => "V", 6 => "VI", 7 =>"VII"
+        , 8 => "VIII", 9 => "IX", 10 => "X", 11 =>"XI" 
 );
 
 my $latexString = <<"START_LATEX";
@@ -62,7 +62,7 @@ my @form = split ',', $f;
 
 for my $f (@form) {
 	$latexString .= <<"CARD_COMMAND"
-\\newcommand{\\battleshipX${s}X$romanize{$f}Xcard}[5]{%
+\\newcommand{\\battleshipX${s}X$roman{$f}Xcard}[5]{%
         \\vspace{0.1cm}
         \\small #1 #2
         \\par
@@ -110,7 +110,7 @@ my $battleship;
 for my $f ( @form ) {
 	my $prompt = $story->{$f}->{identifier};
 	$prompt =~ s/_/ /;
-	$latexString .= "\\newcommand{\\battleshipX${s}X$romanize{$f}XPrompt}[0]{$prompt\n}\n\n";
+	$latexString .= "\\newcommand{\\battleshipX${s}X$roman{$f}XPrompt}[0]{$prompt\n}\n\n";
 	if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
 		$battleship = $story->{match}->{$f};
 	}
@@ -146,13 +146,12 @@ else {
 	die "battleship $ref ref not a HASH";
 }
 
-my $prompt_n = $reverse? $n-2 : 0 ;
-for my $prompt ( 0 .. $prompt_n ) {
+for my $card ( 0 .. $n-1 ) {
         $latexString .=
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
-\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{}{";
+\\battleshipX${s}X$roman{$f}Xcard{}{\\battleshipX${s}X$roman{$f}XPrompt}{}{";
 	if ( $reverse ) {
 		my @call_all = (@call, @lost_call);
 		if ( $five or $four ) {
@@ -205,7 +204,7 @@ for my $card ( 0 .. $card_n ) {
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
-\\bingoX${s}X$romanize{$f}Xcard{}{\\bingoX${s}X$romanize{$f}XIdentifier}{\\parbox{9.0cm}{";
+\\bingoX${s}X$roman{$f}Xcard{}{\\bingoX${s}X$roman{$f}XIdentifier}{\\parbox{9.0cm}{";
         while ( my @word = $it->() ) {
                 tr/_/~/ for @word;
 		$latexString .= "\\begin{multicols}{4}";
