@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 11:46:34 AM
+# Last Edit: 2022 Oct 24, 11:50:23 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -64,10 +64,10 @@ START_LATEX
 	$latexString .= <<"CARD_COMMAND";
 \\newcommand{\\$card_name}[2]{%
         \\vspace{0.1cm}
-        \\small #1
+        \\normalsize #1
         \\par
         \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
-        \\hspace{0.1cm} \\Large#2\\\\
+        \\hspace{0.1cm} \\normalsize#2\\\\
         }
 }
 
