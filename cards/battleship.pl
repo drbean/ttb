@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 12:17:31 PM
+# Last Edit: 2022 Oct 24,  1:26:11 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -58,21 +58,26 @@ my $latexString = <<"START_LATEX";
 START_LATEX
 
 my @form = split ',', $f;
-my ( %card_name, %prompt_name );
-for my $f (@form) {
-	$card_name{$f} = 'battleship' . ucfirst $s . $roman{$f} . 'Card';
-	$latexString .= <<"CARD_COMMAND";
-\\newcommand{\\$card_name{$f}}[2]{%
-        \\vspace{0.1cm}
-        \\normalsize #1
-        \\par
-        \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
-        \\hspace{0.1cm} \\normalsize#2\\\\
-        }
+my ( $card_name, %prompt_name );
+my $form = join 'And', ( map { $roman{$_} } @form );
+$card_name = 'battleship' . ucfirst $s . $form . 'Card';
+$latexString .= <<"CARD_COMMAND";
+\\newcommand{\\$card_name}[4]{%
+\\vspace{0.1cm}
+\\normalsize #1
+\\par
+\\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
+\\hspace{0.1cm} \\normalsize#2\\\\
+}
+\\\\
+\\normalsize #3
+\\par
+\\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
+\\hspace{0.1cm} \\normalsize#4\\\\
+}
 }
 
 CARD_COMMAND
-}
 
 my $layout = { a7 => { latex => [
                         { page => 1, x => "0", y => "0" , xy => "0,0" },
@@ -104,7 +109,6 @@ my $cards = LoadFile "$ARGV[0]/cards.yaml";
 
 my $story = $cards->{$s};
 die "No $s story" unless ref $story eq 'HASH';
-my $battleship;
 
 for my $f ( @form ) {
 	my $prompt = $story->{$type}->{$f}->{identifier};
@@ -114,7 +118,9 @@ for my $f ( @form ) {
 }
 $latexString .= "\\begin{document}\n\n";
 
+my %grid;
 for my $f ( @form ) {
+	my $battleship;
 	if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
 		$battleship = $story->{match}->{$f};
 	}
@@ -150,29 +156,33 @@ for my $f ( @form ) {
 	my $yn = $#y + 1;
 	my $column_width = 0.3/$xn . '\\paperwidth';
 	my $row_height = 1/$yn;
+	$grid{$f} = "\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}";
+	$grid{$f} .= 'Y\\textbackslash X & ';
+	$grid{$f} .= join " & ", @x;
+	$grid{$f} .= "\\\\ \\hline \n";
 
-	for my $card ( 0 .. $n-1 ) {
-		$latexString .=
+	for my $y ( @y ) {
+		$grid{$f} .= $y;
+		$grid{$f} .= join " \& ", ('') x $yn;
+		$grid{$f} .= "\\\\ \\hline \n";
+	}
+		$grid{$f} .= "\\end{tabular}\n";
+}
+
+for my $card ( 0 .. $n-1 ) {
+	$latexString .=
 	"\\TPshowboxestrue
 	\\begin{textblock}{8}($latex->[$paging]->{xy})
 	\\textblocklabel{picture$latex->[$paging]->{xy}}
-	\\$card_name{$f} {\\$prompt_name{$f}}{
-	\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}";
-
-		$latexString .= 'Y\\textbackslash X & ';
-		$latexString .= join " & ", @x;
-		$latexString .= "\\\\ \\hline \n";
-
-		for my $y ( @y ) {
-			$latexString .= $y;
-			$latexString .= join " \& ", ('') x $yn;
-			$latexString .= "\\\\ \\hline \n";
-		}
-		$latexString .= "\\end{tabular}\n";
-		$latexString .= "}\n\\end{textblock}\n \\TPshowboxesfalse \n";
-		&paging;
+	\\$card_name\n";
+	for my $f ( @form ){
+		$latexString .=
+		"{\\$prompt_name{$f}}
+		{$grid{$f}}\n";
 	}
-}
+	$latexString .= "\\end{textblock}\n \\TPshowboxesfalse \n";
+	&paging;
+	}
 
 $latexString .= "\\end{document}\n";
 
