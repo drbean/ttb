@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 11:22:21 AM
+# Last Edit: 2022 Oct 24, 11:28:17 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -147,7 +147,7 @@ else {
 }
 my $xn = $#x + 1;
 my $yn = $#y + 1;
-my $column_width = 1/$xn;
+my $column_width = 0.3/$xn . '\\paperwidth';
 my $row_height = 1/$yn;
 
 for my $card ( 0 .. $n-1 ) {
@@ -156,7 +156,7 @@ for my $card ( 0 .. $n-1 ) {
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\$card_name {\\$prompt_name}{
-\\begin{tabular}{l | *{$xn}{ | p{$column_width\\paperwidth}}}";
+\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}";
 
 	$latexString .= 'Y\\textbackslash X & ';
 	$latexString .= join " & ", @x;
