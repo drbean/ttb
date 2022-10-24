@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 10:28:40 AM
+# Last Edit: 2022 Oct 24, 11:06:51 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -60,14 +60,14 @@ START_LATEX
 # my @form = split ',', $f;
 # 
 # for my $f (@form) {
+	my $card_name = 'battleship' . ucfirst $s . $roman{$f} . 'Card';
 	$latexString .= <<"CARD_COMMAND";
-\\newcommand{\\battleshipX${s}X$roman{$f}Xcard}[5]{%
+\\newcommand{\\$card_name}[2]{%
         \\vspace{0.1cm}
-        \\small #1 #2
+        \\small #1
         \\par
         \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
-        \\hspace{0.1cm} \\Large#3\\\\
-        \\normalsize#4 #5
+        \\hspace{0.1cm} \\Large#2\\\\
         }
 }
 
@@ -109,7 +109,8 @@ my $battleship;
 # for my $f ( @form ) {
 	my $prompt = $story->{$f}->{identifier};
 	$prompt =~ s/_/ /;
-	$latexString .= "\\newcommand{\\battleshipX${s}X$roman{$f}XPrompt}[0]{$prompt\n}\n\n";
+	my $prompt_name = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
+	$latexString .= "\\newcommand{\\$prompt_name}[0]{$prompt\n}\n\n";
 	if ($type eq "match" && exists $story->{match} && exists $story->{match}->{$f} ) {
 		$battleship = $story->{match}->{$f};
 	}
@@ -154,19 +155,19 @@ for my $card ( 0 .. $n-1 ) {
 "\\TPshowboxestrue
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
-\\battleshipX${s}X$roman{$f}Xcard{}{\\battleshipX${s}X$roman{$f}XPrompt}{}{
-\\begin{tabular}{l*{$column_width\\paperwidth}p}";
+\\$card_name {\\$prompt_name}{
+\\begin{tabular}{l *{$xn}{p{$column_width\\paperwidth}}}";
 
 	$latexString .= join " & ", @x;
 	$latexString .= "\\\\ \n";
 
 	for my $y ( @y ) {
 		$latexString .= $y;
-		$latexString .= join " \& ", '.' x $yn;
+		$latexString .= join " \& ", ('') x $yn;
 		$latexString .= "\\\\ \n";
 	}
 		$latexString .= "\\end{tabular}\n";
-		$latexString .= "}{}\n\\end{textblock}\n \\TPshowboxesfalse \n";
+		$latexString .= "}\n\\end{textblock}\n \\TPshowboxesfalse \n";
 		&paging;
 	}
 
