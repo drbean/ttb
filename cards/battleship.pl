@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 11:06:51 AM
+# Last Edit: 2022 Oct 24, 11:22:21 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -156,15 +156,16 @@ for my $card ( 0 .. $n-1 ) {
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\$card_name {\\$prompt_name}{
-\\begin{tabular}{l *{$xn}{p{$column_width\\paperwidth}}}";
+\\begin{tabular}{l | *{$xn}{ | p{$column_width\\paperwidth}}}";
 
+	$latexString .= 'Y\\textbackslash X & ';
 	$latexString .= join " & ", @x;
-	$latexString .= "\\\\ \n";
+	$latexString .= "\\\\ \\hline \n";
 
 	for my $y ( @y ) {
 		$latexString .= $y;
 		$latexString .= join " \& ", ('') x $yn;
-		$latexString .= "\\\\ \n";
+		$latexString .= "\\\\ \\hline \n";
 	}
 		$latexString .= "\\end{tabular}\n";
 		$latexString .= "}\n\\end{textblock}\n \\TPshowboxesfalse \n";
