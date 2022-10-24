@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24,  2:31:09 PM
+# Last Edit: 2022 Oct 24,  3:12:28 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -58,11 +58,11 @@ my $latexString = <<"START_LATEX";
 START_LATEX
 
 my @form = split ',', $f;
-my ( $card_name, %prompt_name );
+my ( $card, %prompt );
 my $form = join 'And', ( map { $roman{$_} } @form );
-$card_name = 'battleship' . ucfirst $s . $form . 'Card';
+$card = 'battleship' . ucfirst $s . $form . 'Card';
 $latexString .= <<"CARD_COMMAND";
-\\newcommand{\\$card_name}[4]{%
+\\newcommand{\\$card}[4]{%
 \\vspace{0.1cm}
 \\normalsize #1
 \\par
@@ -109,10 +109,10 @@ my $story = $cards->{$s};
 die "No $s story" unless ref $story eq 'HASH';
 
 for my $f ( @form ) {
-	my $prompt = $story->{$type}->{$f}->{identifier};
-	$prompt =~ s/_/ /;
-	$prompt_name{$f} = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
-	$latexString .= "\\newcommand{\\$prompt_name{$f}}[0]{$prompt}\n";
+	my $identifier = $story->{$type}->{$f}->{identifier};
+	$identifier =~ s/_/ /;
+	$prompt{$f} = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
+	$latexString .= "\\newcommand{\\$prompt{$f}}[0]{$identifier}\n";
 }
 $latexString .= "\n\\begin{document}\n\n";
 
@@ -169,14 +169,14 @@ for my $f ( @form ) {
 		$grid{$f} .= "\\end{tabular}\n";
 }
 
-for my $card ( 0 .. $n-1 ) {
+for ( 0 .. $n-1 ) {
 	$latexString .=
 	"\\TPshowboxestrue
 	\\begin{textblock}{8}($latex->[$paging]->{xy})
 	\\textblocklabel{picture$latex->[$paging]->{xy}}
-	\\$card_name\n";
+	\\$card\n";
 	for my $f ( @form ){
-		$latexString .="{\\$prompt_name{$f}}{$grid{$f}}\n";
+		$latexString .="{\\$prompt{$f}}{$grid{$f}}\n";
 	}
 	$latexString .= "\\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
