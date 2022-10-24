@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 23,  9:56:14 PM
+# Last Edit: 2022 Oct 24, 10:28:40 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -155,21 +155,24 @@ for my $card ( 0 .. $n-1 ) {
 \\begin{textblock}{8}($latex->[$paging]->{xy})
 \\textblocklabel{picture$latex->[$paging]->{xy}}
 \\battleshipX${s}X$roman{$f}Xcard{}{\\battleshipX${s}X$roman{$f}XPrompt}{}{
-\\begin{tabular}{l*{$column_width\\paperwidth}}";
+\\begin{tabular}{l*{$column_width\\paperwidth}p}";
 
 	$latexString .= join " & ", @x;
-	$latexString .= "\\\\";
+	$latexString .= "\\\\ \n";
 
 	for my $y ( @y ) {
-		$latexString .= join " & ", '' x $yn;
+		$latexString .= $y;
+		$latexString .= join " \& ", '.' x $yn;
+		$latexString .= "\\\\ \n";
 	}
-		$latexString .= "}{} \n \\end{textblock}\n \\TPshowboxesfalse \n";
+		$latexString .= "\\end{tabular}\n";
+		$latexString .= "}{}\n\\end{textblock}\n \\TPshowboxesfalse \n";
 		&paging;
 	}
 
 $latexString .= "\\end{document}\n";
 
-my $bio = io "$ARGV[0]/bingo_${s}_$f.tex";
+my $bio = io "$ARGV[0]/battleship_${s}_$f.tex";
 $bio->print( $latexString );
 
 sub paging
