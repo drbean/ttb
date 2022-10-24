@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24,  1:26:11 PM
+# Last Edit: 2022 Oct 24,  2:09:16 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -68,11 +68,9 @@ $latexString .= <<"CARD_COMMAND";
 \\par
 \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
 \\hspace{0.1cm} \\normalsize#2\\\\
-}
 \\\\
 \\normalsize #3
 \\par
-\\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
 \\hspace{0.1cm} \\normalsize#4\\\\
 }
 }
@@ -114,9 +112,9 @@ for my $f ( @form ) {
 	my $prompt = $story->{$type}->{$f}->{identifier};
 	$prompt =~ s/_/ /;
 	$prompt_name{$f} = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
-	$latexString .= "\\newcommand{\\$prompt_name{$f}}[0]{$prompt\n}\n\n";
+	$latexString .= "\\newcommand{\\$prompt_name{$f}}[0]{$prompt}\n";
 }
-$latexString .= "\\begin{document}\n\n";
+$latexString .= "\n\\begin{document}\n\n";
 
 my %grid;
 for my $f ( @form ) {
@@ -176,9 +174,7 @@ for my $card ( 0 .. $n-1 ) {
 	\\textblocklabel{picture$latex->[$paging]->{xy}}
 	\\$card_name\n";
 	for my $f ( @form ){
-		$latexString .=
-		"{\\$prompt_name{$f}}
-		{$grid{$f}}\n";
+		$latexString .="{\\$prompt_name{$f}}{$grid{$f}}\n";
 	}
 	$latexString .= "\\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
