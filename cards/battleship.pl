@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24,  2:09:16 PM
+# Last Edit: 2022 Oct 24,  2:31:09 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,7 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use List::Util qw/sample sum/;
+use List::Util qw/sample sum uniq/;
 use List::MoreUtils qw/natatime/;
 
 my $man = 0;
@@ -150,6 +150,8 @@ for my $f ( @form ) {
 		my $ref = ref $battleship;
 		die "battleship $ref ref not a HASH";
 	}
+	@x = uniq (sort @x);
+	@y = sort @y;
 	my $xn = $#x + 1;
 	my $yn = $#y + 1;
 	my $column_width = 0.3/$xn . '\\paperwidth';
@@ -161,7 +163,7 @@ for my $f ( @form ) {
 
 	for my $y ( @y ) {
 		$grid{$f} .= $y;
-		$grid{$f} .= join " \& ", ('') x $yn;
+		$grid{$f} .= join " \& ", ('') x $xn;
 		$grid{$f} .= "\\\\ \\hline \n";
 	}
 		$grid{$f} .= "\\end{tabular}\n";
