@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24, 11:28:17 AM
+# Last Edit: 2022 Oct 24, 11:46:34 AM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -107,7 +107,7 @@ die "No $s story" unless ref $story eq 'HASH';
 my $battleship;
 
 # for my $f ( @form ) {
-	my $prompt = $story->{$f}->{identifier};
+	my $prompt = $story->{$type}->{$f}->{identifier};
 	$prompt =~ s/_/ /;
 	my $prompt_name = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
 	$latexString .= "\\newcommand{\\$prompt_name}[0]{$prompt\n}\n\n";
