@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Oct 27,  3:36:27 PM
+# Last Edit: 2022 Oct 27,  3:44:39 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -195,7 +195,7 @@ sub simple_cloze
 			my @cword;
 		}
 		string: token(s) end | <error>
-		token: cloze | unclozed
+		token: cloze | unclozed | blankline
 		cloze: m/$Dic::Cloze::Text::cloze_match/i {
 			my $cloze=$item[1];
 			my $length = length $cloze;
