@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Oct 27,  3:33:44 PM
+# Last Edit: 2022 Oct 27,  3:41:44 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -193,7 +193,7 @@ sub simple_cloze
 			my @cword;
 		}
 		string: token(s) end | <error>
-		token: cloze | unclozed
+		token: cloze | unclozed | blankline
 		cloze: m/$Dic::Cloze::Text::cloze_match/i {
 			my $cloze=$item[1];
 			my $length = length $cloze;
@@ -212,7 +212,7 @@ sub simple_cloze
 			}
 		blankline: m/^$/
 			{
-				$Dic::Cloze::Text::clozeline .= "~\\\\\\\\";
+				push @Dic::Cloze::Text::clozeline, "~\\\\\\\\";
 			}
 		end: m/^\Z/
 		];
