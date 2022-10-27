@@ -1,6 +1,6 @@
 package Dic::Cloze::Text;  # assumes Some/Module.pm
 
-# Last Edit: 2022 Oct 05,  2:58:23 PM
+# Last Edit: 2022 Oct 27,  3:36:27 PM
 # $Id:60 /cloze/branches/ctest/Cloze.pm 1234 2007-06-03T00:32:38.953757Z greg  $
 
 use strict;
@@ -218,6 +218,10 @@ sub simple_cloze
 		}
 		unclozed: m/$word/ {
 			push @Dic::Cloze::Text::clozeline, "$item[1] ";
+			}
+		blankline: m/^$/
+			{
+				$Dic::Cloze::Text::clozeline .= "~\\\\\\\\";
 			}
 		end: m/^\Z/
 		];
