@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Oct 24,  3:12:28 PM
+# Last Edit: 2022 Nov 14,  4:28:26 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -61,22 +61,37 @@ my @form = split ',', $f;
 my ( $card, %prompt );
 my $form = join 'And', ( map { $roman{$_} } @form );
 $card = 'battleship' . ucfirst $s . $form . 'Card';
-$latexString .= <<"CARD_COMMAND";
+if ( $#form == 1 ) {
+	$latexString .= <<"TWO_GRID_CARD_COMMAND";
 \\newcommand{\\$card}[4]{%
 \\vspace{0.1cm}
 \\normalsize #1
 \\par
 \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
-\\hspace{0.1cm} \\normalsize#2\\\\
+\\hspace{-0.5cm} \\normalsize#2\\\\
 \\\\
 \\normalsize #3
 \\par
-\\hspace{0.1cm} \\normalsize#4\\\\
+\\hspace{-0.5cm} \\normalsize#4\\\\
 }
 }
 
-CARD_COMMAND
+TWO_GRID_CARD_COMMAND
+}
+elsif ( $#form == 0 ) {
+	$latexString .= <<"ONE_GRID_CARD_COMMAND";
+\\newcommand{\\$card}[2]{%
+\\vspace{0.1cm}
+\\normalsize #1
+\\par
+\\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
+\\hspace{-0.5cm} \\normalsize#2\\\\
+}
+}
 
+ONE_GRID_CARD_COMMAND
+}
+else { die "Too many grids. Write bigger new $card card newcommand." }
 my $layout = { a7 => { latex => [
                         { page => 1, x => "0", y => "0" , xy => "0,0" },
                         { page => 1, x => "8", y => "0" , xy => "8,0" },
@@ -111,8 +126,10 @@ die "No $s story" unless ref $story eq 'HASH';
 for my $f ( @form ) {
 	my $identifier = $story->{$type}->{$f}->{identifier};
 	$identifier =~ s/_/ /;
+	unless ( exists $prompt{$f} ) {
 	$prompt{$f} = "battleship" . ucfirst $s . $roman{$f} . 'Prompt';
 	$latexString .= "\\newcommand{\\$prompt{$f}}[0]{$identifier}\n";
+	}
 }
 $latexString .= "\n\\begin{document}\n\n";
 
@@ -126,9 +143,11 @@ for my $f ( @form ) {
 		$battleship = $story->{flash}->{$f};
 	}
 	else { die "No '$type' battleship for $s story, form $f" }
-	my (@x, @y);
+	my (@x, @y, $y_hypernym, $x_hypernym);
 	if ( ref $battleship eq 'HASH' and exists $battleship->{pair} ) {
 		my $pair = $battleship->{pair};
+		$y_hypernym = $battleship->{y} || 'noun';
+		$x_hypernym = $battleship->{x} || 'verb';
 		if ( $swap ) {
 			push @y, $pair->[$_]->[0] for (0..$#$pair);
 			push @x, $pair->[$_]->[1] for (0..$#$pair);
@@ -156,8 +175,8 @@ for my $f ( @form ) {
 	my $yn = $#y + 1;
 	my $column_width = 0.3/$xn . '\\paperwidth';
 	my $row_height = 1/$yn;
-	$grid{$f} = "\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}";
-	$grid{$f} .= 'Y\\textbackslash X & ';
+	$grid{$f} = "\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}\n";
+	$grid{$f} .= "\\parbox[t]{1.5cm}{~~~$x_hypernym→ \\\\ $y_hypernym ↓} & ";
 	$grid{$f} .= join " & ", @x;
 	$grid{$f} .= "\\\\ \\hline \n";
 
@@ -166,7 +185,7 @@ for my $f ( @form ) {
 		$grid{$f} .= join " \& ", ('') x $xn;
 		$grid{$f} .= "\\\\ \\hline \n";
 	}
-		$grid{$f} .= "\\end{tabular}\n";
+	$grid{$f} .= "\\end{tabular}\n";
 }
 
 for ( 0 .. $n-1 ) {
@@ -176,7 +195,7 @@ for ( 0 .. $n-1 ) {
 	\\textblocklabel{picture$latex->[$paging]->{xy}}
 	\\$card\n";
 	for my $f ( @form ){
-		$latexString .="{\\$prompt{$f}}{$grid{$f}}\n";
+		$latexString .="{\\$prompt{$f}}\n{$grid{$f}}\n";
 	}
 	$latexString .= "\\end{textblock}\n \\TPshowboxesfalse \n";
 	&paging;
