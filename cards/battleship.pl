@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Nov 17,  3:38:38 PM
+# Last Edit: 2022 Nov 17,  4:24:17 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -8,7 +8,7 @@ use warnings;
 
 use Getopt::Long;
 use Pod::Usage;
-use List::Util qw/sample sum uniq/;
+use List::Util qw/sample sum tail uniq/;
 use List::MoreUtils qw/natatime/;
 
 my $man = 0;
@@ -85,7 +85,7 @@ elsif ( $#form == 0 ) {
 \\normalsize #1
 \\par
 \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
-\\hspace{-0.5cm} \\normalsize#2\\\\
+\\hspace{-0.3cm} \\normalsize#2\\\\
 }
 }
 
@@ -149,12 +149,13 @@ for my $f ( @form ) {
 		$y_hypernym = $battleship->{y} || 'noun';
 		$x_hypernym = $battleship->{x} || 'verb';
 		if ( $swap ) {
-			push @y, $pair->[$_]->[0] for (0..$#$pair);
-			push @x, $pair->[$_]->[1] for (0..$#$pair);
-		}
-		else {
 			push @y, $pair->[$_]->[1] for (0..$#$pair);
 			push @x, $pair->[$_]->[0] for (0..$#$pair);
+			($y_hypernym, $x_hypernym) = ($x_hypernym, $y_hypernym);
+		}
+		else {
+			push @y, $pair->[$_]->[0] for (0..$#$pair);
+			push @x, $pair->[$_]->[1] for (0..$#$pair);
 		}
 		die "Unequal x, y numbers in form $f match. Also check order"
 			unless ( @x == @y );
