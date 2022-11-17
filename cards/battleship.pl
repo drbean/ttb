@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Nov 14,  4:28:26 PM
+# Last Edit: 2022 Nov 17,  3:38:38 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -153,8 +153,8 @@ for my $f ( @form ) {
 			push @x, $pair->[$_]->[1] for (0..$#$pair);
 		}
 		else {
-			push @x, $pair->[$_]->[1] for (0..$#$pair);
-			push @y, $pair->[$_]->[0] for (0..$#$pair);
+			push @y, $pair->[$_]->[1] for (0..$#$pair);
+			push @x, $pair->[$_]->[0] for (0..$#$pair);
 		}
 		die "Unequal x, y numbers in form $f match. Also check order"
 			unless ( @x == @y );
@@ -176,7 +176,7 @@ for my $f ( @form ) {
 	my $column_width = 0.3/$xn . '\\paperwidth';
 	my $row_height = 1/$yn;
 	$grid{$f} = "\\begin{tabular}{l | *{$xn}{ | p{$column_width}}}\n";
-	$grid{$f} .= "\\parbox[t]{1.5cm}{~~~$x_hypernym→ \\\\ $y_hypernym ↓} & ";
+	$grid{$f} .= "\\parbox[t]{1.5cm}{~~$x_hypernym→ \\\\ $y_hypernym ↓} & ";
 	$grid{$f} .= join " & ", @x;
 	$grid{$f} .= "\\\\ \\hline \n";
 
