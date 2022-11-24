@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Last Edit: 2022 Nov 17,  4:24:17 PM
+# Last Edit: 2022 Nov 24,  4:05:12 PM
 # $Id: /dic/branches/ctest/dic.pl 1263 2007-06-23T12:37:20.810966Z greg  $
 
 use strict;
@@ -81,7 +81,7 @@ TWO_GRID_CARD_COMMAND
 elsif ( $#form == 0 ) {
 	$latexString .= <<"ONE_GRID_CARD_COMMAND";
 \\newcommand{\\$card}[2]{%
-\\vspace{0.1cm}
+\\vspace{0.4cm}
 \\normalsize #1
 \\par
 \\parbox[t][0.475\\paperheight][t]{0.46\\paperwidth}{%
